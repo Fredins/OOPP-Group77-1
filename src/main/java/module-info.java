@@ -1,6 +1,7 @@
 module org.group77.mejl {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.mail;
 
 
     opens org.group77.mejl to javafx.fxml;
