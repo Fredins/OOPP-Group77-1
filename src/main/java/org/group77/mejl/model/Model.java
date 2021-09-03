@@ -19,16 +19,13 @@ public class Model {
 
 
     // IN DEVELOPMENT
-    public Message[] getMessages(String folder) throws MessagingException {
-            Store store = connectToStore();
-            Folder inbox = store.getFolder(folder);
-            inbox.open(Folder.READ_ONLY);
-            Message[] messages = inbox.getMessages();
-            return messages;
+    public Message[] getMessages(Folder folder) throws MessagingException {
+        folder.open(Folder.READ_ONLY);
+        return folder.getMessages();
     }
 
     // IN DEVELOPMENT
-    public Folder[] getfolders() throws MessagingException {
+    public Folder[] getFolders() throws MessagingException {
         Store store = connectToStore();
         return store.getDefaultFolder().list("*");
     }
