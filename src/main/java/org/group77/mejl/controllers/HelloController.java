@@ -17,12 +17,10 @@ public class HelloController {
         label_fetch.setText("fetched mails");
         Model model = new Model();
         try{
-            Message[] messages = model.checkMails("INBOX");
-            for (Message m: messages){
-               System.out.printf("from: %s\nsubject: %s\n\n", m.getFrom()[0], m.getSubject());
-            }
-        } catch (MessagingException e){
-            label_fetch.setText("fetching mails failed");
+            model.getFolders();
+            model.getMessages("[Gmail]/Drafts");
+        }catch (MessagingException e){
+            e.printStackTrace();
         }
 
     }
