@@ -13,7 +13,6 @@ import java.util.Properties;
 public class HelloController {
     @FXML
     private TreeView<Folder> folderTree;
-
     private final Model model = new Model();
 
 

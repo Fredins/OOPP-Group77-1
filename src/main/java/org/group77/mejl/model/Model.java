@@ -3,19 +3,27 @@ package org.group77.mejl.model;
 import javax.mail.*;
 import java.util.*;
 
+// THIS CLASS WILL BE SPLIT INTO MULTIPLE SINGLE RESPONSIBILITY CLASSES ONCE
+// SOME THINGS ARE FIGURED OUT
 public class Model {
     // remove global ugly variable when implementing fetching props from filesystem
     // probably from ~/.config/<app_name>/connected_emails.d/something
     Properties props = new Properties();
 
+
+    public void storeProps(Properties props){
+        // TODO store in filesystem under ~/.config/<app_name>/connected_emails.d/something
+        // TODO figure out windows/mac equivalent
+        System.out.println("storing the props...");
+    }
+
     public Model(){
         // TEMPORARY
-        props.setProperty("mail.store.protocol", "imaps");
+        props.setProperty("protocol", "imaps");
         props.setProperty("host", "imap.gmail.com");
         props.setProperty("port", "993");
         props.setProperty("user", "77grupp@gmail.com");
         props.setProperty("password", "grupp77group");
-        props.setProperty("protocol", "imaps");
     }
 
     // IN DEVELOPMENT
