@@ -2,6 +2,7 @@ package org.group77.mejl.model;
 
 import javax.mail.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 // THIS CLASS WILL BE SPLIT INTO MULTIPLE SINGLE RESPONSIBILITY CLASSES ONCE
 // SOME THINGS ARE FIGURED OUT
@@ -18,18 +19,32 @@ public class Model {
         Model.props = props;
     }
 
+    public IdentifierAndFolder[] getIdentifierAndFolder() throws MessagingException {
+        return prependIdentifier(
+                toIdentifierAndFolder(
+                        getFolders(
+                                connectStore(getProps()))
+                ),
+                getProps());
+
+    }
+
+
     // IN DEVELOPMENT
-    public Properties getProps(){
+    private Properties getProps() {
         // TODO fetch from filesystem
         // TODO need information on which email is "active", either use dependency injection or maybe symlink
-        if (props == null){
+        if (Model.props == null) {
+            Properties props = new Properties();
+            props.setProperty("identifier", "gmail");
             props.setProperty("protocol", "imaps");
             props.setProperty("host", "imap.gmail.com");
             props.setProperty("port", "993");
             props.setProperty("user", "77grupp@gmail.com");
             props.setProperty("password", "grupp77group");
+            return props;
         }
-        return props;
+        return Model.props;
     }
 
 
@@ -50,12 +65,29 @@ public class Model {
     // IN DEVELOPMENT
     public Message[] getMessages(Folder folder) throws MessagingException {
         folder.open(Folder.READ_ONLY);
-        return folder.getMessages();
-        }
+        Message[] messages = folder.getMessages();
+        folder.close();
+        return messages;
+    }
 
     // IN DEVELOPMENT
-    public Folder[] getFolders() throws MessagingException {
-        Store store = connectStore(props);
+    private Folder[] getFolders(Store store) throws MessagingException {
         return store.getDefaultFolder().list("*");
     }
+
+    private IdentifierAndFolder[] toIdentifierAndFolder(Folder[] folders){
+        return Stream.of(Arrays.stream(folders)
+                .map(IdentifierAndFolder::new)
+                .toArray(IdentifierAndFolder[]::new)
+        ).toArray(IdentifierAndFolder[]::new);
+    }
+
+    private IdentifierAndFolder[] prependIdentifier(IdentifierAndFolder[] identifierAndFolders, Properties props) {
+        return Stream.concat(
+                Stream.of(new IdentifierAndFolder[]{new IdentifierAndFolder(props.getProperty("identifier"))}),
+                Stream.of(identifierAndFolders))
+                .toArray(IdentifierAndFolder[]::new);
+    }
 }
+// TEMPORARY
+

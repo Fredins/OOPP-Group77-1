@@ -8,6 +8,6 @@
    <children>
       <Button layoutX="263.0" layoutY="28.0" mnemonicParsing="false" onAction="#fetchMails" text="fetch mails" />
       <TreeView fx:id="folderTree" />
-      <Button layoutX="32.0" layoutY="188.0" mnemonicParsing="false" onMouseClicked="#openEmailSettings" text="add email" />
+      <Button layoutX="257.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#openEmailSettings" text="add email" />
    </children>
 </AnchorPane>
