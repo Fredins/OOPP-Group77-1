@@ -8,6 +8,7 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.util.Arrays;
+import java.util.Properties;
 
 public class HelloController {
     @FXML
@@ -47,6 +48,7 @@ public class HelloController {
     // IN DEVELOPMENT
     @FXML
     private void fetchMails() {
+
         Model model = new Model();
         try{
             Folder[] folders = model.getFolders();
