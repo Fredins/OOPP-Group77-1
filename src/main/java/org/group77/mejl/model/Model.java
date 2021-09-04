@@ -8,23 +8,30 @@ import java.util.*;
 public class Model {
     // remove global ugly variable when implementing fetching props from filesystem
     // probably from ~/.config/<app_name>/connected_emails.d/something
-    Properties props = new Properties();
+    private static Properties props;
 
 
-    public void storeProps(Properties props){
+    // IN DEVELOPMENT
+    public void storeProps(Properties props) {
         // TODO store in filesystem under ~/.config/<app_name>/connected_emails.d/something
         // TODO figure out windows/mac equivalent
-        System.out.println("storing the props...");
+        Model.props = props;
     }
 
-    public Model(){
-        // TEMPORARY
-        props.setProperty("protocol", "imaps");
-        props.setProperty("host", "imap.gmail.com");
-        props.setProperty("port", "993");
-        props.setProperty("user", "77grupp@gmail.com");
-        props.setProperty("password", "grupp77group");
+    // IN DEVELOPMENT
+    public Properties getProps(){
+        // TODO fetch from filesystem
+        // TODO need information on which email is "active", either use dependency injection or maybe symlink
+        if (props == null){
+            props.setProperty("protocol", "imaps");
+            props.setProperty("host", "imap.gmail.com");
+            props.setProperty("port", "993");
+            props.setProperty("user", "77grupp@gmail.com");
+            props.setProperty("password", "grupp77group");
+        }
+        return props;
     }
+
 
     // IN DEVELOPMENT
     private Store connectStore(Properties props) throws MessagingException {

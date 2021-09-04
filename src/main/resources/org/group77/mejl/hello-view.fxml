@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mejl.controllers.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mejl.controllers.HelloController">
    <children>
-      <Button layoutX="177.0" layoutY="24.0" mnemonicParsing="false" onAction="#fetchMails" text="fetch mails" />
-      <TreeView fx:id="folderTree" prefHeight="400.0" prefWidth="150.0" />
+      <Button layoutX="263.0" layoutY="28.0" mnemonicParsing="false" onAction="#fetchMails" text="fetch mails" />
+      <TreeView fx:id="folderTree" />
+      <Button layoutX="32.0" layoutY="188.0" mnemonicParsing="false" onMouseClicked="#openEmailSettings" text="add email" />
    </children>
 </AnchorPane>

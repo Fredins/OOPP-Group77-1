@@ -32,7 +32,7 @@ public class EmailSettings {
         props.setProperty("port", port.getText());
         props.setProperty("user", user.getText());
         props.setProperty("identifier", identifier.getText());
-        System.out.println("storing props");
+        System.out.printf("props: \n%s\n", props);
         model.storeProps(props);
 
     }
