@@ -3,11 +3,13 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mejl.controllers.HelloController">
    <children>
-      <Button layoutX="263.0" layoutY="28.0" mnemonicParsing="false" onAction="#fetchMails" text="fetch mails" />
-      <TreeView fx:id="folderTree" />
-      <Button layoutX="257.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#openEmailSettings" text="add email" />
+      <Button layoutX="387.0" layoutY="20.0" mnemonicParsing="false" onAction="#fetchMails" text="fetch mails" />
+      <TreeView fx:id="folderTree" prefHeight="400.0" prefWidth="140.0" />
+      <Button layoutX="491.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#openEmailSettings" text="add email" />
+      <FlowPane fx:id="flowPane" layoutX="140.0" prefHeight="400.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

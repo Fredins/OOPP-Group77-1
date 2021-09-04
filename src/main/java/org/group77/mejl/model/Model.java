@@ -66,7 +66,6 @@ public class Model {
     public Message[] getMessages(Folder folder) throws MessagingException {
         folder.open(Folder.READ_ONLY);
         Message[] messages = folder.getMessages();
-        folder.close();
         return messages;
     }
 

@@ -1,6 +1,5 @@
 package org.group77.mejl.controllers;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,20 +9,14 @@ import org.group77.mejl.Main;
 import org.group77.mejl.model.IdentifierAndFolder;
 import org.group77.mejl.model.Model;
 
-import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Properties;
 
 public class HelloController {
-    @FXML
     private final Model model = new Model();
-
     @FXML
     private TreeView<IdentifierAndFolder> folderTree;
-
     // IN DEVELOPMENT
     @FXML
     private void initialize(){
@@ -42,8 +35,10 @@ public class HelloController {
             contextMenu.getItems().add(m1);
             contextMenu.getItems().add(m2);
             folderTree.setContextMenu(contextMenu);
-        }catch (NullPointerException | MessagingException ignored){
+        }catch (NullPointerException | MessagingException e){
+           e.printStackTrace();
         }
+
 
 
     }
@@ -61,6 +56,14 @@ public class HelloController {
     // IN DEVELOPMENT
     @FXML
     private void fetchMails() {
+        try {
+            Message[] messages = model.getMessages(folderTree.getFocusModel().getFocusedItem().getValue().getFolder());
+            for(Message m : messages){
+                System.out.printf("from: %s\n subject: %s\n\n", m.getFrom()[0], m.getSubject());
+            }
+        }catch (MessagingException e){
+            e.printStackTrace();
+        }
 
 
     }
