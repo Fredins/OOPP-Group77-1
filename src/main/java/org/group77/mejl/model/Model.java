@@ -4,6 +4,8 @@ import javax.mail.*;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Stream;
+import net.harawata.appdirs.AppDirs;
+import net.harawata.appdirs.AppDirsFactory;
 
 // THIS CLASS WILL BE SPLIT INTO MULTIPLE SINGLE RESPONSIBILITY CLASSES ONCE
 // SOME THINGS ARE FIGURED OUT
@@ -12,6 +14,35 @@ public class Model {
     // probably from ~/.config/<app_name>/connected_emails.d/something
     private static Properties props;
 
+    public void writeESP(ESP esp){
+        try{
+            // TODO implement getDataDir() method
+            String path = "C:\\Users\\Martin\\AppData\\Local\\grupp77\\mejl\\esp.d\\" + esp.getIdentifier();
+            createFile(path);
+            writeTo(esp, path);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public ESP readESP(String path){
+        try{
+           ESP esp = readFrom(path);
+           return esp;
+        }catch (IOException | ClassNotFoundException e){
+           e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void createFile(String path) throws IOException {
+       File file = new File(path);
+       if(file.exists()){
+          file.delete();
+       }
+       file.createNewFile();
+    }
 
     private <T> void writeTo(T o, String path) throws IOException {
         FileOutputStream file = new FileOutputStream(path);

@@ -1,6 +1,9 @@
 package org.group77.mejl.model;
 
-public class ESP {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class ESP implements Serializable {
     private final String identifier;
     private final String host;
     private final int port;
@@ -39,5 +42,28 @@ public class ESP {
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof ESP)){
+           return false;
+        }
+        if(!(Objects.equals(getIdentifier(), ((ESP) obj).getIdentifier()))){
+           return false;
+        }
+        if(!(Objects.equals(getHost(), ((ESP) obj).getHost()))){
+            return false;
+        }
+        if(!(getPort() == ((ESP) obj).getPort())){
+            return false;
+        }
+        if(!(Objects.equals(getUser(), ((ESP) obj).getUser()))){
+            return false;
+        }
+        if(!(Objects.equals(getPassword(), ((ESP) obj).getPassword()))){
+            return false;
+        }
+        return true;
     }
 }
