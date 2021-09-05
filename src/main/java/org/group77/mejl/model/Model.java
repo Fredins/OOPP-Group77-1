@@ -1,10 +1,11 @@
 package org.group77.mejl.model;
 
-import com.sun.mail.imap.IMAPFolder;
-
 import javax.mail.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
+import java.util.Scanner;
 
 // THIS CLASS WILL BE SPLIT INTO MULTIPLE SINGLE RESPONSIBILITY CLASSES ONCE
 // SOME THINGS ARE FIGURED OUT
@@ -16,14 +17,20 @@ public class Model {
      */
     public void writeESP(ESP esp) {
         try {
-            // TODO implement getDataDir() method
-            String path = "C:\\Users\\Martin\\AppData\\Local\\grupp77\\mejl\\esp.d\\" + esp.getIdentifier();
+            String path = getESPsDir() + esp.getIdentifier();
             createFile(path);
             writeTo(esp, path);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private String getESPsDir(){
+       return getDataDir() + "esp.d\\";
+    }
+    private String getDataDir(){
+        return "C:\\Users\\Martin\\AppData\\Local\\grupp77\\mejl\\";
     }
 
     /**
@@ -65,6 +72,7 @@ public class Model {
         try{
             connectStore(esp);
         }catch(MessagingException e){
+            // TODO display this exception to the user
             return false;
         }
         return true;
@@ -92,20 +100,62 @@ public class Model {
         return o;
     }
 
+    /**
+     * sets the active ESP by writing to the file active_esp
+     * @param identifier target
+     * @implNote not using symlink because Windows require elevated permission
+     */
+    public void setAcitiveESP(String identifier){
+        String path = getDataDir() + "active_esp";
+        File file = new File(path);
+        try{
+            if(!file.exists()){
+                createFile(path);
+            }
+            FileWriter writer = new FileWriter(path);
+            if(!file.canWrite()){
+                file.setWritable(true);
+            }
+            writer.write(identifier);
+            writer.flush();
+            writer.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * reads the active ESP which is indicated in the file active_esp
+     * @return the in use ESP
+     */
+    public ESP getActiveESP(){
+        String s = getDataDir() + "active_esp";
+        File file = new File(s);
+        try{
+            if(!file.exists()){
+                createFile(s);
+            }
+            Scanner scanner = new Scanner(file);
+            String identifier = scanner.nextLine();
+            return readFrom(getESPsDir() + identifier);
+        }catch(IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+       return null;
+    }
+
     private Folder[] getFolders(Store store) throws MessagingException {
         return store.getDefaultFolder().list("*");
     }
 
-    private Folder mkdir(Store store, String identifier) throws MessagingException {
+    private Folder createFolder(Store store, String identifier) throws MessagingException {
        Folder folder = store.getFolder(identifier);
        if (!folder.exists()){
            folder.create(Folder.HOLDS_FOLDERS);
        }
        return folder;
     }
-
-
-    // IN DEVELOPMENT
 
     // IN DEVELOPMENT
     public Message[] getMessages(Folder folder) throws MessagingException {

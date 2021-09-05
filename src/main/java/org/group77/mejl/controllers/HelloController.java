@@ -29,11 +29,7 @@ public class HelloController {
         }catch (NullPointerException | MessagingException e){
            e.printStackTrace();
         }
-
          */
-
-
-
     }
 
     @FXML

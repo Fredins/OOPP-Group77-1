@@ -19,10 +19,8 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
                 "grupp77group"
         );
         m.writeESP(esp);
-
-        String path = "C:\\Users\\Martin\\AppData\\Local\\grupp77\\mejl\\esp.d\\" + esp.getIdentifier();
-
-        ESP esp1 = m.readESP(path);
+        m.setAcitiveESP("gmail");
+        ESP esp1 = m.getActiveESP();
 
         Assertions.assertEquals(esp, esp1);
     }
