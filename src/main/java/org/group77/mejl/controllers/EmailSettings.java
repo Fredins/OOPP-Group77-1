@@ -23,7 +23,6 @@ public class EmailSettings {
 
     @FXML
     private void addEmail(){
-        // TODO check if connection is established
         ESP esp = new ESP(
                 identifier.getText(),
                 host.getText(),
@@ -32,7 +31,10 @@ public class EmailSettings {
                 user.getText(),
                 password.getText()
         );
-        model.writeESP(esp);
-
+        if(model.connectESP(esp)){
+            model.writeESP(esp);
+        }else{
+            System.out.println("can't connect to email service provider");
+        }
     }
 }

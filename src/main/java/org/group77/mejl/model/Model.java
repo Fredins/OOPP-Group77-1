@@ -4,6 +4,7 @@ import com.sun.mail.imap.IMAPFolder;
 
 import javax.mail.*;
 import java.io.*;
+import java.util.Properties;
 
 // THIS CLASS WILL BE SPLIT INTO MULTIPLE SINGLE RESPONSIBILITY CLASSES ONCE
 // SOME THINGS ARE FIGURED OUT
@@ -55,9 +56,22 @@ public class Model {
         file.close();
     }
 
+    /**
+     * tests connection to store
+     * @param esp an object with required data for connecting to remote ESP
+     * @return true if connection was established
+     */
+    public boolean connectESP(ESP esp){
+        try{
+            connectStore(esp);
+        }catch(MessagingException e){
+            return false;
+        }
+        return true;
+    }
 
     private Store connectStore(ESP esp) throws MessagingException {
-        Session session = Session.getDefaultInstance(null, null);
+        Session session = Session.getDefaultInstance((new Properties()), null);
         Store store = session.getStore(esp.getProtocol());
         // for gmail you currently need to enable the option "less secure apps" TODO fix OAuth 2.0
         store.connect(
@@ -77,8 +91,6 @@ public class Model {
         file.close();
         return o;
     }
-
-
 
     private Folder[] getFolders(Store store) throws MessagingException {
         return store.getDefaultFolder().list("*");

@@ -26,4 +26,20 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
 
         Assertions.assertEquals(esp, esp1);
     }
+
+
+    // IN DEVELOPMENT
+    @Test
+    void connectESP(){
+        Model m = new Model();
+        ESP esp = new ESP(
+                "gmail",
+                "imap.gmail.com",
+                993,
+                "imaps",
+                "77grupp@gmail.com",
+                "grupp77group"
+        );
+        Assertions.assertTrue(m.connectESP(esp));
+    }
 }
