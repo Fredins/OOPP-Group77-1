@@ -2,9 +2,8 @@ package org.group77.mejl.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import org.group77.mejl.model.ESP;
 import org.group77.mejl.model.Model;
-
-import java.util.Properties;
 
 public class EmailSettings {
     @FXML
@@ -24,16 +23,16 @@ public class EmailSettings {
 
     @FXML
     private void addEmail(){
-        // TODO possibly convert props to custom data class (thin class)
-        Properties props = new Properties();
-        props.setProperty("password", password.getText());
-        props.setProperty("protocol", protocol.getText());
-        props.setProperty("host", host.getText());
-        props.setProperty("port", port.getText());
-        props.setProperty("user", user.getText());
-        props.setProperty("identifier", identifier.getText());
-        System.out.printf("props: \n%s\n", props);
-        model.storeProps(props);
+        // TODO check if connection is established
+        ESP esp = new ESP(
+                identifier.getText(),
+                host.getText(),
+                Integer.parseInt(port.getText()),
+                protocol.getText(),
+                user.getText(),
+                password.getText()
+        );
+        model.writeESP(esp);
 
     }
 }
