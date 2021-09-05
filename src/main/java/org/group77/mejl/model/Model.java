@@ -1,5 +1,7 @@
 package org.group77.mejl.model;
 
+import com.sun.mail.imap.IMAPFolder;
+
 import javax.mail.*;
 import java.io.*;
 
@@ -53,16 +55,7 @@ public class Model {
         file.close();
     }
 
-    private <T> T readFrom(String path) throws IOException, ClassNotFoundException {
-        FileInputStream file = new FileInputStream(path);
-        ObjectInputStream in = new ObjectInputStream(file);
-        T o = (T) in.readObject();
-        in.close();
-        file.close();
-        return o;
-    }
 
-    // IN DEVELOPMENT
     private Store connectStore(ESP esp) throws MessagingException {
         Session session = Session.getDefaultInstance(null, null);
         Store store = session.getStore(esp.getProtocol());
@@ -76,6 +69,32 @@ public class Model {
         return store;
     }
 
+    private <T> T readFrom(String path) throws IOException, ClassNotFoundException {
+        FileInputStream file = new FileInputStream(path);
+        ObjectInputStream in = new ObjectInputStream(file);
+        T o = (T) in.readObject();
+        in.close();
+        file.close();
+        return o;
+    }
+
+
+
+    private Folder[] getFolders(Store store) throws MessagingException {
+        return store.getDefaultFolder().list("*");
+    }
+
+    private Folder mkdir(Store store, String identifier) throws MessagingException {
+       Folder folder = store.getFolder(identifier);
+       if (!folder.exists()){
+           folder.create(Folder.HOLDS_FOLDERS);
+       }
+       return folder;
+    }
+
+
+    // IN DEVELOPMENT
+
     // IN DEVELOPMENT
     public Message[] getMessages(Folder folder) throws MessagingException {
         folder.open(Folder.READ_ONLY);
@@ -83,10 +102,7 @@ public class Model {
         return messages;
     }
 
-    // IN DEVELOPMENT
-    private Folder[] getFolders(Store store) throws MessagingException {
-        return store.getDefaultFolder().list("*");
-    }
+
 }
 
 
