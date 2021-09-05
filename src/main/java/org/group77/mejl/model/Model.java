@@ -1,6 +1,7 @@
 package org.group77.mejl.model;
 
 import javax.mail.*;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -10,6 +11,28 @@ public class Model {
     // remove global ugly variable when implementing fetching props from filesystem
     // probably from ~/.config/<app_name>/connected_emails.d/something
     private static Properties props;
+
+
+    private <T> void writeTo(T o, String path) throws IOException {
+        FileOutputStream file = new FileOutputStream(path);
+        ObjectOutputStream out = new ObjectOutputStream(file);
+        out.writeObject(o);
+        out.close();
+        file.close();
+    }
+
+    private <T> T readFrom(String path) throws IOException, ClassNotFoundException {
+        FileInputStream file = new FileInputStream(path);
+        ObjectInputStream in = new ObjectInputStream(file);
+        T o =  (T) in.readObject();
+        in.close();
+        file.close();
+        return o;
+    }
+
+
+
+
 
 
     // IN DEVELOPMENT
