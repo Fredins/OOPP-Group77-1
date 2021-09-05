@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
 
     @Test
-    void addUser(){
+    void ESPStorage(){
         Model m = new Model();
         ESP esp = new ESP(
                 "gmail",

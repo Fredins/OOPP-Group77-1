@@ -14,6 +14,10 @@ public class Model {
     // probably from ~/.config/<app_name>/connected_emails.d/something
     private static Properties props;
 
+    /**
+     * Stores esp information serialized in data directory
+     * @param esp an object with required data for connecting to remote ESP
+     */
     public void writeESP(ESP esp){
         try{
             // TODO implement getDataDir() method
@@ -26,6 +30,11 @@ public class Model {
 
     }
 
+    /**
+     *
+     * @param path to the file which contains ESP data
+     * @return a new deserialized ESP object
+     */
     public ESP readESP(String path){
         try{
            ESP esp = readFrom(path);
