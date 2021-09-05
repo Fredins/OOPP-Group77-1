@@ -4,8 +4,6 @@ import javax.mail.*;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Stream;
-import net.harawata.appdirs.AppDirs;
-import net.harawata.appdirs.AppDirsFactory;
 
 // THIS CLASS WILL BE SPLIT INTO MULTIPLE SINGLE RESPONSIBILITY CLASSES ONCE
 // SOME THINGS ARE FIGURED OUT

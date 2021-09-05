@@ -2,8 +2,6 @@ module org.group77.mejl {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.mail;
-    requires net.harawata.appdirs;
-
 
     opens org.group77.mejl to javafx.fxml;
     exports org.group77.mejl;
