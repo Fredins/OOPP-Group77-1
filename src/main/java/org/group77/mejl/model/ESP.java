@@ -3,6 +3,7 @@ package org.group77.mejl.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+// Email Service Provider
 public class ESP implements Serializable {
     private final String identifier;
     private final String host;
