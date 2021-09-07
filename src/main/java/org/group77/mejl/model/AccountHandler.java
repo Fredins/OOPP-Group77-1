@@ -69,17 +69,17 @@ public class AccountHandler {
     /**
      * Stores esp information serialized in data directory
      *
-     * @param accountInformation an object with required data for connecting to remote ESP
+     * @param info an object with required data for connecting to remote ESP
      */
-    protected void writeAccount(AccountInformation accountInformation) {
+    protected IOException writeAccount(AccountInformation info) {
         try {
-            String path = getSystemManager().getAccountDir() + accountInformation.getIdentifier() + "-" + accountInformation.getProtocol();
+            String path = getSystemManager().getAccountDir() + info.getIdentifier() + "-" + info.getProtocol();
             getSystemManager().createFile(path);
-            getSystemManager().writeTo(accountInformation, path);
+            getSystemManager().writeTo(info, path);
         } catch (IOException e) {
-            e.printStackTrace();
+            return e;
         }
-
+        return  null;
     }
 
     private SystemManager getSystemManager() {

@@ -11,13 +11,13 @@ public class Connector {
      * @param info an object with required data for connecting to remote ESP
      * @return true if connection was established
      */
-    protected boolean testConnection(AccountInformation info){
+    protected MessagingException testConnection(AccountInformation info){
         try{
             connectStore(info);
         }catch(MessagingException e){
-            return false;
+            return e;
         }
-        return true;
+        return null;
     }
 
     private Store connectStore(AccountInformation info) throws MessagingException {
