@@ -2,10 +2,10 @@ package org.group77.mejl.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import org.group77.mejl.model.ESP;
+import org.group77.mejl.model.AccountInformation;
 import org.group77.mejl.model.Model;
 
-public class EmailSettings {
+public class AccountController {
     @FXML
     private TextField password;
     @FXML
@@ -23,7 +23,7 @@ public class EmailSettings {
 
     @FXML
     private void addEmail(){
-        ESP esp = new ESP(
+        AccountInformation accountInformation = new AccountInformation(
                 identifier.getText(),
                 host.getText(),
                 Integer.parseInt(port.getText()),
@@ -31,8 +31,8 @@ public class EmailSettings {
                 user.getText(),
                 password.getText()
         );
-        if(model.connectESP(esp)){
-            model.writeESP(esp);
+        if(model.connectESP(accountInformation)){
+            model.writeESP(accountInformation);
         }else{
             System.out.println("can't connect to email service provider");
         }

@@ -11,7 +11,7 @@ import org.group77.mejl.model.Model;
 import javax.mail.Folder;
 import java.io.IOException;
 
-public class HelloController {
+public class MainController {
     private final Model model = new Model();
     @FXML
     private TreeView<Folder> folderTree;
@@ -34,7 +34,7 @@ public class HelloController {
 
     @FXML
     private void openEmailSettings() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("EmailSettings.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 500, 400);
         Stage stage = new Stage();
         stage.setTitle("mejl");

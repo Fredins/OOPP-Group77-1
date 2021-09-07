@@ -2,8 +2,6 @@ package org.group77.mejl.model;
 
 import javax.mail.*;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -13,13 +11,13 @@ public class Model {
     /**
      * Stores esp information serialized in data directory
      *
-     * @param esp an object with required data for connecting to remote ESP
+     * @param accountInformation an object with required data for connecting to remote ESP
      */
-    public void writeESP(ESP esp) {
+    public void writeESP(AccountInformation accountInformation) {
         try {
-            String path = getESPsDir() + esp.getIdentifier();
+            String path = getESPsDir() + accountInformation.getIdentifier();
             createFile(path);
-            writeTo(esp, path);
+            writeTo(accountInformation, path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,10 +35,10 @@ public class Model {
      * @param path to the file which contains ESP data
      * @return a new deserialized ESP object
      */
-    public ESP readESP(String path) {
+    public AccountInformation readESP(String path) {
         try {
-            ESP esp = readFrom(path);
-            return esp;
+            AccountInformation accountInformation = readFrom(path);
+            return accountInformation;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -65,12 +63,12 @@ public class Model {
 
     /**
      * tests connection to store
-     * @param esp an object with required data for connecting to remote ESP
+     * @param accountInformation an object with required data for connecting to remote ESP
      * @return true if connection was established
      */
-    public boolean connectESP(ESP esp){
+    public boolean connectESP(AccountInformation accountInformation){
         try{
-            connectStore(esp);
+            connectStore(accountInformation);
         }catch(MessagingException e){
             // TODO display this exception to the user
             return false;
@@ -78,15 +76,15 @@ public class Model {
         return true;
     }
 
-    private Store connectStore(ESP esp) throws MessagingException {
+    private Store connectStore(AccountInformation accountInformation) throws MessagingException {
         Session session = Session.getDefaultInstance((new Properties()), null);
-        Store store = session.getStore(esp.getProtocol());
+        Store store = session.getStore(accountInformation.getProtocol());
         // for gmail you currently need to enable the option "less secure apps" TODO fix OAuth 2.0
         store.connect(
-                esp.getHost(),
-                esp.getPort(),
-                esp.getUser(),
-                esp.getPassword()
+                accountInformation.getHost(),
+                accountInformation.getPort(),
+                accountInformation.getUser(),
+                accountInformation.getPassword()
         );
         return store;
     }
@@ -128,7 +126,7 @@ public class Model {
      * reads the active ESP which is indicated in the file active_esp
      * @return the in use ESP
      */
-    public ESP getActiveESP(){
+    public AccountInformation getActiveESP(){
         String s = getDataDir() + "active_esp";
         File file = new File(s);
         try{

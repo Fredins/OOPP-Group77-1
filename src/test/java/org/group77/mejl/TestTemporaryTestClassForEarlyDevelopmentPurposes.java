@@ -1,6 +1,6 @@
 package org.group77.mejl;
 
-import org.group77.mejl.model.ESP;
+import org.group77.mejl.model.AccountInformation;
 import org.group77.mejl.model.Model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
     @Test
     void ESPStorage(){
         Model m = new Model();
-        ESP esp = new ESP(
+        AccountInformation accountInformation = new AccountInformation(
                 "gmail",
                 "imap.gmail.com",
                 993,
@@ -18,11 +18,11 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
                 "77grupp@gmail.com",
                 "grupp77group"
         );
-        m.writeESP(esp);
+        m.writeESP(accountInformation);
         m.setAcitiveESP("gmail");
-        ESP esp1 = m.getActiveESP();
+        AccountInformation accountInformation1 = m.getActiveESP();
 
-        Assertions.assertEquals(esp, esp1);
+        Assertions.assertEquals(accountInformation, accountInformation1);
     }
 
 
@@ -30,7 +30,7 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
     @Test
     void connectESP(){
         Model m = new Model();
-        ESP esp = new ESP(
+        AccountInformation accountInformation = new AccountInformation(
                 "gmail",
                 "imap.gmail.com",
                 993,
@@ -38,6 +38,6 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
                 "77grupp@gmail.com",
                 "grupp77group"
         );
-        Assertions.assertTrue(m.connectESP(esp));
+        Assertions.assertTrue(m.connectESP(accountInformation));
     }
 }

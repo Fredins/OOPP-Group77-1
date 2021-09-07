@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 // Email Service Provider
-public class ESP implements Serializable {
+public class AccountInformation implements Serializable {
     private final String identifier;
     private final String host;
     private final int port;
@@ -12,7 +12,7 @@ public class ESP implements Serializable {
     private final String user;
     private final String password;
 
-    public ESP(String identifier, String host, int port, String protocol, String user, String password) {
+    public AccountInformation(String identifier, String host, int port, String protocol, String user, String password) {
         this.identifier = identifier;
         this.host = host;
         this.port = port;
@@ -47,22 +47,22 @@ public class ESP implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof ESP)){
+        if(!(obj instanceof AccountInformation)){
            return false;
         }
-        if(!(Objects.equals(getIdentifier(), ((ESP) obj).getIdentifier()))){
+        if(!(Objects.equals(getIdentifier(), ((AccountInformation) obj).getIdentifier()))){
            return false;
         }
-        if(!(Objects.equals(getHost(), ((ESP) obj).getHost()))){
+        if(!(Objects.equals(getHost(), ((AccountInformation) obj).getHost()))){
             return false;
         }
-        if(!(getPort() == ((ESP) obj).getPort())){
+        if(!(getPort() == ((AccountInformation) obj).getPort())){
             return false;
         }
-        if(!(Objects.equals(getUser(), ((ESP) obj).getUser()))){
+        if(!(Objects.equals(getUser(), ((AccountInformation) obj).getUser()))){
             return false;
         }
-        if(!(Objects.equals(getPassword(), ((ESP) obj).getPassword()))){
+        if(!(Objects.equals(getPassword(), ((AccountInformation) obj).getPassword()))){
             return false;
         }
         return true;
