@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class MainController {
     private final Model model = new Model();
+    private static Stage stage = new Stage();
     @FXML
     private TreeView<Folder> folderTree;
     // IN DEVELOPMENT
@@ -32,11 +33,14 @@ public class MainController {
          */
     }
 
+    public static Stage getStage() {
+        return stage;
+    }
+
     @FXML
     private void openEmailSettings() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 500, 400);
-        Stage stage = new Stage();
         stage.setTitle("mejl");
         stage.setScene(scene);
         stage.show();

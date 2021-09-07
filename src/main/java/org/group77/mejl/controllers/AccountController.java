@@ -28,7 +28,7 @@ public class AccountController {
     private void addEmail(){
         boolean connection = emailApp.testConnection(identifier.getText(), host.getText(), Integer.parseInt(port.getText()), protocol.getText(), user.getText(), password.getText());
         if (connection) {
-
+            MainController.getStage().close();
         } else{
             System.out.println("can't connect to email service provider");
         }
