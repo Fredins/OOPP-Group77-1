@@ -11,7 +11,7 @@ public class Connector {
      * @param info an object with required data for connecting to remote ESP
      * @return true if connection was established
      */
-    public boolean testConnection(AccountInformation info){
+    protected boolean testConnection(AccountInformation info){
         try{
             connectStore(info);
         }catch(MessagingException e){
