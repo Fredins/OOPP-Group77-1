@@ -9,7 +9,7 @@ public class Connector {
      */
 
     public boolean testConnection(String identifier, String host, Integer port, String protocol, String user, String password ){
-        return true;
+        return false;
     }
 
 }

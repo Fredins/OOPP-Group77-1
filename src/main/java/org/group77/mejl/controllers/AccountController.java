@@ -6,6 +6,8 @@ import org.group77.mejl.model.AccountInformation;
 import org.group77.mejl.model.EmailApp;
 import org.group77.mejl.model.Model;
 
+import java.io.IOException;
+
 public class AccountController {
     @FXML
     private TextField password;
@@ -24,32 +26,20 @@ public class AccountController {
     private EmailApp emailApp = new EmailApp();
 
 
+
     @FXML
-    private void addEmail(){
+    private void addEmail() throws IOException {
         boolean connection = emailApp.testConnection(identifier.getText(), host.getText(), Integer.parseInt(port.getText()), protocol.getText(), user.getText(), password.getText());
         if (connection) {
             MainController.getStage().close();
         } else{
             System.out.println("can't connect to email service provider");
+            AddEmailErrorController.Error();
+
         }
     }
 
 
 
-    @FXML
-    private void addEmaill(){
-        AccountInformation accountInformation = new AccountInformation(
-                identifier.getText(),
-                host.getText(),
-                Integer.parseInt(port.getText()),
-                protocol.getText(),
-                user.getText(),
-                password.getText()
-        );
-        if(model.connectESP(accountInformation)){
-            model.writeESP(accountInformation);
-        }else{
-            System.out.println("can't connect to email service provider");
-        }
-    }
+
 }
