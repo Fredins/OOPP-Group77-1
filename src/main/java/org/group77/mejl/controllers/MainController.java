@@ -6,13 +6,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.group77.mejl.Main;
-import org.group77.mejl.model.Model;
+import org.group77.mejl.model.EmailApp;
 
 import javax.mail.Folder;
 import java.io.IOException;
 
 public class MainController {
-    private final Model model = new Model();
+    private final EmailApp emailApp = new EmailApp();
     @FXML
     private TreeView<Folder> folderTree;
     // IN DEVELOPMENT
