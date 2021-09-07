@@ -73,7 +73,7 @@ public class AccountHandler {
      */
     protected void writeAccount(AccountInformation accountInformation) {
         try {
-            String path = getSystemManager().getAccountDir() + accountInformation.getIdentifier();
+            String path = getSystemManager().getAccountDir() + accountInformation.getIdentifier() + "-" + accountInformation.getProtocol();
             getSystemManager().createFile(path);
             getSystemManager().writeTo(accountInformation, path);
         } catch (IOException e) {
