@@ -61,33 +61,6 @@ public class Model {
         file.close();
     }
 
-    /**
-     * tests connection to store
-     * @param accountInformation an object with required data for connecting to remote ESP
-     * @return true if connection was established
-     */
-    public boolean connectESP(AccountInformation accountInformation){
-        try{
-            connectStore(accountInformation);
-        }catch(MessagingException e){
-            // TODO display this exception to the user
-            return false;
-        }
-        return true;
-    }
-
-    private Store connectStore(AccountInformation accountInformation) throws MessagingException {
-        Session session = Session.getDefaultInstance((new Properties()), null);
-        Store store = session.getStore(accountInformation.getProtocol());
-        // for gmail you currently need to enable the option "less secure apps" TODO fix OAuth 2.0
-        store.connect(
-                accountInformation.getHost(),
-                accountInformation.getPort(),
-                accountInformation.getUser(),
-                accountInformation.getPassword()
-        );
-        return store;
-    }
 
     private <T> T readFrom(String path) throws IOException, ClassNotFoundException {
         FileInputStream file = new FileInputStream(path);
