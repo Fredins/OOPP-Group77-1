@@ -14,7 +14,7 @@ public class AccountHandler {
      * @implNote not using symlink because Windows require elevated permission
      */
     protected void setAcitiveAccount(String identifier){
-        String path = getSystemManager().getDataDir() + "active_account";
+        String path = getSystemManager().getAccountDir() + "active_account";
         File file = new File(path);
         try{
             if(!file.exists()){
@@ -37,7 +37,7 @@ public class AccountHandler {
      * @return the in use ESP
      */
     protected AccountInformation getActiveAccount(){
-        String s = getSystemManager().getDataDir() + "active_account";
+        String s = getSystemManager().getAccountDir() + "active_account";
         File file = new File(s);
         try{
             if(!file.exists()){
