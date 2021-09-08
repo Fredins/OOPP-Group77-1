@@ -25,7 +25,7 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
                 "77grupp@gmail.com",
                 "nopassword"
         );
-        EmailApp emailApp = new EmailApp()
+        EmailApp emailApp = new EmailApp();
         String res = emailApp.addEmail(info.getIdentifier(),
                 info.getHost(),
                 info.getPort(),
