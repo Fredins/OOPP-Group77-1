@@ -48,6 +48,10 @@ public class SystemManager {
         return accountDir;
     }
 
+    protected String getDatadir() {
+        return dataDir;
+    }
+
     protected void createFile(String path) throws IOException {
         File file = new File(path);
         if (file.exists()) {

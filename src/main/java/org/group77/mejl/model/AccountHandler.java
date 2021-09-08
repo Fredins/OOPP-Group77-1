@@ -14,7 +14,7 @@ public class AccountHandler {
      * @implNote not using symlink because Windows require elevated permission
      */
     protected void setAcitiveAccount(String identifier){
-        String path = getSystemManager().getAccountDir() + "active_account";
+        String path = getSystemManager().getDataDir() + "active_account";
         File file = new File(path);
         try{
             if(!file.exists()){
@@ -37,7 +37,7 @@ public class AccountHandler {
      * @return the in use ESP
      */
     protected AccountInformation getActiveAccount(){
-        String s = getSystemManager().getAccountDir() + "active_account";
+        String s = getSystemManager().getDataDir() + "active_account";
         File file = new File(s);
         try{
             if(!file.exists()){
@@ -53,11 +53,11 @@ public class AccountHandler {
         return null;
     }
     /**
-     * @param path to the file which contains ESP data
      * @return a new deserialized ESP object
      */
-    protected AccountInformation readAccount(String path) {
+    protected AccountInformation readAccount(String identifier, String protocol) {
         try {
+            String path = systemManager.getAccountDir() + identifier + "-" + protocol;
             AccountInformation accountInformation = getSystemManager().readFrom(path);
             return accountInformation;
         } catch (IOException | ClassNotFoundException e) {
