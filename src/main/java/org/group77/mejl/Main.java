@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.group77.mejl.model.EmailBuilder;
 
 import java.io.IOException;
 
@@ -17,7 +18,8 @@ public class Main extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         launch();
+        EmailBuilder.sendEmail("iiredqueen@gmail.com");
     }
 }
