@@ -22,7 +22,15 @@ public class EmailApp {
         return messages;
     }
 
-    public String addEmail(AccountInformation info){
+    public String addEmail(String identifier, String host, int port, String protocol, String user, String password){
+        AccountInformation info = new AccountInformation(
+                identifier,
+                host,
+                port,
+                protocol,
+                user,
+                password
+        );
         MessagingException e = connector.testConnection(info);
         if(e != null){
             // return exception message to client

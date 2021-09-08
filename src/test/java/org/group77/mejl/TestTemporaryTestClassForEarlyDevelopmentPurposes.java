@@ -25,9 +25,22 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
                 "77grupp@gmail.com",
                 "nopassword"
         );
-        EmailApp emailApp = new EmailApp();
-        String res = emailApp.addEmail(info);
-        String res1 = emailApp.addEmail(wrongInfo);
+        EmailApp emailApp = new EmailApp()
+        String res = emailApp.addEmail(info.getIdentifier(),
+                info.getHost(),
+                info.getPort(),
+                info.getProtocol(),
+                info.getUser(),
+                info.getPassword()
+        );
+        String res1 = emailApp.addEmail(
+                wrongInfo.getIdentifier(),
+                wrongInfo.getHost(),
+                wrongInfo.getPort(),
+                wrongInfo.getProtocol(),
+                wrongInfo.getUser(),
+                wrongInfo.getPassword()
+        );
         Assertions.assertTrue(res.equals("account successfully added"));
         Assertions.assertFalse(res.equals(res1));
     }
