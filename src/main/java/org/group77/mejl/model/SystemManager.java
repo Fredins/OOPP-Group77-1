@@ -52,12 +52,14 @@ public class SystemManager {
         return dataDir;
     }
 
-    protected void createFile(String path) throws IOException {
+    protected void touch(String path) throws IOException {
         File file = new File(path);
-        if (file.exists()) {
-            file.delete();
-        }
         file.createNewFile();
+    }
+
+    protected void mkdir(String path) throws IOException {
+        File file = new File(path);
+        file.mkdir();
     }
 
     protected <T> void writeTo(T o, String path) throws IOException {

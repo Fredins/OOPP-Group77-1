@@ -3,6 +3,8 @@ package org.group77.mejl.model;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class AccountHandler {
@@ -15,11 +17,9 @@ public class AccountHandler {
      */
     protected void setAcitiveAccount(String identifier){
         String path = getSystemManager().getDataDir() + "active_account";
-        File file = new File(path);
+        createAccountHandlerPaths();
         try{
-            if(!file.exists()){
-                getSystemManager().createFile(path);
-            }
+            File file = new File(path);
             FileWriter writer = new FileWriter(path);
             if(!file.canWrite()){
                 file.setWritable(true);
@@ -32,34 +32,50 @@ public class AccountHandler {
         }
     }
 
+    private void createAccountHandlerPaths() {
+        SystemManager sys = getSystemManager();
+        String active_account = sys.getDataDir() + "active_account";
+        String accountInformation_d = sys.getDataDir() + "accountinformation.d";
+        try{
+            if(!Files.exists(Path.of(active_account))){
+                sys.touch(active_account);
+            }
+            if(!Files.exists(Path.of(accountInformation_d))){
+                sys.mkdir(accountInformation_d);
+            }
+        }catch(IOException e){
+           e.printStackTrace();
+        }
+    }
+
     /**
      * reads the active ESP which is indicated in the file active_esp
      * @return the in use ESP
      */
     protected AccountInformation getActiveAccount(){
-        String s = getSystemManager().getDataDir() + "active_account";
-        File file = new File(s);
+        SystemManager sys = getSystemManager();
+        createAccountHandlerPaths();
         try{
-            if(!file.exists()){
-                getSystemManager().createFile(s);
-            }
+            String s = getSystemManager().getDataDir() + "active_account";
+            File file = new File(s);
             Scanner scanner = new Scanner(file);
-            String identifier = scanner.nextLine();
-            return getSystemManager().readFrom(getSystemManager().getAccountDir() + identifier);
+            String active_account = scanner.nextLine();
+            return sys.readFrom(sys.getAccountDir() + active_account);
         }catch(IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
-
         return null;
     }
+
     /**
      * @return a new deserialized ESP object
      */
     protected AccountInformation readAccount(String identifier, String protocol) {
+        SystemManager sys = getSystemManager();
+        createAccountHandlerPaths();
         try {
-            String path = systemManager.getAccountDir() + identifier + "-" + protocol;
-            AccountInformation accountInformation = getSystemManager().readFrom(path);
-            return accountInformation;
+            String path = sys.getAccountDir() + identifier + "-" + protocol;
+            return sys.readFrom(path);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -72,9 +88,11 @@ public class AccountHandler {
      * @param info an object with required data for connecting to remote ESP
      */
     protected IOException writeAccount(AccountInformation info) {
+        SystemManager sys = getSystemManager();
+        createAccountHandlerPaths();
         try {
-            String path = getSystemManager().getAccountDir() + info.getIdentifier() + "-" + info.getProtocol();
-            getSystemManager().createFile(path);
+            String path = sys.getAccountDir() + info.getIdentifier() + "-" + info.getProtocol();
+            getSystemManager().touch(path);
             getSystemManager().writeTo(info, path);
         } catch (IOException e) {
             return e;
