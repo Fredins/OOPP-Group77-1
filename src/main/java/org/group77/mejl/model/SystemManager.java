@@ -48,7 +48,7 @@ public class SystemManager {
         return accountDir;
     }
 
-    protected String getDatadir() {
+    protected String getDataDir() {
         return dataDir;
     }
 
