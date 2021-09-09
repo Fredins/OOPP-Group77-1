@@ -11,9 +11,8 @@ public class EmailApp {
     private final AccountHandler accountHandler = new AccountHandler();
     private final Connector connector = new Connector();
 
-
-    private Folder[] getFolders(Store store) throws MessagingException {
-        return store.getDefaultFolder().list("*");
+    public TreeNode<Folder> getFolderTree(AccountInformation info) throws MessagingException {
+        return connector.getFolderTree(info);
     }
 
 

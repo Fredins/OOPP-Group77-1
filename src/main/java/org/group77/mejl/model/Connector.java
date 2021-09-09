@@ -1,11 +1,22 @@
 package org.group77.mejl.model;
 
+import javax.mail.Folder;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import java.util.Properties;
 
 public class Connector {
+    private final FolderParser folderParser = new FolderParser();
+
+    public TreeNode<Folder> getFolderTree(AccountInformation info) throws MessagingException {
+        Store store = connectStore(info);
+        return folderParser.getFolderTree(getFolders(store), store);
+    }
+
+    private Folder[] getFolders(Store store) throws MessagingException {
+        return store.getDefaultFolder().list("*");
+    }
 
     /**
      * tests connection to store
