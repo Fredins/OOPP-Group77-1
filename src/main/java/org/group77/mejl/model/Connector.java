@@ -1,21 +1,26 @@
 package org.group77.mejl.model;
 
+import com.sun.mail.imap.IMAPFolder;
+
 import javax.mail.Folder;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class Connector {
     private final FolderParser folderParser = new FolderParser();
 
-    public TreeNode<Folder> getFolderTree(AccountInformation info) throws MessagingException {
+    public TreeNode<ImapsFolder> getFolderTree(AccountInformation info) throws MessagingException {
         Store store = connectStore(info);
-        return folderParser.getFolderTree(getFolders(store), store);
+        return folderParser.parseFolders(getFolders(store), store);
     }
 
-    private Folder[] getFolders(Store store) throws MessagingException {
-        return store.getDefaultFolder().list("*");
+    private ImapsFolder[] getFolders(Store store) throws MessagingException {
+        return Arrays.stream(store.getDefaultFolder().list("*"))
+                .map(f -> new ImapsFolder((IMAPFolder) f))
+                .toArray(ImapsFolder[]::new);
     }
 
     /**

@@ -29,6 +29,10 @@ public class TreeNode<T> implements Serializable{
        this.parent = parent;
     }
 
+    public T getT() {
+        return t;
+    }
+
     public TreeNode<T> getRoot(){
         TreeNode<T> node = this;
         while(true){

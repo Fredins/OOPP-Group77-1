@@ -11,7 +11,7 @@ public class EmailApp {
     private final AccountHandler accountHandler = new AccountHandler();
     private final Connector connector = new Connector();
 
-    public TreeNode<Folder> getFolderTree(AccountInformation info) throws MessagingException {
+    public TreeNode<ImapsFolder> getFolderTree(AccountInformation info) throws MessagingException {
         return connector.getFolderTree(info);
     }
 

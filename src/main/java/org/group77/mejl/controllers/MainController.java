@@ -6,18 +6,41 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.group77.mejl.Main;
-import org.group77.mejl.model.EmailApp;
+import org.group77.mejl.model.*;
 
 import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.function.Function;
 
 public class MainController {
     private final EmailApp emailApp = new EmailApp();
     @FXML
-    private TreeView<Folder> folderTree;
+    private TreeView<ImapsFolder> folderTree;
     // IN DEVELOPMENT
     @FXML
     private void initialize(){
+        Function<TreeNode<ImapsFolder>, ImapsFolder> dataFunction = c -> c.getT();
+        Function<TreeNode<ImapsFolder>, Collection<? extends TreeNode<ImapsFolder>>> childFunction = c -> c.getChildren();
+
+        try{
+            TreeNode<ImapsFolder> node = emailApp.getFolderTree(new AccountInformation(
+                    "gmail",
+                    "imap.gmail.com",
+                    993,
+                    "imaps",
+                    "77grupp@gmail.com",
+                    "grupp77group"
+            ));
+            TreeItemRecursive<TreeNode<ImapsFolder>, ImapsFolder> root = new TreeItemRecursive<>(node, dataFunction, childFunction);
+            root.setExpanded(true);
+            folderTree.setRoot(root);
+        }catch(MessagingException e){
+            e.printStackTrace();
+        }
+
         /*
         try{
             ContextMenu contextMenu = new ContextMenu();
