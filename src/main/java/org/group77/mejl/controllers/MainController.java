@@ -32,6 +32,8 @@ public class MainController {
          */
     }
 
+
+
     @FXML
     private void openEmailSettings() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountView.fxml"));

@@ -7,6 +7,7 @@ import javax.mail.Store;
 import java.io.IOException;
 
 public class EmailApp {
+
     private final AccountHandler accountHandler = new AccountHandler();
     private final Connector connector = new Connector();
 
@@ -42,5 +43,6 @@ public class EmailApp {
         }
         return "account successfully added";
     }
+
 
 }

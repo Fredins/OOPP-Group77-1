@@ -6,6 +6,7 @@ import javax.mail.Store;
 import java.util.Properties;
 
 public class Connector {
+
     /**
      * tests connection to store
      * @param info an object with required data for connecting to remote ESP
@@ -32,4 +33,5 @@ public class Connector {
         );
         return store;
     }
+
 }
