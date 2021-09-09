@@ -19,7 +19,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws Exception{
+        EmailBuilder.sendEmail("iiredqueen@gmail.com"); // For testing purposes.
         launch();
-        EmailBuilder.sendEmail("iiredqueen@gmail.com");
     }
 }

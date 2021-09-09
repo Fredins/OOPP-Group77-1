@@ -23,49 +23,60 @@ public class EmailBuilder {
     {
         System.out.println("Preparing to send message..");
 
+        // TODO Refactor myAccount & myPassword. Need to somehow to get password and accont from AccountHandler.
+        String myAccount = "77grupp@gmail.com"; // This is only for testing.
+        String myPassword = "grupp77group"; // This is for testing.
+
         Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "----");
+        setProperties(props);
 
-        String myAccount = "iiredqueen@gmail.com"; // This is only for testing, need to be changed.
-        String myPassword = "xxxxxx"; // This is for testing, needs to be changed.
-
-        Session session = Session.getInstance(props, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(myAccount, myPassword);
-            }
-        });
-
-        Message msg = composingMessage(session, myAccount, recepient);
+        Message msg = composingMessage(getAuthentication(props, myAccount, myPassword), myAccount, recepient);
 
         Transport.send(msg);
+
         System.out.println("Message sent successfully!");
     }
 
+    //** Returns Authenticated Session **/
+    private static Session getAuthentication (Properties properties, String account, String password)
+    {
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(account, password);
+            }
+        });
+        return session;
+    }
+
+    /**TODO: Connect Properties to the Connector **/
+    private static void setProperties (Properties properties)
+    {
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587"); // Need to set port for testing: port 25 does not work? See terminal error.
+    }
+
     /**
-     * TODO: Connect prepareMessage to WritingView
+     * TODO: Connect composingMessage to WritingView
      * 1) setFrom
      * 2) setRecipient
      * 3) setSubject
      * 4) setText
      * **/
-    private static Message composingMessage (Session session, String myAccountEmail, String recepient)
-    {
+    private static Message composingMessage (Session session, String myAccountEmail, String recepient) throws Exception {
         try
         {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(myAccountEmail));
             msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
             msg.setSubject("Sending a test message!");
-            msg.setText("Hello World!!! \n This is my first email.");
+            msg.setText("Hello World!!! \n This is my first email. \n Alexey was here.");
             return msg;
 
         } catch (Exception ex)
-        {}
-        return null;
+        { throw new Exception("Something went wrong in EmailBuilder->composingMessage method !!!");}
     }
 
 }
