@@ -27,7 +27,7 @@ public class EmailBuilder {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.port", "----");
 
         String myAccount = "iiredqueen@gmail.com"; // This is only for testing, need to be changed.
         String myPassword = "xxxxxx"; // This is for testing, needs to be changed.
