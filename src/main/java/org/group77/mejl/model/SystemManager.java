@@ -6,8 +6,6 @@ public class SystemManager {
     // path to the root directory of this application's files.
     // Will depend on OS.
     private String appDir;
-    //path to directory with account information
-    private String accountDir;
 
     /** //TODO make getDataDir() into separate method to make it testable?
      *      // Then have setAppDir as a separate method?
@@ -37,12 +35,8 @@ public class SystemManager {
         appDir = dataDir + "Group77"; //TODO change Group77 to app name?
     }
 
-    private void setAccountDir() {
-        accountDir = appDir + "AccountInformation.d";
-    }
-
     protected String getAccountDir(){
-        return accountDir;
+        return appDir + "AccountInformation.d";
     }
 
     protected String getAppDir() {
