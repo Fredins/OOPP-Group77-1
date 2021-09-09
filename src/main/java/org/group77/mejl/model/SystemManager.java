@@ -43,6 +43,10 @@ public class SystemManager {
         return appDir;
     }
 
+    protected String getFolderDir() {
+        return appDir + "Folders";
+    }
+
     protected void touch(String path) throws IOException {
         File file = new File(path);
         file.createNewFile();
