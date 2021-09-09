@@ -53,7 +53,6 @@ public class MainController {
                 try {
                     f.open(Folder.READ_WRITE);
                     Message[] messages = f.getMessages();
-                    System.out.println(messages[0].getSubject());
                     loadMails(messages);
                     f.close();
                 } catch (MessagingException | IOException ex) {
@@ -80,6 +79,7 @@ public class MainController {
     }
 
     private void loadMails(Message[] messages) throws IOException, MessagingException {
+        flowPane.getChildren().clear();
         for (Message m: messages) {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("EmailItemView.fxml"));
             flowPane.getChildren().add(fxmlLoader.load());

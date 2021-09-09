@@ -20,7 +20,7 @@ public class ImapsFolder{
     }
 
     public void open(int mode) throws MessagingException {
-       imapFolder.open(mode);
+        imapFolder.open(mode);
     }
 
     public void close() throws MessagingException {

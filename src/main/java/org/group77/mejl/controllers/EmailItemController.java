@@ -19,7 +19,6 @@ public class EmailItemController {
 
     public void init(Message message) throws MessagingException {
        this.message = message;
-       System.out.println("hello" + Arrays.toString(message.getFrom()));
        from.setText(String.valueOf(message.getFrom()[0]));
        subject.setText(message.getSubject());
     }
