@@ -6,38 +6,35 @@ public class SystemManager {
     // path to the root directory of this application's files.
     // Will depend on OS.
     private String appDir;
-    // user's os' data directory
-    private String dataDir;
-    // application name
-    private String appName = "Group77";     //TODO change Group77 to app name?
-    // root directories of this application's files depending on OS.
-    private final String linuxRoot = "/home/<user>/.local/share/";
-    private final String macRoot = "/Users/<user>/Library/Application Support/";
-    private final String windowsRoot = "C:\\Users\\<user>\\AppData\\Local\\"; //TODO ok to remove <groupname> and only have <appname>? (MARTIN)
-
     //path to directory with account information
     private String accountDir;
 
-    /**
+    /** //TODO make getDataDir() into separate method to make it testable?
+     *      // Then have setAppDir as a separate method?
      * Method to determine both the data directory of the user's os and the root directory of this
      * application's files.
      * App root will be <data directory of user's OS>/Group77. //TODO change from Group77 to appName?
      * @throws InvalidOperatingSystemException - custom exception stating that os could not be found or is incompatible.
      */
     protected void setDataDir() throws InvalidOperatingSystemException {
+        String dataDir;
         // Get the operating system of the machine.
-        // If os does not match OSX, windows or linux then throw exception.
         String os = System.getProperty("os.name").toLowerCase();
+        // Get the username on the user's machine.
+        String userName = System.getProperty("user.name");
+        // Set dataDir according to os and username.
+        // If os does not match mac/osx, windows or linux then throw exception.
         if (os.contains("mac")) {
-            dataDir = macRoot;
+            dataDir = "/Users/" + userName + "/Library/Application Support/";
         } else if (os.contains("win")) {
-            dataDir = windowsRoot;
+            dataDir = "C:\\Users\\" + userName + "\\AppData\\Local\\";
         } else if (os.contains("nux")) {
-            dataDir = linuxRoot;
+            dataDir = "/home/" + userName + "/.local/share/";
         } else {
             throw new InvalidOperatingSystemException("Your operating system is either not supported or not found.");
         }
-        appDir = dataDir + appName;
+        // TODO change setting of appDir to a separate method??
+        appDir = dataDir + "Group77"; //TODO change Group77 to app name?
     }
 
     private void setAccountDir() {
@@ -48,8 +45,8 @@ public class SystemManager {
         return accountDir;
     }
 
-    protected String getDataDir() {
-        return dataDir;
+    protected String getAppDir() {
+        return appDir;
     }
 
     protected void touch(String path) throws IOException {

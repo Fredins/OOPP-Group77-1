@@ -16,7 +16,7 @@ public class AccountHandler {
      * @implNote not using symlink because Windows require elevated permission
      */
     protected void setAcitiveAccount(String identifier){
-        String path = getSystemManager().getDataDir() + "active_account";
+        String path = getSystemManager().getAppDir() + "active_account"; //TODO change SystemManager to have a getActiveAccountDir() instead? We use this multiple times.
         createAccountHandlerPaths();
         try{
             File file = new File(path);
@@ -34,8 +34,8 @@ public class AccountHandler {
 
     private void createAccountHandlerPaths() {
         SystemManager sys = getSystemManager();
-        String active_account = sys.getDataDir() + "active_account";
-        String accountInformation_d = sys.getDataDir() + "accountinformation.d";
+        String active_account = sys.getAppDir() + "active_account";
+        String accountInformation_d = sys.getAppDir() + "accountinformation.d";
         try{
             if(!Files.exists(Path.of(active_account))){
                 sys.touch(active_account);
@@ -56,7 +56,7 @@ public class AccountHandler {
         SystemManager sys = getSystemManager();
         createAccountHandlerPaths();
         try{
-            String s = getSystemManager().getDataDir() + "active_account";
+            String s = getSystemManager().getAppDir() + "active_account";
             File file = new File(s);
             Scanner scanner = new Scanner(file);
             String active_account = scanner.nextLine();
