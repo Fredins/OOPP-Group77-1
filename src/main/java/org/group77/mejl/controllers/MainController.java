@@ -26,6 +26,7 @@ public class MainController {
         Function<TreeNode<ImapsFolder>, Collection<? extends TreeNode<ImapsFolder>>> childFunction = c -> c.getChildren();
 
         try{
+            // temporary, instead load all something-imaps from
             TreeNode<ImapsFolder> node = emailApp.getFolderTree(new AccountInformation(
                     "gmail",
                     "imap.gmail.com",
@@ -41,7 +42,6 @@ public class MainController {
             e.printStackTrace();
         }
 
-        /*
         try{
             ContextMenu contextMenu = new ContextMenu();
             MenuItem m1 = new MenuItem("do something");
@@ -49,10 +49,9 @@ public class MainController {
             contextMenu.getItems().add(m1);
             contextMenu.getItems().add(m2);
             folderTree.setContextMenu(contextMenu);
-        }catch (NullPointerException | MessagingException e){
+        }catch (NullPointerException e ){
            e.printStackTrace();
         }
-         */
     }
 
 
