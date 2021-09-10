@@ -1,6 +1,8 @@
 package org.group77.mejl.model;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class SystemManager {
     // path to the root directory of this application's files.
@@ -14,7 +16,12 @@ public class SystemManager {
      * App root will be <data directory of user's OS>/Group77. //TODO change from Group77 to appName?
      * @throws InvalidOperatingSystemException - custom exception stating that os could not be found or is incompatible.
      */
-    protected void setDataDir() throws InvalidOperatingSystemException {
+    public SystemManager(){
+        createAppPath();
+        createAccountHandlerPaths();
+    }
+
+    protected void setAppDir() throws InvalidOperatingSystemException {
         String dataDir;
         // Get the operating system of the machine.
         String os = System.getProperty("os.name").toLowerCase();
@@ -32,19 +39,61 @@ public class SystemManager {
             throw new InvalidOperatingSystemException("Your operating system is either not supported or not found.");
         }
         // TODO change setting of appDir to a separate method??
-        appDir = dataDir + "Group77"; //TODO change Group77 to app name?
+        appDir = dataDir + getAppName(); //TODO change Group77 to app name?
+        System.out.println("appdir: " + appDir);
     }
 
     protected String getAccountDir(){
         return appDir + "AccountInformation.d";
     }
+    protected String getActiveAccountPath(){
+        return appDir + "active_account";
+    }
 
-    protected String getAppDir() {
+    protected String getAppDir() { // är detta okej hampus?
+        if(appDir == null){
+            try{
+                setAppDir();
+            }catch(InvalidOperatingSystemException e){
+                e.printStackTrace();
+            }
+        }
         return appDir;
     }
 
-    protected String getFolderDir() {
-        return appDir + "Folders";
+    private void createAccountHandlerPaths() {
+        try{
+            if(!Files.exists(Path.of(getActiveAccountPath()))){
+                touch(getActiveAccountPath());
+            }
+            if(!Files.exists(Path.of(getAccountDir()))){
+                mkdir(getAccountDir());
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void createAppPath(){
+        if(appDir == null){
+            try{
+                setAppDir();
+            }catch(InvalidOperatingSystemException e){
+                e.printStackTrace();
+            }
+        }
+        try{
+            if(!Files.exists(Path.of(getAppDir()))){
+               mkdir(getAppDir());
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    protected String getAppName(){
+        return "Group77"; // TODO decide on app name
     }
 
     protected void touch(String path) throws IOException {
@@ -57,7 +106,7 @@ public class SystemManager {
         file.mkdir();
     }
 
-    protected <T> void writeTo(T o, String path) throws IOException {
+    protected <T> void serialize(T o, String path) throws IOException {
         FileOutputStream file = new FileOutputStream(path);
         ObjectOutputStream out = new ObjectOutputStream(file);
         out.writeObject(o);
@@ -66,7 +115,7 @@ public class SystemManager {
     }
 
 
-    protected <T> T readFrom(String path) throws IOException, ClassNotFoundException {
+    protected <T> T deserialize(String path) throws IOException, ClassNotFoundException {
         FileInputStream file = new FileInputStream(path);
         ObjectInputStream in = new ObjectInputStream(file);
         T o = (T) in.readObject();

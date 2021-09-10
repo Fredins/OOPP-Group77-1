@@ -46,7 +46,6 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
         Assertions.assertFalse(res.equals(res1));
     }
 
-
     @Test
     void testTree(){
         Tree<String> root = new Tree<>("im root");
