@@ -8,6 +8,7 @@ public class SystemManager {
     // path to the root directory of this application's files.
     // Will depend on OS.
     private String appDir;
+    String separator;
 
     /** //TODO make getDataDir() into separate method to make it testable?
      *      // Then have setAppDir as a separate method?
@@ -31,20 +32,23 @@ public class SystemManager {
         // If os does not match mac/osx, windows or linux then throw exception.
         if (os.contains("mac")) {
             dataDir = "/Users/" + userName + "/Library/Application Support/";
+            separator = "/";
         } else if (os.contains("win")) {
             dataDir = "C:\\Users\\" + userName + "\\AppData\\Local\\";
+            separator = "\\";
         } else if (os.contains("nux")) {
             dataDir = "/home/" + userName + "/.local/share/";
+            separator = "/";
         } else {
             throw new InvalidOperatingSystemException("Your operating system is either not supported or not found.");
         }
         // TODO change setting of appDir to a separate method??
-        appDir = dataDir + getAppName(); //TODO change Group77 to app name?
+        appDir = dataDir + getAppName() + separator; //TODO change Group77 to app name?
         System.out.println("appdir: " + appDir);
     }
 
     protected String getAccountDir(){
-        return appDir + "AccountInformation.d";
+        return appDir + "AccountInformation.d" + separator;
     }
     protected String getActiveAccountPath(){
         return appDir + "active_account";
