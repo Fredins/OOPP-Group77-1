@@ -2,7 +2,6 @@ package org.group77.mejl.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import org.group77.mejl.model.AccountInformation;
 import org.group77.mejl.model.EmailApp;
 
 

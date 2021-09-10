@@ -52,7 +52,7 @@ public class AccountHandler {
      * reads the active ESP which is indicated in the file active_esp
      * @return the in use ESP
      */
-    protected AccountInformation getActiveAccount(){
+    protected Account getActiveAccount(){
         SystemManager sys = getSystemManager();
         createAccountHandlerPaths();
         try{
@@ -70,7 +70,7 @@ public class AccountHandler {
     /**
      * @return a new deserialized ESP object
      */
-    protected AccountInformation readAccount(String identifier, String protocol) {
+    protected Account readAccount(String identifier, String protocol) {
         SystemManager sys = getSystemManager();
         createAccountHandlerPaths();
         try {
@@ -87,7 +87,7 @@ public class AccountHandler {
      *
      * @param info an object with required data for connecting to remote ESP
      */
-    protected IOException writeAccount(AccountInformation info) {
+    protected IOException writeAccount(Account info) {
         SystemManager sys = getSystemManager();
         createAccountHandlerPaths();
         try {

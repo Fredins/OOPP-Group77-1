@@ -5,27 +5,27 @@ import java.io.Serializable;
 import java.util.*;
 
 
-public class TreeNode<T> implements Serializable{
-    private TreeNode<T> parent;
-    private final List<TreeNode<T>> children = new ArrayList<>();
+public class Tree<T> implements Serializable{
+    private Tree<T> parent;
+    private final List<Tree<T>> children = new ArrayList<>();
     private final T t;
 
-    public TreeNode(T t) {
+    public Tree(T t) {
         this.t = t;
         this.parent = null;
     }
 
-    public TreeNode(T t, TreeNode<T> parent) {
+    public Tree(T t, Tree<T> parent) {
         this.t = t;
         this.parent = parent;
     }
 
-    public void add(TreeNode<T> node){
+    public void add(Tree<T> node){
         getChildren().add(node);
         node.setParent(this);
     }
 
-    public void setParent(TreeNode<T> parent){
+    public void setParent(Tree<T> parent){
        this.parent = parent;
     }
 
@@ -33,8 +33,8 @@ public class TreeNode<T> implements Serializable{
         return t;
     }
 
-    public TreeNode<T> getRoot(){
-        TreeNode<T> node = this;
+    public Tree<T> getRoot(){
+        Tree<T> node = this;
         while(true){
             if(node.getParent() == null){
                 return node;
@@ -49,11 +49,11 @@ public class TreeNode<T> implements Serializable{
         return t.toString();
     }
 
-    public List<TreeNode<T>> getChildren(){
+    public List<Tree<T>> getChildren(){
         return this.children;
     }
 
-    protected TreeNode<T> getParent(){
+    protected Tree<T> getParent(){
         return this.parent;
     }
 }

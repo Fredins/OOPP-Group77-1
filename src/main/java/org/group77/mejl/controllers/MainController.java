@@ -1,14 +1,11 @@
 package org.group77.mejl.controllers;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.group77.mejl.Main;
 import org.group77.mejl.model.*;
 
@@ -22,18 +19,18 @@ import java.util.function.Function;
 public class MainController {
     private final EmailApp emailApp = new EmailApp();
     @FXML
-    private TreeView<ImapsFolder> tree;
+    private TreeView<EmailFolder> tree;
     @FXML
     private FlowPane flowPane;
     // IN DEVELOPMENT
     @FXML
     private void initialize(){
-        Function<TreeNode<ImapsFolder>, ImapsFolder> dataFunction = c -> c.getT();
-        Function<TreeNode<ImapsFolder>, Collection<? extends TreeNode<ImapsFolder>>> childFunction = c -> c.getChildren();
+        Function<Tree<EmailFolder>, EmailFolder> dataFunction = c -> c.getT();
+        Function<Tree<EmailFolder>, Collection<? extends Tree<EmailFolder>>> childFunction = c -> c.getChildren();
 
         try{
             // temporary, instead load all something-imaps from
-            TreeNode<ImapsFolder> node = emailApp.getFolderTree(new AccountInformation(
+            Tree<EmailFolder> node = emailApp.getFolderTree(new Account(
                     "gmail",
                     "imap.gmail.com",
                     993,
@@ -41,7 +38,7 @@ public class MainController {
                     "77grupp@gmail.com",
                     "grupp77group"
             ));
-            TreeItemRecursive<TreeNode<ImapsFolder>, ImapsFolder> root = new TreeItemRecursive<>(node, dataFunction, childFunction);
+            TreeItemRecursive<Tree<EmailFolder>, EmailFolder> root = new TreeItemRecursive<>(node, dataFunction, childFunction);
             root.setExpanded(true);
             tree.setRoot(root);
             int t = 0;
@@ -49,7 +46,7 @@ public class MainController {
 
 
             tree.setOnMouseClicked(e -> {
-                ImapsFolder f = tree.getSelectionModel().getSelectedItem().getValue();
+                EmailFolder f = tree.getSelectionModel().getSelectedItem().getValue();
                 try {
                     f.open(Folder.READ_WRITE);
                     Message[] messages = f.getMessages();

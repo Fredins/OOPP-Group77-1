@@ -1,4 +1,4 @@
-package org.group77.mejl.model;
+package org.group77.mejl.controllers;
 
 import javafx.scene.control.TreeItem;
 

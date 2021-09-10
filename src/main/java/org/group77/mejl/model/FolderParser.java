@@ -8,13 +8,13 @@ import javax.mail.Store;
 
 public class FolderParser {
 
-    protected TreeNode<ImapsFolder> parseFolders(ImapsFolder[] folders, Store store) throws MessagingException {
-        ImapsFolder folder = createFolder(store, "gmail");
-        TreeNode<ImapsFolder> root = new TreeNode<>(folder);
-        TreeNode<ImapsFolder> inbox = new TreeNode<>(folders[0], root);
-        TreeNode<ImapsFolder> gmail = new TreeNode<>(folders[1], root);
+    protected Tree<EmailFolder> parseFolders(EmailFolder[] folders, Store store) throws MessagingException {
+        EmailFolder folder = createFolder(store, "gmail");
+        Tree<EmailFolder> root = new Tree<>(folder);
+        Tree<EmailFolder> inbox = new Tree<>(folders[0], root);
+        Tree<EmailFolder> gmail = new Tree<>(folders[1], root);
         for (int i = 2; i < folders.length; i++) {
-            TreeNode<ImapsFolder> node = new TreeNode<>(folders[i], gmail);
+            Tree<EmailFolder> node = new Tree<>(folders[i], gmail);
             gmail.add(node);
         }
         root.getChildren().add(inbox);
@@ -22,12 +22,12 @@ public class FolderParser {
         return root;
     }
 
-    private ImapsFolder createFolder(Store store, String identifier) throws MessagingException {
+    private EmailFolder createFolder(Store store, String identifier) throws MessagingException {
         Folder folder = store.getFolder(identifier);
         if (!folder.exists()){
             folder.create(Folder.HOLDS_FOLDERS);
         }
-        return  new ImapsFolder((IMAPFolder) folder);
+        return  new EmailFolder((IMAPFolder) folder);
     }
 
 }

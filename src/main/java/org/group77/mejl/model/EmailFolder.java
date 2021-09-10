@@ -8,10 +8,10 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 
-public class ImapsFolder{
+public class EmailFolder {
     private final IMAPFolder imapFolder;
 
-    public ImapsFolder(IMAPFolder imapFolder) {
+    public EmailFolder(IMAPFolder imapFolder) {
         this.imapFolder = imapFolder;
     }
 

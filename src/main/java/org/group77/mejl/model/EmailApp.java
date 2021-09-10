@@ -3,7 +3,6 @@ package org.group77.mejl.model;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Store;
 import java.io.IOException;
 
 public class EmailApp {
@@ -11,7 +10,7 @@ public class EmailApp {
     private final AccountHandler accountHandler = new AccountHandler();
     private final Connector connector = new Connector();
 
-    public TreeNode<ImapsFolder> getFolderTree(AccountInformation info) throws MessagingException {
+    public Tree<EmailFolder> getFolderTree(Account info) throws MessagingException {
         return connector.getFolderTree(info);
     }
 
@@ -23,7 +22,7 @@ public class EmailApp {
     }
 
     public String addEmail(String identifier, String host, int port, String protocol, String user, String password){
-        AccountInformation info = new AccountInformation(
+        Account info = new Account(
                 identifier,
                 host,
                 port,

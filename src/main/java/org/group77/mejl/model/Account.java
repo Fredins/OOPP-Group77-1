@@ -3,7 +3,7 @@ package org.group77.mejl.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class AccountInformation implements Serializable {
+public class Account implements Serializable {
     private final String identifier;
     private final String host;
     private final int port;
@@ -11,7 +11,7 @@ public class AccountInformation implements Serializable {
     private final String user;
     private final String password;
 
-    public AccountInformation(String identifier, String host, int port, String protocol, String user, String password) {
+    public Account(String identifier, String host, int port, String protocol, String user, String password) {
         this.identifier = identifier;
         this.host = host;
         this.port = port;
@@ -46,22 +46,22 @@ public class AccountInformation implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof AccountInformation)){
+        if(!(obj instanceof Account)){
            return false;
         }
-        if(!(Objects.equals(getIdentifier(), ((AccountInformation) obj).getIdentifier()))){
+        if(!(Objects.equals(getIdentifier(), ((Account) obj).getIdentifier()))){
            return false;
         }
-        if(!(Objects.equals(getHost(), ((AccountInformation) obj).getHost()))){
+        if(!(Objects.equals(getHost(), ((Account) obj).getHost()))){
             return false;
         }
-        if(!(getPort() == ((AccountInformation) obj).getPort())){
+        if(!(getPort() == ((Account) obj).getPort())){
             return false;
         }
-        if(!(Objects.equals(getUser(), ((AccountInformation) obj).getUser()))){
+        if(!(Objects.equals(getUser(), ((Account) obj).getUser()))){
             return false;
         }
-        if(!(Objects.equals(getPassword(), ((AccountInformation) obj).getPassword()))){
+        if(!(Objects.equals(getPassword(), ((Account) obj).getPassword()))){
             return false;
         }
         return true;

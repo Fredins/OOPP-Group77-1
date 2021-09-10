@@ -1,18 +1,16 @@
 package org.group77.mejl;
 
-import org.group77.mejl.model.AccountInformation;
+import org.group77.mejl.model.Account;
 import org.group77.mejl.model.EmailApp;
-import org.group77.mejl.model.TreeNode;
+import org.group77.mejl.model.Tree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Iterator;
 
 public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
 
     @Test
     void testAddEmail(){
-        AccountInformation info = new AccountInformation(
+        Account info = new Account(
                 "gmail",
                 "imap.gmail.com",
                 993,
@@ -20,7 +18,7 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
                 "77grupp@gmail.com",
                 "grupp77group"
         );
-        AccountInformation wrongInfo = new AccountInformation(
+        Account wrongInfo = new Account(
                 "gmail",
                 "imap.gmail.com",
                 993,
@@ -51,12 +49,12 @@ public class TestTemporaryTestClassForEarlyDevelopmentPurposes {
 
     @Test
     void testTree(){
-        TreeNode<String> root = new TreeNode<>("im root");
-        TreeNode<String> notLeaf = new TreeNode<>("not leaf");
-        TreeNode<String> notLeaf1 = new TreeNode<>("not leaf1");
-        TreeNode<String> leaf = new TreeNode<>("leaf");
-        TreeNode<String> leaf1 = new TreeNode<>("leaf1");
-        TreeNode<String> leaf2 = new TreeNode<>("leaf2");
+        Tree<String> root = new Tree<>("im root");
+        Tree<String> notLeaf = new Tree<>("not leaf");
+        Tree<String> notLeaf1 = new Tree<>("not leaf1");
+        Tree<String> leaf = new Tree<>("leaf");
+        Tree<String> leaf1 = new Tree<>("leaf1");
+        Tree<String> leaf2 = new Tree<>("leaf2");
 
         notLeaf.add(leaf);
         notLeaf.add(leaf1);
