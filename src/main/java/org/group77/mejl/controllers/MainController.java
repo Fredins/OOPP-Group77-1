@@ -30,7 +30,7 @@ public class MainController {
 
         try{
             // temporary, instead load all something-imaps from
-            Tree<EmailFolder> node = emailApp.getFolderTree(new Account(
+            Tree<EmailFolder> node = emailApp.getTree(new Account(
                     "gmail",
                     "imap.gmail.com",
                     993,

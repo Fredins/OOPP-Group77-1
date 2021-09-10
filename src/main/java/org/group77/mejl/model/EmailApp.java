@@ -4,14 +4,23 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmailApp {
 
     private final AccountHandler accountHandler = new AccountHandler();
     private final Connector connector = new Connector();
 
-    public Tree<EmailFolder> getFolderTree(Account info) throws MessagingException {
-        return connector.getFolderTree(info);
+    public Tree<EmailFolder> getTree(Account info) {
+        return connector.getTree(info);
+    }
+    public List<Tree<EmailFolder>> getTrees() throws IOException {
+        return Arrays.stream(accountHandler.getAcccountsWithProtocol("imaps"))
+                .map(this::getTree)
+                .collect(Collectors.toList());
     }
 
 

@@ -11,10 +11,16 @@ import java.util.Properties;
 public class Connector {
     private final FolderParser folderParser = new FolderParser();
 
-    public Tree<EmailFolder> getFolderTree(Account info) throws MessagingException {
-        Store store = connectStore(info);
-        return folderParser.parseFolders(getFolders(store), store);
+    public Tree<EmailFolder> getTree(Account info) {
+        try{
+            Store store = connectStore(info);
+            return folderParser.parseFolders(getFolders(store), store);
+        }catch(MessagingException e){
+            e.printStackTrace();
+        }
+        return null;
     }
+
 
     private EmailFolder[] getFolders(Store store) throws MessagingException {
         return Arrays.stream(store.getDefaultFolder().list("*"))
