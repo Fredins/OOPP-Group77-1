@@ -23,6 +23,12 @@ public class EmailApp {
                 .collect(Collectors.toList());
     }
 
+    // TODO elin och alexey använd denna för att visa en drop down när man ska skicka ett mejl
+    public Account[] getSendingAccounts() throws IOException {
+        return Arrays.stream(accountHandler.getAcccountsWithProtocol("smtp"))
+                .toArray(Account[]::new);
+    }
+
 
     private Message[] getMessages(Folder folder) throws MessagingException {
         folder.open(Folder.READ_ONLY);

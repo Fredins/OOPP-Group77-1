@@ -14,6 +14,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 public class MainController {
@@ -23,56 +24,40 @@ public class MainController {
     @FXML
     private FlowPane flowPane;
     // IN DEVELOPMENT
+
     @FXML
-    private void initialize(){
-        Function<Tree<EmailFolder>, EmailFolder> dataFunction = c -> c.getT();
-        Function<Tree<EmailFolder>, Collection<? extends Tree<EmailFolder>>> childFunction = c -> c.getChildren();
-
+    private void loadEmailFolders() {
+        Function<Tree<EmailFolder>, EmailFolder> funcValue = Tree::getT;
+        Function<Tree<EmailFolder>, Collection<? extends Tree<EmailFolder>>> funcChildren = Tree::getChildren;
         try{
-            // temporary, instead load all something-imaps from
-            Tree<EmailFolder> node = emailApp.getTree(new Account(
-                    "gmail",
-                    "imap.gmail.com",
-                    993,
-                    "imaps",
-                    "77grupp@gmail.com",
-                    "grupp77group"
-            ));
-            TreeItemRecursive<Tree<EmailFolder>, EmailFolder> root = new TreeItemRecursive<>(node, dataFunction, childFunction);
-            root.setExpanded(true);
-            tree.setRoot(root);
-            int t = 0;
-
-
-
-            tree.setOnMouseClicked(e -> {
-                EmailFolder f = tree.getSelectionModel().getSelectedItem().getValue();
-                try {
-                    f.open(Folder.READ_WRITE);
-                    Message[] messages = f.getMessages();
-                    loadMails(messages);
-                    f.close();
-                } catch (MessagingException | IOException ex) {
-                    ex.printStackTrace();
-                }
-
-
+            List<Tree<EmailFolder>> trees = emailApp.getTrees();
+            if(trees.size() == 0){
+                return;
+            }
+            trees.forEach(t -> {
+                TreeItemRecursive<Tree<EmailFolder>, EmailFolder> root = new TreeItemRecursive<>(trees.get(0), funcValue, funcChildren);
+                root.setExpanded(true);
+                tree.setRoot(root);
+                tree.setOnMouseClicked(e -> {
+                    EmailFolder f = tree.getSelectionModel().getSelectedItem().getValue();
+                    try {
+                        f.open(Folder.READ_WRITE);
+                        Message[] messages = f.getMessages();
+                        loadMails(messages);
+                        f.close();
+                    } catch (MessagingException | IOException ex) {
+                        ex.printStackTrace();
+                    }
+                });
             });
-        }catch(MessagingException e){
+        }catch (IOException e){
             e.printStackTrace();
         }
+    }
 
-        try{
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem m1 = new MenuItem("do something");
-            MenuItem m2 = new MenuItem("do something else");
-            contextMenu.getItems().add(m1);
-            contextMenu.getItems().add(m2);
-            tree.setContextMenu(contextMenu);
-        }catch (NullPointerException e ){
-           e.printStackTrace();
-        }
-
+    @FXML
+    private void initialize(){
+            loadEmailFolders();
     }
 
     private void loadMails(Message[] messages) throws IOException, MessagingException {
