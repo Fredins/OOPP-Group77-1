@@ -20,7 +20,7 @@ import java.util.function.Function;
 public class MainController {
     private final EmailApp emailApp = new EmailApp();
     @FXML
-    private TreeView<EmailFolder> tree;
+    private FlowPane flowPaneTrees;
     @FXML
     private FlowPane flowPane;
     // IN DEVELOPMENT
@@ -34,12 +34,16 @@ public class MainController {
             if(trees.size() == 0){
                 return;
             }
-            trees.forEach(t -> {
-                TreeItemRecursive<Tree<EmailFolder>, EmailFolder> root = new TreeItemRecursive<>(trees.get(0), funcValue, funcChildren);
+            trees.forEach(tree -> {
+                TreeItemRecursive<Tree<EmailFolder>, EmailFolder> root = new TreeItemRecursive<>(tree, funcValue, funcChildren);
                 root.setExpanded(true);
-                tree.setRoot(root);
-                tree.setOnMouseClicked(e -> {
-                    EmailFolder f = tree.getSelectionModel().getSelectedItem().getValue();
+
+                TreeView<EmailFolder> treeView = new TreeView<>();
+                // TODO maybe fix this width thing
+                treeView.setMaxWidth(150.0);
+                treeView.setRoot(root);
+                treeView.setOnMouseClicked(e -> {
+                    EmailFolder f = treeView.getSelectionModel().getSelectedItem().getValue();
                     try {
                         f.open(Folder.READ_WRITE);
                         Message[] messages = f.getMessages();
@@ -49,6 +53,7 @@ public class MainController {
                         ex.printStackTrace();
                     }
                 });
+                flowPaneTrees.getChildren().add(treeView);
             });
         }catch (IOException e){
             e.printStackTrace();
