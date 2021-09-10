@@ -7,11 +7,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TreeItemRecursive<T, U> extends TreeItem<U> {
-    public TreeItemRecursive(T t, Function<T, U> funcData, Function<T, Collection<? extends T>> funcChildren) {
-        super(funcData.apply(t));
+    public TreeItemRecursive(T t, Function<T, U> funcValue, Function<T, Collection<? extends T>> funcChildren) {
+        super(funcValue.apply(t));
         getChildren().addAll(funcChildren.apply(t)
                 .stream()
-                .map(t1 -> new TreeItemRecursive<T, U>(t1, funcData, funcChildren))
+                .map(t1 -> new TreeItemRecursive<T, U>(t1, funcValue, funcChildren))
                 .collect(Collectors.toList()));
     }
 }
