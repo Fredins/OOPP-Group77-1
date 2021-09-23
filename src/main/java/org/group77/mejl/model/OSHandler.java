@@ -38,14 +38,6 @@ public class OSHandler {
         }
         return new String[]{appDir, separator};
 
-
     }
 
-    public static String getAppPath() {
-        return null;
-    }
-
-    public static String getSeparator() {
-        return null;
-    }
 }

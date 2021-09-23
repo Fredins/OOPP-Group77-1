@@ -10,13 +10,9 @@ public class LocalDiscStorage implements Storage {
     String separator;
     
     // Storage interface methods
-
-    /**@author Alexey Ryabov */
-
     public LocalDiscStorage() throws OSNotFoundException {
         appPath = OSHandler.getAppDirAndSeparator()[0];
         separator = OSHandler.getAppDirAndSeparator()[1];
-
     }
 
     // TODO This method return value doesn't make sense..
@@ -33,10 +29,8 @@ public class LocalDiscStorage implements Storage {
                 mkdir(address);
                 touch(appPath + address + separator);
                 serialize(account, appPath + address + separator);
-                return true;
-            } else {
-                return true;
             }
+            return true;
         } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> store -method !");}
 
     }
