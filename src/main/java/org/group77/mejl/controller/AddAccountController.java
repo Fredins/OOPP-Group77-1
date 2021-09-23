@@ -18,7 +18,12 @@ public class AddAccountController {
 
     @FXML
     void addAccount(MouseEvent event) {
-        applicationManager.addAccount(user.getText(),password.getText());
+
+        if (applicationManager.addAccount(user.getText(),password.getText())) {
+            // account was successfully created, close AddAccountView
+        } else {
+            // error, give error message?
+        };
     }
 
 }
