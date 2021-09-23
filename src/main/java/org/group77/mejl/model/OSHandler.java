@@ -1,12 +1,12 @@
-    package org.group77.mejl.model;
+package org.group77.mejl.model;
 
 public class OSHandler {
     
-    public String getAppPath(){
+    public static String getAppPath(){
         return null;
     }
     
-    public String getSeparator(){
+    public static String getSeparator(){
         return null;
     }
 }

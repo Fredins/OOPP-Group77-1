@@ -9,27 +9,31 @@ public class LocalDiscStorage implements Storage {
     String separator;
     
     // Storage interface methods
-    /*@author Alexey Ryabov */
-
+    /** @author Alexey Ryabov, Martin Fredin */
     public LocalDiscStorage(){
-         //appPath = OSHandler.getAppPath();
-         //separator = OSHandler.getSeparator();
+         appPath = OSHandler.getAppPath();
+         separator = OSHandler.getSeparator();
     }
 
-
+    // TODO This method return value doesn't make sense..
+    /**
+     * @author Alexey Ryabov
+     * @param account - keeps email adress of account object.
+     * @return - Needs more work.
+     * @throws Exception
+     */
     public boolean store(Account account) throws Exception {
         try {
             String adress = account.getEmailAddress();
-            if (testExists(appPath + adress)) {
-                return true;
-            } else {
+            if (!testExists(appPath + adress)) {
                 mkdir(adress);
                 touch(appPath + adress);
                 serialize(account, appPath + adress);
-
+                return false;
+            } else {
+                return true;
             }
         } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> store -method !");}
-
     }
 
 
