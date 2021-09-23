@@ -22,7 +22,7 @@ public class ApplicationManager {
     * */
 
 
-    public boolean addAccount(String emailAddress, String password) {
+    public boolean addAccount(String emailAddress, String password) throws Exception {
 
         Account account = accountHandler.createAccount(emailAddress,password);
         EmailServiceProviderStrategy espStrategy = espFactory.getEmailServiceProvider(account);
