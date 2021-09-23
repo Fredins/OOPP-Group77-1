@@ -6,11 +6,12 @@ package org.group77.mejl.model;
  * classes who may use this information.
  */
 public class OSHandler {
-    /** @author Hampus Jernkrook
-     * Get the right app directory and separator for the user's OS.
-     *
+
+    /**
      * @return Array of form: [App Directory, Separator]
      * @throws OSNotFoundException if OS is not MacOS, Windows or Linux.
+     * @author Hampus Jernkrook
+     * Get the right app directory and separator for the user's OS.
      */
     public static String[] getAppDirAndSeparator() throws OSNotFoundException {
         // The variables that will be returned:
@@ -36,5 +37,15 @@ public class OSHandler {
             throw new OSNotFoundException("Your operating system is either not supported or not found.");
         }
         return new String[]{appDir, separator};
+
+
+    }
+
+    public static String getAppPath() {
+        return null;
+    }
+
+    public static String getSeparator() {
+        return null;
     }
 }
