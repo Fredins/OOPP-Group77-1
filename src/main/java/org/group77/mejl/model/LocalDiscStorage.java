@@ -11,7 +11,7 @@ public class LocalDiscStorage implements Storage {
     
     // Storage interface methods
 
-    /*@author Alexey Ryabov */
+    /**@author Alexey Ryabov */
 
     public LocalDiscStorage() throws OSNotFoundException {
         appPath = OSHandler.getAppDirAndSeparator()[0];
