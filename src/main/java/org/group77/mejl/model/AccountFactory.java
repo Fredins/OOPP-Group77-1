@@ -3,7 +3,9 @@ package org.group77.mejl.model;
 public class AccountFactory {
 
     public Account createAccount(String emailAddress, String password){
-
+        if (emailAddress.contains("@gmail.com")){
+           return new Account(emailAddress, password, ServerProvider.GMAIL);
+        }
         return null;
     }
     

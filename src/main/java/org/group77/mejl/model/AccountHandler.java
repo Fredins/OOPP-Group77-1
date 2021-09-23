@@ -6,7 +6,7 @@ public class AccountHandler {
 * */
     Account activeAccount;
     Storage storage;
-    AccountFactory accountFactory;
+    AccountFactory accountFactory = new AccountFactory();
 
     /* @author Alexey Ryabov
     * TODO Test this method */
@@ -42,7 +42,7 @@ public class AccountHandler {
     }
 
     public Account createAccount(String emailAddress, String password) {
-        return null;
+        return accountFactory.createAccount(emailAddress, password);
     }
 
 
