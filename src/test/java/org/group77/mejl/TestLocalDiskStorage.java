@@ -8,7 +8,7 @@ public class TestLocalDiskStorage {
 
 
     @Test
-    void testRetrieveEmails() throws OSNotFoundException, IOException, ClassNotFoundException {
+    void testRetrieveEmails() throws Exception {
         LocalDiscStorage storage = new LocalDiscStorage();
         AccountHandler handler = new AccountHandler();
         Account a = handler.createAccount("grupp77@gmail.com", "grupp77group");
