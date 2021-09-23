@@ -1,6 +1,6 @@
 package org.group77.mejl.model;
 import java.util.*;
-import javax.*;
+//import javax.*;
 
 
 public abstract class EmailServiceProviderStrategy {
