@@ -1,5 +1,6 @@
 package org.group77.mejl.model;
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.*;
 
 public class ApplicationManager {
@@ -45,21 +46,22 @@ public class ApplicationManager {
 
     public List<String> getEmailAddresses() {
         return null;
- 
-    /**
-     * @author David Zamanian
-     *
-     * calls getEmails with foldername in accountHandler
-     *
-     * @param folderName the name of the desired email folder
-     * @return
-     * @throws OSNotFoundException If the operating system is not found
-     * @throws IOException If there are any problems when locating the file
-     * @throws ClassNotFoundException Of the classes required is not on the classpath?
-     */
 
-    public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException {
-        accountHandler.getEmails(folderName);   }
+        /**
+         * @author David Zamanian
+         *
+         * calls getEmails with foldername in accountHandler
+         *
+         * @param folderName the name of the desired email folder
+         * @return
+         * @throws OSNotFoundException If the operating system is not found
+         * @throws IOException If there are any problems when locating the file
+         * @throws ClassNotFoundException Of the classes required is not on the classpath?
+         */
+    }
+
+    public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException, IOException {
+        return accountHandler.getEmails(folderName);   }
 
     public boolean sendEmail(List<String> recipients, String subject, String content) {
         return false;
