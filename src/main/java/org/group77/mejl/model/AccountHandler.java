@@ -9,7 +9,7 @@ public class AccountHandler {
     Storage storage;
     AccountFactory accountFactory = new AccountFactory();
 
-    /* @author Alexey Ryabov
+    /** @author Alexey Ryabov
     * TODO Test this method */
     public boolean storeAccount(Account account) throws Exception {
         try {

@@ -19,5 +19,14 @@ public class TestLocalDiskStorage {
         storage.retrieveEmails(handler.getActiveAccount().getEmailAddress(), folderName);
     }
 
+    @Test
+    void testStorage() throws Exception
+    {
+        AccountHandler h = new AccountHandler();
+        Account a = h.createAccount("grupp77@gmail.com", "grupp77group");
+        LocalDiscStorage l = new LocalDiscStorage();
+        l.store(a);
+    }
+
 }
 
