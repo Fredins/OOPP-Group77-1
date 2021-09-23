@@ -5,17 +5,29 @@ import java.util.List;
 
 public class LocalDiscStorage implements Storage {
 
-    OSHandler osHandler;
     String appPath;
     String separator;
     
     // Storage interface methods
     /*@author Alexey Ryabov */
+
+    public LocalDiscStorage(){
+         //appPath = OSHandler.getAppPath();
+         //separator = OSHandler.getSeparator();
+    }
+
+
     public boolean store(Account account) throws Exception {
         try {
             String adress = account.getEmailAddress();
-            testExists(adress);
-            return true;
+            if (testExists(appPath + adress)) {
+                return true;
+            } else {
+                mkdir(adress);
+                touch(appPath + adress);
+                serialize(account, appPath + adress);
+
+            }
         } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> store -method !");}
 
     }
