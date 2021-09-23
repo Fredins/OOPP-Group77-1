@@ -1,8 +1,8 @@
 package org.group77.mejl;
 
-import org.group77.mejl.model.Account;
-import org.group77.mejl.model.EmailApp;
-import org.group77.mejl.model.Tree;
+import org.group77.mejl.oldModel.Account;
+import org.group77.mejl.oldModel.EmailApp;
+import org.group77.mejl.oldModel.Tree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,10 +1,7 @@
-package org.group77.mejl.model;
+package org.group77.mejl.oldModel;
 
 import com.sun.mail.imap.IMAPFolder;
-import com.sun.mail.imap.IMAPStore;
-import com.sun.mail.imap.protocol.ListInfo;
 
-import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 

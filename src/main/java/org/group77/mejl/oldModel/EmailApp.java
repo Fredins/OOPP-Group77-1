@@ -1,10 +1,9 @@
-package org.group77.mejl.model;
+package org.group77.mejl.oldModel;
 
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -5,6 +5,6 @@ module org.group77.mejl {
 
     opens org.group77.mejl to javafx.fxml;
     exports org.group77.mejl;
-    exports org.group77.mejl.controllers;
-    opens org.group77.mejl.controllers to javafx.fxml;
+    exports org.group77.mejl.oldControllers;
+    opens org.group77.mejl.oldControllers to javafx.fxml;
 }

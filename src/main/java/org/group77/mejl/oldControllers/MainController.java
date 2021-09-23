@@ -1,4 +1,4 @@
-package org.group77.mejl.controllers;
+package org.group77.mejl.oldControllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import org.group77.mejl.Main;
-import org.group77.mejl.model.*;
+import org.group77.mejl.oldModel.*;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -68,7 +68,7 @@ public class MainController {
     private void loadMails(Message[] messages) throws IOException, MessagingException {
         flowPane.getChildren().clear();
         for (Message m: messages) {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("EmailItemView.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
             flowPane.getChildren().add(fxmlLoader.load());
             EmailItemController controller = fxmlLoader.getController();
             controller.init(m);
@@ -79,7 +79,7 @@ public class MainController {
 
     @FXML
     private void openEmailSettings() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccountView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 500, 400);
         Stage stage = new Stage();
         stage.setTitle("mejl");

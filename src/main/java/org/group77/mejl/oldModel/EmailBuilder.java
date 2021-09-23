@@ -1,4 +1,4 @@
-package org.group77.mejl.model;
+package org.group77.mejl.oldModel;
 
 import javax.mail.Session;
 import javax.mail.Transport;

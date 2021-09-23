@@ -1,8 +1,8 @@
-package org.group77.mejl.controllers;
+package org.group77.mejl.oldControllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import org.group77.mejl.model.EmailApp;
+import org.group77.mejl.oldModel.EmailApp;
 
 
 import java.io.IOException;

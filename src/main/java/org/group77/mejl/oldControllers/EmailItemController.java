@@ -1,12 +1,10 @@
-package org.group77.mejl.controllers;
+package org.group77.mejl.oldControllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import java.util.Arrays;
 
 public class EmailItemController {
     @FXML
