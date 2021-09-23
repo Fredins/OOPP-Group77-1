@@ -1,4 +1,5 @@
 package org.group77.mejl.model;
+import java.io.IOException;
 import java.util.*;
 
 public class ApplicationManager {
@@ -6,7 +7,7 @@ public class ApplicationManager {
     AccountHandler accountHandler;
     EmailServiceProviderFactory espFactory;
 
-    ApplicationManager() {}
+    public ApplicationManager() {}
 
     /**
      * @author Elin Hagman
@@ -46,7 +47,21 @@ public class ApplicationManager {
         return null;
     }
 
-    public List<Email> getEmails(String folderName) {
+
+    /**
+     * @author David Zamanian
+     *
+     * calls getEmails with foldername in accountHandler
+     *
+     * @param folderName the name of the desired email folder
+     * @return
+     * @throws OSNotFoundException If the operating system is not found
+     * @throws IOException If there are any problems when locating the file
+     * @throws ClassNotFoundException Of the classes required is not on the classpath?
+     */
+
+    public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException {
+        accountHandler.getEmails(folderName);
         return null;
     }
 
