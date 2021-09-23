@@ -18,7 +18,7 @@ public class LocalDiscStorage implements Storage {
     // TODO This method return value doesn't make sense..
     /**
      * @author Alexey Ryabov
-     * @param account - keeps email adress of account object.
+     * @param account - keeps email address of account object.
      * @return - Needs more work.
      * @throws Exception
      */
