@@ -12,7 +12,7 @@ public class Account {
         this.password = password;
         this.provider = provider;
     }
-
+    
     public String getEmailAddress(){ return emailAddress; }
     public String getPassword(){ return password; }
     public ServerProvider getServerProvider() {return provider;}
