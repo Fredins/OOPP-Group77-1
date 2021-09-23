@@ -77,6 +77,5 @@ public class ApplicationManager {
             throw new Exception("Could not store folders");
         }
 
-
-
+    }
 }
