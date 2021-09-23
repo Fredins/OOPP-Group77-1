@@ -25,12 +25,12 @@ public class LocalDiscStorage implements Storage {
      */
     public boolean store(Account account) throws Exception {
         try {
-            String adress = account.getEmailAddress();
-            if (!testExists(appPath + adress + separator)) {
-                mkdir(adress);
-                touch(appPath + adress + separator);
-                serialize(account, appPath + adress + separator);
-                return false;
+            String address = account.getEmailAddress();
+            if (!testExists(appPath + address + separator)) {
+                mkdir(address);
+                touch(appPath + address + separator);
+                serialize(account, appPath + address + separator);
+                return true;
             } else {
                 return true;
             }
@@ -43,8 +43,18 @@ public class LocalDiscStorage implements Storage {
     public List<Folder> retrieveFolders(String emailAddress) {return null;};
     public List<Email> retrieveEmails(String emailAddress, String folderName) {return null;};
     public List<String> retrieveAllEmailAddresses() {return null;};
-    
-    private boolean testExists(String emailAddress) {
+
+    /**
+     * @author Alexey Ryabov
+     * Method will create a path or return false is path already exists.
+     * @param emailAddress - path of the email address.
+     * @return false.
+     * @throws Exception
+     */
+    private boolean testExists(String emailAddress) throws Exception {
+        try {
+            File file = new File(emailAddress);
+        } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> testExists -method !");}
         return false;
     }
     
@@ -65,7 +75,6 @@ public class LocalDiscStorage implements Storage {
         out.close();
         file.close();
     }
-
 
     private Object deserialize(String path) throws IOException, ClassNotFoundException {
         FileInputStream file = new FileInputStream(path);
