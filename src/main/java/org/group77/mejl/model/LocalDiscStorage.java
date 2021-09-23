@@ -25,10 +25,10 @@ public class LocalDiscStorage implements Storage {
     public boolean store(Account account) throws Exception {
         try {
             String adress = account.getEmailAddress();
-            if (!testExists(appPath + adress)) {
+            if (!testExists(appPath + adress + separator)) {
                 mkdir(adress);
-                touch(appPath + adress);
-                serialize(account, appPath + adress);
+                touch(appPath + adress + separator);
+                serialize(account, appPath + adress + separator);
                 return false;
             } else {
                 return true;
