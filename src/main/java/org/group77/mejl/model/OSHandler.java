@@ -1,7 +1,12 @@
 package org.group77.mejl.model;
 
+/**
+ * This class sets the application directory and the correct separator
+ * depending on the user's OS. It serves only as a helper for other
+ * classes who may use this information.
+ */
 public class OSHandler {
-    /**
+    /** @author Hampus Jernkrook
      * Get the right app directory and separator for the user's OS.
      *
      * @return Array of form: [App Directory, Separator]
