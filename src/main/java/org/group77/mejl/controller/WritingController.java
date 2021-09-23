@@ -5,5 +5,5 @@ import javafx.fxml.FXML;
 public class WritingController {
     
     @FXML
-    public void send(){}
+    public void sendEmail(){}
 }

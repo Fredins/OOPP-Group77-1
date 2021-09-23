@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane onMouseClicked="#readEmail" prefHeight="39.0" prefWidth="378.0" style="-fx-background-color: #dddddd;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mejl.oldControllers.EmailItemController">
+<AnchorPane onMouseClicked="#readEmail" prefHeight="39.0" prefWidth="378.0" style="-fx-background-color: #dddddd;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mejl.controller.listItemController">
    <children>
       <Label fx:id="from" layoutX="7.0" layoutY="4.0" prefHeight="17.0" prefWidth="356.0" text="From" />
       <Label fx:id="subject" layoutX="6.0" layoutY="20.0" prefHeight="17.0" prefWidth="371.0" text="Subject" />

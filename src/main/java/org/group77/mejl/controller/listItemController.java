@@ -8,5 +8,10 @@ public class listItemController {
     Email email;
 
     @FXML
+    void readEmail() {
+
+    }
+
+    @FXML
     public void openReadingView(){};
 }
