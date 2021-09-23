@@ -8,9 +8,35 @@ public class ApplicationManager {
 
     ApplicationManager() {}
 
+    /**
+     * @author Elin Hagman
+     *
+     * Creates an Account and tries to store it.
+     * Only stores the account if it connects to the server and it is not already stored.
+     *
+     * @param emailAddress the Account's emailAddress
+     * @param password the Account's password
+     *
+     * @return boolean, true if account was successfully stored,
+     * false if account could not be stored.
+    * */
+
+
     public boolean addAccount(String emailAddress, String password) {
-        return false;
+
+        Account account = accountHandler.createAccount(emailAddress,password);
+        EmailServiceProviderStrategy espStrategy = espFactory.getEmailServiceProvider(account);
+
+        if (espStrategy.testConnection(account)) {
+
+            return accountHandler.storeAccount(account);
+
+        } else {
+            return false;
+        }
+
     }
+
 
     public boolean setActiveAccount(String emailAddress) {
         return false;
