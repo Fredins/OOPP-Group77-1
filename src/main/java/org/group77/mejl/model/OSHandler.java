@@ -1,21 +1,13 @@
-    package org.group77.mejl.model;
+package org.group77.mejl.model;
 
-    public class OSHandler {
-    
-    public String getAppPath(){
-        return null;
-    }
-    
-    public String getSeparator(){
-        return null;
-    }
-
-        /**
-         * Get the right app directory and separator for the user's OS.
-         * @return Array of form: [App Directory, Separator]
-         * @throws OSNotFoundException if OS is not MacOS, Windows or Linux.
-         */
-    private String[] getAppDirAndSeparator() throws OSNotFoundException {
+public class OSHandler {
+    /**
+     * Get the right app directory and separator for the user's OS.
+     *
+     * @return Array of form: [App Directory, Separator]
+     * @throws OSNotFoundException if OS is not MacOS, Windows or Linux.
+     */
+    public static String[] getAppDirAndSeparator() throws OSNotFoundException {
         // The variables that will be returned:
         String appDir;
         String separator;
