@@ -1,6 +1,6 @@
 package org.group77.mejl.model;
 import java.util.*;
-//import javax.*;
+import javax.mail.*;
 
 
 public abstract class EmailServiceProviderStrategy {
@@ -9,15 +9,38 @@ public abstract class EmailServiceProviderStrategy {
     String hostOut;
     String protocolIn;
     String protocolOut;
-    String portIn;
-    String portOut;
+    int portIn;
+    int portOut;
 
-    public boolean testConnection(Account account) {
-        return false;
+
+    public List<Folder> refreshFromServer(Account account) throws MessagingException{
+        return parse(
+            connectStore(account)
+            .getDefaultFolder()
+            .list("*")
+            );
+    }
+    
+    public boolean testConnection(Account info) throws MessagingException{
+        try{
+            connectStore(info);
+        }catch(MessagingException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public List<Folder> refreshFromServer(Account account) {
-        return null;
+    private Store connectStore(Account account) throws MessagingException {
+        Session session = Session.getDefaultInstance((new Properties()), null);
+        Store store = session.getStore(protocolIn);
+        store.connect(
+                hostIn,
+                portIn,
+                account.getEmailAddress(),
+                account.getPassword()
+        );
+        return store;
     }
 
     public boolean sendEmail(Account from, List<String> recepients, String subject, String content) {
