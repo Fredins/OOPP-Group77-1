@@ -6,7 +6,7 @@ public class ApplicationManager {
     AccountHandler accountHandler;
     EmailServiceProviderFactory espFactory;
 
-    ApplicationManager() {}
+    public ApplicationManager() {}
 
     /**
      * @author Elin Hagman
@@ -54,8 +54,28 @@ public class ApplicationManager {
         return false;
     }
 
-    public List<Folder> refreshFromServer() {
-        return null;
+    /**
+     * @author Elin Hagman
+     *
+     * Refreshes the currently active account´s folders from server and stores them.
+     * If the refreshed fodlers cannot be stored, an exception will
+     * be thrown instead of returning the folders.
+     *
+     * @return List of folders that has been updated from server
+     * @throws Exception if the folders updated from server cannot be stored
+     */
+    public List<Folder> refreshFromServer() throws Exception {
+
+        Account account = accountHandler.getActiveAccount();
+        EmailServiceProviderStrategy espStrategy = espFactory.getEmailServiceProvider(account);
+
+        List<Folder> folders = espStrategy.refreshFromServer(account);
+        if (accountHandler.storeFolders(folders)) {
+            return folders;
+        } else {
+            throw new Exception("Could not store folders");
+        }
+
     }
 
 
