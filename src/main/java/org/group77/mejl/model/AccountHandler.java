@@ -1,4 +1,5 @@
 package org.group77.mejl.model;
+import java.io.IOException;
 import java.util.*;
 public class AccountHandler {
 /*
@@ -29,7 +30,20 @@ public class AccountHandler {
         return false;
     }
 
-    public List<Email> getEmails (String folderName) {
+    /**
+     * @author David Zamanian
+     *
+     * calls retrieveEmails in storage with the email address of the active account and the foldername
+     *
+     * @param folderName the name of the desired folder
+     * @return
+     * @throws OSNotFoundException If the operating system is not found
+     * @throws IOException If there are any problems when locating the file
+     * @throws ClassNotFoundException Of the classes required is not on the classpath?
+     */
+
+    public List<Email> getEmails (String folderName) throws OSNotFoundException, IOException, ClassNotFoundException {
+        storage.retrieveEmails(getActiveAccount().getEmailAddress(), folderName);
         return null;
     }
 

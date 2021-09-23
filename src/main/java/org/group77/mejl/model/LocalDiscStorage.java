@@ -12,9 +12,9 @@ public class LocalDiscStorage implements Storage {
     // Storage interface methods
     /*@author Alexey Ryabov */
 
-    public LocalDiscStorage(){
-         //appPath = OSHandler.getAppPath();
-         //separator = OSHandler.getSeparator();
+    public LocalDiscStorage() throws OSNotFoundException {
+        appPath = OSHandler.getAppDirAndSeparator()[0];
+        separator = OSHandler.getAppDirAndSeparator()[1];
     }
 
 
@@ -31,13 +31,33 @@ public class LocalDiscStorage implements Storage {
             }
         } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> store -method !");}
 
+        return true;
     }
 
 
     public boolean store(String emailAddress, List<Folder> folders) {return false;};
     public Account retrieveAccount(String emailAddress) {return null;};
     public List<Folder> retrieveFolders(String emailAddress) {return null;};
-    public List<Email> retrieveEmails(String emailAddress, String folderName) {return null;};
+
+    /**
+     * @author David Zamanian
+     *
+     * Creates a path for the specific OS down to the folderName. The path is then deserialized and cased to Folder
+     * and returns the emails in that folder.
+     *
+     * @param emailAddress the emailAddress of the active account
+     * @param folderName the name of the desired folder
+     * @return returns a list of emails for the specific folder
+     * @throws IOException If there are any problems when locating the file
+     * @throws ClassNotFoundException Of the classes required is not on the classpath?
+     */
+
+    public List<Email> retrieveEmails(String emailAddress, String folderName) throws IOException, ClassNotFoundException {
+
+        String path = appPath + separator + emailAddress + separator + folderName;
+        Folder folder = (Folder) deserialize(path);
+        return folder.getEmails();
+    };
     public List<String> retrieveAllEmailAddresses() {return null;};
     
     private boolean testExists(String emailAddress) {
