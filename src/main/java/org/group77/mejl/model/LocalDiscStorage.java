@@ -1,5 +1,6 @@
 package org.group77.mejl.model;
 
+import javax.mail.Address;
 import java.util.List;
 
 public class LocalDiscStorage implements Storage {
@@ -9,7 +10,17 @@ public class LocalDiscStorage implements Storage {
     String separator;
     
     // Storage interface methods
-    public boolean store(Account account) { return false; };
+    /*@author Alexey Ryabov */
+    public boolean store(Account account) throws Exception {
+        try {
+            String adress = account.getEmailAddress();
+            testExists(adress);
+            return true;
+        } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> store -method !");}
+
+    }
+
+
     public boolean store(String emailAddress, List<Folder> folders) {return false;};
     public Account retrieveAccount(String emailAddress) {return null;};
     public List<Folder> retrieveFolders(String emailAddress) {return null;};
