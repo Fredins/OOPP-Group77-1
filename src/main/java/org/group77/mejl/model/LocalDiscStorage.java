@@ -1,6 +1,7 @@
 package org.group77.mejl.model;
 
 import java.util.List;
+import java.io.*;
 
 public class LocalDiscStorage implements Storage {
 
@@ -20,20 +21,32 @@ public class LocalDiscStorage implements Storage {
         return false;
     }
     
-    private boolean mkdir(String path) {
-        return false;
+    private void touch(String path) throws IOException {
+        File file = new File(path);
+        file.createNewFile();
     }
-    
-    private boolean touch (String path) {
-        return false;
+
+    private void mkdir(String path) throws IOException {
+        File file = new File(path);
+        file.mkdir();
     }
-    
-    private boolean serialize (Object object, String path) {
-        return false; 
+
+    private void serialize(Object o, String path) throws IOException {
+        FileOutputStream file = new FileOutputStream(path);
+        ObjectOutputStream out = new ObjectOutputStream(file);
+        out.writeObject(o);
+        out.close();
+        file.close();
     }
-    
-    private Object deserialize(String path) {
-        return null;
+
+
+    private Object deserialize(String path) throws IOException, ClassNotFoundException {
+        FileInputStream file = new FileInputStream(path);
+        ObjectInputStream in = new ObjectInputStream(file);
+        Object o = in.readObject();
+        in.close();
+        file.close();
+        return o;
     }
     
     
