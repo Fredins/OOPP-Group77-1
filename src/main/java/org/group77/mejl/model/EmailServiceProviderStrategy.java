@@ -13,17 +13,27 @@ public abstract class EmailServiceProviderStrategy {
     int portOut;
 
 
+    /**
+     * @author Martin
+     * @param account is a account
+     * @return List<Folder> is a list of folders
+     */
     public List<Folder> refreshFromServer(Account account) throws MessagingException{
         return parse(
-            connectStore(account)
-            .getDefaultFolder()
-            .list("*")
-            );
+                connectStore(account)
+                        .getDefaultFolder()
+                        .list("*")
+        );
     }
-    
-    public boolean testConnection(Account info) throws MessagingException{
+
+    /**
+     * @author Martin
+     * @param account is a account
+     * @return boolean if the connection was successfull
+     */
+    public boolean testConnection(Account account) throws MessagingException{
         try{
-            connectStore(info);
+            connectStore(account);
         }catch(MessagingException e){
             e.printStackTrace();
             return false;
@@ -31,6 +41,11 @@ public abstract class EmailServiceProviderStrategy {
         return true;
     }
 
+    /**
+     * @author Martin
+     * @param account is a account
+     * @return Store is a list of folders
+     */
     private Store connectStore(Account account) throws MessagingException {
         Session session = Session.getDefaultInstance((new Properties()), null);
         Store store = session.getStore(protocolIn);

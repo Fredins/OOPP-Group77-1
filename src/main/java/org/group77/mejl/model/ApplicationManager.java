@@ -1,5 +1,5 @@
 package org.group77.mejl.model;
-import java.io.IOException;
+import javax.mail.MessagingException;
 import java.util.*;
 
 public class ApplicationManager {
@@ -7,7 +7,7 @@ public class ApplicationManager {
     AccountHandler accountHandler;
     EmailServiceProviderFactory espFactory;
 
-    public ApplicationManager() {}
+    ApplicationManager() {}
 
     /**
      * @author Elin Hagman
@@ -20,7 +20,7 @@ public class ApplicationManager {
      *
      * @return boolean, true if account was successfully stored,
      * false if account could not be stored.
-    * */
+     * */
 
 
     public boolean addAccount(String emailAddress, String password) throws Exception {
@@ -47,21 +47,7 @@ public class ApplicationManager {
         return null;
     }
 
-
-    /**
-     * @author David Zamanian
-     *
-     * calls getEmails with foldername in accountHandler
-     *
-     * @param folderName the name of the desired email folder
-     * @return
-     * @throws OSNotFoundException If the operating system is not found
-     * @throws IOException If there are any problems when locating the file
-     * @throws ClassNotFoundException Of the classes required is not on the classpath?
-     */
-
-    public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException {
-        accountHandler.getEmails(folderName);
+    public List<Email> getEmails(String folderName) {
         return null;
     }
 
@@ -69,28 +55,8 @@ public class ApplicationManager {
         return false;
     }
 
-    /**
-     * @author Elin Hagman
-     *
-     * Refreshes the currently active account´s folders from server and stores them.
-     * If the refreshed fodlers cannot be stored, an exception will
-     * be thrown instead of returning the folders.
-     *
-     * @return List of folders that has been updated from server
-     * @throws Exception if the folders updated from server cannot be stored
-     */
-    public List<Folder> refreshFromServer() throws Exception {
-
-        Account account = accountHandler.getActiveAccount();
-        EmailServiceProviderStrategy espStrategy = espFactory.getEmailServiceProvider(account);
-
-        List<Folder> folders = espStrategy.refreshFromServer(account);
-        if (accountHandler.storeFolders(folders)) {
-            return folders;
-        } else {
-            throw new Exception("Could not store folders");
-        }
-
+    public List<Folder> refreshFromServer() {
+        return null;
     }
 
 
