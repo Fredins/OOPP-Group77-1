@@ -15,6 +15,6 @@ public class Account {
 
     public String getEmailAddress(){ return emailAddress; }
     public String getPassword(){ return password; }
-    public ServerProvider getProvider() { return provider; }
+    public ServerProvider getServerProvider() {return provider;}
 
 }
