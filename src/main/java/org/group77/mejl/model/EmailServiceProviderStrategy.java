@@ -17,7 +17,7 @@ public abstract class EmailServiceProviderStrategy {
         this.hostOut = hostOut;
         this.protocolIn = protocolIn;
         this.protocolOut = protocolOut;
-        this.protocolIn = protocolIn;
+        this.portIn = portIn;
         this.portOut = portOut;
 
     }
@@ -36,13 +36,8 @@ public abstract class EmailServiceProviderStrategy {
      * @param account is a account
      * @return boolean if the connection was successfull
      */
-    public boolean testConnection(Account account) throws MessagingException{
-        try{
-            connectStore(account);
-        }catch(MessagingException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean testConnection(Account account) throws MessagingException {
+        connectStore(account);
         return true;
     }
 
@@ -54,6 +49,12 @@ public abstract class EmailServiceProviderStrategy {
     private Store connectStore(Account account) throws MessagingException {
         Session session = Session.getDefaultInstance((new Properties()), null);
         Store store = session.getStore(protocolIn);
+
+        String host = hostIn;
+        int port = portIn;
+        String address = account.getEmailAddress();
+        String password = account.getPassword();
+
         store.connect(
                 hostIn,
                 portIn,

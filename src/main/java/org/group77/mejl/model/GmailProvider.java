@@ -1,8 +1,5 @@
 package org.group77.mejl.model;
 
-import org.group77.mejl.controller.listItemController;
-
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
 import javax.mail.internet.MimeUtility;
@@ -84,7 +81,10 @@ public class GmailProvider extends EmailServiceProviderStrategy {
     protected List<Folder> parse(Store store){
         Function<String, javax.mail.Folder> getFolder = s -> {
             try {
-                return store.getFolder(s);
+                javax.mail.Folder f = store.getFolder(s);
+                // store.getFolder doesn't throw exception for some reason but f.open does.
+                f.open(javax.mail.Folder.READ_WRITE);
+                return f;
             }catch(MessagingException e){
                 e.printStackTrace();
                 return null;
@@ -92,11 +92,12 @@ public class GmailProvider extends EmailServiceProviderStrategy {
         };
 
         Map<String, javax.mail.Folder> map = Map.of(
-                "Inbox", getFolder.apply("[INBOX]"),
-                "All Mail", getFolder.apply("AllMail"),
-                "Sent Mail", getFolder.apply("Sent"),
-                "Drafts", getFolder.apply("Drafts"),
-                "Trash", getFolder.apply("Trash"));
+                "Inbox", getFolder.apply("INBOX"),
+                "All Mail", getFolder.apply("[Gmail]/All Mail"),
+                "Sent Mail", getFolder.apply("[Gmail]/Sent Mail"),
+                "Drafts", getFolder.apply("[Gmail]/Drafts"),
+                "Spam", getFolder.apply("[Gmail]/Spam"),
+                "Trash", getFolder.apply("[Gmail]/Trash"));
 
         return map
             .entrySet()

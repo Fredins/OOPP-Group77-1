@@ -11,7 +11,7 @@ public class TestLocalDiskStorage {
     void testRetrieveEmails() throws Exception {
         LocalDiscStorage storage = new LocalDiscStorage();
         AccountHandler handler = new AccountHandler();
-        Account a = handler.createAccount("grupp77@gmail.com", "grupp77group");
+        Account a = handler.createAccount("77grupp@gmail.com", "grupp77group");
         handler.setActiveAccount(a.getEmailAddress());
         ApplicationManager am = new ApplicationManager();
         am.refreshFromServer();
@@ -24,7 +24,7 @@ public class TestLocalDiskStorage {
     void testStorage() throws Exception
     {
         AccountHandler h = new AccountHandler();
-        Account a = h.createAccount("grupp77@gmail.com", "grupp77group");
+        Account a = h.createAccount("77grupp@gmail.com", "grupp77group");
         LocalDiscStorage l = new LocalDiscStorage();
         l.store(a);
         // TODO assertion

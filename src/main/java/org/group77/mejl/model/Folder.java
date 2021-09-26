@@ -6,8 +6,8 @@ import java.util.*;
  * @author Hampus Jernkrook
  */
 public class Folder {
-    private String name;
-    private List<Email> emails;
+    private final String name;
+    private final List<Email> emails;
 
     public Folder(String name, List<Email> emails) {
         this.name = name;
@@ -20,5 +20,10 @@ public class Folder {
 
     public List<Email> getEmails() {
         return emails;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
