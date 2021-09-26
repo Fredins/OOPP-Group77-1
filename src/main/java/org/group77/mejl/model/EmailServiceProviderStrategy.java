@@ -12,6 +12,15 @@ public abstract class EmailServiceProviderStrategy {
     int portIn;
     int portOut;
 
+    public EmailServiceProviderStrategy(String hostIn ,String hostOut, String protocolIn, String protocolOut, int portIn, int portOut){
+        this.hostIn = hostIn;
+        this.hostOut = hostOut;
+        this.protocolIn = protocolIn;
+        this.protocolOut = protocolOut;
+        this.protocolIn = protocolIn;
+        this.portOut = portOut;
+
+    }
 
     /**
      * @author Martin
@@ -19,11 +28,7 @@ public abstract class EmailServiceProviderStrategy {
      * @return List<Folder> is a list of folders
      */
     public List<Folder> refreshFromServer(Account account) throws MessagingException{
-        return parse(
-                connectStore(account)
-                        .getDefaultFolder()
-                        .list("*")
-        );
+        return parse(connectStore(account));
     }
 
     /**
@@ -62,6 +67,6 @@ public abstract class EmailServiceProviderStrategy {
         return false;
     }
 
-    protected abstract List<Folder> parse(javax.mail.Folder[] folders);
+    protected abstract List<Folder> parse(Store store) throws MessagingException;
 
 }

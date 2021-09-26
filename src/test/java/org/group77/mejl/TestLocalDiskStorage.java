@@ -17,6 +17,7 @@ public class TestLocalDiskStorage {
         am.refreshFromServer();
         String folderName = "inbox";
         storage.retrieveEmails(handler.getActiveAccount().getEmailAddress(), folderName);
+        // TODO assertion
     }
 
     @Test
@@ -26,6 +27,7 @@ public class TestLocalDiskStorage {
         Account a = h.createAccount("grupp77@gmail.com", "grupp77group");
         LocalDiscStorage l = new LocalDiscStorage();
         l.store(a);
+        // TODO assertion
     }
 
 }

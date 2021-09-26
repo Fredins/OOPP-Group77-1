@@ -6,10 +6,10 @@ import java.util.*;
  * @author Hampus Jernkrook
  */
 public class Email {
-    private String from;
-    private List<String> to;
-    private String subject;
-    private String content;
+    private final String from;
+    private final List<String> to;
+    private final String subject;
+    private final String content;
     
     public Email(String from, List<String> to, String subject, String content) {
         this.from = from;
