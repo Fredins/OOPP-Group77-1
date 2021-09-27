@@ -1,5 +1,6 @@
 package org.group77.mejl.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 
@@ -62,8 +63,12 @@ public class LocalDiscStorage implements Storage {
         String path = appPath + separator + emailAddress + separator + folderName;
         Folder folder = (Folder) deserialize(path);
         return folder.getEmails();
-    };
-    public List<String> retrieveAllEmailAddresses() {return null;};
+    }
+
+    public List<String> retrieveAllEmailAddresses() {
+        // find all directories
+        return null;
+    }
 
     /**
      * @author Alexey Ryabov. Revised by Hampus Jernkrook
@@ -104,6 +109,49 @@ public class LocalDiscStorage implements Storage {
         file.close();
         return o;
     }
+
+    /**
+     * @author Hampus Jernkrook
+     *
+     * Finds all directories at a certain level from a parent path.
+     * @param parent - the File encoding of the parent path to search under.
+     * @param level - the level to search down to. level == 0 returns the first children of the parent.
+     * @return A list of paths to the directories at the specified level.
+     *
+     * Method inspiration from
+     * https://stackoverflow.com/questions/41344236/java-how-to-get-only-subdirectories-name-present-at-certain-level
+     * Cred to user: krzydyn
+     */
+    private List<String> getDirsAtLevel(File parent, int level){
+        List<String> dirs = new ArrayList<>();
+        File[] files = parent.listFiles();
+        if (files == null) return dirs; // empty dir
+        for (File f : files){
+            if (f.isDirectory()) {
+                if (level == 0) dirs.add(f.getPath());
+                else if (level > 0) dirs.addAll(getDirsAtLevel(f,level-1));
+            }
+        }
+        return dirs;
+    }
+
+    /**
+     * @author Hampus Jernkrook
+     *
+     * Get only the directory names from a list of directory paths,
+     * i.e. get only the last suffix after the separator.
+     * @param dirs - List of directory paths to cut off the prefixes from.
+     * @return A list of directory names.
+     */
+    private List<String> getDirSuffix(List<String> dirs) {
+        List<String> suffixes = new ArrayList<>();
+        for (String path : dirs) {
+            suffixes.add(path.substring(path.lastIndexOf(separator) + 1));
+        }
+        return suffixes;
+    }
+
+
     
     
     

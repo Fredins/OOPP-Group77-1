@@ -35,6 +35,8 @@ public class TestLocalDiskStorage {
         Email[] retrievedArray = (Email[]) retrieved.toArray(); //TODO will the casting work?
         // check that the emails are the same //TODO WILL THIS WORK?
         Assertions.assertArrayEquals(emails.toArray(), retrievedArray);
+
+        //TODO clean up?
     }
 
     @Test //TODO keep or remove this one?
