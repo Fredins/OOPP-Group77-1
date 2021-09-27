@@ -1,6 +1,5 @@
 package org.group77.mejl.model;
 
-import javax.mail.Address;
 import java.util.List;
 import java.io.*;
 
@@ -16,19 +15,24 @@ public class LocalDiscStorage implements Storage {
     }
 
     // TODO This method return value doesn't make sense..
+    //  ^^ Who wrote this? (hampus)
     /**
-     * @author Alexey Ryabov
+     * @author Alexey Ryabov. Revised by Hampus Jernkrook
      * @param account - keeps email address of account object.
      * @return - Needs more work.
      * @throws Exception
      */
     public boolean store(Account account) throws Exception {
+        String address = account.getEmailAddress();
+        String path = appPath + separator + address;
         try {
-            String address = account.getEmailAddress();
-            if (!testExists(appPath + address + separator)) {
-                mkdir(address);
-                touch(appPath + address + separator);
-                serialize(account, appPath + address + separator);
+            // if account is not already added, create directory and store file with account details
+            if (!testExists(path)) {
+                mkdir(path);
+                // path of the account file
+                String accountFilePath = path + separator + "Account";
+                touch(accountFilePath);
+                serialize(account, accountFilePath);
             }
             return true;
         } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> store -method !");}
@@ -62,7 +66,7 @@ public class LocalDiscStorage implements Storage {
     public List<String> retrieveAllEmailAddresses() {return null;};
 
     /**
-     * @author Alexey Ryabov
+     * @author Alexey Ryabov. Revised by Hampus Jernkrook
      * Method will create a path or return false is path already exists.
      * @param emailAddress - path of the email address.
      * @return false.
@@ -70,9 +74,8 @@ public class LocalDiscStorage implements Storage {
      */
     private boolean testExists(String emailAddress) throws Exception {
         try {
-            File file = new File(emailAddress);
+            return (new File(emailAddress).exists());
         } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> testExists -method !");}
-        return false;
     }
     
     private void touch(String path) throws IOException {

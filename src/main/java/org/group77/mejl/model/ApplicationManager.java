@@ -6,9 +6,19 @@ import java.util.*;
 public class ApplicationManager {
 
     AccountHandler accountHandler;
-    EmailServiceProviderFactory espFactory;
+    //EmailServiceProviderFactory espFactory; //TODO remove (hampus)
 
-    public ApplicationManager() {}
+    /**
+     * @author Hampus Jernkrook
+     */
+    public ApplicationManager() {
+        // TODO make use of singleton pattern for AccountHandler? (hampus)
+        try {
+            accountHandler = new AccountHandler();
+        } catch (Exception e) {
+            System.out.println(e.getMessage()); //TODO REFINE THIS (hampus)
+        }
+    }
 
     /**
      * @author Elin Hagman
@@ -27,7 +37,7 @@ public class ApplicationManager {
     public boolean addAccount(String emailAddress, String password) throws Exception {
 
         Account account = accountHandler.createAccount(emailAddress,password);
-        EmailServiceProviderStrategy espStrategy = espFactory.getEmailServiceProvider(account);
+        EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(account);
 
         if (espStrategy.testConnection(account)) {
 
@@ -79,7 +89,7 @@ public class ApplicationManager {
     public List<Folder> refreshFromServer() throws Exception {
 
         Account account = accountHandler.getActiveAccount();
-        EmailServiceProviderStrategy espStrategy = espFactory.getEmailServiceProvider(account);
+        EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(account);
 
         List<Folder> folders = espStrategy.refreshFromServer(account);
         if (accountHandler.storeFolders(folders)) {

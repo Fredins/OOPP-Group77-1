@@ -7,7 +7,9 @@ import org.group77.mejl.model.ApplicationManager;
 
 public class AddAccountController {
 
-    ApplicationManager applicationManager;
+    //TODO possibly move this somewhere else or make use of singleton pattern to avoid
+    // multiple AppManagers if not necessary? (Hampus)
+    ApplicationManager applicationManager = new ApplicationManager();
 
     @FXML
     private TextField password;

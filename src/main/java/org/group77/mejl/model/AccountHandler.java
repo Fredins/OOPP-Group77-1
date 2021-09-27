@@ -1,4 +1,6 @@
 package org.group77.mejl.model;
+import com.sun.mail.smtp.SMTPOutputStream;
+
 import java.io.IOException;
 import java.util.*;
 public class AccountHandler {
@@ -7,7 +9,12 @@ public class AccountHandler {
 * */
     Account activeAccount;
     Storage storage;
-    AccountFactory accountFactory = new AccountFactory();
+    AccountFactory accountFactory;
+
+    public AccountHandler() throws OSNotFoundException {
+        this.storage = new LocalDiscStorage();
+        this.accountFactory = new AccountFactory();
+    }
 
     /** @author Alexey Ryabov
     * TODO Test this method */
@@ -15,7 +22,9 @@ public class AccountHandler {
         try {
             storage.store(account);
             return true;
-        } catch (Exception e) {throw new Exception("Failed in AccountHandler -> storeAccount -method ! ");}
+        } catch (Exception e) {
+            throw new Exception("Failed in AccountHandler -> storeAccount -method ! ");
+        }
     }
 
     public Account getAccount(String emailAddress) {

@@ -14,7 +14,7 @@ public class EmailServiceProviderFactory {
      *                email service provider.
      * @return an EmailServiceProviderStrategy.
      */
-    public EmailServiceProviderStrategy getEmailServiceProvider(Account account){
+    public static EmailServiceProviderStrategy getEmailServiceProvider(Account account){
         if (account.getServerProvider() == ServerProvider.GMAIL) {
             return new GmailProvider();
         } else { //TODO should this be `else if microsoft`?
