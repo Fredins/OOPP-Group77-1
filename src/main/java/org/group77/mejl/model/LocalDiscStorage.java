@@ -41,7 +41,7 @@ public class LocalDiscStorage implements Storage {
 
     }
 
-    // TODO
+    
     public boolean store(String emailAddress, List<Folder> folders) {return false;};
     public Account retrieveAccount(String emailAddress) {return null;};
     public List<Folder> retrieveFolders(String emailAddress) {return null;};
