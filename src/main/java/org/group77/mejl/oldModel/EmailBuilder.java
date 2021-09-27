@@ -58,14 +58,8 @@ public class EmailBuilder {
         properties.put("mail.smtp.port", "587"); // Need to set port for testing: port 25 does not work? See terminal error.
     }
 
-    /**
-     * TODO: Connect composingMessage to WritingView
-     * 1) setFrom
-     * 2) setRecipient
-     * 3) setSubject
-     * 4) setText
-     * **/
-    private static Message composingMessage (Session session, String myAccountEmail, String recepient) throws Exception {
+    private static Message composingMessage (Session session, String myAccountEmail, String recepient) throws Exception
+    {
         try
         {
             Message msg = new MimeMessage(session);

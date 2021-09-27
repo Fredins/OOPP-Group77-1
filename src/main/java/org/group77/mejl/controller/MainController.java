@@ -29,7 +29,14 @@ public class MainController {
         private void loadFolders(){};
 
         @FXML
-        public void openWritingView(){};
+        public void openWritingView() throws IOException {
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("WritingView.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                Stage stage = new Stage();
+                stage.setTitle("New Me Mail");
+                stage.setScene(scene);
+                stage.show();
+        }
 
         @FXML
         private void openEmailSettings() throws IOException {
