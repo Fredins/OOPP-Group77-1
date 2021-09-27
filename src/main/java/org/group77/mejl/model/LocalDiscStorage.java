@@ -11,8 +11,9 @@ public class LocalDiscStorage implements Storage {
     
     // Storage interface methods
     public LocalDiscStorage() throws OSNotFoundException {
-        appPath = OSHandler.getAppDirAndSeparator()[0];
-        separator = OSHandler.getAppDirAndSeparator()[1];
+        String[] appDirAndSep = OSHandler.getAppDirAndSeparator();
+        appPath = appDirAndSep[0];
+        separator = appDirAndSep[1];
     }
 
     // TODO This method return value doesn't make sense..
