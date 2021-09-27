@@ -8,21 +8,22 @@ public class LocalDiscStorage implements Storage {
 
     String appPath;
     String separator;
-    
+
     // Storage interface methods
     public LocalDiscStorage() throws OSNotFoundException {
-        appPath = OSHandler.getAppDirAndSeparator()[0];
-        separator = OSHandler.getAppDirAndSeparator()[1];
+        String[] appDirAndSep = OSHandler.getAppDirAndSeparator();
+        appPath = appDirAndSep[0];
+        separator = appDirAndSep[1];
     }
 
     // TODO This method return value doesn't make sense..
-    //  ^^ Who wrote this? (hampus). <.<'
+    //  ^^ Who wrote this? (hampus)
 
     /**
-     * @author Alexey Ryabov. Revised by Hampus Jernkrook
      * @param account - keeps email address of account object.
      * @return - Needs more work.
      * @throws Exception
+     * @author Alexey Ryabov. Revised by Hampus Jernkrook
      */
     public boolean store(Account account) throws Exception {
         String address = account.getEmailAddress();
@@ -37,27 +38,59 @@ public class LocalDiscStorage implements Storage {
                 serialize(account, accountFilePath);
             }
             return true;
-        } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> store -method !");}
+        } catch (Exception e) {
+            throw new Exception("Failed in LocalDiskStorage -> store -method !");
+        }
 
     }
 
-    
-    public boolean store(String emailAddress, List<Folder> folders) {return false;};
-    public Account retrieveAccount(String emailAddress) {return null;};
-    public List<Folder> retrieveFolders(String emailAddress) {return null;};
+    /** TODO how to write tests for store and retrieve? The tests will be dependent on both...
+     *
+     * @param emailAddress - the email address of the account to store the data under.
+     * @param folders      - List of folders to store away.
+     * @return true if the folders could be successfully stored.
+     * @throws IOException if the file operations fail.
+     * @author Hampus Jernkrook
+     */
+    public boolean store(String emailAddress, List<Folder> folders) throws IOException {
+        // path to the given account's directory
+        String path = appPath + separator + emailAddress + separator;
+        // TODO if the folder directories already exists, then these should be overwritten...
+        //  will they be overwritten now?
+        // For each folder, create a directory with the folder name and store the folder object
+        for (Folder folder : folders) {
+            String folderPath = path + folder.getName();
+            String objectPath = folderPath + "FolderObject";
+            // create directory with folder name
+            mkdir(folderPath);
+            // create a directory for the folder object
+            touch(objectPath); //TODO ok name?
+            // store the serialized folder object
+            serialize(folder, objectPath);
+        }
+        return true;
+    }
+
+    public Account retrieveAccount(String emailAddress) {
+        return null;
+    }
+
+    public List<Folder> retrieveFolders(String emailAddress) {
+        return null;
+    }
 
     /**
+     * @param emailAddress the emailAddress of the active account
+     * @param folderName   the name of the desired folder
+     * @return returns a list of emails for the specific folder
+     * @throws IOException            If there are any problems when locating the file
+     * @throws ClassNotFoundException Of the classes required is not on the classpath?
      * @author David Zamanian
-     *
+     * <p>
      * Creates a path for the specific OS down to the folderName. The path is then deserialized and cased to Folder
      * and returns the emails in that folder.
-     *
-     * @param emailAddress the emailAddress of the active account
-     * @param folderName the name of the desired folder
-     * @return returns a list of emails for the specific folder
-     * @throws IOException If there are any problems when locating the file
-     * @throws ClassNotFoundException Of the classes required is not on the classpath?
      */
+
     public List<Email> retrieveEmails(String emailAddress, String folderName) throws IOException, ClassNotFoundException {
 
         String path = appPath + separator + emailAddress + separator + folderName;
@@ -66,11 +99,10 @@ public class LocalDiscStorage implements Storage {
     }
 
     /**
-     * @author Hampus Jernkrook
-     *
-     * Get all email addresses added by the user.
-     *
      * @return A list of email addresses.
+     * @author Hampus Jernkrook
+     * <p>
+     * Get all email addresses added by the user.
      */
     public List<String> retrieveAllEmailAddresses() {
         // Find all directories at level 0 under appPath.
@@ -79,26 +111,37 @@ public class LocalDiscStorage implements Storage {
     }
 
     /**
-     * @author Alexey Ryabov. Revised by Hampus Jernkrook
-     * Method will create a path or return false is path already exists.
-     * @param emailAddress - path of the email address.
+     * @param path - path of the file/directory to search for.
      * @return false.
      * @throws Exception
+     * @author Alexey Ryabov. Revised by Hampus Jernkrook
+     * Tell whether a file/directory exists with the given path.
      */
-    private boolean testExists(String emailAddress) throws Exception {
+    private boolean testExists(String path) throws Exception {
         try {
-            return (new File(emailAddress).exists());
-        } catch (Exception e) {throw new Exception("Failed in LocalDiskStorage -> testExists -method !");}
+            return (new File(path).exists());
+        } catch (Exception e) {
+            throw new Exception("Failed in LocalDiskStorage -> testExists -method !");
+        }
     }
-    
+
+    /**
+     * @param path
+     * @throws IOException
+     * @author Hampus Jernkrook
+     */
     private void touch(String path) throws IOException {
         File file = new File(path);
-        file.createNewFile();
+        // if the file already exists, overwrite it.
+        if (file.exists()) {
+            file.delete(); // first delete the existing
+        }
+        file.createNewFile(); //Create new file.
     }
 
     private void mkdir(String path) throws IOException {
         File file = new File(path);
-        file.mkdir();
+        file.mkdir(); //TODO does this create the directory if it exists? (hampus)
     }
 
     private void serialize(Object o, String path) throws IOException {
@@ -119,37 +162,37 @@ public class LocalDiscStorage implements Storage {
     }
 
     /**
-     * @author Hampus Jernkrook
-     *
-     * Finds all directories at a certain level from a parent path.
      * @param parent - the File encoding of the parent path to search under.
-     * @param level - the level to search down to. level == 0 returns the first children of the parent.
+     * @param level  - the level to search down to. level == 0 returns the first children of the parent.
      * @return A list of paths to the directories at the specified level.
-     *
+     * <p>
      * Method inspiration from
      * https://stackoverflow.com/questions/41344236/java-how-to-get-only-subdirectories-name-present-at-certain-level
      * Cred to user: krzydyn
+     * @author Hampus Jernkrook
+     * <p>
+     * Finds all directories at a certain level from a parent path.
      */
-    private List<String> getDirsAtLevel(File parent, int level){
+    private List<String> getDirsAtLevel(File parent, int level) {
         List<String> dirs = new ArrayList<>();
         File[] files = parent.listFiles();
         if (files == null) return dirs; // empty dir
-        for (File f : files){
+        for (File f : files) {
             if (f.isDirectory()) {
                 if (level == 0) dirs.add(f.getPath());
-                else if (level > 0) dirs.addAll(getDirsAtLevel(f,level-1));
+                else if (level > 0) dirs.addAll(getDirsAtLevel(f, level - 1));
             }
         }
         return dirs;
     }
 
     /**
-     * @author Hampus Jernkrook
-     *
-     * Get only the directory names from a list of directory paths,
-     * i.e. get only the last suffix after the separator.
      * @param dirs - List of directory paths to cut off the prefixes from.
      * @return A list of directory names.
+     * @author Hampus Jernkrook
+     * <p>
+     * Get only the directory names from a list of directory paths,
+     * i.e. get only the last suffix after the separator.
      */
     private List<String> getDirSuffix(List<String> dirs) {
         List<String> suffixes = new ArrayList<>();
@@ -160,7 +203,4 @@ public class LocalDiscStorage implements Storage {
     }
 
 
-    
-    
-    
 }
