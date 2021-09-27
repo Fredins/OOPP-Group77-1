@@ -65,9 +65,17 @@ public class LocalDiscStorage implements Storage {
         return folder.getEmails();
     }
 
+    /**
+     * @author Hampus Jernkrook
+     *
+     * Get all email addresses added by the user.
+     *
+     * @return A list of email addresses.
+     */
     public List<String> retrieveAllEmailAddresses() {
-        // find all directories
-        return null;
+        // Find all directories at level 0 under appPath.
+        // These correspond to each emailAddress added by the user.
+        return getDirSuffix(getDirsAtLevel(new File(appPath), 0));
     }
 
     /**

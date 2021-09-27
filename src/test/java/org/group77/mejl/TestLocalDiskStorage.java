@@ -10,6 +10,32 @@ import java.util.List;
 public class TestLocalDiskStorage {
 
     @Test
+    void testRetrieveAllEmailAddresses() throws Exception {
+        Storage storage = new LocalDiscStorage();
+        String[] addresses = new String[]{
+                "TEST_nr_1@gmail.com",
+                "TEST_nr_2@gmail.com",
+                "TEST_nr_3@gmail.com"
+        };
+        Account[] accounts = new Account[]{
+                new Account(addresses[0],"",ServerProvider.GMAIL),
+                new Account(addresses[1],"",ServerProvider.GMAIL),
+                new Account(addresses[2],"",ServerProvider.GMAIL)
+        };
+        // store the accounts
+        for (Account a : accounts) {
+            storage.store(a);
+        }
+        // now retrieve all email addresses
+        List<String> res = storage.retrieveAllEmailAddresses();
+        // TODO need to clean up the folder structure before trying this, otherwise
+        //  must just try if the addresses are members of the result.
+        // Test that the elements of the setup and result arrays are the same
+        Assertions.assertArrayEquals(addresses, res.toArray());
+    }
+
+
+    @Test
     /**
      * @author Hampus Jernkrook
      */
