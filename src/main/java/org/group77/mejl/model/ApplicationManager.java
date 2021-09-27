@@ -32,8 +32,6 @@ public class ApplicationManager {
      * @return boolean, true if account was successfully stored,
      * false if account could not be stored.
      * */
-
-
     public boolean addAccount(String emailAddress, String password) throws Exception {
 
         Account account = accountHandler.createAccount(emailAddress,password);
@@ -72,8 +70,24 @@ public class ApplicationManager {
     public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException, IOException {
         return accountHandler.getEmails(folderName);   }
 
-    public boolean sendEmail(List<String> recipients, String subject, String content) {
-        return false;
+    /** @author Alexey Ryabov
+     * @param recipient - From the GUI FieldText.
+     * @param subject - From the GUI FieldText.
+     * @param content - From the GUI FieldText.
+     * @return - Needs more work.
+     */
+    public boolean sendEmail(String recipient, String subject, String content) throws Exception {
+        AccountHandler accountHandler = new AccountHandler();
+        Account activeAccount = accountHandler.getActiveAccount();
+
+        EmailServiceProviderFactory espf = new EmailServiceProviderFactory();
+        EmailServiceProviderStrategy esps = espf.getEmailServiceProvider(activeAccount);
+
+        if (esps.sendEmail(activeAccount, recipient, subject, content)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
