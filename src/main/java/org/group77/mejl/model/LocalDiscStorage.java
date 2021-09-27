@@ -17,6 +17,9 @@ public class LocalDiscStorage implements Storage {
 
     // TODO This method return value doesn't make sense..
     //  ^^ Who wrote this? (hampus)
+    // <.<
+    // >.>
+    // ?.?
     /**
      * @author Alexey Ryabov. Revised by Hampus Jernkrook
      * @param account - keeps email address of account object.
@@ -40,7 +43,7 @@ public class LocalDiscStorage implements Storage {
 
     }
 
-
+    // TODO
     public boolean store(String emailAddress, List<Folder> folders) {return false;};
     public Account retrieveAccount(String emailAddress) {return null;};
     public List<Folder> retrieveFolders(String emailAddress) {return null;};
@@ -57,7 +60,6 @@ public class LocalDiscStorage implements Storage {
      * @throws IOException If there are any problems when locating the file
      * @throws ClassNotFoundException Of the classes required is not on the classpath?
      */
-
     public List<Email> retrieveEmails(String emailAddress, String folderName) throws IOException, ClassNotFoundException {
 
         String path = appPath + separator + emailAddress + separator + folderName;

@@ -1,4 +1,5 @@
 package org.group77.mejl;
+import junit.framework.AssertionFailedError;
 import org.group77.mejl.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,6 @@ public class TestLocalDiskStorage {
         // Test that the elements of the setup and result arrays are the same
         Assertions.assertArrayEquals(addresses, res.toArray());
     }
-
 
     @Test
     /**
@@ -78,14 +78,22 @@ public class TestLocalDiskStorage {
         // TODO assertion
     }
 
-    @Test //TODO who wrote this and what do you want to test??
+    @Test
+    /** @author Alexey Ryabov
+     * TODO Implement propper Assertion.
+     */
     void testStorage() throws Exception
     {
         AccountHandler h = new AccountHandler();
         Account a = h.createAccount("77grupp@gmail.com", "grupp77group");
         LocalDiscStorage l = new LocalDiscStorage();
-        l.store(a);
-        // TODO assertion
+
+        AccountHandler h1 = new AccountHandler();
+        Account a1 = h1.createAccount("77grupp@gmail.com", "grupp77group");
+        LocalDiscStorage l1 = new LocalDiscStorage();
+
+        Assertions.assertEquals(l.store(a), l1.store(a1));
+
     }
 
 }

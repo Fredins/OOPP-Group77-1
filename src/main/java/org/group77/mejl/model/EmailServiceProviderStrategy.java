@@ -120,7 +120,7 @@ public abstract class EmailServiceProviderStrategy {
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587"); // Need to set port for testing: port 25 does not work? See terminal error.
+        properties.put("mail.smtp.port", "587");
     }
 
     /** @author Alexey Ryabov
