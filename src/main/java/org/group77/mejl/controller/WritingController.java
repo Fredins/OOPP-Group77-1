@@ -63,7 +63,7 @@ public class WritingController {
     }
 
     /** @author Alexey Ryabov
-     * This method converts TextField string to list of recipients separated with "," -sign.
+     * This method converts TextField string to list of recipients separated with ";" -sign.
      * @param textfield - toTextField.
      * @return list of recipints mail adresses.
      */
