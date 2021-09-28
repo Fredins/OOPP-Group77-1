@@ -98,7 +98,9 @@ public class MainController implements Initializable {
 
 
         @FXML
-        public void refresh(){};
+        public void refresh(){
+               loadFolders();
+        };
 
         @FXML
         public void switchAccount(){};
@@ -163,10 +165,6 @@ public class MainController implements Initializable {
                 stage.show();
         }
 
-        // IN DEVELOPMENT
-        @FXML
-        private void fetchMails() {
-        }
 
         /**
          * Populates the ComboBox with the currently stored account
