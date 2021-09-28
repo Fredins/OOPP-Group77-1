@@ -9,7 +9,11 @@ public class AddAccountController {
 
     //TODO possibly move this somewhere else or make use of singleton pattern to avoid
     // multiple AppManagers if not necessary? (Hampus)
-    ApplicationManager applicationManager = new ApplicationManager();
+    private ApplicationManager appManager;
+    
+    public void init(ApplicationManager appManager){
+        this.appManager = appManager; 
+    }
 
     @FXML
     private TextField password;
@@ -21,7 +25,7 @@ public class AddAccountController {
     @FXML
     void addAccount(MouseEvent event) {
         try {
-            if (applicationManager.addAccount(user.getText(),password.getText())) {
+            if (appManager.addAccount(user.getText(),password.getText())) {
                 // account was successfully created, close AddAccountView
             } else {
                 // error, give error message?

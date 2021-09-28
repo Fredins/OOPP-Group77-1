@@ -45,7 +45,8 @@ public class LocalDiscStorage implements Storage {
         return false;
     }
 
-    /** TODO how to write tests for store and retrieve? The tests will be dependent on both...
+    /**
+     * TODO how to write tests for store and retrieve? The tests will be dependent on both...
      *
      * @param emailAddress - the email address of the account to store the data under.
      * @param folders      - List of folders to store away.
@@ -55,7 +56,7 @@ public class LocalDiscStorage implements Storage {
      */
     public boolean store(String emailAddress, List<Folder> folders) throws IOException {
         // path to the given account's directory
-        String path = appPath + emailAddress + separator;
+        String path = appPath + separator + emailAddress + separator;
         // TODO if the folder directories already exists, then these should be overwritten...
         //  will they be overwritten now?
         // For each folder, create a directory with the folder name and store the folder object
@@ -72,8 +73,20 @@ public class LocalDiscStorage implements Storage {
         return true;
     }
 
-    public Account retrieveAccount(String emailAddress) {
-        return null;
+    /**
+     * If an account with the given email address exists as a saved object on the user's
+     * machine, find and return the account object.
+     *
+     * @param emailAddress - the email address of the account that should be retrieved.
+     * @return The Account with the given email address.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @author Hampus Jenrkrook
+     */
+    public Account retrieveAccount(String emailAddress) throws IOException, ClassNotFoundException {
+        // retrieve the account at path "appPath/emailAddress" and unpack to Account object
+        Account account = (Account) deserialize(appPath + separator + emailAddress + "Account"); //TODO set the account object name somewhere else
+        return account;
     }
 
     public List<Folder> retrieveFolders(String emailAddress) {
