@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-        ApplicationManager appManager;
+        private final ApplicationManager appManager = new ApplicationManager();
         @FXML private FlowPane emailListItemFlowPane;
 
         @FXML private FlowPane flowPaneTrees;
@@ -114,8 +114,10 @@ public class MainController implements Initializable {
         private void openEmailSettings() throws IOException {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccountView.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 500, 400);
+                AddAccountController c = fxmlLoader.getController();
+                c.init(appManager);
                 Stage stage = new Stage();
-                stage.setTitle("mejl");
+                stage.setTitle("add account");
                 stage.setScene(scene);
                 stage.show();
         }
