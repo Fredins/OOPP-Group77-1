@@ -77,7 +77,7 @@ public abstract class EmailServiceProviderStrategy {
         System.out.println("Preparing to send message..");
 
         String fromAccount = from.getEmailAddress();
-        String fromPassword = from.getPassword();
+        String fromAccountPassword = from.getPassword();
 
         //For Testing Only!
         String TESTmyAccount = "77grupp@gmail.com";
@@ -115,8 +115,7 @@ public abstract class EmailServiceProviderStrategy {
      * Sets properties. For testing only.
      * @param properties
      */
-    private static void setProperties (Properties properties)
-    {
+    private static void setProperties (Properties properties) {
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");

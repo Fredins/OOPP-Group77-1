@@ -16,12 +16,12 @@ public class WritingController {
     @FXML
     private TextField subjectTextField;
     @FXML
-    private TextField contentTextfield;
+    private TextField contentTextField;
     
     @FXML
     public void sendEmail(){
         try {
-            if (applicationManager.sendEmail(toTextField.getText(), subjectTextField.getText(), contentTextfield.getText())) {
+            if (applicationManager.sendEmail(toTextField.getText(), subjectTextField.getText(), contentTextField.getText())) {
                 // email was successfully send, close WritingView
             } else {
                 // error, give error message?
