@@ -15,4 +15,9 @@ public class FolderItemController {
         this.folder = folder;
         this.parent = parent;
     }
+
+    @FXML
+    void viewEmails(){
+        parent.loadEmails(folder.getEmails());
+    }
 }

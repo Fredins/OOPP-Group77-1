@@ -75,11 +75,7 @@ public class MainController implements Initializable {
 
                 // loadFolders(); TODO implement getActiveAccount();
 
-                try {
-                        loadEmails(emails);
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
+                loadEmails(emails);
 
         }
 
@@ -98,13 +94,18 @@ public class MainController implements Initializable {
 
 
         @FXML
-        public void loadEmails(List<Email> emails) throws IOException {
+        public void loadEmails(List<Email> emails){
                 emailListItemFlowPane.getChildren().clear();
+                try {
+
                 for (Email email : emails){
                         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
                         emailListItemFlowPane.getChildren().add(fxmlLoader.load());
                         listItemController controller = fxmlLoader.getController();
                         controller.init(email);
+                }
+                } catch(IOException e){
+                    e.printStackTrace();
                 }
         }
 
