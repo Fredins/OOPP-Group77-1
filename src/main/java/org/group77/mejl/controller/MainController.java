@@ -67,6 +67,7 @@ public class MainController implements Initializable {
 
         public void initialize(URL url, ResourceBundle rb) {
                 populateAccountsComboBox();
+                addOnActionAccountsComboBox();
 
                 //For testing only
                 String testAddress1 = "from@gmail.com";
@@ -176,8 +177,10 @@ public class MainController implements Initializable {
          * @author Elin Hagman
          */
 
+        @FXML
         private void populateAccountsComboBox() {
 
+                accountsComboBox.getItems().clear();
                 List<String> emailAddresses = appManager.getEmailAddresses();
 
                 // Add every emailAddress to accountsComboBox
@@ -185,6 +188,11 @@ public class MainController implements Initializable {
                         accountsComboBox.getItems().add(emailAddress);
                 }
 
+                System.out.println(accountsComboBox.getItems());
+
+        }
+
+        private void addOnActionAccountsComboBox() {
                 // Add onAction to ComboBox
                 accountsComboBox.setOnAction((event) -> {
 
@@ -196,9 +204,7 @@ public class MainController implements Initializable {
                         System.out.println("active account: " + appManager.getActiveAccount().getEmailAddress());
 
                 });
-
         }
-
 
 
 
