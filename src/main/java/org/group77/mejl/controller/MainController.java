@@ -151,6 +151,8 @@ public class MainController implements Initializable {
         public void openWritingView() throws IOException {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("WritingView.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                WritingController c = fxmlLoader.getController();
+                c.init(appManager);
                 Stage stage = new Stage();
                 stage.setTitle("New Me Mail");
                 stage.setScene(scene);

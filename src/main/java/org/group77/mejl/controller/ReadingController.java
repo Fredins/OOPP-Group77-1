@@ -34,7 +34,6 @@ public class ReadingController {
      *
      * @param email The email that will be displayed in the readingView
      */
-
     public void init(Email email, MainController parent){
         this.parentController = parent;
         this.email = email;
@@ -51,7 +50,6 @@ public class ReadingController {
      *
      * @throws IOException
      */
-
     @FXML
     public void openWritingViewFromAnswer() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("WritingView.fxml"));

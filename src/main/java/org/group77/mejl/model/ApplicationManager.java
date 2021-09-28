@@ -75,7 +75,6 @@ public class ApplicationManager {
     public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException, IOException {
         return accountHandler.getEmails(folderName);   }
 
-    // TODO sendEmail will instead of String recipient take List<String> recipients.
     /** @author Alexey Ryabov
      * @param recipient - From the GUI FieldText.
      * @param subject - From the GUI FieldText.
@@ -83,13 +82,13 @@ public class ApplicationManager {
      * @return - Needs more work.
      */
     public boolean sendEmail(List<String> recipient, String subject, String content) throws Exception {
-        AccountHandler accountHandler = new AccountHandler();
+        //AccountHandler accountHandler = new AccountHandler();
+        //EmailServiceProviderFactory espf = new EmailServiceProviderFactory();
+
         Account activeAccount = accountHandler.getActiveAccount();
+        EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount);
 
-        EmailServiceProviderFactory espf = new EmailServiceProviderFactory();
-        EmailServiceProviderStrategy esps = espf.getEmailServiceProvider(activeAccount);
-
-        if (esps.sendEmail(activeAccount, recipient, subject, content)) {
+        if (espStrategy.sendEmail(activeAccount, recipient, subject, content)) {
             return true;
         } else {
             return false;

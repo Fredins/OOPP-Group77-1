@@ -28,7 +28,6 @@ public class WritingController {
      *
      * @param applicationManager
      */
-
     public void init(ApplicationManager applicationManager){
         this.applicationManager = applicationManager;
     }
@@ -40,7 +39,6 @@ public class WritingController {
      *
      * @param applicationManager
      */
-
     public void init(ApplicationManager applicationManager, String to){
         this.applicationManager = applicationManager;
         this.toTextField.setText(to);
@@ -49,12 +47,12 @@ public class WritingController {
 
 
     /** @author Alexey Ryabov
-     *
+     * From GUI, this method initialises sendEmail method in application manager.
      */
     @FXML
     public void sendEmail(){
         try {
-            if (applicationManager.sendEmail(fromTextFieldToListOfRecipients(toTextField), subjectTextField.getText(), contentTextField.getText())) {
+            if (applicationManager.sendEmail(fromTextFieldToListOfRecipients(toTextField.getText()), subjectTextField.getText(), contentTextField.getText())) {
                 // email was successfully send, close WritingView
             } else {
                 // error, give error message?
@@ -69,11 +67,12 @@ public class WritingController {
      * @param textfield - toTextField.
      * @return list of recipints mail adresses.
      */
-    private List<String> fromTextFieldToListOfRecipients (TextField textfield) {
-        String textFieldToString = textfield.toString();
-        String strings[] = textFieldToString.split(",");
+    private List<String> fromTextFieldToListOfRecipients (String textfield) {
+        //String textFieldToString = textfield.toString();
+        String strings[] = textfield.split(";");
         List list = Arrays.asList(strings);
 
+        System.out.println(list); // For Testing.
         return list;
     }
 

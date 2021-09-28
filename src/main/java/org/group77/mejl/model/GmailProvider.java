@@ -135,7 +135,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
         setGmailProperties(props);
 
         for (String recipient : recipients) {
-            Message msg = composingMessage(getAuthentication(props, TESTmyAccount, TESTmyPassword), TESTmyAccount, recipient, subject, content);
+            Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content);
 
             Transport.send(msg);
 
@@ -188,11 +188,15 @@ public class GmailProvider extends EmailServiceProviderStrategy {
         {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));
+            System.out.println(recipient); // For testing.
             msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             msg.setSubject(subject);
             msg.setText(content);
             return msg;
 
-        } catch (Exception ex) { throw new Exception("Something went wrong in EmailBuilder->composingMessage method !!!");}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
