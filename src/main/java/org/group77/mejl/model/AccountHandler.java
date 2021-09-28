@@ -33,7 +33,7 @@ public class AccountHandler {
     }
 
     public List<String> getEmailAddresses() {
-        return null;
+        return storage.retrieveAllEmailAddresses();
     }
 
     public boolean storeFolders(List<Folder> folders) {
@@ -61,8 +61,10 @@ public class AccountHandler {
         return activeAccount;
     }
 
-    public boolean setActiveAccount(String emailAddress) {
-        return false;
+    public boolean setActiveAccount(String emailAddress) throws IOException, ClassNotFoundException {
+
+        activeAccount = storage.retrieveAccount(emailAddress);
+        return true;
     }
 
     public Account createAccount(String emailAddress, String password) {

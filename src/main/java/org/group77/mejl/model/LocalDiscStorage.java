@@ -85,7 +85,7 @@ public class LocalDiscStorage implements Storage {
      */
     public Account retrieveAccount(String emailAddress) throws IOException, ClassNotFoundException {
         // retrieve the account at path "appPath/emailAddress" and unpack to Account object
-        Account account = (Account) deserialize(appPath + separator + emailAddress + "Account"); //TODO set the account object name somewhere else
+        Account account = (Account) deserialize(appPath + separator + emailAddress + separator + "Account"); //TODO set the account object name somewhere else
         return account;
     }
 

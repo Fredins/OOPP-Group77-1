@@ -47,12 +47,18 @@ public class ApplicationManager {
 
     }
 
-    public boolean setActiveAccount(String emailAddress) {
-        return false;
+    public boolean setActiveAccount(String emailAddress)  {
+        try {
+            accountHandler.setActiveAccount(emailAddress);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public List<String> getEmailAddresses() {
-        return null;
+        return accountHandler.getEmailAddresses();
     }
 
     /**
@@ -108,6 +114,11 @@ public class ApplicationManager {
         List<Folder> folders = espStrategy.refreshFromServer(account);
         accountHandler.storeFolders(folders);
         return folders;
+    }
+
+
+    public Account getActiveAccount() {
+        return accountHandler.getActiveAccount();
     }
 
 }
