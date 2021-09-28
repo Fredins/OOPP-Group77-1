@@ -14,6 +14,7 @@ public class FolderItemController {
     void init(Folder folder, MainController parent){
         this.folder = folder;
         this.parent = parent;
+        label.setText(folder.getName());
     }
 
     @FXML

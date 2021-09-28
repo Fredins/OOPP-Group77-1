@@ -2,10 +2,13 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="270.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="197.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mejl.controller.FolderItemController">
    <children>
-      <Label fx:id="label" layoutX="28.0" layoutY="28.0" prefHeight="30.0" prefWidth="213.0" text="Label" />
+      <Label fx:id="label" layoutX="16.0" layoutY="2.0" onMouseClicked="#viewEmails" prefHeight="35.0" prefWidth="172.0" text="Label">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
    </children>
 </AnchorPane>
