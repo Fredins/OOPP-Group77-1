@@ -47,7 +47,6 @@ public class ApplicationManager {
 
     }
 
-
     public boolean setActiveAccount(String emailAddress) {
         return false;
     }
@@ -70,13 +69,14 @@ public class ApplicationManager {
     public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException, IOException {
         return accountHandler.getEmails(folderName);   }
 
+    // TODO sendEmail will instead of String recipient take List<String> recipients.
     /** @author Alexey Ryabov
      * @param recipient - From the GUI FieldText.
      * @param subject - From the GUI FieldText.
      * @param content - From the GUI FieldText.
      * @return - Needs more work.
      */
-    public boolean sendEmail(String recipient, String subject, String content) throws Exception {
+    public boolean sendEmail(List<String> recipient, String subject, String content) throws Exception {
         AccountHandler accountHandler = new AccountHandler();
         Account activeAccount = accountHandler.getActiveAccount();
 
