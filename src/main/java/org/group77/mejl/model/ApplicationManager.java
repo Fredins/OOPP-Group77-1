@@ -49,11 +49,12 @@ public class ApplicationManager {
 
 
     public boolean setActiveAccount(String emailAddress) {
-        return false;
+        accountHandler.setActiveAccount(emailAddress);
+        return true;
     }
 
     public List<String> getEmailAddresses() {
-        return null;
+        return accountHandler.getEmailAddresses();
     }
 
     /**
@@ -112,5 +113,9 @@ public class ApplicationManager {
             throw new Exception("Could not store folders");
         }
 
+    }
+
+    public Account getActiveAccount() {
+        return accountHandler.getActiveAccount();
     }
 }
