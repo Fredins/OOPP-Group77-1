@@ -26,9 +26,10 @@ public class MainController implements Initializable {
 
         private final ApplicationManager appManager = new ApplicationManager();
         @FXML private FlowPane emailListItemFlowPane;
+        @FXML public FlowPane readingFlowPane;
+
         @FXML
         private FlowPane flowPaneFolder;
-
 
         private void loadFolders() {
                 try {
@@ -56,7 +57,9 @@ public class MainController implements Initializable {
          * @param url
          * @param rb
          */
-        public void initialize(URL url, ResourceBundle rb) {
+
+        public void initialize(URL url, ResourceBundle rb)  {
+
 
                 //For testing only
                 String testAddress1 = "from@gmail.com";
@@ -67,7 +70,13 @@ public class MainController implements Initializable {
                         "lol2@gmail.com",
                         "lol3@gmail.com");
                 List<Email> emails = Arrays.asList(
-                        new Email(testAddress1, to, "Subject 1", "Email 1"),
+                        new Email(testAddress1, to, "Subject 1", "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" +
+                                "\n" +
+                                "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" +
+                                "\n" +
+                                "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.\n" +
+                                "\n" +
+                                "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."),
                         new Email(testAddress2, to, "Subject 2", "Email 2"),
                         new Email(testAddress3, to, "Subject 3", "Email 3"),
                         new Email(testAddress4, to, "Subject 4", "Email 4")
@@ -91,6 +100,15 @@ public class MainController implements Initializable {
         public void openAddAccountView(){};
 
 
+        /**
+         * @author David Zamanian
+         *
+         * Iterates through the list of emails given and creates a listItem for each of them and shows
+         * them in the emailListItemflowPane.
+         *
+         * @param emails the list of emails that will be shown in the listItems
+         * @throws IOException
+         */
 
 
         @FXML
@@ -102,7 +120,7 @@ public class MainController implements Initializable {
                         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
                         emailListItemFlowPane.getChildren().add(fxmlLoader.load());
                         listItemController controller = fxmlLoader.getController();
-                        controller.init(email);
+                        controller.init(email, this);
                 }
                 } catch(IOException e){
                     e.printStackTrace();
