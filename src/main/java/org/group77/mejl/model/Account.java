@@ -1,8 +1,9 @@
 package org.group77.mejl.model;
 
 
+import java.io.Serializable;
 
-public class Account {
+public class Account implements Serializable {
     private final String emailAddress;
     private final String password;
     private final ServerProvider provider;

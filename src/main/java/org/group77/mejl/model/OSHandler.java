@@ -25,13 +25,13 @@ public class OSHandler {
         // Set appDir according to os and username.
         // If os does not match mac/osx, windows or linux then throw exception.
         if (os.contains("mac")) {
-            appDir = "/Users/" + userName + "/Library/Application Support/";
+            appDir = "/Users/" + userName + "/Library/Application Support/Group77";
             separator = "/";
         } else if (os.contains("win")) {
-            appDir = "C:\\Users\\" + userName + "\\AppData\\Local\\";
+            appDir = "C:\\Users\\" + userName + "\\AppData\\Local\\Group77";
             separator = "\\";
         } else if (os.contains("nux")) {
-            appDir = "/home/" + userName + "/.local/share/";
+            appDir = "/home/" + userName + "/.local/share/Group77";
             separator = "/";
         } else {
             throw new OSNotFoundException("Your operating system is either not supported or not found.");

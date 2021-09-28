@@ -10,10 +10,11 @@ public class LocalDiscStorage implements Storage {
     String separator;
 
     // Storage interface methods
-    public LocalDiscStorage() throws OSNotFoundException {
+    public LocalDiscStorage() throws OSNotFoundException, IOException {
         String[] appDirAndSep = OSHandler.getAppDirAndSeparator();
         appPath = appDirAndSep[0];
         separator = appDirAndSep[1];
+        this.mkdir(appPath);
     }
 
     // TODO This method return value doesn't make sense..
@@ -39,9 +40,9 @@ public class LocalDiscStorage implements Storage {
             }
             return true;
         } catch (Exception e) {
-            throw new Exception("Failed in LocalDiskStorage -> store -method !");
+            e.printStackTrace();
         }
-
+        return false;
     }
 
     /** TODO how to write tests for store and retrieve? The tests will be dependent on both...
@@ -54,7 +55,7 @@ public class LocalDiscStorage implements Storage {
      */
     public boolean store(String emailAddress, List<Folder> folders) throws IOException {
         // path to the given account's directory
-        String path = appPath + separator + emailAddress + separator;
+        String path = appPath + emailAddress + separator;
         // TODO if the folder directories already exists, then these should be overwritten...
         //  will they be overwritten now?
         // For each folder, create a directory with the folder name and store the folder object

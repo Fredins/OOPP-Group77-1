@@ -11,7 +11,7 @@ public class AccountHandler {
     Storage storage;
     AccountFactory accountFactory;
 
-    public AccountHandler() throws OSNotFoundException {
+    public AccountHandler() throws OSNotFoundException, IOException {
         this.storage = new LocalDiscStorage();
         this.accountFactory = new AccountFactory();
     }
@@ -23,8 +23,9 @@ public class AccountHandler {
             storage.store(account);
             return true;
         } catch (Exception e) {
-            throw new Exception("Failed in AccountHandler -> storeAccount -method ! ");
+            e.printStackTrace();
         }
+        return false;
     }
 
     public Account getAccount(String emailAddress) {
