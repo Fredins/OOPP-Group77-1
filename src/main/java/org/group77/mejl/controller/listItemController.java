@@ -1,12 +1,17 @@
 package org.group77.mejl.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
+import org.group77.mejl.Main;
 import org.group77.mejl.model.Email;
+
+import java.io.IOException;
 
 public class listItemController extends FlowPane {
 
+    private MainController parentController;
     Email email;
     @FXML private Label from;
     @FXML private Label subject;
@@ -19,20 +24,28 @@ public class listItemController extends FlowPane {
      * @param email
      */
 
-    public void init(Email email){
+    public void init(Email email, MainController parent){
+        this.parentController = parent;
         this.email = email;
         this.from.setText(email.getFrom());
         this.subject.setText(email.getSubject());
     }
 
-    @FXML
-    void readEmail() {
+    /**
+     * @author David Zamanian
+     *
+     * opens the readingView in the readingFlowPane in MainController/MainView.
+     *
+     * @throws IOException
+     */
 
-        //For testing only
-        System.out.println("readEmail - Click!");
+    @FXML
+    void readEmail() throws IOException {
+            parentController.readingFlowPane.getChildren().clear();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ReadingView.fxml"));
+            parentController.readingFlowPane.getChildren().add(fxmlLoader.load());
+            ReadingController controller = fxmlLoader.getController();
+            controller.init(email);
     }
-
-    @FXML
-    public void openReadingView(){};
 
 }
