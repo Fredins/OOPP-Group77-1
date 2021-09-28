@@ -54,6 +54,8 @@ public class WritingController {
     @FXML
     public void sendEmail(){
         try {
+            ApplicationManager app = new ApplicationManager();
+            init(app);
             if (applicationManager.sendEmail(fromTextFieldToListOfRecipients(toTextField), subjectTextField.getText(), contentTextField.getText())) {
                 // email was successfully send, close WritingView
             } else {
