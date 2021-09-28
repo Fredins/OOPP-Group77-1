@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -33,6 +34,8 @@ public class MainController implements Initializable {
 
         @FXML
         private FlowPane flowPaneFolder;
+        @FXML
+        private ComboBox<String> accountsComboBox;
 
         private void loadFolders() {
                 try {
@@ -51,8 +54,7 @@ public class MainController implements Initializable {
         }
 
 
-        @FXML
-        private ComboBox<String> accountsComboBox;
+
 
 
         /**
@@ -106,6 +108,7 @@ public class MainController implements Initializable {
 
         @FXML
         public void openAddAccountView(){};
+
 
 
         /**
@@ -171,8 +174,6 @@ public class MainController implements Initializable {
 
         /**
          * Populates this accountsComboBox with the accounts which are currently stored in appManager.
-         * Also adds a listener to this accountsComboBox that changes the activeAccount to the
-         * account that is currently selected in this accountComboBox.
          *
          * @author Elin Hagman
          */
@@ -192,6 +193,14 @@ public class MainController implements Initializable {
 
         }
 
+        /**
+         * Adds listener to this accountComboBox which sets the selected email address in the combobox
+         * as activeAccount in this appManager.
+         *
+         * Does not set new activeAccount if the selected account has the same email address as the current activeAccount.
+         *
+         * @author Elin Hagman
+         */
         private void addOnActionAccountsComboBox() {
                 // Add onAction to ComboBox
                 accountsComboBox.setOnAction((event) -> {
@@ -199,10 +208,18 @@ public class MainController implements Initializable {
                         // selectedEmailAddress is the email address the user has clicked on
                         String selectedEmailAddress = accountsComboBox.getSelectionModel().getSelectedItem();
 
-                        appManager.setActiveAccount(selectedEmailAddress);
-                        System.out.println("changed active account to " + selectedEmailAddress );
-                        System.out.println("active account: " + appManager.getActiveAccount().getEmailAddress());
+                        if (selectedEmailAddress != null) {
 
+                                // change activeAccount if it is null or if it is not the same as before
+                                if (appManager.getActiveAccount() == null
+                                        || (!selectedEmailAddress.equals(appManager.getActiveAccount().getEmailAddress()))) {
+
+                                        appManager.setActiveAccount(selectedEmailAddress);
+                                        System.out.println("changed active account to " + selectedEmailAddress);
+                                        System.out.println("active account: " + appManager.getActiveAccount().getEmailAddress());
+
+                                }
+                        }
                 });
         }
 
