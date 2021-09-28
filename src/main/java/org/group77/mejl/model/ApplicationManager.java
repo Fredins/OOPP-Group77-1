@@ -98,19 +98,16 @@ public class ApplicationManager {
      * be thrown instead of returning the folders.
      *
      * @return List of folders that has been updated from server
-     * @throws Exception if the folders updated from server cannot be stored
+     * @throws MessagingException if the folders updated from server cannot be stored
      */
-    public List<Folder> refreshFromServer() throws Exception {
+    public List<Folder> refreshFromServer() throws MessagingException {
 
         Account account = accountHandler.getActiveAccount();
         EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(account);
 
         List<Folder> folders = espStrategy.refreshFromServer(account);
-        if (accountHandler.storeFolders(folders)) {
-            return folders;
-        } else {
-            throw new Exception("Could not store folders");
-        }
-
+        accountHandler.storeFolders(folders);
+        return folders;
     }
+
 }

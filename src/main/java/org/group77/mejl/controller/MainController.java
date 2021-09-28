@@ -6,10 +6,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.group77.mejl.Main;
 import org.group77.mejl.model.ApplicationManager;
 import org.group77.mejl.model.Email;
+import org.group77.mejl.model.Folder;
 import org.group77.mejl.oldControllers.EmailItemController;
 
 import javax.mail.Message;
@@ -24,10 +26,26 @@ public class MainController implements Initializable {
 
         private final ApplicationManager appManager = new ApplicationManager();
         @FXML private FlowPane emailListItemFlowPane;
+        @FXML
+        private FlowPane flowPaneFolder;
 
-        @FXML private FlowPane flowPaneTrees;
 
-        @FXML private Button writeEmailButton;
+        private void loadFolders() {
+                try {
+                    List<Folder> folders = appManager.refreshFromServer();
+                    flowPaneFolder.getChildren().clear();
+                    for (Folder f: folders) {
+                        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItemView.fxml"));
+                        flowPaneFolder.getChildren().add(fxmlLoader.load());
+                        FolderItemController c = fxmlLoader.getController();
+                        c.init(f, this);
+                    }
+                }catch (MessagingException | IOException e) {
+                    e.printStackTrace();
+                }
+
+        }
+
 
 
         /**
@@ -38,7 +56,6 @@ public class MainController implements Initializable {
          * @param url
          * @param rb
          */
-
         public void initialize(URL url, ResourceBundle rb) {
 
                 //For testing only
@@ -56,9 +73,10 @@ public class MainController implements Initializable {
                         new Email(testAddress4, to, "Subject 4", "Email 4")
                 );
 
+                // loadFolders(); TODO implement getActiveAccount();
+
                 try {
                         loadEmails(emails);
-                        loadFolders();
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
@@ -92,9 +110,6 @@ public class MainController implements Initializable {
 
 
 
-
-        @FXML
-        private void loadFolders(){};
 
         /**
          * @author Alexey Ryabov
