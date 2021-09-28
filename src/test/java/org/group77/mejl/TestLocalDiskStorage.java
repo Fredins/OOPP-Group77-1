@@ -1,6 +1,7 @@
 package org.group77.mejl;
 import junit.framework.AssertionFailedError;
 import org.group77.mejl.model.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,26 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TestLocalDiskStorage {
+
+    @AfterEach
+    void removeAppDir() throws OSNotFoundException {
+        // remove the app directory to ensure that each test works with a clean directory structure.
+        String appPath = OSHandler.getAppDirAndSeparator()[0];
+        ProcessBuilder processBuilder = new ProcessBuilder("rm", "-rf", appPath);
+    }
+
+    // TODO how to avoid circular tests with store and retrieve??
+    @Test
+    void testRetrieveAccount() throws Exception {
+        // store away an account
+        Account a = new Account("TEST_nr_1@gmail.com", "", ServerProvider.GMAIL);
+        Storage storage = new LocalDiscStorage();
+        storage.store(a);
+        // retrieve the account by its email address
+        Account b = storage.retrieveAccount(a.getEmailAddress());
+        // check that the accounts are the same
+        Assertions.assertEquals(a, b);
+    }
 
     @Test
     void testRetrieveAllEmailAddresses() throws Exception {
