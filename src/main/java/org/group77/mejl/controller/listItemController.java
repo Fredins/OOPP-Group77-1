@@ -45,7 +45,7 @@ public class listItemController extends FlowPane {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ReadingView.fxml"));
             parentController.readingFlowPane.getChildren().add(fxmlLoader.load());
             ReadingController controller = fxmlLoader.getController();
-            controller.init(email);
+            controller.init(email, parentController);
     }
 
 }
