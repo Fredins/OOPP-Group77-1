@@ -17,6 +17,7 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
 
 
     /**@author Alexey Ryabov
+     * TODO Replace TESTAccount, TESTAccountPassword with fromAccount, fromAccountPassword.
      * @param from - active account
      * @param recipients - List of to-account emails will be sent to.
      * @param subject - subject.
@@ -69,9 +70,9 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
      * @param properties
      */
     private static void setMicrosoftOutlookProperties (Properties properties) {
+        properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.host", "smtp-mail.outlook.com");
         properties.put("mail.smtp.port", "587");
     }
 
