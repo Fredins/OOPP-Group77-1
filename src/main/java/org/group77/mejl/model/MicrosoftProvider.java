@@ -39,7 +39,7 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
         setMicrosoftOutlookProperties(props);
 
         for (String recipient : recipients) {
-            Message msg = composingMessage(getAuthentication(props, TESTmyAccount, TESTmyPassword), TESTmyAccount, recipient, subject, content);
+            Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content);
 
             Transport.send(msg);
 
