@@ -56,7 +56,7 @@ public class LocalDiscStorage implements Storage {
      */
     public boolean store(String emailAddress, List<Folder> folders) throws IOException {
         // path to the given account's directory
-        String path = appPath + emailAddress + separator;
+        String path = appPath + separator + emailAddress + separator;
         // TODO if the folder directories already exists, then these should be overwritten...
         //  will they be overwritten now?
         // For each folder, create a directory with the folder name and store the folder object
@@ -85,7 +85,7 @@ public class LocalDiscStorage implements Storage {
      */
     public Account retrieveAccount(String emailAddress) throws IOException, ClassNotFoundException {
         // retrieve the account at path "appPath/emailAddress" and unpack to Account object
-        Account account = (Account) deserialize(appPath + emailAddress + "Account"); //TODO set the account object name somewhere else
+        Account account = (Account) deserialize(appPath + separator + emailAddress + "Account"); //TODO set the account object name somewhere else
         return account;
     }
 
