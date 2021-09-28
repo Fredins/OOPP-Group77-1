@@ -96,6 +96,10 @@ public class MainController implements Initializable {
         @FXML
         private void loadFolders(){};
 
+        /**
+         * @author Alexey Ryabov
+         * @throws IOException
+         */
         @FXML
         public void openWritingView() throws IOException {
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("WritingView.fxml"));
