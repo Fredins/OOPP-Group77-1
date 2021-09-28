@@ -24,7 +24,7 @@ public class WritingController {
     private TextField contentTextField;
 
     /** @author Alexey Ryabov
-     *
+     * From GUI, this method initialises sendEmail method in application manager.
      */
     @FXML
     public void sendEmail(){
