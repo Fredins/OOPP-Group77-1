@@ -33,7 +33,7 @@ public class AccountHandler {
     }
 
     public List<String> getEmailAddresses() {
-        return null;
+        return storage.retrieveAllEmailAddresses();
     }
 
     public boolean storeFolders(List<Folder> folders) {
@@ -62,7 +62,9 @@ public class AccountHandler {
     }
 
     public boolean setActiveAccount(String emailAddress) {
-        return false;
+
+        activeAccount = storage.retrieveAccount(emailAddress);
+        return true;
     }
 
     public Account createAccount(String emailAddress, String password) {
