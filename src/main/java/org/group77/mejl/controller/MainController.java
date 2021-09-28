@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -24,7 +25,9 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
+
         private final ApplicationManager appManager = new ApplicationManager();
+
         @FXML private FlowPane emailListItemFlowPane;
         @FXML public FlowPane readingFlowPane;
 
@@ -48,6 +51,9 @@ public class MainController implements Initializable {
         }
 
 
+        @FXML
+        private ComboBox<String> accountsComboBox;
+
 
         /**
          * @Author David Zamanian
@@ -58,8 +64,9 @@ public class MainController implements Initializable {
          * @param rb
          */
 
-        public void initialize(URL url, ResourceBundle rb)  {
 
+        public void initialize(URL url, ResourceBundle rb) {
+                populateAccountsComboBox();
 
                 //For testing only
                 String testAddress1 = "from@gmail.com";
@@ -160,4 +167,49 @@ public class MainController implements Initializable {
         @FXML
         private void fetchMails() {
         }
+
+        /**
+         * Populates the ComboBox with the currently stored account
+         * and also adds option to add a new account at the end of the list.
+         *
+         * Also adds listener to ComboBox that either changes activeAccount to the selected account,
+         * or opens AddAccountView if the "add a new account"-item is selected.
+         *
+         * Probably needs some more work
+         *
+         * @author Elin Hagman
+         */
+
+        private void populateAccountsComboBox() {
+
+                List<String> emailAddresses = appManager.getEmailAddresses();
+
+                // Add every emailAddress to the ComboBox and the option to add a new account last
+                for (String emailAddress : emailAddresses) {
+                        accountsComboBox.getItems().add(emailAddress);
+                }
+                accountsComboBox.getItems().add("Add new account");
+
+                // Add onAction to ComboBox
+                accountsComboBox.setOnAction((event) -> {
+                        // selectedIndex shows which index in ComboBox was chosen
+                        int selectedIndex = accountsComboBox.getSelectionModel().getSelectedIndex();
+                        // selectedItem shows selected item's value
+                        String selectedEmailAddress = accountsComboBox.getSelectionModel().getSelectedItem();
+
+                        if (selectedIndex == emailAddresses.size()) {
+                                System.out.println("Open add account view");
+                                // TODO: Also have to change prompt text in ComboBox to activeAccount, but what to do if there is no activeAccount?
+                                String activeAccount = appManager.getActiveAccount().getEmailAddress();
+                                accountsComboBox.setPromptText(activeAccount);
+                        } else {
+                                appManager.setActiveAccount(selectedEmailAddress);
+                                System.out.println("changed account to " + selectedEmailAddress );
+                        }
+
+                });
+
+        }
+
+
 }
