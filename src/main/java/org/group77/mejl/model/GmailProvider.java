@@ -1,16 +1,11 @@
 package org.group77.mejl.model;
 
+import org.apache.commons.mail.util.MimeMessageParser;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GmailProvider extends EmailServiceProviderStrategy {
 
@@ -40,7 +35,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
             String name = entry.getKey();
             javax.mail.Folder folder = entry.getValue();
             List<Email> emails = new ArrayList<>();
-            folder.open(1);
+            folder.open(2);
             int count = folder.getMessageCount();
 
             if (folder.getMessageCount() != 0) {
@@ -50,7 +45,14 @@ public class GmailProvider extends EmailServiceProviderStrategy {
                     String from = message.getFrom()[0].toString();
                     List<String> to = List.of(Arrays.toString(message.getAllRecipients()));
                     String subject = message.getSubject();
-                    String content = "";
+                    String content = "no content";
+                    try {
+                        MimeMessageParser parser = new MimeMessageParser((MimeMessage) message);
+                        content = parser.parse().getPlainContent();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     emails.add(new Email(
                             from,
                             to,
