@@ -133,7 +133,7 @@ public class MainController implements Initializable {
                         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
                         emailListItemFlowPane.getChildren().add(fxmlLoader.load());
                         listItemController controller = fxmlLoader.getController();
-                        controller.init(email, this);
+                        controller.init(appManager, email,this);
                 }
                 } catch(IOException e){
                     e.printStackTrace();
@@ -177,7 +177,6 @@ public class MainController implements Initializable {
          *
          * @author Elin Hagman
          */
-
         @FXML
         private void populateAccountsComboBox() {
 

@@ -18,7 +18,8 @@ import java.io.IOException;
 public class ReadingController {
     private MainController parentController;
     private Email email;
-    private final ApplicationManager appManager = new ApplicationManager();
+    ApplicationManager appManager;
+
     @FXML private Label fromLabel;
     @FXML private Label subjectLabel;
     @FXML private Label toLabel;
@@ -34,7 +35,8 @@ public class ReadingController {
      *
      * @param email The email that will be displayed in the readingView
      */
-    public void init(Email email, MainController parent){
+    public void init(ApplicationManager appManager,Email email, MainController parent){
+        this.appManager = appManager;
         this.parentController = parent;
         this.email = email;
         this.toLabel.setText(String.valueOf(email.getTo()));
