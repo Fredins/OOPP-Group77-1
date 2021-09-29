@@ -30,7 +30,7 @@ public abstract class EmailServiceProviderStrategy {
      * @return List<Folder> is a list of folders
      */
     public List<Folder> refreshFromServer(Account account) throws MessagingException{
-        return parse(connectStore(account));
+        return parse(connectStore(account), 1, 20);
     }
 
     /**
@@ -75,6 +75,6 @@ public abstract class EmailServiceProviderStrategy {
      */
     protected abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content) throws Exception;
 
-    protected abstract List<Folder> parse(Store store) throws MessagingException;
+    protected abstract List<Folder> parse(Store store, int numFirstMsg, int numLastMsg) throws MessagingException;
 
 }

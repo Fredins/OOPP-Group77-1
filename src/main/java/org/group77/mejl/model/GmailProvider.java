@@ -24,94 +24,48 @@ public class GmailProvider extends EmailServiceProviderStrategy {
         );
     }
 
-    /**
-     * @author Martin
-     * @param n name of folder
-     * @param f is a javax.mail.Folder
-     * @return Folder a folder which is not dependent on javax.mail
-     * @throws MessagingException is javax.mail can't retrieve mails from folder
-     */
-    private Folder createFolder(String n, javax.mail.Folder f) throws MessagingException {
-        List<Email> emails = Stream.of(f.getMessages())
-            .map(m -> {
-                        try {
-                            return createEmail(m);
-                        } catch (MessagingException | IOException e) {
-                            e.printStackTrace();
-                            return null;
-                        }
-                    }
-                )
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
-
-        return new Folder(n, emails);
-    }
-
-    /**
-     * @author Martin
-     * @param m is the email from the javax.mail api
-     * @return Email is an api-independent email object
-     * @throws MessagingException if the javax.mail can't retrieve data about message object
-     * @throws IOException if the io utils can't parse/unparse the message streams
-     */
-    private Email createEmail(javax.mail.Message m) throws MessagingException, IOException {
-        String encoding = MimeUtility.getEncoding(m.getDataHandler().getDataSource());
-        InputStream inputStream = MimeUtility.decode(m.getInputStream(), encoding);
-
-        String content = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        List<String> to = List.of(Arrays.toString(m.getAllRecipients()));
-        return new Email(
-                m.getFrom()[0].toString(),
-                to,
-                m.getSubject(),
-                content
-        );
-
-    }
-
-    /**
-     * @author Martin
-     * @param store is the connection to the ESP
-     * @return List<Folder> a list of folders which are not dependent on javax.mail
-     */
     @Override
-    protected List<Folder> parse(Store store){
-        Function<String, javax.mail.Folder> getFolder = s -> {
-            try {
-                javax.mail.Folder f = store.getFolder(s);
-                // store.getFolder doesn't throw exception for some reason but f.open does.
-                f.open(javax.mail.Folder.READ_WRITE);
-                return f;
-            }catch(MessagingException e){
-                e.printStackTrace();
-                return null;
-            }
-        };
+    protected List<Folder> parse(Store store, int numFirstMsg, int numLastMsg) throws MessagingException {
+        LinkedHashMap<String, javax.mail.Folder> map = new LinkedHashMap<>();
+        map.put("Inbox", store.getFolder("INBOX"));
+        map.put("All Mail", store.getFolder("[Gmail]/All Mail"));
+        map.put("Sent Mail", store.getFolder("[Gmail]/Sent Mail"));
+        map.put("Drafts", store.getFolder("[Gmail]/Drafts"));
+        map.put("Spam", store.getFolder("[Gmail]/Spam"));
+        map.put("Trash", store.getFolder("[Gmail]/Trash"));
 
-        Map<String, javax.mail.Folder> map = Map.of(
-                "Inbox", getFolder.apply("INBOX"),
-                "All Mail", getFolder.apply("[Gmail]/All Mail"),
-                "Sent Mail", getFolder.apply("[Gmail]/Sent Mail"),
-                "Drafts", getFolder.apply("[Gmail]/Drafts"),
-                "Spam", getFolder.apply("[Gmail]/Spam"),
-                "Trash", getFolder.apply("[Gmail]/Trash"));
+        List<Folder> folders = new ArrayList<>();
 
-        return map
-            .entrySet()
-            .stream()
-            .filter(e -> e.getValue() != null)
-            .map(e -> {
-                try {
-                    return createFolder(e.getKey(), e.getValue());
-                } catch (MessagingException ex) {
-                    ex.printStackTrace();
-                    return null;
+        for (Map.Entry<String, javax.mail.Folder> entry : map.entrySet()) {
+            String name = entry.getKey();
+            javax.mail.Folder folder = entry.getValue();
+            List<Email> emails = new ArrayList<>();
+            folder.open(1);
+            int count = folder.getMessageCount();
+
+            if (folder.getMessageCount() != 0) {
+                int n0 = Math.min(numFirstMsg, count);
+                int n1 = Math.min(numLastMsg, count);
+                for (Message message : folder.getMessages(n0, n1)) {
+                    String from = message.getFrom()[0].toString();
+                    List<String> to = List.of(Arrays.toString(message.getAllRecipients()));
+                    String subject = message.getSubject();
+                    String content = "";
+                    emails.add(new Email(
+                            from,
+                            to,
+                            subject,
+                            content
+                    ));
                 }
-            })
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+            }
+            folders.add(new Folder(name, emails));
+        }
+        return folders;
     }
+
+
+
 
     /**@author Alexey Ryabov
      * @param from - active account
@@ -139,6 +93,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
         }
         return true;
     }
+
 
     /** @author Alexey Ryabov
      * Helper function. Returns Authenticated Session. For testing only.

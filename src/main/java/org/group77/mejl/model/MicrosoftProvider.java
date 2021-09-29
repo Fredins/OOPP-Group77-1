@@ -11,7 +11,7 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
     }
 
     @Override
-    protected List<Folder> parse(Store store) {
+    protected List<Folder> parse(Store store, int numFirstMsg, int numLastMsg) {
         return null;
     }
 
