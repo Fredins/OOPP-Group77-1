@@ -122,14 +122,10 @@ public class GmailProvider extends EmailServiceProviderStrategy {
      */
     @Override
     public boolean sendEmail(Account from, List<String> recipients, String subject, String content) throws Exception {
-        System.out.println("Preparing to send message..");
+        System.out.println("Preparing to send message.."); // For Testing
 
         String fromAccount = from.getEmailAddress();
         String fromAccountPassword = from.getPassword();
-
-        //For Testing Only!
-        String TESTmyAccount = "77grupp@gmail.com";
-        String TESTmyPassword = "grupp77group";
 
         Properties props = new Properties();
         setGmailProperties(props);
@@ -139,7 +135,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
 
             Transport.send(msg);
 
-            System.out.println("Message sent successfully!");
+            System.out.println("Message sent successfully!"); // For Testing.
         }
         return true;
     }

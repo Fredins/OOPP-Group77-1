@@ -7,7 +7,7 @@ import java.util.*;
 public class MicrosoftProvider extends EmailServiceProviderStrategy {
 
     public MicrosoftProvider() {
-        super("sluta", "störa", "mig", "tack", 1, 2);
+        super("outlook.office365.com", "smtp-mail.outlook.com", "imaps", "smtp", 993, 587);
     }
 
     @Override
@@ -26,14 +26,10 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
      */
     @Override
     public boolean sendEmail(Account from, List<String> recipients, String subject, String content) throws Exception {
-        System.out.println("Preparing to send message..");
+        System.out.println("Preparing to send message.."); // For Testing
 
         String fromAccount = from.getEmailAddress();
         String fromAccountPassword = from.getPassword();
-
-        //For Testing Only!
-        String TESTmyAccount = "77grupp@gmail.com";
-        String TESTmyPassword = "grupp77group";
 
         Properties props = new Properties();
         setMicrosoftOutlookProperties(props);
@@ -43,7 +39,7 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
 
             Transport.send(msg);
 
-            System.out.println("Message sent successfully!");
+            System.out.println("Message sent successfully!"); // For Testing
         }
         return true;
     }

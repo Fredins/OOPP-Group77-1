@@ -72,7 +72,7 @@ public class WritingController {
         String strings[] = textfield.split(";");
         List list = Arrays.asList(strings);
 
-        System.out.println(list); // For Testing.
+        //System.out.println(list); // For Testing.
         return list;
     }
 

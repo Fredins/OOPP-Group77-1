@@ -115,7 +115,6 @@ public class ApplicationManager {
         return folders;
     }
 
-
     public Account getActiveAccount() {
         return accountHandler.getActiveAccount();
     }
