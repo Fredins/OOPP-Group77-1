@@ -1,0 +1,16 @@
+.itemPane{
+-fx-border-width: 3 3 3 3;
+-fx-border-radius: 20;
+-fx-background-color: #ffffff;
+}
+
+
+.button: focused{
+-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
+}
+
+.button{
+-fx-background-color: #ffffff;
+-fx-border-width: 3 3 3 3;
+-fx-border-radius: 20;
+}

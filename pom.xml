@@ -73,7 +73,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.group77.mejl/org.group77.mejl.Main</mainClass>
+                            <mainClass>org.group77.mejl/org.group77.mailMe.Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>
