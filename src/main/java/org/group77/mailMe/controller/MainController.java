@@ -14,52 +14,53 @@ import org.group77.mailMe.model.Folder;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
 
-        private final ApplicationManager appManager = new ApplicationManager();
+  private final ApplicationManager appManager = new ApplicationManager();
 
-        @FXML public FlowPane emailListItemFlowPane;
-        @FXML public FlowPane readingFlowPane;
+  @FXML
+  public FlowPane emailListItemFlowPane;
+  @FXML
+  public FlowPane readingFlowPane;
 
-        @FXML
-        private FlowPane flowPaneFolder;
-        @FXML
-        private ComboBox<String> accountsComboBox;
+  @FXML
+  private FlowPane flowPaneFolder;
+  @FXML
+  private ComboBox<String> accountsComboBox;
 
-        private void loadFolders() {
-                try {
-                    List<Folder> folders = appManager.refreshFromServer();
-                    flowPaneFolder.getChildren().clear();
-                    for (Folder f: folders) {
-                        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItemView.fxml"));
-                        flowPaneFolder.getChildren().add(fxmlLoader.load());
-                        FolderItemController c = fxmlLoader.getController();
-                        c.init(f, this);
-                    }
-                } catch (Exception e) {
-                        e.printStackTrace();
-                }
+  private void loadFolders() {
+    try {
+      List<Folder> folders = null;
+      flowPaneFolder.getChildren().clear();
+      for (Folder f : folders) {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItemView.fxml"));
+        flowPaneFolder.getChildren().add(fxmlLoader.load());
+        FolderItemController c = fxmlLoader.getController();
+        c.init(f, this);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
-        }
+  }
 
-        /**
-         * @Author David Zamanian
-         *
-         * This method will be called when starting the application and calls loadEmails to load the emails into listItems into the flowPane
-         *
-         * @param url
-         * @param rb
-         */
-        public void initialize(URL url, ResourceBundle rb) {
-                populateAccountsComboBox();
-                addOnActionAccountsComboBox();
+  /**
+   * @param url
+   * @param rb
+   * @Author David Zamanian
+   * <p>
+   * This method will be called when starting the application and calls loadEmails to load the emails into listItems into the flowPane
+   */
+  public void initialize(URL url, ResourceBundle rb) {
+    populateAccountsComboBox();
+    addOnActionAccountsComboBox();
 
-                //For testing only
+    //For testing only
+                /*
                 String testAddress1 = "from@gmail.com";
                 String testAddress2 = "from@gmail.com";
                 String testAddress3 = "from@gmail.com";
@@ -94,124 +95,139 @@ public class MainController implements Initializable {
                 // loadFolders(); TODO implement getActiveAccount();
 
                 loadEmails(emails);
+                 */
+  }
+
+  @FXML
+  public void refresh() {
+    try {
+      appManager.refreshFromServer();
+      List<Email> emails = appManager.getEmails("Inbox");
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItemView.fxml"));
+      flowPaneFolder.getChildren().add(fxmlLoader.load());
+      FolderItemController c = fxmlLoader.getController();
+      c.init(new Folder("Inbox", emails), this);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+
+
+  @FXML
+  public void switchAccount() {
+  }
+
+  ;
+
+  @FXML
+  public void openAddAccountView() {
+  }
+
+  ;
+
+  /**
+   * @param emails the list of emails that will be shown in the listItems
+   * @throws IOException
+   * @author David Zamanian
+   * <p>
+   * Iterates through the list of emails given and creates a listItem for each of them and shows
+   * them in the emailListItemflowPane.
+   */
+
+  @FXML
+  public void loadEmails(List<Email> emails) {
+    emailListItemFlowPane.getChildren().clear();
+    try {
+      for (Email email : emails) {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
+        emailListItemFlowPane.getChildren().add(fxmlLoader.load());
+        listItemController controller = fxmlLoader.getController();
+        controller.init(appManager, email, this);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * @throws IOException
+   * @author Alexey Ryabov
+   */
+  @FXML
+  public void openWritingView() throws IOException {
+    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("WritingView.fxml"));
+    Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+    WritingController c = fxmlLoader.getController();
+    c.init(appManager);
+    Stage stage = new Stage();
+    stage.setTitle("New Me Mail");
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  @FXML
+  private void openEmailSettings() throws IOException {
+    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccountView.fxml"));
+    Scene scene = new Scene(fxmlLoader.load(), 500, 400);
+    AddAccountController c = fxmlLoader.getController();
+    c.init(appManager);
+    Stage stage = new Stage();
+    stage.setTitle("add account");
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  /**
+   * Populates this accountsComboBox with the accounts which are currently stored in appManager.
+   *
+   * @author Elin Hagman
+   */
+  @FXML
+  private void populateAccountsComboBox() {
+
+    accountsComboBox.getItems().clear();
+    List<String> emailAddresses = appManager.getEmailAddresses();
+
+    // Add every emailAddress to accountsComboBox
+    for (String emailAddress : emailAddresses) {
+      accountsComboBox.getItems().add(emailAddress);
+    }
+
+    System.out.println(accountsComboBox.getItems());
+
+  }
+
+  /**
+   * Adds listener to this accountComboBox which sets the selected email address in the combobox
+   * as activeAccount in this appManager.
+   * <p>
+   * Does not set new activeAccount if the selected account has the same email address as the current activeAccount.
+   *
+   * @author Elin Hagman
+   */
+  private void addOnActionAccountsComboBox() {
+    // Add onAction to ComboBox
+    accountsComboBox.setOnAction((event) -> {
+
+      // selectedEmailAddress is the email address the user has clicked on
+      String selectedEmailAddress = accountsComboBox.getSelectionModel().getSelectedItem();
+
+      if (selectedEmailAddress != null) {
+
+        // change activeAccount if it is null or if it is not the same as before
+        if (appManager.getActiveAccount() == null
+          || (!selectedEmailAddress.equals(appManager.getActiveAccount().getEmailAddress()))) {
+
+          appManager.setActiveAccount(selectedEmailAddress);
+          System.out.println("changed active account to " + selectedEmailAddress);
+          System.out.println("active account: " + appManager.getActiveAccount().getEmailAddress());
 
         }
-
-        @FXML
-        public void refresh(){
-               loadFolders();
-        };
-
-        @FXML
-        public void switchAccount(){};
-
-        @FXML
-        public void openAddAccountView(){};
-
-        /**
-         * @author David Zamanian
-         *
-         * Iterates through the list of emails given and creates a listItem for each of them and shows
-         * them in the emailListItemflowPane.
-         *
-         * @param emails the list of emails that will be shown in the listItems
-         * @throws IOException
-         */
-
-        @FXML
-        public void loadEmails(List<Email> emails){
-                emailListItemFlowPane.getChildren().clear();
-                try {
-                        System.out.printf(emails.toString());
-                for (Email email : emails){
-                        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
-                        emailListItemFlowPane.getChildren().add(fxmlLoader.load());
-                        listItemController controller = fxmlLoader.getController();
-                        controller.init(appManager, email,this);
-                }
-                } catch(IOException e){
-                    e.printStackTrace();
-                }
-        }
-
-        /**
-         * @author Alexey Ryabov
-         * @throws IOException
-         */
-        @FXML
-        public void openWritingView() throws IOException {
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("WritingView.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-                WritingController c = fxmlLoader.getController();
-                c.init(appManager);
-                Stage stage = new Stage();
-                stage.setTitle("New Me Mail");
-                stage.setScene(scene);
-                stage.show();
-        }
-
-        @FXML
-        private void openEmailSettings() throws IOException {
-                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccountView.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 500, 400);
-                AddAccountController c = fxmlLoader.getController();
-                c.init(appManager);
-                Stage stage = new Stage();
-                stage.setTitle("add account");
-                stage.setScene(scene);
-                stage.show();
-        }
-
-        /**
-         * Populates this accountsComboBox with the accounts which are currently stored in appManager.
-         *
-         * @author Elin Hagman
-         */
-        @FXML
-        private void populateAccountsComboBox() {
-
-                accountsComboBox.getItems().clear();
-                List<String> emailAddresses = appManager.getEmailAddresses();
-
-                // Add every emailAddress to accountsComboBox
-                for (String emailAddress : emailAddresses) {
-                        accountsComboBox.getItems().add(emailAddress);
-                }
-
-                System.out.println(accountsComboBox.getItems());
-
-        }
-
-        /**
-         * Adds listener to this accountComboBox which sets the selected email address in the combobox
-         * as activeAccount in this appManager.
-         *
-         * Does not set new activeAccount if the selected account has the same email address as the current activeAccount.
-         *
-         * @author Elin Hagman
-         */
-        private void addOnActionAccountsComboBox() {
-                // Add onAction to ComboBox
-                accountsComboBox.setOnAction((event) -> {
-
-                        // selectedEmailAddress is the email address the user has clicked on
-                        String selectedEmailAddress = accountsComboBox.getSelectionModel().getSelectedItem();
-
-                        if (selectedEmailAddress != null) {
-
-                                // change activeAccount if it is null or if it is not the same as before
-                                if (appManager.getActiveAccount() == null
-                                        || (!selectedEmailAddress.equals(appManager.getActiveAccount().getEmailAddress()))) {
-
-                                        appManager.setActiveAccount(selectedEmailAddress);
-                                        System.out.println("changed active account to " + selectedEmailAddress);
-                                        System.out.println("active account: " + appManager.getActiveAccount().getEmailAddress());
-
-                                }
-                        }
-                });
-        }
-
+      }
+    });
+  }
 
 
 }

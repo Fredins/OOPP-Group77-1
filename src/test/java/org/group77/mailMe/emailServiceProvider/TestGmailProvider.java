@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class TestGmailProvider {
 
+    /*
     @Test
     void testRefreshFromServerAllFoldersFound() throws MessagingException {
         GmailProvider provider = new GmailProvider();
@@ -29,6 +30,9 @@ public class TestGmailProvider {
 
         Assertions.assertTrue(folderNames.containsAll(folderNames1));
     }
+
+     */
+    /*
     @Test
     void testRefreshFromServerEmailsFound(){
         GmailProvider provider = new GmailProvider();
@@ -61,4 +65,6 @@ public class TestGmailProvider {
         Account a1 = factory.createAccount("77grupp@gmail.com", "wrong_password");
         Assertions.assertThrows(MessagingException.class, () -> provider.testConnection(a1));
     }
+
+     */
 }
