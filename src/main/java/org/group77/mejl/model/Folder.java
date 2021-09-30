@@ -1,5 +1,6 @@
 package org.group77.mejl.model;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**

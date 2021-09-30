@@ -47,8 +47,8 @@ public class MainController implements Initializable {
                         FolderItemController c = fxmlLoader.getController();
                         c.init(f, this);
                     }
-                }catch (MessagingException | IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                        e.printStackTrace();
                 }
 
         }

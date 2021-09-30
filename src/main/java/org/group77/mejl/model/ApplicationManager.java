@@ -105,13 +105,16 @@ public class ApplicationManager {
      * @return List of folders that has been updated from server
      * @throws MessagingException if the folders updated from server cannot be stored
      */
-    public List<Folder> refreshFromServer() throws MessagingException {
-
+    public List<Folder> refreshFromServer() throws Exception {
         Account account = accountHandler.getActiveAccount();
         EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(account);
 
-        List<Folder> folders = espStrategy.refreshFromServer(account);
-        accountHandler.storeFolders(folders);
+        List<Folder> folders = espStrategy.refreshFromServer(account); //TODO should this not throw an exception?? (hampus)
+        try {
+            accountHandler.storeFolders(folders);
+        } catch (IOException e) {
+            throw new Exception("Could not store your emails.");
+        }
         return folders;
     }
 

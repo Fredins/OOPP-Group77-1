@@ -1,11 +1,12 @@
 package org.group77.mejl.model;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * @author Hampus Jernkrook
  */
-public class Email {
+public class Email implements Serializable {
     private final String from;
     private final List<String> to;
     private final String subject;

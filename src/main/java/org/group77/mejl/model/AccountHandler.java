@@ -36,8 +36,8 @@ public class AccountHandler {
         return storage.retrieveAllEmailAddresses();
     }
 
-    public boolean storeFolders(List<Folder> folders) {
-        return false;
+    public boolean storeFolders(List<Folder> folders) throws IOException {
+        return storage.store(activeAccount.getEmailAddress(), folders);
     }
 
     /**

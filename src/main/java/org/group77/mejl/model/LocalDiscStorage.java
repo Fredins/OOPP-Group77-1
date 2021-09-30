@@ -62,13 +62,15 @@ public class LocalDiscStorage implements Storage {
         // For each folder, create a directory with the folder name and store the folder object
         for (Folder folder : folders) {
             String folderPath = path + folder.getName();
-            String objectPath = folderPath + "FolderObject";
+            String objectPath = folderPath + separator + "EmailListObject";
             // create directory with folder name
             mkdir(folderPath);
             // create a directory for the folder object
-            touch(objectPath); //TODO ok name?
-            // store the serialized folder object
-            serialize(folder, objectPath);
+            touch(objectPath);
+            // go over all emails and store in an arraylist. This is needed to get something serializable.
+            ArrayList<Email> emails = new ArrayList<>(folder.getEmails());
+            // store the serialized list of emails
+            serialize(emails, objectPath);
         }
         return true;
     }
