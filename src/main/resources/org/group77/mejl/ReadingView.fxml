@@ -5,11 +5,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mejl.controller.ReadingController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="600.0" style="-fx-background-color: ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mejl.controller.ReadingController">
     <children>
-        <ScrollPane fx:id="scrollPane" layoutX="13.0" layoutY="77.0" prefHeight="316.0" prefWidth="573.0">
+        <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutX="13.0" layoutY="77.0" pannable="true" prefHeight="316.0" prefWidth="573.0" vbarPolicy="NEVER">
             <content>
                 <AnchorPane fx:id="anchorPaneInScrollPane" minHeight="0.0" minWidth="0.0" prefHeight="313.0" prefWidth="570.0">
                <children>
@@ -21,7 +23,14 @@
         <Label fx:id="subjectLabel" layoutX="14.0" layoutY="31.0" prefHeight="17.0" prefWidth="193.0" text="Subject" />
         <Label fx:id="toLabel" layoutX="51.0" layoutY="48.0" prefHeight="17.0" prefWidth="272.0" text="To" />
         <Label layoutX="14.0" layoutY="48.0" prefHeight="17.0" prefWidth="37.0" text="To:" />
-      <Button fx:id="answerButton" layoutX="14.0" layoutY="393.0" mnemonicParsing="false" onMouseClicked="#openWritingViewFromAnswer" text="Reply" />
+      <Button fx:id="answerButton" layoutX="13.0" layoutY="397.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#openWritingViewFromAnswer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: ffffff;">
+         <graphic>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@ImagesAndIcons/ReplyButtonIcon.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
     </children>
    <opaqueInsets>
       <Insets left="50.0" right="50.0" />

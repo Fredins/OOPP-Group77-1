@@ -134,12 +134,11 @@ public class MainController implements Initializable {
          * @throws IOException
          */
 
-
         @FXML
         public void loadEmails(List<Email> emails){
                 emailListItemFlowPane.getChildren().clear();
                 try {
-
+                        System.out.printf(emails.toString());
                 for (Email email : emails){
                         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
                         emailListItemFlowPane.getChildren().add(fxmlLoader.load());
