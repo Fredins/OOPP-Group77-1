@@ -73,7 +73,7 @@ public abstract class EmailServiceProviderStrategy {
      * @param content - content.
      * @return
      */
-    protected abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content) throws Exception;
+    protected abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content, String AttachedFile) throws Exception;
 
     protected abstract List<Folder> parse(Store store, int numFirstMsg, int numLastMsg) throws MessagingException;
 

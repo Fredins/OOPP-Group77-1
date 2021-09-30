@@ -4,7 +4,10 @@ import org.apache.commons.mail.util.MimeMessageParser;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.IOException;
 import java.util.*;
 
 public class GmailProvider extends EmailServiceProviderStrategy {
@@ -67,8 +70,6 @@ public class GmailProvider extends EmailServiceProviderStrategy {
     }
 
 
-
-
     /**@author Alexey Ryabov
      * @param from - active account
      * @param recipients - List of to-account that email will be sent to.
@@ -77,7 +78,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
      * @return
      */
     @Override
-    public boolean sendEmail(Account from, List<String> recipients, String subject, String content) throws Exception {
+    public boolean sendEmail(Account from, List<String> recipients, String subject, String content, String attachedFile) throws Exception {
         System.out.println("Preparing to send message.."); // For Testing
 
         String fromAccount = from.getEmailAddress();
@@ -87,7 +88,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
         setGmailProperties(props);
 
         for (String recipient : recipients) {
-            Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content);
+            Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content, attachedFile);
 
             Transport.send(msg);
 
@@ -95,7 +96,6 @@ public class GmailProvider extends EmailServiceProviderStrategy {
         }
         return true;
     }
-
 
     /** @author Alexey Ryabov
      * Helper function. Returns Authenticated Session. For testing only.
@@ -135,7 +135,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
      * @return
      * @throws Exception
      */
-    private static Message composingMessage (Session session, String from, String recipient, String subject, String content) throws Exception
+    private static Message composingMessage (Session session, String from, String recipient, String subject, String content, String attachedFile) throws Exception
     {
         try
         {
@@ -145,6 +145,25 @@ public class GmailProvider extends EmailServiceProviderStrategy {
             msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             msg.setSubject(subject);
             msg.setText(content);
+
+            // Testing the attachment
+
+            // creates message part
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setContent(content, "text/html");
+
+            // creates multi-part
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+
+            MimeBodyPart attachPart = new MimeBodyPart();
+            attachPart.attachFile(attachedFile);
+
+            multipart.addBodyPart(attachPart);
+
+            // sets the multi-part as e-mail's content
+            msg.setContent(multipart);
+
             return msg;
 
         } catch (Exception e) {

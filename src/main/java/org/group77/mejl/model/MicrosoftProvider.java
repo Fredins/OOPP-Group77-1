@@ -25,7 +25,7 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
      * @return
      */
     @Override
-    public boolean sendEmail(Account from, List<String> recipients, String subject, String content) throws Exception {
+    public boolean sendEmail(Account from, List<String> recipients, String subject, String content, String attachedFile) throws Exception {
         System.out.println("Preparing to send message.."); // For Testing
 
         String fromAccount = from.getEmailAddress();

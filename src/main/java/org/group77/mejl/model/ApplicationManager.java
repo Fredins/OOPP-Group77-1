@@ -81,14 +81,14 @@ public class ApplicationManager {
      * @param content - From the GUI FieldText.
      * @return - Needs more work.
      */
-    public boolean sendEmail(List<String> recipient, String subject, String content) throws Exception {
+    public boolean sendEmail(List<String> recipient, String subject, String content, String attachedFile) throws Exception {
         //AccountHandler accountHandler = new AccountHandler();
         //EmailServiceProviderFactory espf = new EmailServiceProviderFactory();
 
         Account activeAccount = accountHandler.getActiveAccount();
         EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount);
 
-        if (espStrategy.sendEmail(activeAccount, recipient, subject, content)) {
+        if (espStrategy.sendEmail(activeAccount, recipient, subject, content, attachedFile)) {
             return true;
         } else {
             return false;

@@ -1,13 +1,15 @@
 package org.group77.mejl.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.group77.mejl.model.ApplicationManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.io.File;
+import java.util.*;
 
 public class WritingController {
 
@@ -22,6 +24,7 @@ public class WritingController {
     private TextField subjectTextField;
     @FXML
     private TextField contentTextField;
+
 
     /**
      * @Author David Zamanian
@@ -44,18 +47,17 @@ public class WritingController {
         this.toTextField.setText(to);
     }
 
-
-
     /** @author Alexey Ryabov
      * From GUI, this method initialises sendEmail method in application manager.
      */
     @FXML
     public void sendEmail(){
         try {
-            if (applicationManager.sendEmail(fromTextFieldToListOfRecipients(toTextField.getText()), subjectTextField.getText(), contentTextField.getText())) {
-                // email was successfully send, close WritingView
+            if (attachFileToEmail()[1] != "True") {
+                applicationManager.sendEmail(fromTextFieldToListOfRecipients(toTextField.getText()), subjectTextField.getText(), contentTextField.getText(), null);
             } else {
                 // error, give error message?
+                applicationManager.sendEmail(fromTextFieldToListOfRecipients(toTextField.getText()), subjectTextField.getText(), contentTextField.getText(), attachFileToEmail()[0]);
             };
         }catch (Exception e){
             e.printStackTrace();
@@ -74,6 +76,23 @@ public class WritingController {
 
         //System.out.println(list); // For Testing.
         return list;
+    }
+
+    /** @author Alexey Ryabov
+     * From GUI, this method initialises attachment method in application manager.
+     */
+    @FXML
+    public String[] attachFileToEmail() {
+
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extentionFilter);
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile.exists()) {
+            return new String[]{selectedFile.toString(), "True"};
+        } else {
+            return new String[] {null, "False"};
+        }
     }
 
 }
