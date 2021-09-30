@@ -1,0 +1,28 @@
+
+
+.root{
+-fx-border-radius: 1
+
+}
+
+
+.writeButton{
+ -fx-color: #E03A5B;
+ -fx-border-radius: 100;
+ -fx-border-width: 1;
+ -fx-display: inline-block;
+ -fx-font-size: 14px;
+ -fx-line-height: 17px;
+ -fx-padding: 11px;
+ -fx-font-family: Georgia, serif;
+}
+
+
+
+
+.writeButton:hover {
+-fx-background: #1C6EA4; }
+.writeButton:active {
+background: #E03A5B; }
+}
+
