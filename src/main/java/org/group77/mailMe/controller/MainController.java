@@ -23,7 +23,7 @@ public class MainController implements Initializable {
 
         private final ApplicationManager appManager = new ApplicationManager();
 
-        @FXML private FlowPane emailListItemFlowPane;
+        @FXML public FlowPane emailListItemFlowPane;
         @FXML public FlowPane readingFlowPane;
 
         @FXML
@@ -77,6 +77,17 @@ public class MainController implements Initializable {
                                 "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."),
                         new Email(testAddress2, to, "Subject 2", "Email 2"),
                         new Email(testAddress3, to, "Subject 3", "Email 3"),
+                        new Email(testAddress4, to, "Subject 4", "Email 4"),
+                        new Email(testAddress2, to, "Subject 2", "Email 2"),
+                        new Email(testAddress3, to, "Subject 3", "Email 3"),
+                        new Email(testAddress4, to, "Subject 4", "Email 4"),
+                        new Email(testAddress2, to, "Subject 2", "Email 2"),
+                        new Email(testAddress3, to, "Subject 3", "Email 3"),
+                        new Email(testAddress4, to, "Subject 4", "Email 4"),new Email(testAddress2, to, "Subject 2", "Email 2"),
+                        new Email(testAddress3, to, "Subject 3", "Email 3"),
+                        new Email(testAddress4, to, "Subject 4", "Email 4"),
+                        new Email(testAddress2, to, "Subject 2", "Email 2"),
+                        new Email(testAddress3, to, "Subject 3", "Email 3"),
                         new Email(testAddress4, to, "Subject 4", "Email 4")
                 );
 
@@ -106,11 +117,12 @@ public class MainController implements Initializable {
          * @param emails the list of emails that will be shown in the listItems
          * @throws IOException
          */
+
         @FXML
         public void loadEmails(List<Email> emails){
                 emailListItemFlowPane.getChildren().clear();
                 try {
-
+                        System.out.printf(emails.toString());
                 for (Email email : emails){
                         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
                         emailListItemFlowPane.getChildren().add(fxmlLoader.load());

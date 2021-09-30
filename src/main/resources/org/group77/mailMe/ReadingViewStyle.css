@@ -1,0 +1,16 @@
+.textarea {
+    -fx-font-family: Consolas;
+    -fx-font-size: 15;
+
+    -fx-display-caret:true;
+    -fx-border-width: -1;
+    -fx-background-insets: 0;
+        -fx-background-color: transparent, white, transparent, white;
+        -fx-background-radius: 0, 0, 0, 0;
+}
+
+.textarea .content {
+    -fx-background-color: #ffffff;
+}
+
+  -fx-background-insets: 0;

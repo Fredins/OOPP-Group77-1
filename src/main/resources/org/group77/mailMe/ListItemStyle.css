@@ -1,0 +1,13 @@
+.itemPane{
+
+-fx-background-color: #ffffff;
+}
+
+
+.button: focused{
+-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
+}
+
+.button{
+-fx-background-color: #ffffff;
+}
