@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane onMouseClicked="#readEmail" prefHeight="39.0" prefWidth="150.0" style="-fx-border-width: 0 0 1 0; -fx-border-color: black;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.listItemController">
+   <children>
+      <Label fx:id="from" layoutX="7.0" layoutY="4.0" prefHeight="17.0" prefWidth="150.0" text="From" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Label>
+      <Label fx:id="subject" layoutX="6.0" layoutY="20.0" prefHeight="17.0" prefWidth="150.0" text="Subject" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0" />
+   </children>
+</AnchorPane>
