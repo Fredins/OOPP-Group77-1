@@ -1,10 +1,18 @@
 
 
 .root{
--fx-border-radius: 1
+-fx-border-radius: 1;
+-fx-background-color: #ffffff;
 
 }
 
+.pane{
+-fx-background-color: #ffffff;
+}
+
+folderPane{
+-fx-background-color: #ffffff;
+}
 
 .writeButton{
  -fx-color: #E03A5B;
@@ -15,6 +23,7 @@
  -fx-line-height: 17px;
  -fx-padding: 11px;
  -fx-font-family: Georgia, serif;
+ -fx-background-radius: 10;
 }
 
 
