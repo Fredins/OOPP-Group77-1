@@ -132,16 +132,21 @@ public class GmailProvider extends EmailServiceProviderStrategy {
       System.out.println(recipient); // For testing.
       msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
       msg.setSubject(subject);
-      //msg.setText(content);
 
-      //Set the content:
+      // Create the Multipart and add MimeBodyParts to it.
       Multipart multipart = new MimeMultipart();
-      BodyPart messageBodyPart = new MimeBodyPart();
+
+      // Create and fill the first message part.
+      MimeBodyPart messageBodyPart = new MimeBodyPart();
+      //Content of the message.
       messageBodyPart.setContent(content, "text/html");
+      // Add multipart to message.
       multipart.addBodyPart(messageBodyPart);
       msg.setContent(multipart);
+
       // adding attachments:
       if(attachments.size() > 0){
+        // For every file in attachments list, created new MimeBodyPart and add it to Multipart.
         for (String file: attachments){
           MimeBodyPart mimeBodyPart = new MimeBodyPart();
           mimeBodyPart.attachFile(file);
@@ -149,29 +154,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
         }
       }
 
-      /*
-      // Attachments
-      // create and fill the first message part
-      MimeBodyPart mbp1 = new MimeBodyPart();
-      mbp1.setText(content);
-
-      // create the second message part
-      MimeBodyPart mbp2 = new MimeBodyPart();
-
-      // attach the file to the message
-      mbp2.attachFile("null"); // Test
-      // create the Multipart and add its parts to it
-      Multipart mp = new MimeMultipart();
-      mp.addBodyPart(mbp1);
-      mp.addBodyPart(mbp2);
-
-      // add the Multipart to the message
-      msg.setContent(mp);
-
-      // set the Date: header
       msg.setSentDate(new Date());
-
-       */
 
       return msg;
 
