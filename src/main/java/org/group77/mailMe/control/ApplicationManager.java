@@ -92,14 +92,14 @@ public class ApplicationManager {
    * @return - Needs more work.
    * @author Alexey Ryabov
    */
-  public boolean sendEmail(List<String> recipient, String subject, String content) throws Exception {
+  public boolean sendEmail(List<String> recipient, String subject, String content, List<String> attachments) throws Exception {
     //AccountHandler accountHandler = new AccountHandler();
     //EmailServiceProviderFactory espf = new EmailServiceProviderFactory();
 
     Account activeAccount = accountHandler.getActiveAccount();
     EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount);
 
-    if (espStrategy.sendEmail(activeAccount, recipient, subject, content)) {
+    if (espStrategy.sendEmail(activeAccount, recipient, subject, content, attachments)) {
       return true;
     } else {
       return false;

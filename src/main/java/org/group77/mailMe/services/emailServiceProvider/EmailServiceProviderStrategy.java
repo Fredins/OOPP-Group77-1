@@ -6,6 +6,7 @@ import org.group77.mailMe.model.Email;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
+import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
@@ -82,7 +83,7 @@ public abstract class EmailServiceProviderStrategy {
    * @return
    * @author Alexey Ryabov
    */
-  public abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content) throws Exception;
+  public abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content, List<String> attachments) throws Exception;
 
   protected abstract List<Email> parse(Store store) throws MessagingException;
 

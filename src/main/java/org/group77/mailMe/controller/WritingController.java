@@ -2,8 +2,11 @@ package org.group77.mailMe.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import org.group77.mailMe.control.ApplicationManager;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +14,9 @@ public class WritingController {
 
   // author Alexey Ryabov
   ApplicationManager applicationManager;
+
+  //List of strings, each string is a file path.
+  private List<String> attachments = new ArrayList<>();
 
   @FXML
   private TextField toTextField;
@@ -48,7 +54,7 @@ public class WritingController {
   @FXML
   public void sendEmail() {
     try {
-      if (applicationManager.sendEmail(fromTextFieldToListOfRecipients(toTextField.getText()), subjectTextField.getText(), contentTextField.getText())) {
+      if (applicationManager.sendEmail(fromTextFieldToListOfRecipients(toTextField.getText()), subjectTextField.getText(), contentTextField.getText(), attachments)) {
         // email was successfully send, close WritingView
       } else {
         // error, give error message?
@@ -56,6 +62,19 @@ public class WritingController {
       ;
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  /** @author Alexey Ryabov
+   * Method creates file chooser and lets user to select multiple files and adds them to a list.
+   */
+  @FXML
+  public void attachFilesToEmail () {
+    FileChooser fileChooser = new FileChooser();
+    File selectedFile = fileChooser.showOpenDialog(null);
+    if(selectedFile != null){
+      attachments.add(selectedFile.toString());
+      System.out.println("File selected >" + " " + selectedFile); // For Testing
     }
   }
 

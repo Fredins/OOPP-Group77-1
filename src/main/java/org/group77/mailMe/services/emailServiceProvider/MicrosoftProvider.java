@@ -26,7 +26,7 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
    * TODO Replace TESTAccount, TESTAccountPassword with fromAccount, fromAccountPassword.
    */
   @Override
-  public boolean sendEmail(Account from, List<String> recipients, String subject, String content) throws Exception {
+  public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
     System.out.println("Preparing to send message.."); // For Testing
 
     String fromAccount = from.getEmailAddress();
@@ -36,7 +36,7 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
     setMicrosoftOutlookProperties(props);
 
     for (String recipient : recipients) {
-      Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content);
+      Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content, attachments);
 
       Transport.send(msg);
 
@@ -91,7 +91,7 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
    * @author Alexey Ryabov
    * Helper function. Composes a message.
    */
-  private static Message composingMessage(Session session, String from, String recipient, String subject, String content) throws Exception {
+  private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<String> attachments) throws Exception {
     try {
       Message msg = new MimeMessage(session);
       msg.setFrom(new InternetAddress(from));

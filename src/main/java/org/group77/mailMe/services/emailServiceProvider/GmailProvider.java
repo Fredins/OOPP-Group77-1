@@ -6,11 +6,11 @@ import org.group77.mailMe.model.Email;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import javax.mail.internet.MimeMultipart;
+import java.io.File;
+import java.util.*;
 
 public class GmailProvider extends EmailServiceProviderStrategy {
 
@@ -65,7 +65,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
    * @author Alexey Ryabov
    */
   @Override
-  public boolean sendEmail(Account from, List<String> recipients, String subject, String content) throws Exception {
+  public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
     System.out.println("Preparing to send message.."); // For Testing
 
     String fromAccount = from.getEmailAddress();
@@ -75,7 +75,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
     setGmailProperties(props);
 
     for (String recipient : recipients) {
-      Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content);
+      Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content, attachments);
 
       Transport.send(msg);
 
@@ -83,7 +83,6 @@ public class GmailProvider extends EmailServiceProviderStrategy {
     }
     return true;
   }
-
 
   /**
    * @param properties
@@ -126,14 +125,54 @@ public class GmailProvider extends EmailServiceProviderStrategy {
    * @author Alexey Ryabov
    * Helper function. Composes a message.
    */
-  private static Message composingMessage(Session session, String from, String recipient, String subject, String content) throws Exception {
+  private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<String> attachments) throws Exception {
     try {
       Message msg = new MimeMessage(session);
       msg.setFrom(new InternetAddress(from));
       System.out.println(recipient); // For testing.
       msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
       msg.setSubject(subject);
-      msg.setText(content);
+      //msg.setText(content);
+
+      //Set the content:
+      Multipart multipart = new MimeMultipart();
+      BodyPart messageBodyPart = new MimeBodyPart();
+      messageBodyPart.setContent(content, "text/html");
+      multipart.addBodyPart(messageBodyPart);
+      msg.setContent(multipart);
+      // adding attachments:
+      if(attachments.size() > 0){
+        for (String file: attachments){
+          MimeBodyPart mimeBodyPart = new MimeBodyPart();
+          mimeBodyPart.attachFile(file);
+          multipart.addBodyPart(mimeBodyPart);
+        }
+      }
+
+      /*
+      // Attachments
+      // create and fill the first message part
+      MimeBodyPart mbp1 = new MimeBodyPart();
+      mbp1.setText(content);
+
+      // create the second message part
+      MimeBodyPart mbp2 = new MimeBodyPart();
+
+      // attach the file to the message
+      mbp2.attachFile("null"); // Test
+      // create the Multipart and add its parts to it
+      Multipart mp = new MimeMultipart();
+      mp.addBodyPart(mbp1);
+      mp.addBodyPart(mbp2);
+
+      // add the Multipart to the message
+      msg.setContent(mp);
+
+      // set the Date: header
+      msg.setSentDate(new Date());
+
+       */
+
       return msg;
 
     } catch (Exception e) {
