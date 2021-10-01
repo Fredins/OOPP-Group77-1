@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import org.group77.mailMe.Main;
@@ -32,6 +34,9 @@ public class MainController implements Initializable {
   @FXML
   private ComboBox<String> accountsComboBox;
 
+  @FXML
+  AnchorPane startPagePane;
+
   private void loadFolders() {
     try {
       List<Folder> folders = null;
@@ -58,7 +63,11 @@ public class MainController implements Initializable {
   public void initialize(URL url, ResourceBundle rb) {
     populateAccountsComboBox();
     addOnActionAccountsComboBox();
-
+    try {
+      openStartPage();
+    } catch (IOException exception) {
+      exception.printStackTrace();
+    }
     //For testing only
                 /*
                 String testAddress1 = "from@gmail.com";
@@ -96,6 +105,44 @@ public class MainController implements Initializable {
 
                 loadEmails(emails);
                  */
+  }
+
+  /**
+   * method that initializes
+   * @throws IOException
+   */
+
+  @FXML
+  private void openStartPage() throws IOException {
+
+    // initialize StartPageView and its Controller
+    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StartPageView.fxml"));
+    startPagePane.getChildren().add(fxmlLoader.load());
+    StartPageController startPageController = fxmlLoader.getController();
+    startPageController.init(appManager);
+
+    // add OnMouseClickedListeners to buttons
+    List<Label> emailAddressesLabels = startPageController.getAccountsListView().getItems();
+    for (Label emailAddressLabel : emailAddressesLabels) {
+      emailAddressLabel.setOnMouseClicked(actionEvent -> {
+        appManager.setActiveAccount(emailAddressLabel.getText());
+        System.out.println("Active account: " + appManager.getActiveAccount().getEmailAddress());
+        startPagePane.toBack();
+      });
+    }
+
+    if (appManager.getEmailAddresses().size() == 0) {
+      // open accountview
+      startPagePane.toBack();
+    } else if (appManager.getEmailAddresses().size() == 1) {
+      startPagePane.toBack();
+      appManager.setActiveAccount(appManager.getEmailAddresses().get(0));
+      System.out.println("Active account: " + appManager.getActiveAccount().getEmailAddress());
+    } else {
+      startPagePane.toFront();
+    }
+
+
   }
 
   @FXML
