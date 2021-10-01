@@ -1,4 +1,7 @@
-package org.group77.mailMe.model;
+package org.group77.mailMe.oldmodel;
+
+import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.model.data.ServerProvider;
 
 /**
  * @author Martin Fredin.
@@ -17,9 +20,9 @@ public class AccountFactory {
    * "@gmail.com" gets associated with ServerProvider.GMAIL.
    * "@hotmail.com", "@live.com", "@outlook.com" with ServerProvider.MICROSOFT.
    */
-  public Account createAccount(String emailAddress, String password) {
+  public Account createAccount(String emailAddress, char[] password) {
     if (emailAddress.contains("@gmail.com")) {
-      return new Account(emailAddress, password, ServerProvider.GMAIL);
+      return new Account(emailAddress, password, ServerProvider.GMAIL_PROVIDER);
     }
     return null;
   }

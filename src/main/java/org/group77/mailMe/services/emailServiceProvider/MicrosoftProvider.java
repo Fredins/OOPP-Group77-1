@@ -1,13 +1,11 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.group77.mailMe.model.Account;
-import org.group77.mailMe.model.Email;
+import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class MicrosoftProvider extends EmailServiceProviderStrategy {
 
@@ -29,8 +27,8 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
   public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
     System.out.println("Preparing to send message.."); // For Testing
 
-    String fromAccount = from.getEmailAddress();
-    String fromAccountPassword = from.getPassword();
+    String fromAccount = from.emailAddress();
+    String fromAccountPassword = Arrays.toString(from.password());
 
     Properties props = new Properties();
     setMicrosoftOutlookProperties(props);

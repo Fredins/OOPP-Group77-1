@@ -1,13 +1,13 @@
-package org.group77.mailMe.controller;
+package org.group77.mailMe.oldcontroller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import org.group77.mailMe.Main;
-import org.group77.mailMe.control.ApplicationManager;
-import org.group77.mailMe.model.Email;
+import org.group77.mailMe.*;
+import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.oldmodel.ApplicationManager;
 
 import java.io.IOException;
 
@@ -34,8 +34,8 @@ public class listItemController extends FlowPane {
     this.appManager = appManager;
     this.parentController = parent;
     this.email = email;
-    this.from.setText(email.getFrom());
-    this.subject.setText(email.getSubject());
+    this.from.setText(email.from());
+    this.subject.setText(email.subject());
   }
 
   /**
@@ -50,7 +50,7 @@ public class listItemController extends FlowPane {
   void readEmail() throws IOException {
 
     parentController.readingFlowPane.getChildren().clear();
-    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ReadingView.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Reading.fxml"));
     parentController.readingFlowPane.getChildren().add(fxmlLoader.load());
     ReadingController controller = fxmlLoader.getController();
     controller.init(appManager, email, parentController);

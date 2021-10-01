@@ -1,9 +1,6 @@
-package org.group77.mailMe.control;
+package org.group77.mailMe.oldmodel;
 
-import org.group77.mailMe.model.Account;
-import org.group77.mailMe.model.AccountHandler;
-import org.group77.mailMe.model.Email;
-import org.group77.mailMe.model.Folder;
+import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderStrategy;
 import org.group77.mailMe.services.storage.LocalDiscStorage;
@@ -41,7 +38,7 @@ public class ApplicationManager {
    * Creates an Account and tries to store it.
    * Only stores the account if it connects to the server and it is not already stored.
    */
-  public boolean addAccount(String emailAddress, String password) throws Exception {
+  public boolean addAccount(String emailAddress, char[] password) throws Exception {
 
     Account account = accountHandler.createAccount(emailAddress, password);
     EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(account);
@@ -82,7 +79,7 @@ public class ApplicationManager {
    * calls getEmails with foldername in accountHandler
    */
   public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException, IOException {
-    return storage.retrieveEmails(getActiveAccount().getEmailAddress(), folderName);
+    return storage.retrieveEmails(getActiveAccount().emailAddress(), folderName);
   }
 
   /**
@@ -120,7 +117,7 @@ public class ApplicationManager {
     EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(account);
     List<Email> newEmails = espStrategy.refreshFromServer(account);
     newEmails.addAll(getEmails("Inbox"));
-    storage.store(getActiveAccount().getEmailAddress(), new Folder("Inbox", newEmails));
+    storage.store(getActiveAccount().emailAddress(), new Folder("Inbox", newEmails.toArray(new Email[]{})));
   }
 
   public Account getActiveAccount() {
@@ -144,7 +141,7 @@ public class ApplicationManager {
   }
 
   public boolean storeFolders(List<Folder> folders) throws IOException {
-    return storage.store(accountHandler.getActiveAccount().getEmailAddress(), folders);
+    return storage.store(accountHandler.getActiveAccount().emailAddress(), folders);
   }
 
 

@@ -1,15 +1,14 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
+import com.sun.mail.pop3.*;
 import org.apache.commons.mail.util.MimeMessageParser;
-import org.group77.mailMe.model.Account;
-import org.group77.mailMe.model.Email;
+import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.File;
 import java.util.*;
 
 public class GmailProvider extends EmailServiceProviderStrategy {
@@ -34,7 +33,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
     if (inbox.getMessageCount() != 0) {
       for (Message message : inbox.getMessages()) {
         String from = message.getFrom()[0].toString();
-        List<String> to = List.of(Arrays.toString(message.getAllRecipients()));
+        String[] to = Arrays.stream(message.getAllRecipients()).map(Address::toString).toArray(String[]::new);
         String subject = message.getSubject();
         String content = "no content";
         try {
@@ -68,8 +67,8 @@ public class GmailProvider extends EmailServiceProviderStrategy {
   public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
     System.out.println("Preparing to send message.."); // For Testing
 
-    String fromAccount = from.getEmailAddress();
-    String fromAccountPassword = from.getPassword();
+    String fromAccount = from.emailAddress();
+    String fromAccountPassword = Arrays.toString(from.password());
 
     Properties props = new Properties();
     setGmailProperties(props);

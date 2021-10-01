@@ -1,7 +1,6 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.group77.mailMe.model.Account;
-import org.group77.mailMe.model.ServerProvider;
+import org.group77.mailMe.model.data.*;
 
 /**
  * @author Hampus Jernkrook.
@@ -20,7 +19,7 @@ public class EmailServiceProviderFactory {
    * account's ServerProvider enum.
    */
   public static EmailServiceProviderStrategy getEmailServiceProvider(Account account) {
-    if (account.getServerProvider() == ServerProvider.GMAIL) {
+    if (account.provider() == ServerProvider.GMAIL_PROVIDER) {
       return new GmailProvider();
     } else { //TODO should this be `else if microsoft`?
       return new MicrosoftProvider();

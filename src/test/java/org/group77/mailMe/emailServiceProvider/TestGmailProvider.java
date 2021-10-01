@@ -1,16 +1,5 @@
 package org.group77.mailMe.emailServiceProvider;
 
-import org.group77.mailMe.model.Account;
-import org.group77.mailMe.model.AccountFactory;
-import org.group77.mailMe.model.Folder;
-import org.group77.mailMe.services.emailServiceProvider.GmailProvider;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import javax.mail.MessagingException;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class TestGmailProvider {
 
     /*

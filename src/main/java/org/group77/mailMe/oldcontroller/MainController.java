@@ -1,4 +1,4 @@
-package org.group77.mailMe.controller;
+package org.group77.mailMe.oldcontroller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,10 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import org.group77.mailMe.Main;
-import org.group77.mailMe.control.ApplicationManager;
-import org.group77.mailMe.model.Email;
-import org.group77.mailMe.model.Folder;
+import org.group77.mailMe.*;
+import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.oldmodel.ApplicationManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,7 +36,7 @@ public class MainController implements Initializable {
       List<Folder> folders = null;
       flowPaneFolder.getChildren().clear();
       for (Folder f : folders) {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItemView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItem.fxml"));
         flowPaneFolder.getChildren().add(fxmlLoader.load());
         FolderItemController c = fxmlLoader.getController();
         c.init(f, this);
@@ -102,8 +101,8 @@ public class MainController implements Initializable {
   public void refresh() {
     try {
       appManager.refreshFromServer();
-      List<Email> emails = appManager.getEmails("Inbox");
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItemView.fxml"));
+      Email[] emails = appManager.getEmails("Inbox").toArray(Email[]::new);
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItem.fxml"));
       flowPaneFolder.getChildren().add(fxmlLoader.load());
       FolderItemController c = fxmlLoader.getController();
       c.init(new Folder("Inbox", emails), this);
@@ -141,7 +140,7 @@ public class MainController implements Initializable {
     emailListItemFlowPane.getChildren().clear();
     try {
       for (Email email : emails) {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ListItemView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("EmailItem.fxml"));
         emailListItemFlowPane.getChildren().add(fxmlLoader.load());
         listItemController controller = fxmlLoader.getController();
         controller.init(appManager, email, this);
@@ -157,7 +156,7 @@ public class MainController implements Initializable {
    */
   @FXML
   public void openWritingView() throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("WritingView.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), 600, 400);
     WritingController c = fxmlLoader.getController();
     c.init(appManager);
@@ -169,7 +168,7 @@ public class MainController implements Initializable {
 
   @FXML
   private void openEmailSettings() throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccountView.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccount.fxml"));
     Scene scene = new Scene(fxmlLoader.load(), 500, 400);
     AddAccountController c = fxmlLoader.getController();
     c.init(appManager);
@@ -218,11 +217,11 @@ public class MainController implements Initializable {
 
         // change activeAccount if it is null or if it is not the same as before
         if (appManager.getActiveAccount() == null
-          || (!selectedEmailAddress.equals(appManager.getActiveAccount().getEmailAddress()))) {
+          || (!selectedEmailAddress.equals(appManager.getActiveAccount().emailAddress()))) {
 
           appManager.setActiveAccount(selectedEmailAddress);
           System.out.println("changed active account to " + selectedEmailAddress);
-          System.out.println("active account: " + appManager.getActiveAccount().getEmailAddress());
+          System.out.println("active account: " + appManager.getActiveAccount().emailAddress());
 
         }
       }

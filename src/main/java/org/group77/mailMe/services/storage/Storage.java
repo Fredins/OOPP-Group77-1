@@ -1,8 +1,6 @@
 package org.group77.mailMe.services.storage;
 
-import org.group77.mailMe.model.Account;
-import org.group77.mailMe.model.Email;
-import org.group77.mailMe.model.Folder;
+import org.group77.mailMe.model.data.*;
 
 import java.io.IOException;
 import java.util.List;

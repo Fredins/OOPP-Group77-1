@@ -1,8 +1,6 @@
 package org.group77.mailMe.services.storage;
 
-import org.group77.mailMe.model.Account;
-import org.group77.mailMe.model.Email;
-import org.group77.mailMe.model.Folder;
+import org.group77.mailMe.model.data.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -31,7 +29,7 @@ public class LocalDiscStorage implements Storage {
    * @author Alexey Ryabov. Revised by Hampus Jernkrook
    */
   public boolean store(Account account) throws Exception {
-    String address = account.getEmailAddress();
+    String address = account.emailAddress();
     String path = appPath + separator + address;
     try {
       // if account is not already added, create directory and store file with account details
@@ -65,27 +63,27 @@ public class LocalDiscStorage implements Storage {
     //  will they be overwritten now?
     // For each folder, create a directory with the folder name and store the folder object
     for (Folder folder : folders) {
-      String folderPath = path + folder.getName();
+      String folderPath = path + folder.name();
       String objectPath = folderPath + separator + "EmailListObject";
       // create directory with folder name
       mkdir(folderPath);
       // create a directory for the folder object
       touch(objectPath);
       // go over all emails and store in an arraylist. This is needed to get something serializable.
-      ArrayList<Email> emails = new ArrayList<>(folder.getEmails());
+
       // store the serialized list of emails
-      serialize(emails, objectPath);
+      serialize(folder.emails(), objectPath);
     }
     return true;
   }
 
   @Override
   public void store(String emailAddress, Folder folder) throws IOException {
-    String folderPath = appPath + separator + emailAddress + separator + folder.getName();
+    String folderPath = appPath + separator + emailAddress + separator + folder.name();
     String objectPath = folderPath + separator + "EmailListObject";
     mkdir(folderPath);
     touch(objectPath);
-    serialize(folder.getEmails(), objectPath);
+    serialize(folder.emails(), objectPath);
   }
 
   /**

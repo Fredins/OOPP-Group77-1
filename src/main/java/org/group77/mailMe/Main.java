@@ -1,17 +1,22 @@
 package org.group77.mailMe;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.application.*;
+import javafx.fxml.*;
+import javafx.scene.*;
+import javafx.scene.layout.*;
+import javafx.stage.*;
+import org.group77.mailMe.controller.*;
+import org.group77.mailMe.model.*;
 
-import java.io.IOException;
+import java.io.*;
 
 public class Main extends Application {
   @Override
   public void start(Stage stage) throws IOException {
-    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("MainView.fxml"));
-    Scene scene = new Scene(fxmlLoader.load(), 1050, 700);
+    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
+    Pane pane = fxmlLoader.load();
+    ((MasterController) fxmlLoader.getController()).init(new Model());
+    Scene scene = new Scene(pane, 1050, 700);
     stage.setTitle("MailMe");
     stage.setScene(scene);
     stage.show();
