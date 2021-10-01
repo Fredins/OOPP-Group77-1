@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import org.group77.mailMe.control.ApplicationManager;
 
@@ -15,7 +17,7 @@ public class StartPageController {
     private Label welcomeLabel;
 
     @FXML
-    private VBox accountListVBox;
+    private ListView<Label> accountsListView;
 
     /**
      *
@@ -25,15 +27,9 @@ public class StartPageController {
 
     public void init(ApplicationManager appManager) {
 
-        // First add buttons for every stored accounts with actionEvent listeners
+        // Add buttons for every stored accounts with actionEvent listeners
         initStoredAccounts(appManager);
 
-        // Lastly add an account button
-        Button addNewAccountButton = new Button("Add new account");
-        accountListVBox.getChildren().add(addNewAccountButton);
-
-        // Structure buttons in VBox
-        accountListVBox.setAlignment(Pos.TOP_CENTER);
 
     }
 
@@ -42,17 +38,18 @@ public class StartPageController {
         List<String> emailAddresses = appManager.getEmailAddresses();
 
         for (String emailAddress : emailAddresses) {
-            Button accountButton = new Button(emailAddress);
-            accountListVBox.getChildren().add(accountButton);
-
-            accountButton.setOnAction(actionEvent ->  {
-                String activeAccount = accountButton.getText();
-                appManager.setActiveAccount(activeAccount);
-                System.out.println("Active account chosen: " + activeAccount);
-                System.out.println("Active account in AM: " + appManager.getActiveAccount().getEmailAddress());
-            });
+            Label accountLabel = new Label(emailAddress);
+            accountsListView.getItems().add(accountLabel);
+            accountLabel.setPrefWidth(accountsListView.getPrefWidth());
+            accountLabel.setAlignment(Pos.CENTER);
 
         }
+    }
+
+
+
+    public ListView<Label> getAccountsListView() {
+        return this.accountsListView;
     }
 
 
