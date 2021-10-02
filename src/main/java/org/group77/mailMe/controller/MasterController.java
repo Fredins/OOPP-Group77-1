@@ -1,6 +1,5 @@
 package org.group77.mailMe.controller;
 
-import javafx.beans.*;
 import javafx.beans.value.*;
 import javafx.collections.*;
 import javafx.fxml.*;
@@ -12,8 +11,10 @@ import javafx.stage.*;
 import javafx.util.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.model.data.*;
 
+import javax.mail.*;
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
@@ -24,7 +25,7 @@ public class MasterController {
   @FXML private Button writeBtn;
   @FXML private FlowPane foldersFlow;
   @FXML private Pane readingPane;
-  @FXML private ComboBox<?> accountsCombo;
+  @FXML private ComboBox<Account> accountsCombo;
   @FXML private TextField searchField;
   @FXML private ImageView searchImg;
   @FXML private ImageView accountImg;
@@ -32,7 +33,9 @@ public class MasterController {
 
   public void init(Model m) {
     loadFolders(m.folders, m);
-    loadEmails(m.visibleEmails, m);
+    if(m.accounts != null) {
+      populateAcountCombo(m.accounts, m);
+    }
 
     // change handler
     m.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), m));
@@ -46,11 +49,51 @@ public class MasterController {
       }
     });
 
-    // input handler
-    refreshBtn.setOnAction(i -> m.refresh());
+    // input handlers
+    refreshBtn.setOnAction(i -> refresh(m));
     addAccountBtn.setOnAction(i -> openAddAccount(m));
     writeBtn.setOnAction(i -> openWriting(m));
+    accountsCombo.setOnAction(i -> setActiveAccount(m));
 
+    // change handlers
+    m.accounts.addListener((ListChangeListener<? super Account>) c -> populateAcountCombo(c.getList(), m));
+  }
+
+  private void setActiveAccount(Model m) {
+    Account selected = accountsCombo.getSelectionModel().getSelectedItem();
+    if (selected != null) {
+      m.activeAccount.set(new Pair<>(true, selected));
+    }
+  }
+
+  private void refresh(Model m) {
+    try {
+      m.refresh();
+    } catch (Exception e) {
+      e.printStackTrace(); // TODO feedback
+    }
+  }
+
+  private void populateAcountCombo(List<? extends Account> accounts, Model m) {
+    accountsCombo.getItems().clear();
+    accountsCombo.setConverter(new StringConverter<>() {
+      @Override public String toString(Account account) {
+        return account != null ? account.emailAddress() : null;
+      }
+      @Override public Account fromString(String string) {
+        Account account = null;
+        try {
+        account = m.accounts.stream()
+            .filter(a -> a.emailAddress().equals(string))
+            .findAny()
+            .orElseThrow(Exception::new);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return account;
+      }
+    });
+    accountsCombo.getItems().addAll(accounts);
   }
 
   void loadReading(Email e, Model m) {

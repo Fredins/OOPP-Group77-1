@@ -27,9 +27,9 @@
          </font></Label>
         <Label fx:id="toLabel" layoutX="51.0" layoutY="31.0" prefHeight="17.0" prefWidth="272.0" text="To" AnchorPane.topAnchor="33.0" />
         <Label layoutX="14.0" layoutY="33.0" prefHeight="17.0" prefWidth="37.0" text="To:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="33.0" />
-      <Button fx:id="answerButton" layoutX="18.0" layoutY="436.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#openWritingViewFromAnswer" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: ffffff;" AnchorPane.leftAnchor="14.0">
+      <Button fx:id="replyButton" layoutX="18.0" layoutY="436.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" style="-fx-background-color: ffffff;" AnchorPane.leftAnchor="14.0">
          <graphic>
-            <ImageView fx:id="replyImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@ImagesAndIcons/ReplyButtonIcon.png" />
                </image>

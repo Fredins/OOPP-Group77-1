@@ -1,4 +1,4 @@
-package org.group77.mailMe.oldmodel;
+package org.group77.mailMe.model;
 
 import org.group77.mailMe.model.data.*;
 

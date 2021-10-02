@@ -19,8 +19,7 @@ public class ReadingController {
   @FXML private Label subjectLabel;
   @FXML private Label toLabel;
   @FXML private Label dateLabel;
-  @FXML private Button answerButton;
-  @FXML private ImageView replyImg;
+  @FXML private Button replyButton;
 
   void init(Model m, Email e) {
     contentArea.setText(e.content());
@@ -29,12 +28,12 @@ public class ReadingController {
     toLabel.setText(Arrays.toString(e.to()));
     // TODO date
 
-    answerButton.setOnAction(i -> openWriting(m, fromLabel.getText()));
+    replyButton.setOnAction(i -> openWriting(m, fromLabel.getText()));
   }
 
   private void openWriting(Model m, String to){
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItem.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
       Pane pane = fxmlLoader.load();
       ((WritingController) fxmlLoader.getController()).init(m, to);
       Stage stage = new Stage();

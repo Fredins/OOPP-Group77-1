@@ -5,6 +5,7 @@ import javafx.collections.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
+import javafx.util.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
 
@@ -18,7 +19,7 @@ public class WritingController {
   @FXML private Button sendBtn;
   @FXML private Button attachBtn;
   @FXML private TextField subjectField;
-  private List<String> attachments = new ArrayList<>();
+  private final List<String> attachments = new ArrayList<>();
 
   void init(Model m){
     init(m, null);
@@ -28,17 +29,29 @@ public class WritingController {
     if(to != null){
       toField.setText(to);
     }
+    fromLabel.setText(m.activeAccount.get().getValue().emailAddress());
     // input handlers
-    sendBtn.setOnAction(i -> m.send());
+    sendBtn.setOnAction(i -> send(m));
     attachBtn.setOnAction(i -> attachFiles());
 
     // change handlers
-    m.activeAccount.addListener((ChangeListener<? super Account>) (o, ov, nv) -> fromLabel.setText(nv.emailAddress()));
+    m.activeAccount.addListener((ChangeListener<? super Pair<Boolean, Account>>) (o, oa, na) -> fromLabel.setText(na.getValue().emailAddress()));
   }
 
+  private void send(Model m){
+    try{
+      m.send(
+        List.of(toField.getText()),
+        subjectField.getText(),
+        contentField.getText(),
+        attachments
+      );
+    }catch(Exception e){
+      e.printStackTrace(); // TODO display feedback
+    }
+  }
 
-
-  public void attachFiles() {
+  private void attachFiles() {
     FileChooser fileChooser = new FileChooser();
     File selectedFile = fileChooser.showOpenDialog(null);
     if(selectedFile != null){

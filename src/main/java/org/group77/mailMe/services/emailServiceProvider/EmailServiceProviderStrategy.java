@@ -60,7 +60,7 @@ public abstract class EmailServiceProviderStrategy {
     String host = hostIn;
     int port = portIn;
     String address = account.emailAddress();
-    String password = Arrays.toString(account.password());
+    String password = String.valueOf(account.password());
 
     store.connect(
       hostIn,

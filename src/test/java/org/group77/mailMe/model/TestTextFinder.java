@@ -1,7 +1,6 @@
 package org.group77.mailMe.model;
 
 import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.oldmodel.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

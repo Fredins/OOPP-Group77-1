@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="83.0" prefWidth="219.0" styleClass="itemPane" stylesheets="@ListItemStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.EmailItemController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="83.0" prefWidth="219.0" styleClass="itemPane" stylesheets="@EmailItemStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.EmailItemController">
 
    <children>
       <Label fx:id="fromLabel" layoutX="57.0" layoutY="12.0" mouseTransparent="true" prefHeight="19.0" prefWidth="160.0" text="From" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="12.0">

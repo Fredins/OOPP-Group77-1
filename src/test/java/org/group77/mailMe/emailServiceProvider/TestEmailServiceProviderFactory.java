@@ -2,8 +2,8 @@ package org.group77.mailMe.emailServiceProvider;
 
 import static org.junit.Assert.*;
 
+import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.oldmodel.*;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderStrategy;
 import org.group77.mailMe.services.emailServiceProvider.GmailProvider;

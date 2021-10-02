@@ -3,8 +3,8 @@ package org.group77.mailMe.services.storage;
 import org.group77.mailMe.model.data.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.*;
 
 public class LocalDiscStorage implements Storage {
 
@@ -14,13 +14,10 @@ public class LocalDiscStorage implements Storage {
   // Storage interface methods
   public LocalDiscStorage() throws OSNotFoundException, IOException {
     String[] appDirAndSep = OSHandler.getAppDirAndSeparator();
-    appPath = appDirAndSep[0];
+    appPath = appDirAndSep[0]; // TODO perhaps replace with Pair<String, String>
     separator = appDirAndSep[1];
     this.mkdir(appPath);
   }
-
-  // TODO This method return value doesn't make sense..
-  //  ^^ Who wrote this? (hampus)
 
   /**
    * @param account - keeps email address of account object.
@@ -28,7 +25,8 @@ public class LocalDiscStorage implements Storage {
    * @throws Exception
    * @author Alexey Ryabov. Revised by Hampus Jernkrook
    */
-  public boolean store(Account account) throws Exception {
+  @Override
+  public void store(Account account) throws Exception {
     String address = account.emailAddress();
     String path = appPath + separator + address;
     try {
@@ -40,75 +38,80 @@ public class LocalDiscStorage implements Storage {
         touch(accountFilePath);
         serialize(account, accountFilePath);
       }
-      return true;
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return false;
   }
 
   /**
    * TODO how to write tests for store and retrieve? The tests will be dependent on both...
    *
-   * @param emailAddress - the email address of the account to store the data under.
-   * @param folders      - List of folders to store away.
+   * @param folders - List of folders to store away.
    * @return true if the folders could be successfully stored.
    * @throws IOException if the file operations fail.
    * @author Hampus Jernkrook
    */
-  public boolean store(String emailAddress, List<Folder> folders) throws IOException {
+  @Override
+  public void store(Account account, List<Folder> folders) {
     // path to the given account's directory
-    String path = appPath + separator + emailAddress + separator;
+    String accountPath = appPath + separator + account.emailAddress();
     // TODO if the folder directories already exists, then these should be overwritten...
     //  will they be overwritten now?
     // For each folder, create a directory with the folder name and store the folder object
-    for (Folder folder : folders) {
-      String folderPath = path + folder.name();
-      String objectPath = folderPath + separator + "EmailListObject";
-      // create directory with folder name
-      mkdir(folderPath);
-      // create a directory for the folder object
-      touch(objectPath);
-      // go over all emails and store in an arraylist. This is needed to get something serializable.
-
-      // store the serialized list of emails
-      serialize(folder.emails(), objectPath);
-    }
-    return true;
+    folders.forEach(f -> {
+                      try {
+                        String folderPath = accountPath + separator +  f.name();
+                        touch(folderPath);
+                        serialize(f, folderPath);
+                      } catch (IOException e) {
+                        e.printStackTrace();
+                      }
+                    }
+    );
   }
 
   @Override
-  public void store(String emailAddress, Folder folder) throws IOException {
-    String folderPath = appPath + separator + emailAddress + separator + folder.name();
-    String objectPath = folderPath + separator + "EmailListObject";
-    mkdir(folderPath);
-    touch(objectPath);
-    serialize(folder.emails(), objectPath);
+  public void store(Account account, Folder folder) throws IOException {
+    String folderPath = appPath + separator + account.emailAddress() + separator + folder.name();
+    touch(folderPath);
+    serialize(folder, folderPath);
+  }
+
+
+  @Override
+  public List<Folder> retrieveFolders(Account account) {
+    String accountPath = appPath + separator + account.emailAddress();
+    File[] folderDirs = Arrays.stream(Objects.requireNonNull((new File(accountPath)).listFiles()))
+      .filter(f -> !f.getName().equals("Account"))
+      .toArray(File[]::new);
+    return Arrays.stream(folderDirs)
+      .map(f -> {
+        Folder f1 = null;
+        try {
+          f1 = (Folder) deserialize(f.getPath());
+        } catch (IOException | ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        return f1;
+      })
+      .filter(Objects::nonNull)
+      .sorted((f1, f2) -> {
+        List<String> orderedNames = List.of(
+          "Inbox",
+          "Archive",
+          "Sent",
+          "Drafts",
+          "Trash"
+        );
+        int i1 = orderedNames.indexOf(f1.name());
+        int i2 = orderedNames.indexOf(f2.name());
+        return Integer.compare(i1, i2);
+      })
+      .collect(Collectors.toList());
   }
 
   /**
-   * If an account with the given email address exists as a saved object on the user's
-   * machine, find and return the account object.
-   *
-   * @param emailAddress - the email address of the account that should be retrieved.
-   * @return The Account with the given email address.
-   * @throws IOException
-   * @throws ClassNotFoundException
-   * @author Hampus Jenrkrook
-   */
-  public Account retrieveAccount(String emailAddress) throws IOException, ClassNotFoundException {
-    // retrieve the account at path "appPath/emailAddress" and unpack to Account object
-    Account account = (Account) deserialize(appPath + separator + emailAddress + separator + "Account"); //TODO set the account object name somewhere else
-    return account;
-  }
-
-  public List<Folder> retrieveFolders(String emailAddress) {
-    return null;
-  }
-
-  /**
-   * @param emailAddress the emailAddress of the active account
-   * @param folderName   the name of the desired folder
+   * @param folderName the name of the desired folder
    * @return returns a list of emails for the specific folder
    * @throws IOException            If there are any problems when locating the file
    * @throws ClassNotFoundException Of the classes required is not on the classpath?
@@ -118,23 +121,33 @@ public class LocalDiscStorage implements Storage {
    * and returns the emails in that folder.
    */
 
-  public List<Email> retrieveEmails(String emailAddress, String folderName) throws IOException, ClassNotFoundException {
-
-    String path = appPath + separator + emailAddress + separator + folderName + separator + "EmailListObject";
+  @Override
+  public List<Email> retrieveEmails(Account account, String folderName) throws IOException, ClassNotFoundException {
+    String path = appPath + separator + account.emailAddress() + separator + folderName + separator + "EmailListObject";
     return (List<Email>) deserialize(path);
   }
 
-  /**
-   * @return A list of email addresses.
-   * @author Hampus Jernkrook
-   * <p>
-   * Get all email addresses added by the user.
-   */
-  public List<String> retrieveAllEmailAddresses() {
-    // Find all directories at level 0 under appPath.
-    // These correspond to each emailAddress added by the user.
-    return getDirSuffix(getDirsAtLevel(new File(appPath), 0));
+  @Override
+  public List<Account> retrieveAllAccounts() {
+    File[] accountDirs = (new File(appPath)).listFiles();
+    List<Account> accounts = new ArrayList<>();
+    if (accountDirs != null) {
+      accounts = Arrays.stream(accountDirs)
+        .map(f -> {
+          Account a = null;
+          try {
+            a = (Account) deserialize(f.getPath() + separator + "Account");
+          } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+          return a;
+        })
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
+    }
+    return accounts;
   }
+
 
   /**
    * @param path - path of the file/directory to search for.
@@ -143,12 +156,8 @@ public class LocalDiscStorage implements Storage {
    * @author Alexey Ryabov. Revised by Hampus Jernkrook
    * Tell whether a file/directory exists with the given path.
    */
-  private boolean testExists(String path) throws Exception {
-    try {
-      return (new File(path).exists());
-    } catch (Exception e) {
-      throw new Exception("Failed in LocalDiskStorage -> testExists -method !");
-    }
+  private boolean testExists(String path) {
+    return (new File(path).exists());
   }
 
   /**
@@ -186,47 +195,4 @@ public class LocalDiscStorage implements Storage {
     file.close();
     return o;
   }
-
-  /**
-   * @param parent - the File encoding of the parent path to search under.
-   * @param level  - the level to search down to. level == 0 returns the first children of the parent.
-   * @return A list of paths to the directories at the specified level.
-   * <p>
-   * Method inspiration from
-   * https://stackoverflow.com/questions/41344236/java-how-to-get-only-subdirectories-name-present-at-certain-level
-   * Cred to user: krzydyn
-   * @author Hampus Jernkrook
-   * <p>
-   * Finds all directories at a certain level from a parent path.
-   */
-  private List<String> getDirsAtLevel(File parent, int level) {
-    List<String> dirs = new ArrayList<>();
-    File[] files = parent.listFiles();
-    if (files == null) return dirs; // empty dir
-    for (File f : files) {
-      if (f.isDirectory()) {
-        if (level == 0) dirs.add(f.getPath());
-        else if (level > 0) dirs.addAll(getDirsAtLevel(f, level - 1));
-      }
-    }
-    return dirs;
-  }
-
-  /**
-   * @param dirs - List of directory paths to cut off the prefixes from.
-   * @return A list of directory names.
-   * @author Hampus Jernkrook
-   * <p>
-   * Get only the directory names from a list of directory paths,
-   * i.e. get only the last suffix after the separator.
-   */
-  private List<String> getDirSuffix(List<String> dirs) {
-    List<String> suffixes = new ArrayList<>();
-    for (String path : dirs) {
-      suffixes.add(path.substring(path.lastIndexOf(separator) + 1));
-    }
-    return suffixes;
-  }
-
-
 }
