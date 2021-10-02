@@ -2,9 +2,7 @@ package org.group77.mailMe.services.emailServiceProvider;
 
 import org.group77.mailMe.model.data.*;
 
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Store;
+import javax.mail.*;
 import java.util.*;
 
 
@@ -82,5 +80,4 @@ public abstract class EmailServiceProviderStrategy {
   public abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content, List<String> attachments) throws Exception;
 
   protected abstract List<Email> parse(Store store) throws MessagingException;
-
 }

@@ -2,8 +2,8 @@ package org.group77.mailMe.services.storage;
 
 import org.group77.mailMe.model.data.*;
 
-import java.io.IOException;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public interface Storage {
   void store(Account account) throws Exception;

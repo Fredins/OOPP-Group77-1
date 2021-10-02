@@ -1,7 +1,6 @@
 package org.group77.mailMe.model;
 
 import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.model.data.ServerProvider;
 
 /**
  * @author Martin Fredin.
@@ -26,5 +25,4 @@ public class AccountFactory {
     }
     return null;
   }
-
 }

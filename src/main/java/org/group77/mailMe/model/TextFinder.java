@@ -2,8 +2,7 @@ package org.group77.mailMe.model;
 
 import org.group77.mailMe.model.data.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class implements an algorithm for searching emails for a given substring.

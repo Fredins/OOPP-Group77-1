@@ -3,8 +3,7 @@ package org.group77.mailMe.services.emailServiceProvider;
 import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import javax.mail.internet.*;
 import java.util.*;
 
 public class MicrosoftProvider extends EmailServiceProviderStrategy {
@@ -97,7 +96,6 @@ public class MicrosoftProvider extends EmailServiceProviderStrategy {
       msg.setSubject(subject);
       msg.setText(content);
       return msg;
-
     } catch (Exception ex) {
       throw new Exception("Something went wrong in EmailBuilder->composingMessage method !!!");
     }

@@ -13,6 +13,6 @@ public record Email(
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Email email = (Email) o;
-    return Objects.equals(from, email.from) && Arrays.equals(to, email.to) && Objects.equals(subject,email.subject) && Objects.equals(content,email.content);
+    return Objects.equals(from, email.from) && Arrays.equals(to, email.to) && Objects.equals(subject, email.subject) && Objects.equals(content, email.content);
   }
 }

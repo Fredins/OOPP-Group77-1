@@ -3,14 +3,11 @@ package org.group77.mailMe.model;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.util.*;
-import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.*;
 import org.group77.mailMe.services.storage.*;
 
-import javax.mail.*;
 import java.io.*;
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -47,7 +44,7 @@ public class Model {
     storage.store(account);
   }
   public void send(List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
-    if(activeAccount.get().getKey()){
+    if (activeAccount.get().getKey()) {
       EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get().getValue()).sendEmail(
         activeAccount.get().getValue(),
         recipients,
@@ -55,7 +52,7 @@ public class Model {
         content,
         attachments
       );
-    }else {
+    } else {
       throw new Exception("no active account");
     }
   }
@@ -63,10 +60,10 @@ public class Model {
     return storage.retrieveAllAccounts();
   }
 
-  private List<Folder> getAllFolders() throws Exception{
-    if (activeAccount.get().getKey()){
+  private List<Folder> getAllFolders() throws Exception {
+    if (activeAccount.get().getKey()) {
       return storage.retrieveFolders(activeAccount.get().getValue());
-    }else{
+    } else {
       throw new Exception("no active account");
     }
   }
@@ -79,7 +76,7 @@ public class Model {
     }
     if (activeAccount.get().getKey()) {
       List<Folder> localFolders = storage.retrieveFolders(activeAccount.get().getValue());
-      if(localFolders.isEmpty()){
+      if (localFolders.isEmpty()) {
         createFolders();
       }
 
@@ -87,7 +84,7 @@ public class Model {
     }
   }
 
-  private void createFolders(){ // TODO this should be some sort of gui where the user can decide which folders he wants
+  private void createFolders() { // TODO this should be some sort of gui where the user can decide which folders he wants
     List<Folder> folderList = List.of(
       new Folder("Inbox", new ArrayList<>()),
       new Folder("Archive", new ArrayList<>()),

@@ -37,7 +37,5 @@ public class OSHandler {
       throw new OSNotFoundException("Your operating system is either not supported or not found.");
     }
     return new String[]{appDir, separator};
-
   }
-
 }

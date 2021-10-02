@@ -1,7 +1,6 @@
 package org.group77.mailMe.controller;
 
 import javafx.beans.value.*;
-import javafx.collections.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
@@ -21,12 +20,12 @@ public class WritingController {
   @FXML private TextField subjectField;
   private final List<String> attachments = new ArrayList<>();
 
-  void init(Model m){
+  void init(Model m) {
     init(m, null);
   }
 
-  void init(Model m, String to){
-    if(to != null){
+  void init(Model m, String to) {
+    if (to != null) {
       toField.setText(to);
     }
     fromLabel.setText(m.activeAccount.get().getValue().emailAddress());
@@ -38,15 +37,15 @@ public class WritingController {
     m.activeAccount.addListener((ChangeListener<? super Pair<Boolean, Account>>) (o, oa, na) -> fromLabel.setText(na.getValue().emailAddress()));
   }
 
-  private void send(Model m){
-    try{
+  private void send(Model m) {
+    try {
       m.send(
         List.of(toField.getText()),
         subjectField.getText(),
         contentField.getText(),
         attachments
       );
-    }catch(Exception e){
+    } catch (Exception e) {
       e.printStackTrace(); // TODO display feedback
     }
   }
@@ -54,7 +53,7 @@ public class WritingController {
   private void attachFiles() {
     FileChooser fileChooser = new FileChooser();
     File selectedFile = fileChooser.showOpenDialog(null);
-    if(selectedFile != null){
+    if (selectedFile != null) {
       attachments.add(selectedFile.toString());
       System.out.println("File selected >" + " " + selectedFile); // For Testing
     }

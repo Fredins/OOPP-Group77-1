@@ -3,7 +3,6 @@ package org.group77.mailMe.controller;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import org.group77.mailMe.*;
@@ -31,7 +30,7 @@ public class ReadingController {
     replyButton.setOnAction(i -> openWriting(m, fromLabel.getText()));
   }
 
-  private void openWriting(Model m, String to){
+  private void openWriting(Model m, String to) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
       Pane pane = fxmlLoader.load();
@@ -43,6 +42,5 @@ public class ReadingController {
     } catch (IOException e1) {
       e1.printStackTrace();
     }
-
   }
 }

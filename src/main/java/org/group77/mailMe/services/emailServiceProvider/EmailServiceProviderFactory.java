@@ -25,5 +25,4 @@ public class EmailServiceProviderFactory {
       return new MicrosoftProvider();
     }
   }
-
 }

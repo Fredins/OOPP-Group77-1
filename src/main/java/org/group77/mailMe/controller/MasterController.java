@@ -11,10 +11,8 @@ import javafx.stage.*;
 import javafx.util.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.model.*;
-import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.model.data.*;
 
-import javax.mail.*;
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
@@ -33,7 +31,7 @@ public class MasterController {
 
   public void init(Model m) {
     loadFolders(m.folders, m);
-    if(m.accounts != null) {
+    if (m.accounts != null) {
       populateAcountCombo(m.accounts, m);
     }
 
@@ -128,7 +126,7 @@ public class MasterController {
       @Override public Account fromString(String string) {
         Account account = null;
         try {
-        account = m.accounts.stream()
+          account = m.accounts.stream()
             .filter(a -> a.emailAddress().equals(string))
             .findAny()
             .orElseThrow(Exception::new);

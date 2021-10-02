@@ -13,13 +13,11 @@ public class EmailItemController {
   @FXML private Label subjectLabel;
 
 
-
-  void init(Model m, Email e){
+  void init(Model m, Email e) {
     fromLabel.setText(e.from());
     subjectLabel.setText(e.subject());
 
     // input handler
     root.setOnMouseClicked(i -> m.readingEmail.set(new Pair<>(true, e)));
   }
-
 }

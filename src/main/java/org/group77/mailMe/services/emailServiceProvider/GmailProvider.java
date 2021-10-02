@@ -1,25 +1,21 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import com.sun.mail.pop3.*;
-import org.apache.commons.mail.util.MimeMessageParser;
+import org.apache.commons.mail.util.*;
 import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.*;
 import java.util.*;
 
 public class GmailProvider extends EmailServiceProviderStrategy {
 
   public GmailProvider() {
     super("pop.gmail.com",
-      "smtp.gmail.com",
-      "pop3",
-      "smtp",
-      995,
-      587
+          "smtp.gmail.com",
+          "pop3",
+          "smtp",
+          995,
+          587
     );
   }
 
@@ -144,9 +140,9 @@ public class GmailProvider extends EmailServiceProviderStrategy {
       msg.setContent(multipart);
 
       // adding attachments:
-      if(attachments.size() > 0){
+      if (attachments.size() > 0) {
         // For every file in attachments list, created new MimeBodyPart and add it to Multipart.
-        for (String file: attachments){
+        for (String file : attachments) {
           MimeBodyPart mimeBodyPart = new MimeBodyPart();
           mimeBodyPart.attachFile(file);
           multipart.addBodyPart(mimeBodyPart);
@@ -156,7 +152,6 @@ public class GmailProvider extends EmailServiceProviderStrategy {
       msg.setSentDate(new Date());
 
       return msg;
-
     } catch (Exception e) {
       e.printStackTrace();
       return null;

@@ -10,20 +10,20 @@ public class AddAccountController {
   @FXML private Button addAccountBtn;
   @FXML private PasswordField passwordField;
 
-  void init(Model m){
+  void init(Model m) {
     // input handlers
     addAccountBtn.setOnAction(i -> addAccount(m));
     passwordField.setOnAction(i -> addAccount(m));
   }
 
-  private void addAccount(Model m){
+  private void addAccount(Model m) {
     try {
       Account account = AccountFactory.createAccount(user.getText(), passwordField.getText().toCharArray());
       m.addAccount(account);
       m.accounts.add(account);
     } catch (Exception e) {
       e.printStackTrace(); // TODO feedback
-    };
+    }
+    ;
   }
-
 }

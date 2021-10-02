@@ -60,7 +60,7 @@ public class LocalDiscStorage implements Storage {
     // For each folder, create a directory with the folder name and store the folder object
     folders.forEach(f -> {
                       try {
-                        String folderPath = accountPath + separator +  f.name();
+                        String folderPath = accountPath + separator + f.name();
                         touch(folderPath);
                         serialize(f, folderPath);
                       } catch (IOException e) {
