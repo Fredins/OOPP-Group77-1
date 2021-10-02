@@ -79,13 +79,13 @@ public class LocalDiscStorage implements Storage {
     return true;
   }
 
-  @Override
   public void store(String emailAddress, Folder folder) throws IOException {
     String folderPath = appPath + separator + emailAddress + separator + folder.getName();
     String objectPath = folderPath + separator + "EmailListObject";
     mkdir(folderPath);
     touch(objectPath);
-    serialize(folder.getEmails(), objectPath);
+    ArrayList<Email> emails = new ArrayList<>(folder.getEmails());
+    serialize(emails, objectPath);
   }
 
   /**

@@ -149,7 +149,7 @@ public class MainController implements Initializable {
   public void refresh() {
     try {
       appManager.refreshFromServer();
-      List<Email> emails = appManager.getEmails("Inbox");
+      List<Email> emails = appManager.retrieveEmails("Inbox");
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItemView.fxml"));
       flowPaneFolder.getChildren().add(fxmlLoader.load());
       FolderItemController c = fxmlLoader.getController();

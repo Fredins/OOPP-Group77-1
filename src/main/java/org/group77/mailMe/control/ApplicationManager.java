@@ -81,7 +81,7 @@ public class ApplicationManager {
    * <p>
    * calls getEmails with foldername in accountHandler
    */
-  public List<Email> getEmails(String folderName) throws OSNotFoundException, IOException, ClassNotFoundException, IOException {
+  public List<Email> retrieveEmails(String folderName) throws IOException, ClassNotFoundException {
     return storage.retrieveEmails(getActiveAccount().getEmailAddress(), folderName);
   }
 
@@ -119,7 +119,13 @@ public class ApplicationManager {
     Account account = accountHandler.getActiveAccount();
     EmailServiceProviderStrategy espStrategy = EmailServiceProviderFactory.getEmailServiceProvider(account);
     List<Email> newEmails = espStrategy.refreshFromServer(account);
-    newEmails.addAll(getEmails("Inbox"));
+    // if there are any previously stored emails, add them to the list of new emails to store.
+    // else just directly store what the server returned.
+    try {
+      newEmails.addAll(retrieveEmails("Inbox"));
+    } catch (IOException | ClassNotFoundException e) {
+      // nothing
+    }
     storage.store(getActiveAccount().getEmailAddress(), new Folder("Inbox", newEmails));
   }
 
