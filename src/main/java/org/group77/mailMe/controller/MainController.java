@@ -1,5 +1,6 @@
 package org.group77.mailMe.controller;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,6 +37,9 @@ public class MainController implements Initializable {
 
   @FXML
   AnchorPane startPagePane;
+
+  @FXML
+  private AnchorPane startPageContentPane;
 
   private void loadFolders() {
     try {
@@ -117,7 +121,7 @@ public class MainController implements Initializable {
 
     // initialize StartPageView and its Controller
     FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StartPageView.fxml"));
-    startPagePane.getChildren().add(fxmlLoader.load());
+    startPageContentPane.getChildren().add(fxmlLoader.load());
     StartPageController startPageController = fxmlLoader.getController();
     startPageController.init(appManager);
 
@@ -130,6 +134,15 @@ public class MainController implements Initializable {
         startPagePane.toBack();
       });
     }
+
+    startPageController.getAddAccountButton().setOnAction(EventHandler -> {
+      try {
+        openEmailSettings();
+      } catch (IOException exception) {
+        exception.printStackTrace();
+      }
+      startPagePane.toBack();
+    });
 
     if (appManager.getEmailAddresses().size() == 0) {
       // open accountview
