@@ -1,40 +1,29 @@
 package org.group77.mailMe.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import org.group77.mailMe.control.ApplicationManager;
+import javafx.fxml.*;
+import javafx.scene.control.*;
+import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.data.*;
 
 public class AddAccountController {
+  @FXML private TextField user;
+  @FXML private Button addAccountBtn;
+  @FXML private PasswordField passwordField;
 
-  //TODO possibly move this somewhere else or make use of singleton pattern to avoid
-  // multiple AppManagers if not necessary? (Hampus)
-  private ApplicationManager appManager;
-
-  public void init(ApplicationManager appManager) {
-    this.appManager = appManager;
+  void init(Model m){
+    // input handlers
+    addAccountBtn.setOnAction(i -> addAccount(m));
+    passwordField.setOnAction(i -> addAccount(m));
   }
 
-  @FXML
-  private TextField password;
-
-  @FXML
-  private TextField user;
-
-
-  @FXML
-  void addAccount(MouseEvent event) {
+  private void addAccount(Model m){
     try {
-      if (appManager.addAccount(user.getText(), password.getText())) {
-        // account was successfully created, close AddAccountView
-      } else {
-        // error, give error message?
-      }
-      ;
+      Account account = AccountFactory.createAccount(user.getText(), passwordField.getText().toCharArray());
+      m.addAccount(account);
+      m.accounts.add(account);
     } catch (Exception e) {
-      e.printStackTrace();
-    }
-
+      e.printStackTrace(); // TODO feedback
+    };
   }
 
 }

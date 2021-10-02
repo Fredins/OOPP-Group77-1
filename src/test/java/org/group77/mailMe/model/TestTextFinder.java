@@ -1,7 +1,6 @@
 package org.group77.mailMe.model;
 
-import org.group77.mailMe.model.Email;
-import org.group77.mailMe.model.TextFinder;
+import org.group77.mailMe.model.data.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,10 +15,10 @@ public class TestTextFinder {
     @Test
     public void testFindsBothUpperAndLowerCase() {
         //setup
-        List<String> to = Arrays.asList("TEST_nr_1@gmail.com",
-                "TEST_nr_2@gmail.com",
-                "TEST_nr_3@gmail.com"
-        );
+        String[]to = new String[]{"TEST_nr_1@gmail.com",
+          "TEST_nr_2@gmail.com",
+          "TEST_nr_3@gmail.com"
+        };
         List<Email> input = Arrays.asList(
                 new Email("lol@gmail.com", to, "Upper", "contains SAUSAGE"),
                 new Email("lol@gmail.com", to, "Lower", "contains sausage"),
@@ -41,10 +40,10 @@ public class TestTextFinder {
     @Test
     public void testNoSuchSubstring() {
         // setup
-        List<String> to = Arrays.asList("TEST_nr_1@gmail.com",
+        String[] to = new String[]{"TEST_nr_1@gmail.com",
                 "TEST_nr_2@gmail.com",
                 "TEST_nr_3@gmail.com"
-        );
+        };
         List<Email> input = Arrays.asList(
                 new Email("lol@gmail.com", to, "Upper", "contains SAUSAGE"),
                 new Email("lol@gmail.com", to, "Lower", "contains sausage"),
@@ -60,10 +59,11 @@ public class TestTextFinder {
     @Test
     public void testFindsSubstringInSubject() {
         // setup
-        List<String> to = Arrays.asList("TEST_nr_1@gmail.com",
-                "TEST_nr_2@gmail.com",
-                "TEST_nr_3@gmail.com"
-        );
+        String[] to = new String[]{
+            "TEST_nr_1@gmail.com",
+              "TEST_nr_2@gmail.com",
+              "TEST_nr_3@gmail.com"
+        };
         List<Email> input = Arrays.asList(
                 new Email("lol@gmail.com", to, "Upper", "contains SAUSAGE"),
                 new Email("lol@gmail.com", to, "Lower", "contains sausage"),
@@ -85,10 +85,10 @@ public class TestTextFinder {
     @Test
     public void testFindsSubstringInAddress() {
         // set up
-        List<String> to = Arrays.asList("TEST_nr_1@gmail.com",
+        String[] to = new String[]{"TEST_nr_1@gmail.com",
                 "TEST_nr_2@gmail.com",
                 "TEST_nr_3@gmail.com"
-        );
+        };
         List<Email> input = Arrays.asList(
                 new Email("lol@gmail.com", to, "Upper", "contains SAUSAGE"),
                 new Email("lol@gmail.com", to, "Lower", "contains sausage"),
@@ -111,14 +111,14 @@ public class TestTextFinder {
     @Test
     public void testFindsUpperCasedSubstring() {
         // set up
-        List<String> to = Arrays.asList("TEST_nr_1@gmail.com",
+        String[] to = new String[]{"TEST_nr_1@gmail.com",
                 "TEST_nr_2@gmail.com",
                 "TEST_nr_3@gmail.com"
-        );
+        };
         List<Email> input = Arrays.asList(
-                new Email("lol@gmail.com", List.of("TEST_nr_1@gmail.com"), "Upper", "contains SAUSAGE"),
+                new Email("lol@gmail.com", new String[]{"TEST_nr_1@gmail.com"}, "Upper", "contains SAUSAGE"),
                 new Email("lol@gmail.com", to, "Lower", "contains sausage"),
-                new Email("lol@gmail.com", List.of("TEST_nr_1@gmail.com"), "Nothing", "contains no meat at all")
+                new Email("lol@gmail.com", new String[]{"TEST_nr_1@gmail.com"}, "Nothing", "contains no meat at all")
         );
         TextFinder searcher = new TextFinder();
         // search emails for part of second element's to, but upper-cased.

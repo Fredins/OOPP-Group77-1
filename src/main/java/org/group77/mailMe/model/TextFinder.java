@@ -1,5 +1,7 @@
 package org.group77.mailMe.model;
 
+import org.group77.mailMe.model.data.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +30,12 @@ public class TextFinder {
     // Convert all strings to lowercase to ensure case-insensitiveness.
     for (Email email : emails) {
       // check everything except `to`
-      if (email.getFrom().toLowerCase().contains(substring) || email.getSubject().toLowerCase().contains(substring)
-        || email.getContent().toLowerCase().contains(substring)) {
+      if (email.from().toLowerCase().contains(substring) || email.subject().toLowerCase().contains(substring)
+        || email.content().toLowerCase().contains(substring)) {
         res.add(email);
       } // if neither above contained substring, then check the list of to:s
       else {
-        for (String to : email.getTo()) {
+        for (String to : email.to()) {
           if (to.toLowerCase().contains(substring)) {
             res.add(email);
             break; // break out of loop to avoid adding the same email more than once.

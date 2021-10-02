@@ -1,24 +1,28 @@
 package org.group77.mailMe.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import org.group77.mailMe.model.Folder;
+import javafx.beans.value.*;
+import javafx.fxml.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.util.*;
+import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.data.*;
+
 
 public class FolderItemController {
-  private Folder folder;
-  private MainController parent;
+  @FXML private Label nameLabel;
+  @FXML private AnchorPane root;
 
-  @FXML
-  private Label label;
+  void init(Model model, Folder f) {
+    nameLabel.setText(f.name());
 
-  void init(Folder folder, MainController parent) {
-    this.folder = folder;
-    this.parent = parent;
-    label.setText(folder.getName());
-  }
-
-  @FXML
-  void viewEmails() {
-    parent.loadEmails(folder.getEmails());
+    // input handlers
+    root.setOnMouseClicked(i -> model.activeFolder.set(new Pair<>(true, f)));
+    // change handlers
+    model.activeFolder.addListener((ChangeListener<? super Pair<Boolean, Folder>>) (o, op, np) -> {
+      if(np.getValue().equals(f)){
+        model.visibleEmails.setAll(f.emails());
+      }
+    });
   }
 }

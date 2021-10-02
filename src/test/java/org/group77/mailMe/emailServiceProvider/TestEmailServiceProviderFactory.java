@@ -1,9 +1,9 @@
 package org.group77.mailMe.emailServiceProvider;
 
-import org.group77.mailMe.model.*;
-
 import static org.junit.Assert.*;
 
+import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderStrategy;
 import org.group77.mailMe.services.emailServiceProvider.GmailProvider;
@@ -17,7 +17,7 @@ public class TestEmailServiceProviderFactory {
     @Test
     public void TestGmailAccount() {
         AccountFactory accountFactory = new AccountFactory();
-        Account account = accountFactory.createAccount("lol@gmail.com", "1234");
+        Account account = accountFactory.createAccount("lol@gmail.com", "1345".toCharArray());
         EmailServiceProviderFactory espFactory = new EmailServiceProviderFactory();
         EmailServiceProviderStrategy esp = espFactory.getEmailServiceProvider(account);
         assertTrue(esp instanceof GmailProvider);

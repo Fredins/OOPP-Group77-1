@@ -1,14 +1,11 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.group77.mailMe.model.Account;
-import org.group77.mailMe.model.Email;
+import org.group77.mailMe.model.data.*;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
-import java.io.File;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 
 public abstract class EmailServiceProviderStrategy {
@@ -27,7 +24,6 @@ public abstract class EmailServiceProviderStrategy {
     this.protocolOut = protocolOut;
     this.portIn = portIn;
     this.portOut = portOut;
-
   }
 
   /**
@@ -63,14 +59,14 @@ public abstract class EmailServiceProviderStrategy {
 
     String host = hostIn;
     int port = portIn;
-    String address = account.getEmailAddress();
-    String password = account.getPassword();
+    String address = account.emailAddress();
+    String password = String.valueOf(account.password());
 
     store.connect(
       hostIn,
       portIn,
-      account.getEmailAddress(),
-      account.getPassword()
+      address,
+      password
     );
     return store;
   }

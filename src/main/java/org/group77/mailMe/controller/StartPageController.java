@@ -15,50 +15,33 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.group77.mailMe.Main;
 import org.group77.mailMe.control.ApplicationManager;
+import org.group77.mailMe.model.*;
 
 import java.io.IOException;
 import java.util.List;
 
 public class StartPageController {
+    @FXML private Label welcomeLabel;
+    @FXML private BorderPane startPageBorderPane;
+    @FXML private Button addAccountButton;@FXML
+    private final ListView<Label> accountsListView = new ListView<Label>();
 
-    @FXML
-    private Label welcomeLabel;
-
-    @FXML
-    private BorderPane startPageBorderPane;
-
-    @FXML
-    private Button addAccountButton;
-
-    @FXML
-    private ListView<Label> accountsListView = new ListView<Label>();
-
-    /**
-     *
-     *
-     * @param appManager
-     */
-
-    public void init(ApplicationManager appManager) {
+    public void init(Model m) {
 
         startPageBorderPane.setCenter(accountsListView);
         accountsListView.setPrefSize(startPageBorderPane.getPrefWidth()-20,startPageBorderPane.getPrefHeight()-20);
         // Add buttons for every stored accounts with actionEvent listeners
-        initStoredAccounts(appManager);
+        initStoredAccounts(m);
 
     }
 
-    private void initStoredAccounts(ApplicationManager appManager) {
-
-        List<String> emailAddresses = appManager.getEmailAddresses();
-
-        for (String emailAddress : emailAddresses) {
-            Label accountLabel = new Label(emailAddress);
+    private void initStoredAccounts(Model m) {
+        m.accounts.forEach(a -> {
+            Label accountLabel = new Label(a.emailAddress());
             accountsListView.getItems().add(accountLabel);
             accountLabel.setPrefWidth(accountsListView.getPrefWidth());
             accountLabel.setAlignment(Pos.CENTER);
-
-        }
+        });
     }
 
     public ListView<Label> getAccountsListView() {

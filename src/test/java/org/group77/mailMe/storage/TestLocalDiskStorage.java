@@ -1,17 +1,4 @@
 package org.group77.mailMe.storage;
-import org.group77.mailMe.control.ApplicationManager;
-import org.group77.mailMe.model.*;
-import org.group77.mailMe.services.storage.LocalDiscStorage;
-import org.group77.mailMe.services.storage.OSHandler;
-import org.group77.mailMe.services.storage.OSNotFoundException;
-import org.group77.mailMe.services.storage.Storage;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 public class TestLocalDiskStorage {
 //
