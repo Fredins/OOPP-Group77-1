@@ -53,8 +53,14 @@ public class MasterController {
     writeBtn.setOnAction(i -> openWriting(m));
     accountsCombo.setOnAction(i -> setActiveAccount(m));
 
+
     // change handlers
-    m.accounts.addListener((ListChangeListener<? super Account>) c -> populateAcountCombo(c.getList(), m));
+    m.accounts.addListener((ListChangeListener<? super Account>) c -> {
+      populateAcountCombo(c.getList(), m);
+      if(c.getList().size() == 1){
+        m.activeAccount.set(new Pair<>(true, c.getList().get(0)));
+      }
+    });
   }
 
   private void setActiveAccount(Model m) {

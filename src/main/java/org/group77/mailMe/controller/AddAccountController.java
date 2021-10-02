@@ -21,9 +21,9 @@ public class AddAccountController {
       Account account = AccountFactory.createAccount(user.getText(), passwordField.getText().toCharArray());
       m.addAccount(account);
       m.accounts.add(account);
+      m.createFolders();
     } catch (Exception e) {
       e.printStackTrace(); // TODO feedback
     }
-    ;
   }
 }

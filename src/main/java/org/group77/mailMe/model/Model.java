@@ -84,7 +84,7 @@ public class Model {
     }
   }
 
-  private void createFolders() { // TODO this should be some sort of gui where the user can decide which folders he wants
+  public void createFolders() { // TODO this should be some sort of gui where the user can decide which folders he wants
     List<Folder> folderList = List.of(
       new Folder("Inbox", new ArrayList<>()),
       new Folder("Archive", new ArrayList<>()),
@@ -92,6 +92,7 @@ public class Model {
       new Folder("Drafts", new ArrayList<>()),
       new Folder("Trash", new ArrayList<>())
     );
+    folders.setAll(folderList);
     storage.store(activeAccount.get().getValue(), folderList);
   }
 }
