@@ -12,12 +12,15 @@ public class EmailItemController {
   @FXML private Label fromLabel;
   @FXML private Label subjectLabel;
 
-
-  void init(Model m, Email e) {
-    fromLabel.setText(e.from());
-    subjectLabel.setText(e.subject());
+  /**
+   * 1. set initial values for nodes
+   * 2. set event handlers for nodes
+   */
+  void init(Model model, Email email) {
+    fromLabel.setText(email.from());
+    subjectLabel.setText(email.subject());
 
     // input handler
-    root.setOnMouseClicked(i -> m.readingEmail.set(e));
+    root.setOnMouseClicked(inputEvent -> model.readingEmail.set(email));
   }
 }
