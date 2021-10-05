@@ -19,11 +19,13 @@ public class StartPageController {
     accountsListView.setPrefSize(startPageBorderPane.getPrefWidth() - 20, startPageBorderPane.getPrefHeight() - 20);
     // Add buttons for every stored accounts with actionEvent listeners
     initStoredAccounts(m);
+    accountsListView.setOnMouseClicked(i -> {
+    });
   }
 
   private void initStoredAccounts(Model m) {
-    m.accounts.forEach(a -> {
-      Label accountLabel = new Label(a.emailAddress());
+    m.accounts.forEach(account -> {
+      Label accountLabel = new Label(account.emailAddress());
       accountsListView.getItems().add(accountLabel);
       accountLabel.setPrefWidth(accountsListView.getPrefWidth());
       accountLabel.setAlignment(Pos.CENTER);

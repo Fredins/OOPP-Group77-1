@@ -12,12 +12,14 @@ import java.io.*;
 import java.util.*;
 
 public class WritingController {
+
   @FXML private TextField toField;
   @FXML private Label fromLabel;
   @FXML private TextField contentField;
   @FXML private Button sendBtn;
   @FXML private Button attachBtn;
   @FXML private TextField subjectField;
+
   private final List<String> attachments = new ArrayList<>();
 
   void init(Model m) {
@@ -57,5 +59,16 @@ public class WritingController {
       attachments.add(selectedFile.toString());
       System.out.println("File selected >" + " " + selectedFile); // For Testing
     }
+  }
+
+  /** @author Alexey Ryabov
+   * For testing. This closes the stage of the window where closeButton is located.
+   * Right now WritingView.
+   */
+  @FXML
+  private void closeWindowAction(){
+    stage.getScene().getWindow();
+    // do what you have to do
+    stage.close();
   }
 }

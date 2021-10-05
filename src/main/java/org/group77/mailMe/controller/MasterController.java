@@ -29,17 +29,17 @@ public class MasterController {
   @FXML private ImageView accountImg;
   @FXML private FlowPane emailsFlow;
 
-  public void init(Model m) {
-    loadFolders(m.folders, m);
-    if (m.accounts != null) {
-      populateAcountCombo(m.accounts, m);
+  public void init(Model model) {
+    loadFolders(model.folders, model);
+    if (model.accounts != null) {
+      populateAcountCombo(model.accounts, model);
     }
 
     // change handler
-    m.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), m));
-    m.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), m));
+    model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), m));
+    model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), m));
 
-    m.readingEmail.addListener((ChangeListener<? super Pair<Boolean, Email>>) (o, op, p) -> {
+    model.readingEmail.addListener((ChangeListener<? super Pair<Boolean, Email>>) (o, op, p) -> {
       if (p.getKey()) {
         loadReading(p.getValue(), m);
       } else {
@@ -72,20 +72,20 @@ public class MasterController {
 
   @FXML AnchorPane startPagePane;
   @FXML private AnchorPane startPageContentPane;
-  /* TODO reimplement elin's startpage
-  private void openStartPage() throws IOException {
+  //TODO reimplement elin's startpage
+  private void openStartPage(Model model) throws IOException {
 
     // initialize StartPageView and its Controller
     FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StartPageView.fxml"));
     startPageContentPane.getChildren().add(fxmlLoader.load());
     StartPageController startPageController = fxmlLoader.getController();
-    startPageController.init(appManager);
+    startPageController.init(model);
 
     // add OnMouseClickedListeners to buttons
     List<Label> emailAddressesLabels = startPageController.getAccountsListView().getItems();
     for (Label emailAddressLabel : emailAddressesLabels) {
       emailAddressLabel.setOnMouseClicked(actionEvent -> {
-        appManager.setActiveAccount(emailAddressLabel.getText());
+        model.setActiveAccount(emailAddressLabel.getText());
         System.out.println("Active account: " + appManager.getActiveAccount().getEmailAddress());
         startPagePane.toBack();
       });
@@ -100,7 +100,7 @@ public class MasterController {
       startPagePane.toBack();
     });
 
-    if (appManager.getEmailAddresses().size() == 0) {
+    if (model.accounts.size() == 0) {
       // open accountview
       startPagePane.toBack();
     } else if (appManager.getEmailAddresses().size() == 1) {
@@ -112,7 +112,7 @@ public class MasterController {
     }
 
   }
-   */
+
 
 
   private void refresh(Model m) {
@@ -125,6 +125,7 @@ public class MasterController {
 
   private void populateAcountCombo(List<? extends Account> accounts, Model m) {
     accountsCombo.getItems().clear();
+    Account addAcc = new Account("Add New Account", new char[]{}, ServerProvider.GMAIL_PROVIDER);
     accountsCombo.setConverter(new StringConverter<>() {
       @Override public String toString(Account account) {
         return account != null ? account.emailAddress() : null;
@@ -143,15 +144,16 @@ public class MasterController {
       }
     });
     accountsCombo.getItems().addAll(accounts);
+    accountsCombo.getItems().add(addAcc);
   }
 
-  void loadReading(Email e, Model m) {
+  void loadReading(Email email, Model model) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Reading.fxml"));
       Pane pane = fxmlLoader.load();
-      ((ReadingController) fxmlLoader.getController()).init(m, e);
+      ((ReadingController) fxmlLoader.getController()).init(model, email);
       readingPane.getChildren().clear();
-      readingPane.getChildren().add(pane);
+      readingPane.getChildren().add(pane);a
     } catch (IOException e1) {
       e1.printStackTrace();
     }
@@ -174,10 +176,10 @@ public class MasterController {
   void openWriting(Model m) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
+      Stage stage = new Stage();
       Pane pane = fxmlLoader.load();
       ((WritingController) fxmlLoader.getController()).init(m);
-      Stage stage = new Stage();
-      stage.setTitle("Add Account");
+      stage.setTitle("New MeMail");
       stage.setScene(new Scene(pane));
       stage.show();
     } catch (IOException e) {
@@ -201,7 +203,6 @@ public class MasterController {
                                        })
                                        .collect(Collectors.toList()));
   }
-
   private void loadEmails(List<? extends Email> emails, Model m) {
     emailsFlow.getChildren().clear();
     emailsFlow.getChildren().addAll(emails
