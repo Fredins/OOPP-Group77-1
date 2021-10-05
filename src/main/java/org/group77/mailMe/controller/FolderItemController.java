@@ -12,10 +12,14 @@ public class FolderItemController {
   @FXML private Label nameLabel;
   @FXML private AnchorPane root;
 
-  void init(Model model, Folder f) {
-    nameLabel.setText(f.name());
+  /**
+   * 1. set initial values for nodes
+   * 2. set event handlers for nodes
+   */
+  void init(Model model, Folder folder) {
+    nameLabel.setText(folder.name());
 
     // input handlers
-    root.setOnMouseClicked(i -> model.activeFolder.set(f));
+    root.setOnMouseClicked(i -> model.activeFolder.set(folder));
   }
 }
