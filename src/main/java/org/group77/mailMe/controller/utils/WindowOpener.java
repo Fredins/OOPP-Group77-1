@@ -73,4 +73,18 @@ public class WindowOpener {
       e.printStackTrace();
     }
   }
+
+  public static void openReply(Model model, String to) {
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
+      Pane pane = fxmlLoader.load();
+      ((WritingController) fxmlLoader.getController()).init(model, to);
+      Stage stage = new Stage();
+      stage.setTitle("Reply");
+      stage.setScene(new Scene(pane));
+      stage.show();
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    }
+  }
 }

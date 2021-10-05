@@ -26,7 +26,7 @@ public class WritingController {
     init(model, null);
   }
 
-  void init(Model model, String to) {
+  public void init(Model model, String to) {
     if (to != null) {
       toField.setText(to);
     }

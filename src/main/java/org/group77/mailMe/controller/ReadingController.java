@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import org.group77.mailMe.*;
+import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
 
@@ -20,27 +21,17 @@ public class ReadingController {
   @FXML private Label dateLabel;
   @FXML private Button replyButton;
 
-  void init(Model m, Email e) {
-    contentArea.setText(e.content());
-    fromLabel.setText(e.from());
-    subjectLabel.setText(e.subject());
-    toLabel.setText(Arrays.toString(e.to()));
+  /**
+   * 1. set initial values for nodes
+   * 2. set event handler for node
+   */
+  void init(Model model, Email email) {
+    contentArea.setText(email.content());
+    fromLabel.setText(email.from());
+    subjectLabel.setText(email.subject());
+    toLabel.setText(Arrays.toString(email.to()));
     // TODO date
 
-    replyButton.setOnAction(i -> openWriting(m, fromLabel.getText()));
-  }
-
-  private void openWriting(Model m, String to) {
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
-      Pane pane = fxmlLoader.load();
-      ((WritingController) fxmlLoader.getController()).init(m, to);
-      Stage stage = new Stage();
-      stage.setTitle("Reply");
-      stage.setScene(new Scene(pane));
-      stage.show();
-    } catch (IOException e1) {
-      e1.printStackTrace();
-    }
+    replyButton.setOnAction(inputEvent -> WindowOpener.openReply(model, fromLabel.getText()));
   }
 }
