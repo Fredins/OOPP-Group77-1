@@ -2,7 +2,6 @@ package org.group77.mailMe.model;
 
 import javafx.beans.property.*;
 import javafx.collections.*;
-import javafx.util.*;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.*;
 import org.group77.mailMe.services.storage.*;
@@ -45,7 +44,7 @@ public class Model {
   public void refresh() throws Exception {
     if (activeAccount.get() != null && !folders.isEmpty()) {
       Folder inbox = folders.stream()
-        .filter(f -> f.name().equals("Inbox"))
+        .filter(folder -> folder.name().equals("Inbox"))
         .findFirst()
         .orElseThrow(Exception::new);
       List<Email> emails = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).refreshFromServer(activeAccount.get());
@@ -57,7 +56,6 @@ public class Model {
                                      .flatMap(Collection::stream)
                                      .collect(Collectors.toList())
       );
-
       activeFolder.set(newInbox);
       storage.store(activeAccount.get(), newInbox);
     } else {
@@ -105,7 +103,7 @@ public class Model {
    * 1. create folders and set the corresponding state field
    * 2. store the folders
    */
-  public void createFolders() { // TODO this should be some sort of gui where the user can decide which folders he wants
+  public void createFolders() {
     List<Folder> folderList = List.of(
       new Folder("Inbox", new ArrayList<>()),
       new Folder("Archive", new ArrayList<>()),

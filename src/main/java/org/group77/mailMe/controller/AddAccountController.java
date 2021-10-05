@@ -14,7 +14,7 @@ public class AddAccountController {
   @FXML private PasswordField passwordField;
 
   /**
-   * add action handlers to nodes
+   * add event handlers to nodes
    */
   public void init(Model model, Consumer<Node> onClose) {
     // input handlers
@@ -23,7 +23,8 @@ public class AddAccountController {
   }
 
   /**
-   *
+   * 1. create and add account
+   * 2. close the window according to Consumer onClose
    */
   private void addAccount(Model model, Event inputEvent, Consumer<Node> onClose) {
     try {
