@@ -17,12 +17,6 @@ public class FolderItemController {
     nameLabel.setText(f.name());
 
     // input handlers
-    root.setOnMouseClicked(i -> model.activeFolder.set(new Pair<>(true, f)));
-    // change handlers
-    model.activeFolder.addListener((ChangeListener<? super Pair<Boolean, Folder>>) (o, op, np) -> {
-      if (np.getValue().equals(f)) {
-        model.visibleEmails.setAll(f.emails());
-      }
-    });
+    root.setOnMouseClicked(i -> model.activeFolder.set(f));
   }
 }

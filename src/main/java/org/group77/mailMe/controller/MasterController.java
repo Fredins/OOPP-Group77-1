@@ -33,12 +33,6 @@ public class MasterController {
     if (model.accounts != null) {
       populateAcountCombo(model.accounts, model);
     }
-
-
-    // change handler
-    model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
-    model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
-
     model.readingEmail.addListener((ChangeListener<? super Pair<Boolean, Email>>) (o, op, p) -> {
       if (p.getKey()) {
         loadReading(p.getValue(), model);
@@ -51,28 +45,25 @@ public class MasterController {
     refreshBtn.setOnAction(i -> refresh(model));
     addAccountBtn.setOnAction(i -> WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close()));
     writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
-    accountsCombo.setOnAction(i -> setActiveAccount(model));
-
+    accountsCombo.setOnAction(i -> {
+      Account selected = accountsCombo.getSelectionModel().getSelectedItem();
+      if (selected != null) {
+        model.activeAccount.set(new Pair<>(true, selected));
+      }
+    });
 
     // change handlers
+    model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
+    model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
     model.accounts.addListener((ListChangeListener<? super Account>) c -> {
       populateAcountCombo(c.getList(), model);
       if(c.getList().size() == 1){
         model.activeAccount.set(new Pair<>(true, c.getList().get(0)));
       }
     });
+    model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> model.visibleEmails.setAll(newFolder.emails()));
   }
 
-  private void setActiveAccount(Model m) {
-    Account selected = accountsCombo.getSelectionModel().getSelectedItem();
-    if (selected != null) {
-      m.activeAccount.set(new Pair<>(true, selected));
-    }
-  }
-
-  @FXML AnchorPane startPagePane;
-  @FXML private AnchorPane startPageContentPane;
-  //TODO reimplement elin's startpage
 
   private void refresh(Model m) {
     try {

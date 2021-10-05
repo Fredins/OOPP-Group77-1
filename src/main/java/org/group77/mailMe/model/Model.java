@@ -1,7 +1,6 @@
 package org.group77.mailMe.model;
 
 import javafx.beans.property.*;
-import javafx.beans.value.*;
 import javafx.collections.*;
 import javafx.util.*;
 import org.group77.mailMe.model.data.*;
@@ -21,7 +20,7 @@ public class Model {
   public ObservableList<Folder> folders = FXCollections.observableList(new ArrayList<>());
   public ObservableList<Account> accounts = FXCollections.observableList(new ArrayList<>());
   public SimpleObjectProperty<Pair<Boolean, Account>> activeAccount = new SimpleObjectProperty<>(new Pair<>(false, null));
-  public SimpleObjectProperty<Pair<Boolean, Folder>> activeFolder = new SimpleObjectProperty<>(new Pair<>(false, null));
+  public SimpleObjectProperty<Folder> activeFolder = new SimpleObjectProperty<>(null);
   public SimpleObjectProperty<Pair<Boolean, Email>> readingEmail = new SimpleObjectProperty<>(new Pair<>(false, null));
 
   public void refresh() throws Exception {
@@ -34,9 +33,14 @@ public class Model {
       List<Email> diffEmails = emails.stream()
         .filter(e -> !inbox.emails().contains(e))
         .collect(Collectors.toList());
-      inbox.emails().addAll(0, diffEmails);
-      storage.store(activeAccount.get().getValue(), inbox);
-      activeFolder.set(new Pair<>(true, inbox));
+      Folder newInbox = new Folder(inbox.name(),
+                                   Stream.of(diffEmails, inbox.emails())
+                                     .flatMap(Collection::stream)
+                                     .collect(Collectors.toList())
+      );
+
+      activeFolder.set(newInbox);
+      storage.store(activeAccount.get().getValue(), newInbox);
     } else {
       throw new Exception("no active account");
     }

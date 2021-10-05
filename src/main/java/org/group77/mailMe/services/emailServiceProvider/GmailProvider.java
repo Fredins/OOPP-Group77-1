@@ -64,7 +64,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
     System.out.println("Preparing to send message.."); // For Testing
 
     String fromAccount = from.emailAddress();
-    String fromAccountPassword = Arrays.toString(from.password());
+    String fromAccountPassword = String.valueOf(from.password());
 
     Properties props = new Properties();
     setGmailProperties(props);
