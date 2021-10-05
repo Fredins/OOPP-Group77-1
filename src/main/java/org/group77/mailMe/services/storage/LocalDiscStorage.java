@@ -128,7 +128,7 @@ public class LocalDiscStorage implements Storage {
   }
 
   @Override
-  public List<Account> retrieveAllAccounts() {
+  public List<Account> retrieveAccounts() {
     File[] accountDirs = (new File(appPath)).listFiles();
     List<Account> accounts = new ArrayList<>();
     if (accountDirs != null) {

@@ -21,7 +21,7 @@ public class AccountFactory {
    */
   public static Account createAccount(String emailAddress, char[] password) {
     if (emailAddress.contains("@gmail.com")) {
-      return new Account(emailAddress, password, ServerProvider.GMAIL_PROVIDER);
+      return new Account(emailAddress, password, ServerProvider.GMAIL);
     }
     return null;
   }

@@ -10,7 +10,7 @@ public interface Storage {
   void store(Account account, List<Folder> folders);
   void store(Account account, Folder folder) throws IOException;
 
-  List<Account> retrieveAllAccounts();
+  List<Account> retrieveAccounts();
   List<Folder> retrieveFolders(Account account);
   List<Email> retrieveEmails(Account account, String folderName) throws IOException, ClassNotFoundException;
 }

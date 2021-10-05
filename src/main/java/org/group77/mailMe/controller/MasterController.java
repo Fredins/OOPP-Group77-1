@@ -38,7 +38,7 @@ public class MasterController {
     loadFolders(model.folders, model);
 
     if (model.accounts != null) {
-      populateAcountCombo(model.accounts, model);
+      populateAccountCombo(model.accounts, model);
     }
 
     // input handlers
@@ -61,7 +61,7 @@ public class MasterController {
     // change handlers
     model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
     model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
-    model.accounts.addListener((ListChangeListener<? super Account>) c -> populateAcountCombo(c.getList(), model));
+    model.accounts.addListener((ListChangeListener<? super Account>) c -> populateAccountCombo(c.getList(), model));
     model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> model.visibleEmails.setAll(newFolder.emails()));
     model.readingEmail.addListener((o, op, p) -> {
       if (p != null) {
@@ -75,9 +75,9 @@ public class MasterController {
   /**
    * populates the comboBox with accounts
    */
-  private void populateAcountCombo(List<? extends Account> accounts, Model m) {
+  private void populateAccountCombo(List<? extends Account> accounts, Model model) {
     accountsCombo.getItems().clear();
-    Account addAcc = new Account("Add New Account", new char[]{}, ServerProvider.GMAIL_PROVIDER);
+    Account addAcc = new Account("Add New Account", new char[]{}, ServerProvider.GMAIL);
     // override toString() and fromString() to make account correspond to its email address
     accountsCombo.setConverter(new StringConverter<>() {
       @Override public String toString(Account account) {
@@ -86,7 +86,7 @@ public class MasterController {
       @Override public Account fromString(String string) {
         Account account = null;
         try {
-          account = m.accounts.stream()
+          account = model.accounts.stream()
             .filter(acc -> acc.emailAddress().equals(string))
             .findAny()
             .orElseThrow(Exception::new);
@@ -103,7 +103,7 @@ public class MasterController {
   /**
    * loads/display email
    */
-  void loadReading(Email email, Model model) {
+ private void loadReading(Email email, Model model) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Reading.fxml"));
       Pane pane = fxmlLoader.load();

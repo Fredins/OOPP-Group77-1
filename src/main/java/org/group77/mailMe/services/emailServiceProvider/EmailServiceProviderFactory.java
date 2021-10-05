@@ -19,7 +19,7 @@ public class EmailServiceProviderFactory {
    * account's ServerProvider enum.
    */
   public static EmailServiceProviderStrategy getEmailServiceProvider(Account account) {
-    if (account.provider() == ServerProvider.GMAIL_PROVIDER) {
+    if (account.provider() == ServerProvider.GMAIL) {
       return new GmailProvider();
     } else { //TODO should this be `else if microsoft`?
       return new MicrosoftProvider();

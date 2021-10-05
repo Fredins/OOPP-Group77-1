@@ -26,7 +26,7 @@ public class Model {
    * loads persistent data from storage and sets the corresponding values
    */
   public Model() throws OSNotFoundException, IOException {
-    accounts.setAll(getAllAccounts());
+    accounts.setAll(storage.retrieveAccounts());
 
     if(!accounts.isEmpty()){
       activeAccount.set(accounts.get(0));
@@ -91,12 +91,6 @@ public class Model {
     } else {
       throw new Exception("no active account");
     }
-  }
-  /**
-   * get all the accounts
-   */
-  private List<Account> getAllAccounts() {
-    return storage.retrieveAllAccounts();
   }
 
   /**
