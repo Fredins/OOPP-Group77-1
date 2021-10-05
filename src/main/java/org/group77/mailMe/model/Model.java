@@ -23,6 +23,25 @@ public class Model {
   public SimpleObjectProperty<Folder> activeFolder = new SimpleObjectProperty<>(null);
   public SimpleObjectProperty<Email> readingEmail = new SimpleObjectProperty<>(null);
 
+  /**
+   * loads persistent data from storage and sets the corresponding values
+   */
+  public Model() throws OSNotFoundException, IOException {
+    accounts.setAll(getAllAccounts());
+
+    if(!accounts.isEmpty()){
+      activeAccount.set(accounts.get(0));
+    }
+    if (activeAccount.get() != null) {
+      folders.setAll(storage.retrieveFolders(activeAccount.get()));
+    }
+  }
+
+  /**
+   * 1. retrieve emails from server
+   * 2. set activeFolder = inbox
+   * 3. store emails
+   */
   public void refresh() throws Exception {
     if (activeAccount.get() != null && !folders.isEmpty()) {
       Folder inbox = folders.stream()
@@ -31,7 +50,7 @@ public class Model {
         .orElseThrow(Exception::new);
       List<Email> emails = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).refreshFromServer(activeAccount.get());
       List<Email> diffEmails = emails.stream()
-        .filter(e -> !inbox.emails().contains(e))
+        .filter(email -> !inbox.emails().contains(email))
         .collect(Collectors.toList());
       Folder newInbox = new Folder(inbox.name(),
                                    Stream.of(diffEmails, inbox.emails())
@@ -45,9 +64,23 @@ public class Model {
       throw new Exception("no active account");
     }
   }
+  /**
+   * 1. add account to state field accounts
+   * 2. store the account
+   * 3. make the account active
+   * 4. create initial folders for the account
+   */
   public void addAccount(Account account) throws Exception {
+    accounts.add(account); // TODO change these to be in master controller listener (SRP)
     storage.store(account);
+    activeAccount.set(account);
+    createFolders();
   }
+
+  /**
+   *  sends the email via the appropriate email service provider
+   * TODO Alexey kan vi byta till send(Account) och sedan fixa med resten på backend?
+   */
   public void send(List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
     if (activeAccount.get() != null) {
       EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).sendEmail(
@@ -61,35 +94,17 @@ public class Model {
       throw new Exception("no active account");
     }
   }
+  /**
+   * get all the accounts
+   */
   private List<Account> getAllAccounts() {
     return storage.retrieveAllAccounts();
   }
 
-  private List<Folder> getAllFolders() throws Exception {
-    if (activeAccount.get() != null) {
-      return storage.retrieveFolders(activeAccount.get());
-    } else {
-      throw new Exception("no active account");
-    }
-  }
-
-  public Model() throws OSNotFoundException, IOException {
-    accounts.setAll(getAllAccounts());
-
-    if(!accounts.isEmpty()){
-      activeAccount.set(accounts.get(0));
-    }
-
-    if (activeAccount.get() != null) {
-      List<Folder> localFolders = storage.retrieveFolders(activeAccount.get());
-      if (localFolders.isEmpty()) {
-        createFolders();
-      }
-
-      folders.setAll(storage.retrieveFolders(activeAccount.get()));
-    }
-  }
-
+  /**
+   * 1. create folders and set the corresponding state field
+   * 2. store the folders
+   */
   public void createFolders() { // TODO this should be some sort of gui where the user can decide which folders he wants
     List<Folder> folderList = List.of(
       new Folder("Inbox", new ArrayList<>()),

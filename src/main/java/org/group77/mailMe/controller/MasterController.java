@@ -30,6 +30,7 @@ public class MasterController {
 
   public void init(Model model) {
     loadFolders(model.folders, model);
+
     if (model.accounts != null) {
       populateAcountCombo(model.accounts, model);
     }
