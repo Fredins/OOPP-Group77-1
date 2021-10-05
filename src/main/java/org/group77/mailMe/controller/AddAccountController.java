@@ -13,46 +13,34 @@ import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
 
 import java.io.IOException;
+import java.util.function.*;
 
 public class AddAccountController {
   @FXML private TextField user;
   @FXML private Button addAccountBtn;
   @FXML private PasswordField passwordField;
 
-  public void init(Model model) {
+  public void init(Model model, Consumer<Node> onClose) {
     // input handlers
-    addAccountBtn.setOnAction(inputEvent -> addAccount(model, inputEvent));
-    passwordField.setOnAction(inputEvent -> addAccount(model, inputEvent));
+    addAccountBtn.setOnAction(inputEvent -> addAccount(model, inputEvent, onClose));
+    passwordField.setOnAction(inputEvent -> addAccount(model, inputEvent, onClose));
   }
 
-  private void addAccount(Model model, Event inputEvent) {
+  /**
+   *
+   */
+  private void addAccount(Model model, Event inputEvent, Consumer<Node> onClose) {
     try {
       Account account = AccountFactory.createAccount(user.getText(), passwordField.getText().toCharArray());
       model.addAccount(account);
-      model.accounts.add(account);
+      model.accounts.add(account); // TODO change these to be in master controller listener (SRP)
       model.activeAccount.set(new Pair<>(true, account));
       model.createFolders();
-      ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
-      openMaster(model);
-
+      // call the closing function
+      onClose.accept((Node) inputEvent.getSource());
     } catch (Exception e) {
       e.printStackTrace(); // TODO feedback
     }
   }
 
-  private void openMaster(Model model){
-    // initialize StartPageView and its Controller
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
-      Pane pane = fxmlLoader.load();
-      ((MasterController) fxmlLoader.getController()).init(model);
-      Stage stage = new Stage();
-      stage.setTitle("MailMe");
-      stage.setScene(new Scene(pane));
-      stage.show();
-
-    }catch (IOException e){
-      e.printStackTrace();
-    }
-  }
 }

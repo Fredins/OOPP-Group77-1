@@ -3,16 +3,15 @@ package org.group77.mailMe.controller;
 import javafx.beans.value.*;
 import javafx.collections.*;
 import javafx.fxml.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.util.*;
 import org.group77.mailMe.*;
+import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
-
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
@@ -50,8 +49,8 @@ public class MasterController {
 
     // input handlers
     refreshBtn.setOnAction(i -> refresh(model));
-    addAccountBtn.setOnAction(i -> openAddAccount(model));
-    writeBtn.setOnAction(i -> openWriting(model));
+    addAccountBtn.setOnAction(i -> WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close()));
+    writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
     accountsCombo.setOnAction(i -> setActiveAccount(model));
 
 
@@ -119,33 +118,6 @@ public class MasterController {
     }
   }
 
-  void openAddAccount(Model m) {
-    System.out.println("open account");
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccount.fxml"));
-      Pane pane = fxmlLoader.load();
-      ((AddAccountController) fxmlLoader.getController()).init(m);
-      Stage stage = new Stage();
-      stage.setTitle("Add Account");
-      stage.setScene(new Scene(pane));
-      stage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-  void openWriting(Model m) {
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
-      Pane pane = fxmlLoader.load();
-      ((WritingController) fxmlLoader.getController()).init(m);
-      Stage stage = new Stage();
-      stage.setTitle("New MeMail");
-      stage.setScene(new Scene(pane));
-      stage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
   private void loadFolders(List<? extends Folder> folders, Model m) {
     foldersFlow.getChildren().clear();
     foldersFlow.getChildren().addAll(folders

@@ -1,6 +1,7 @@
 package org.group77.mailMe.model;
 
 import javafx.beans.property.*;
+import javafx.beans.value.*;
 import javafx.collections.*;
 import javafx.util.*;
 import org.group77.mailMe.model.data.*;

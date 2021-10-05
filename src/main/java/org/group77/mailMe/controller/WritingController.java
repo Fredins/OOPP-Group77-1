@@ -22,7 +22,7 @@ public class WritingController {
 
   private final List<String> attachments = new ArrayList<>();
 
-  void init(Model model) {
+  public void init(Model model) {
     init(model, null);
   }
 
