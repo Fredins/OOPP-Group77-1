@@ -136,9 +136,9 @@ public class MasterController {
   void openWriting(Model m) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
-      Stage stage = new Stage();
       Pane pane = fxmlLoader.load();
       ((WritingController) fxmlLoader.getController()).init(m);
+      Stage stage = new Stage();
       stage.setTitle("New MeMail");
       stage.setScene(new Scene(pane));
       stage.show();

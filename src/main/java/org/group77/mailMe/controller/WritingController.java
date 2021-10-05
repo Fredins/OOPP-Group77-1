@@ -22,36 +22,42 @@ public class WritingController {
 
   private final List<String> attachments = new ArrayList<>();
 
-  void init(Model m) {
-    init(m, null);
+  void init(Model model) {
+    init(model, null);
   }
 
-  void init(Model m, String to) {
+  void init(Model model, String to) {
     if (to != null) {
       toField.setText(to);
     }
-    fromLabel.setText(m.activeAccount.get().getValue().emailAddress());
+    fromLabel.setText(model.activeAccount.get().getValue().emailAddress());
     // input handlers
-    sendBtn.setOnAction(i -> send(m));
+    sendBtn.setOnAction(i -> send(model));
     attachBtn.setOnAction(i -> attachFiles());
 
     // change handlers
-    m.activeAccount.addListener((ChangeListener<? super Pair<Boolean, Account>>) (o, oa, na) -> fromLabel.setText(na.getValue().emailAddress()));
+    model.activeAccount.addListener((ChangeListener<? super Pair<Boolean, Account>>) (o, oa, na) -> fromLabel.setText(na.getValue().emailAddress()));
   }
 
-  private void send(Model m) {
+  private void send(Model model) {
     try {
-      m.send(
-        List.of(toField.getText()),
+      model.send(
+        fromTextFieldToListOfRecipients(toField.getText()),
         subjectField.getText(),
         contentField.getText(),
         attachments
       );
+      if (customAlert("Confirmation !", Alert.AlertType.CONFIRMATION).get() == ButtonType.OK) {closeWindowAction((Stage) sendBtn.getScene().getWindow());}
     } catch (Exception e) {
+      if (customAlert(e.getMessage(), Alert.AlertType.ERROR).get() == ButtonType.OK) {closeWindowAction((Stage) sendBtn.getScene().getWindow());}
       e.printStackTrace(); // TODO display feedback
     }
   }
 
+  /** @author Alexey Ryabov
+   * Method creates file chooser and lets user to select multiple files and adds them to a list.
+   */
+  @FXML
   private void attachFiles() {
     FileChooser fileChooser = new FileChooser();
     File selectedFile = fileChooser.showOpenDialog(null);
@@ -61,14 +67,44 @@ public class WritingController {
     }
   }
 
+  /**
+   * @param textfield - toTextField.
+   * @return list of recipints mail adresses.
+   * @author Alexey Ryabov
+   * This method converts TextField string to list of recipients separated with ";" -sign.
+   */
+  private List<String> fromTextFieldToListOfRecipients(String textfield) {
+    //String textFieldToString = textfield.toString();
+    String strings[] = textfield.split(";");
+    List list = Arrays.asList(strings);
+
+    //System.out.println(list); // For Testing.
+    return list;
+  }
+
   /** @author Alexey Ryabov
-   * For testing. This closes the stage of the window where closeButton is located.
-   * Right now WritingView.
+   * @param message - Type in your message you want user to see in an alert.
+   * This will show conformation window when message has been sent.
+   * @return optional button.
+   */
+  private Optional<ButtonType> customAlert (String message, Alert.AlertType alertType) {
+    // Example of alert type: Alert.AlertType.INFORMATION
+    Alert alert = new Alert(alertType);
+    alert.setTitle("MeAlert");
+    alert.setHeaderText(message);
+    //alert.setContentText("Are you ok with this?");
+    alert.getDialogPane().setPrefSize(300, 300);
+    Optional<ButtonType> result = alert.showAndWait();
+    return result;
+  }
+
+  /** @author Alexey Ryabov
+   * For testing. This closes the stage of the window where certain stage is located.
    */
   @FXML
-  private void closeWindowAction(){
+  private void closeWindowAction(Stage stage){
     stage.getScene().getWindow();
-    // do what you have to do
+    // Close the window of a stage.
     stage.close();
   }
 }
