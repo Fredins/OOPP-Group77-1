@@ -73,45 +73,6 @@ public class MasterController {
   @FXML AnchorPane startPagePane;
   @FXML private AnchorPane startPageContentPane;
   //TODO reimplement elin's startpage
-  private void openStartPage(Model model) throws IOException {
-
-    // initialize StartPageView and its Controller
-    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StartPageView.fxml"));
-    startPageContentPane.getChildren().add(fxmlLoader.load());
-    StartPageController startPageController = fxmlLoader.getController();
-    startPageController.init(model);
-
-    // add OnMouseClickedListeners to buttons
-    List<Label> emailAddressesLabels = startPageController.getAccountsListView().getItems();
-    for (Label emailAddressLabel : emailAddressesLabels) {
-      emailAddressLabel.setOnMouseClicked(actionEvent -> {
-        model.setActiveAccount(emailAddressLabel.getText());
-        System.out.println("Active account: " + appManager.getActiveAccount().getEmailAddress());
-        startPagePane.toBack();
-      });
-    }
-
-    startPageController.getAddAccountButton().setOnAction(EventHandler -> {
-      try {
-        openEmailSettings();
-      } catch (IOException exception) {
-        exception.printStackTrace();
-      }
-      startPagePane.toBack();
-    });
-
-    if (model.accounts.size() == 0) {
-      // open accountview
-      startPagePane.toBack();
-    } else if (appManager.getEmailAddresses().size() == 1) {
-      startPagePane.toBack();
-      appManager.setActiveAccount(appManager.getEmailAddresses().get(0));
-      System.out.println("Active account: " + appManager.getActiveAccount().getEmailAddress());
-    } else {
-      startPagePane.toFront();
-    }
-
-  }
 
 
 

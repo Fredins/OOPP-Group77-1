@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.StartPageController">
     <children>
@@ -22,6 +23,9 @@
                   <Insets bottom="20.0" top="20.0" />
                </BorderPane.margin></Button>
          </bottom>
+         <center>
+            <FlowPane fx:id="accountsFlowPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
         </BorderPane>
     </children>
 </AnchorPane>

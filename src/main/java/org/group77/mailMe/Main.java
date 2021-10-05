@@ -5,6 +5,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
+import javafx.util.Pair;
 import org.group77.mailMe.controller.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.services.storage.*;
