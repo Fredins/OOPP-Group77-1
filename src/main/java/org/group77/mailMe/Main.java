@@ -15,13 +15,61 @@ import java.io.*;
 public class Main extends Application {
   @Override
   public void start(Stage stage) throws IOException, OSNotFoundException {
-    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
-    Pane pane = fxmlLoader.load();
-    ((MasterController) fxmlLoader.getController()).init(new Model());
-    Scene scene = new Scene(pane, 1050, 700);
-    stage.setTitle("MailMe");
-    stage.setScene(scene);
-    stage.show();
+    Model model = new Model();
+    if (model.accounts.isEmpty()) {
+      openAddAccount(model);
+    }else if(model.accounts.size() == 1){
+      model.activeAccount.set(new Pair<>(true, model.accounts.get(0)));
+      openMaster(model);
+    }else{
+      openStartPage(model);
+    }
+  }
+
+  private void openMaster(Model model){
+      // initialize StartPageView and its Controller
+      try {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
+        Pane pane = fxmlLoader.load();
+        ((MasterController) fxmlLoader.getController()).init(model);
+        Stage stage = new Stage();
+        stage.setTitle("MailMe");
+        stage.setScene(new Scene(pane));
+        stage.show();
+      }catch (IOException e){
+        e.printStackTrace();
+      }
+  }
+
+  private void openStartPage(Model model){
+    // initialize StartPageView and its Controller
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StartPage.fxml"));
+      Pane pane = fxmlLoader.load();
+      ((StartPageController) fxmlLoader.getController()).init(model);
+      Stage stage = new Stage();
+      stage.setTitle("Welcome");
+      stage.setScene(new Scene(pane));
+      stage.show();
+
+    }catch (IOException e){
+      e.printStackTrace();
+    }
+  }
+
+  void openAddAccount(Model m) {
+    System.out.println("open account");
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccount.fxml"));
+      Pane pane = fxmlLoader.load();
+      ((AddAccountController) fxmlLoader.getController()).init(m);
+      Stage stage = new Stage();
+      stage.setTitle("Add Account");
+      stage.setScene(new Scene(pane));
+      stage.show();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public static void main(String[] args) {

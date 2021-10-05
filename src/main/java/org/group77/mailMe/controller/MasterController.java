@@ -35,30 +35,31 @@ public class MasterController {
       populateAcountCombo(model.accounts, model);
     }
 
+
     // change handler
-    model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), m));
-    model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), m));
+    model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
+    model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
 
     model.readingEmail.addListener((ChangeListener<? super Pair<Boolean, Email>>) (o, op, p) -> {
       if (p.getKey()) {
-        loadReading(p.getValue(), m);
+        loadReading(p.getValue(), model);
       } else {
         readingPane.getChildren().clear();
       }
     });
 
     // input handlers
-    refreshBtn.setOnAction(i -> refresh(m));
-    addAccountBtn.setOnAction(i -> openAddAccount(m));
-    writeBtn.setOnAction(i -> openWriting(m));
-    accountsCombo.setOnAction(i -> setActiveAccount(m));
+    refreshBtn.setOnAction(i -> refresh(model));
+    addAccountBtn.setOnAction(i -> openAddAccount(model));
+    writeBtn.setOnAction(i -> openWriting(model));
+    accountsCombo.setOnAction(i -> setActiveAccount(model));
 
 
     // change handlers
-    m.accounts.addListener((ListChangeListener<? super Account>) c -> {
-      populateAcountCombo(c.getList(), m);
+    model.accounts.addListener((ListChangeListener<? super Account>) c -> {
+      populateAcountCombo(c.getList(), model);
       if(c.getList().size() == 1){
-        m.activeAccount.set(new Pair<>(true, c.getList().get(0)));
+        model.activeAccount.set(new Pair<>(true, c.getList().get(0)));
       }
     });
   }
@@ -73,8 +74,6 @@ public class MasterController {
   @FXML AnchorPane startPagePane;
   @FXML private AnchorPane startPageContentPane;
   //TODO reimplement elin's startpage
-
-
 
   private void refresh(Model m) {
     try {
@@ -114,7 +113,7 @@ public class MasterController {
       Pane pane = fxmlLoader.load();
       ((ReadingController) fxmlLoader.getController()).init(model, email);
       readingPane.getChildren().clear();
-      readingPane.getChildren().add(pane);a
+      readingPane.getChildren().add(pane);
     } catch (IOException e1) {
       e1.printStackTrace();
     }

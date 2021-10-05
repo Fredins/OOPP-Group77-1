@@ -6,7 +6,13 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.util.Pair;
+import org.group77.mailMe.Main;
 import org.group77.mailMe.model.*;
+
+import java.io.IOException;
+
 
 public class StartPageController {
   @FXML private Label welcomeLabel;
@@ -18,9 +24,13 @@ public class StartPageController {
 
 
     // Add buttons for every stored accounts with actionEvent listeners
-    initStoredAccounts(m);
-    accountsListView.setOnMouseClicked(i -> {
+    initStoredAccounts(model);
+    initAddNewAccountButton(); // TODO add listener
+    /*
+    accountsListView.setOnMouseClicked(inputEvent -> {
+      ((Node) inputEvent.getSource()).getScene().getWindow().hide();
     });
+    */
   }
 
   private void initStoredAccounts(Model model) {
@@ -36,6 +46,21 @@ public class StartPageController {
       });
 
     });
+  }
+  private void openMaster(Model model){
+      // initialize StartPageView and its Controller
+      try {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
+        Pane pane = fxmlLoader.load();
+        ((MasterController) fxmlLoader.getController()).init(model);
+        Stage stage = new Stage();
+        stage.setTitle("MailMe");
+        stage.setScene(new Scene(pane));
+        stage.show();
+
+      }catch (IOException e){
+        e.printStackTrace();
+      }
   }
 
   private void initAddNewAccountButton() {

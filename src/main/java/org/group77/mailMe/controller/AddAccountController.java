@@ -19,13 +19,13 @@ public class AddAccountController {
   @FXML private Button addAccountBtn;
   @FXML private PasswordField passwordField;
 
-  void init(Model m) {
+  public void init(Model model) {
     // input handlers
-    addAccountBtn.setOnAction(i -> addAccount(m));
-    passwordField.setOnAction(i -> addAccount(m));
+    addAccountBtn.setOnAction(inputEvent -> addAccount(model, inputEvent));
+    passwordField.setOnAction(inputEvent -> addAccount(model, inputEvent));
   }
 
-  private void addAccount(Model m) {
+  private void addAccount(Model model, Event inputEvent) {
     try {
       Account account = AccountFactory.createAccount(user.getText(), passwordField.getText().toCharArray());
       model.addAccount(account);
@@ -37,6 +37,22 @@ public class AddAccountController {
 
     } catch (Exception e) {
       e.printStackTrace(); // TODO feedback
+    }
+  }
+
+  private void openMaster(Model model){
+    // initialize StartPageView and its Controller
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
+      Pane pane = fxmlLoader.load();
+      ((MasterController) fxmlLoader.getController()).init(model);
+      Stage stage = new Stage();
+      stage.setTitle("MailMe");
+      stage.setScene(new Scene(pane));
+      stage.show();
+
+    }catch (IOException e){
+      e.printStackTrace();
     }
   }
 }
