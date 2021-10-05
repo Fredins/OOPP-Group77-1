@@ -9,6 +9,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.group77.mailMe.Main;
+import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class StartPageController {
     });
     */
   }
+  // TODO denna får du kommentera elin
 
   private void initStoredAccounts(Model model) {
     model.accounts.forEach(account -> {
@@ -42,25 +44,10 @@ public class StartPageController {
       accountLabel.setOnMouseClicked(inputEvent -> {
         model.activeAccount.set(account);
         ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
-        openMaster(model);
+        WindowOpener.openMaster(model);
       });
 
     });
-  }
-  private void openMaster(Model model){
-      // initialize StartPageView and its Controller
-      try {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
-        Pane pane = fxmlLoader.load();
-        ((MasterController) fxmlLoader.getController()).init(model);
-        Stage stage = new Stage();
-        stage.setTitle("MailMe");
-        stage.setScene(new Scene(pane));
-        stage.show();
-
-      }catch (IOException e){
-        e.printStackTrace();
-      }
   }
 
   private void initAddNewAccountButton() {

@@ -26,19 +26,27 @@ public class WritingController {
     init(model, null);
   }
 
+  /**
+   * 1. set initial values for nodes
+   * 2. set event handlers for nodes and state fields
+   */
   public void init(Model model, String to) {
     if (to != null) {
       toField.setText(to);
     }
     fromLabel.setText(model.activeAccount.get().emailAddress());
     // input handlers
-    sendBtn.setOnAction(i -> send(model));
-    attachBtn.setOnAction(i -> attachFiles());
+    sendBtn.setOnAction(inputEvent -> send(model));
+    attachBtn.setOnAction(inputEvent -> attachFiles());
 
     // change handlers
-    model.activeAccount.addListener((ChangeListener<? super Account>) (o, oa, na) -> fromLabel.setText(na.emailAddress()));
+    model.activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> fromLabel.setText(newAccount.emailAddress()));
   }
 
+  /**
+   * 1. send email
+   * 2. display feedback if sending was successful
+   */
   private void send(Model model) {
     try {
       model.send(
