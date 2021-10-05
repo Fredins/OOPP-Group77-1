@@ -13,6 +13,9 @@ import java.util.function.*;
 
 public class WindowOpener {
 
+  /**
+   * open master window
+   */
   public static void openMaster(Model model){
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
@@ -26,9 +29,10 @@ public class WindowOpener {
       e.printStackTrace();
     }
   }
-
+  /**
+   * open start page window
+   */
   public static void openStartPage(Model model){
-    // initialize StartPageView and its Controller
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StartPage.fxml"));
       Pane pane = fxmlLoader.load();
@@ -42,8 +46,9 @@ public class WindowOpener {
       e.printStackTrace();
     }
   }
-
-
+  /**
+   * open add-account window
+   */
   public static void openAddAccount(Model model, Consumer<Node> onClose) {
 
     try {
@@ -58,8 +63,9 @@ public class WindowOpener {
       e.printStackTrace();
     }
   }
-
-
+  /**
+   * open writing window
+   */
   public static void openWriting(Model model) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
@@ -73,7 +79,9 @@ public class WindowOpener {
       e.printStackTrace();
     }
   }
-
+  /**
+   * open reply window
+   */
   public static void openReply(Model model, String to) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
@@ -83,8 +91,8 @@ public class WindowOpener {
       stage.setTitle("Reply");
       stage.setScene(new Scene(pane));
       stage.show();
-    } catch (IOException e1) {
-      e1.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }
