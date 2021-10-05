@@ -19,17 +19,17 @@ public class Model {
   public ObservableList<Email> visibleEmails = FXCollections.observableList(new ArrayList<>());
   public ObservableList<Folder> folders = FXCollections.observableList(new ArrayList<>());
   public ObservableList<Account> accounts = FXCollections.observableList(new ArrayList<>());
-  public SimpleObjectProperty<Pair<Boolean, Account>> activeAccount = new SimpleObjectProperty<>(new Pair<>(false, null));
+  public SimpleObjectProperty<Account> activeAccount = new SimpleObjectProperty<>(null);
   public SimpleObjectProperty<Folder> activeFolder = new SimpleObjectProperty<>(null);
-  public SimpleObjectProperty<Pair<Boolean, Email>> readingEmail = new SimpleObjectProperty<>(new Pair<>(false, null));
+  public SimpleObjectProperty<Email> readingEmail = new SimpleObjectProperty<>(null);
 
   public void refresh() throws Exception {
-    if (activeAccount.get().getKey() && !folders.isEmpty()) {
+    if (activeAccount.get() != null && !folders.isEmpty()) {
       Folder inbox = folders.stream()
         .filter(f -> f.name().equals("Inbox"))
         .findFirst()
         .orElseThrow(Exception::new);
-      List<Email> emails = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get().getValue()).refreshFromServer(activeAccount.get().getValue());
+      List<Email> emails = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).refreshFromServer(activeAccount.get());
       List<Email> diffEmails = emails.stream()
         .filter(e -> !inbox.emails().contains(e))
         .collect(Collectors.toList());
@@ -40,7 +40,7 @@ public class Model {
       );
 
       activeFolder.set(newInbox);
-      storage.store(activeAccount.get().getValue(), newInbox);
+      storage.store(activeAccount.get(), newInbox);
     } else {
       throw new Exception("no active account");
     }
@@ -49,9 +49,9 @@ public class Model {
     storage.store(account);
   }
   public void send(List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
-    if (activeAccount.get().getKey()) {
-      EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get().getValue()).sendEmail(
-        activeAccount.get().getValue(),
+    if (activeAccount.get() != null) {
+      EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).sendEmail(
+        activeAccount.get(),
         recipients,
         subject,
         content,
@@ -66,8 +66,8 @@ public class Model {
   }
 
   private List<Folder> getAllFolders() throws Exception {
-    if (activeAccount.get().getKey()) {
-      return storage.retrieveFolders(activeAccount.get().getValue());
+    if (activeAccount.get() != null) {
+      return storage.retrieveFolders(activeAccount.get());
     } else {
       throw new Exception("no active account");
     }
@@ -76,16 +76,17 @@ public class Model {
   public Model() throws OSNotFoundException, IOException {
     accounts.setAll(getAllAccounts());
 
-    if (!accounts.isEmpty()) {
-      activeAccount.set(new Pair<>(true, accounts.get(0)));
+    if(!accounts.isEmpty()){
+      activeAccount.set(accounts.get(0));
     }
-    if (activeAccount.get().getKey()) {
-      List<Folder> localFolders = storage.retrieveFolders(activeAccount.get().getValue());
+
+    if (activeAccount.get() != null) {
+      List<Folder> localFolders = storage.retrieveFolders(activeAccount.get());
       if (localFolders.isEmpty()) {
         createFolders();
       }
 
-      folders.setAll(storage.retrieveFolders(activeAccount.get().getValue()));
+      folders.setAll(storage.retrieveFolders(activeAccount.get()));
     }
   }
 
@@ -98,7 +99,7 @@ public class Model {
       new Folder("Trash", new ArrayList<>())
     );
     folders.setAll(folderList);
-    storage.store(activeAccount.get().getValue(), folderList);
+    storage.store(activeAccount.get(), folderList);
   }
 }
 

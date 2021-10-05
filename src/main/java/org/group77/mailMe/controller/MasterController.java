@@ -33,10 +33,10 @@ public class MasterController {
     if (model.accounts != null) {
       populateAcountCombo(model.accounts, model);
     }
-    model.readingEmail.addListener((ChangeListener<? super Pair<Boolean, Email>>) (o, op, p) -> {
-      if (p.getKey()) {
-        loadReading(p.getValue(), model);
-      } else {
+    model.readingEmail.addListener((o, op, p) -> {
+      if (p != null) {
+        loadReading(p, model);
+      } else{
         readingPane.getChildren().clear();
       }
     });
@@ -48,19 +48,14 @@ public class MasterController {
     accountsCombo.setOnAction(i -> {
       Account selected = accountsCombo.getSelectionModel().getSelectedItem();
       if (selected != null) {
-        model.activeAccount.set(new Pair<>(true, selected));
+        model.activeAccount.set(selected);
       }
     });
 
     // change handlers
     model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
     model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
-    model.accounts.addListener((ListChangeListener<? super Account>) c -> {
-      populateAcountCombo(c.getList(), model);
-      if(c.getList().size() == 1){
-        model.activeAccount.set(new Pair<>(true, c.getList().get(0)));
-      }
-    });
+    model.accounts.addListener((ListChangeListener<? super Account>) c -> populateAcountCombo(c.getList(), model));
     model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> model.visibleEmails.setAll(newFolder.emails()));
   }
 

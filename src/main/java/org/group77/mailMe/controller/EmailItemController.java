@@ -18,6 +18,6 @@ public class EmailItemController {
     subjectLabel.setText(e.subject());
 
     // input handler
-    root.setOnMouseClicked(i -> m.readingEmail.set(new Pair<>(true, e)));
+    root.setOnMouseClicked(i -> m.readingEmail.set(e));
   }
 }

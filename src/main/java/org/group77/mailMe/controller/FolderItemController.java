@@ -4,7 +4,6 @@ import javafx.beans.value.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.util.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
 

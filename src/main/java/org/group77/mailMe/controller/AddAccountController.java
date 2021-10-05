@@ -34,7 +34,7 @@ public class AddAccountController {
       Account account = AccountFactory.createAccount(user.getText(), passwordField.getText().toCharArray());
       model.addAccount(account);
       model.accounts.add(account); // TODO change these to be in master controller listener (SRP)
-      model.activeAccount.set(new Pair<>(true, account));
+      model.activeAccount.set(account);
       model.createFolders();
       // call the closing function
       onClose.accept((Node) inputEvent.getSource());

@@ -30,13 +30,13 @@ public class WritingController {
     if (to != null) {
       toField.setText(to);
     }
-    fromLabel.setText(model.activeAccount.get().getValue().emailAddress());
+    fromLabel.setText(model.activeAccount.get().emailAddress());
     // input handlers
     sendBtn.setOnAction(i -> send(model));
     attachBtn.setOnAction(i -> attachFiles());
 
     // change handlers
-    model.activeAccount.addListener((ChangeListener<? super Pair<Boolean, Account>>) (o, oa, na) -> fromLabel.setText(na.getValue().emailAddress()));
+    model.activeAccount.addListener((ChangeListener<? super Account>) (o, oa, na) -> fromLabel.setText(na.emailAddress()));
   }
 
   private void send(Model model) {

@@ -40,7 +40,7 @@ public class StartPageController {
       // TODO: ev fit labels to dimensions
 
       accountLabel.setOnMouseClicked(inputEvent -> {
-        model.activeAccount.set(new Pair<>(true,account));
+        model.activeAccount.set(account);
         ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
         openMaster(model);
       });
