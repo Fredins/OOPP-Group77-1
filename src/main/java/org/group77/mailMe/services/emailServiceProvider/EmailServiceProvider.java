@@ -6,7 +6,7 @@ import javax.mail.*;
 import java.util.*;
 
 
-public abstract class EmailServiceProviderStrategy {
+public abstract class EmailServiceProvider {
 
   String hostIn;
   String hostOut;
@@ -15,7 +15,7 @@ public abstract class EmailServiceProviderStrategy {
   int portIn;
   int portOut;
 
-  public EmailServiceProviderStrategy(String hostIn, String hostOut, String protocolIn, String protocolOut, int portIn, int portOut) {
+  public EmailServiceProvider(String hostIn, String hostOut, String protocolIn, String protocolOut, int portIn, int portOut) {
     this.hostIn = hostIn;
     this.hostOut = hostOut;
     this.protocolIn = protocolIn;
