@@ -27,7 +27,7 @@
          <center>
             <FlowPane fx:id="accountsFlowPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="accountsVbox" prefHeight="283.0" prefWidth="401.0" />
+                  <VBox fx:id="accountsVbox" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="401.0" />
                </children></FlowPane>
          </center>
         </BorderPane>

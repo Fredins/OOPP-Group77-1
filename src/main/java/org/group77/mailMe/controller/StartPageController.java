@@ -12,6 +12,7 @@ import javafx.util.Pair;
 import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.data.Account;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -58,20 +59,35 @@ public class StartPageController {
    */
 
   private void initStoredAccounts(Model model) {
-    model.accounts.forEach(account -> {
-      // create labels for each email address in model
-      Label accountLabel = new Label(account.emailAddress());
-      // add to Vbox that is inside Flow Pane
-      accountsVbox.getChildren().add(accountLabel);
+    for (Account account : model.accounts) {
+
+      try {
+
+        // load AccountListItem.fxml
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountListItem.fxml"));
+        Pane accountPane = fxmlLoader.load();
+        ((AccountListItemController) fxmlLoader.getController()).init(account);
+
+        // add it to VBox
+        accountsVbox.getChildren().add(accountPane);
+
+        // add Listener to it TODO: move to AccountListItem.fxml??
+        accountPane.setOnMouseClicked(inputEvent -> {
+          model.activeAccount.set(account);
+          ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
+          WindowOpener.openMaster(model);
+        });
+
+
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
       // TODO: ev fit labels to dimensions
       // add OnMouseClicked listeners to each email address label
-      accountLabel.setOnMouseClicked(inputEvent -> {
-        model.activeAccount.set(account);
-        ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
-        WindowOpener.openMaster(model);
-      });
 
-    });
+
+    }
   }
 
   private void openAddAccount(ActionEvent actionEvent, Model model, Consumer<Node> onClose) {
