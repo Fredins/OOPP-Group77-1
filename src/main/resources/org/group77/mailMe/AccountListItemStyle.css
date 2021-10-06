@@ -1,0 +1,12 @@
+
+.backgroundPane {
+    -fx-background-color: #B7CBBB;
+}
+
+.backgroundPane:hover {
+    -fx-background-color: #D4D9D5;
+}
+
+.backgroundPane:pressed {
+    -fx-background-color: #A3BAA8;
+}
