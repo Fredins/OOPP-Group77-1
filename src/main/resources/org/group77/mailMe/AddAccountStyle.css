@@ -39,3 +39,8 @@
     -fx-font-size: 14px;
     -fx-text-fill: red;
 }
+/* Remove ugly focus when clicking in textfield */
+.removeFocus{
+-fx-focus-color: #BABABA;
+-fx-faint-focus-color: transparent;
+}
