@@ -8,6 +8,7 @@
  -fx-padding: 5px;
  -fx-font-family: Georgia, serif;
  -fx-background-radius: 10;
+ -fx-focus-color: transparent;
 }
 
 .addAccButton:hover {
@@ -17,6 +18,11 @@
 
 .addAccButton:active {
 background: #E03A5B; }
+}
+
+.removeFocus{
+-fx-focus-color: #BABABA;
+-fx-faint-focus-color: transparent;
 }
 
 

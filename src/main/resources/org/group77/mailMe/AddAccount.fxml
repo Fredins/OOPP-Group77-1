@@ -7,8 +7,8 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.AddAccountController">
    <children>
-      <TextField fx:id="user" layoutX="52.0" layoutY="25.0" prefHeight="27.0" prefWidth="161.0" promptText="user" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="52.0" />
+      <TextField fx:id="user" layoutX="52.0" layoutY="25.0" prefHeight="27.0" prefWidth="161.0" promptText="user" styleClass="removeFocus" stylesheets="@AddAccountStyles.css" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="52.0" />
       <Button fx:id="addAccountBtn" layoutX="488.0" layoutY="67.0" mnemonicParsing="false" prefWidth="102.0" styleClass="addAccButton" stylesheets="@AddAccountStyles.css" text="Add Account" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="18.0" />
-      <PasswordField fx:id="passwordField" layoutX="52.0" layoutY="55.0" promptText="password" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="52.0" />
+      <PasswordField fx:id="passwordField" layoutX="52.0" layoutY="55.0" promptText="password" styleClass="removeFocus" stylesheets="@AddAccountStyles.css" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="52.0" />
    </children>
 </AnchorPane>

@@ -8,6 +8,7 @@
  -fx-padding: 5px;
  -fx-font-family: Georgia, serif;
  -fx-background-radius: 10;
+ -fx-focus-color: transparent;
 }
 
 .sendButton:hover {
@@ -30,6 +31,7 @@ background: #E03A5B; }
  -fx-padding: 5px;
  -fx-font-family: Georgia, serif;
  -fx-background-radius: 10;
+ -fx-focus-color: transparent;
 }
 
 .attachButton:hover {
@@ -39,6 +41,11 @@ background: #E03A5B; }
 
 .attachButton:active {
 background: #E03A5B; }
+}
+
+.removeFocus{
+-fx-focus-color: #BABABA;
+-fx-faint-focus-color: transparent;
 }
 
 

@@ -9,12 +9,12 @@
    <children>
       <Label layoutX="57.0" layoutY="29.0" text="To:" AnchorPane.leftAnchor="51.0" />
       <Label layoutX="50.0" layoutY="56.0" text="From:" AnchorPane.leftAnchor="51.0" />
-      <TextField fx:id="toField" layoutX="110.0" layoutY="25.0" prefHeight="25.0" prefWidth="439.0" promptText="To..." AnchorPane.rightAnchor="51.0" AnchorPane.topAnchor="25.0" />
-      <TextField fx:id="contentField" alignment="TOP_LEFT" layoutX="44.0" layoutY="115.0" prefHeight="241.0" prefWidth="505.0" promptText="Write an email.." AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0" />
+      <TextField fx:id="toField" layoutX="110.0" layoutY="25.0" prefHeight="25.0" prefWidth="439.0" promptText="To..." styleClass="removeFocus" stylesheets="@WritingStyle.css" AnchorPane.rightAnchor="51.0" AnchorPane.topAnchor="25.0" />
+      <TextField fx:id="contentField" alignment="TOP_LEFT" layoutX="44.0" layoutY="115.0" prefHeight="241.0" prefWidth="505.0" promptText="Write an email.." styleClass="removeFocus" stylesheets="@WritingStyle.css" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0" />
       <Button fx:id="sendBtn" layoutX="487.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" styleClass="sendButton" stylesheets="@WritingStyle.css" text="Send" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="51.0" />
       <Button fx:id="attachBtn" layoutX="415.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" styleClass="attachButton" stylesheets="@WritingStyle.css" text="Attach" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="124.0" />
       <Label layoutX="44.0" layoutY="84.0" text="Subject:" AnchorPane.leftAnchor="51.0" />
-      <TextField fx:id="subjectField" layoutX="110.0" layoutY="80.0" prefHeight="25.0" prefWidth="439.0" promptText="Subject..." AnchorPane.rightAnchor="51.0" />
+      <TextField fx:id="subjectField" layoutX="110.0" layoutY="80.0" prefHeight="25.0" prefWidth="439.0" promptText="Subject..." styleClass="removeFocus" stylesheets="@WritingStyle.css" AnchorPane.rightAnchor="51.0" />
       <Label fx:id="fromLabel" layoutX="110.0" layoutY="52.0" prefHeight="25.0" prefWidth="439.0" text="Label" />
    </children>
 </AnchorPane>
