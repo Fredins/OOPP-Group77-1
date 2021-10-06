@@ -1,8 +1,13 @@
-.item: selected{
--fx-background-color: #D3D3D3
+
+
+.button: hover{
+-fx-background-color: #D4D4D4
 }
 
+.button{
+-fx-background-color: #ffffff
+}
 
-.item: hover{
--fx-background-color: #D4D4D4
+.button: focused{
+-fx-background-color: #D3D3D3
 }

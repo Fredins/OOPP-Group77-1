@@ -11,6 +11,7 @@ import org.group77.mailMe.model.data.*;
 public class FolderItemController {
   @FXML private Label nameLabel;
   @FXML private AnchorPane root;
+  @FXML private Button button;
 
   /**
    * 1. set initial values for nodes
@@ -20,6 +21,6 @@ public class FolderItemController {
     nameLabel.setText(folder.name());
 
     // input handlers
-    root.setOnMouseClicked(i -> model.activeFolder.set(folder));
+    button.setOnMouseClicked(i -> model.activeFolder.set(folder));
   }
 }
