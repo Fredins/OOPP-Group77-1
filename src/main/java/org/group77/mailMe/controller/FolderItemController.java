@@ -1,5 +1,6 @@
 package org.group77.mailMe.controller;
 
+import javafx.application.*;
 import javafx.beans.value.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
@@ -22,5 +23,11 @@ public class FolderItemController {
 
     // input handlers
     button.setOnMouseClicked(i -> model.activeFolder.set(folder));
+    // change handlers
+    model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> {
+      if(folder.equals(newFolder)){
+        button.requestFocus();
+      }
+    });
   }
 }
