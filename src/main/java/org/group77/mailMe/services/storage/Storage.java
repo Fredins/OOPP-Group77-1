@@ -12,5 +12,4 @@ public interface Storage {
 
   List<Account> retrieveAccounts();
   List<Folder> retrieveFolders(Account account);
-  List<Email> retrieveEmails(Account account, String folderName) throws IOException, ClassNotFoundException;
 }

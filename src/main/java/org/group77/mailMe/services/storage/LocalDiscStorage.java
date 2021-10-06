@@ -8,11 +8,11 @@ import java.util.stream.*;
 
 public class LocalDiscStorage implements Storage {
 
-  String appPath;
-  String separator;
+  private final String appPath;
+  private final String separator;
 
   // Storage interface methods
-  public LocalDiscStorage() throws OSNotFoundException, IOException {
+  public LocalDiscStorage() throws OSNotFoundException {
     String[] appDirAndSep = OSHandler.getAppDirAndSeparator();
     appPath = appDirAndSep[0]; // TODO perhaps replace with Pair<String, String>
     separator = appDirAndSep[1];
@@ -55,8 +55,6 @@ public class LocalDiscStorage implements Storage {
   public void store(Account account, List<Folder> folders) {
     // path to the given account's directory
     String accountPath = appPath + separator + account.emailAddress();
-    // TODO if the folder directories already exists, then these should be overwritten...
-    //  will they be overwritten now?
     // For each folder, create a directory with the folder name and store the folder object
     folders.forEach(f -> {
                       try {
@@ -70,6 +68,9 @@ public class LocalDiscStorage implements Storage {
     );
   }
 
+  /**
+   * store folder in corresponding account dir
+   */
   @Override
   public void store(Account account, Folder folder) throws IOException {
     String folderPath = appPath + separator + account.emailAddress() + separator + folder.name();
@@ -77,25 +78,28 @@ public class LocalDiscStorage implements Storage {
     serialize(folder, folderPath);
   }
 
-
+  /**
+   * 1. retrieve all folders
+   * 2. sort folders
+   */
   @Override
   public List<Folder> retrieveFolders(Account account) {
     String accountPath = appPath + separator + account.emailAddress();
-    File[] folderDirs = Arrays.stream(Objects.requireNonNull((new File(accountPath)).listFiles()))
-      .filter(f -> !f.getName().equals("Account"))
+    File[] files = Arrays.stream(Objects.requireNonNull((new File(accountPath)).listFiles()))
+      .filter(file -> !file.getName().equals("Account"))
       .toArray(File[]::new);
-    return Arrays.stream(folderDirs)
-      .map(f -> {
-        Folder f1 = null;
+    return Arrays.stream(files)
+      .map(file -> {
+        Folder folder = null;
         try {
-          f1 = (Folder) deserialize(f.getPath());
+          folder = (Folder) deserialize(file.getPath());
         } catch (IOException | ClassNotFoundException e) {
           e.printStackTrace();
         }
-        return f1;
+        return folder;
       })
       .filter(Objects::nonNull)
-      .sorted((f1, f2) -> {
+      .sorted((folder1, folder2) -> {
         List<String> orderedNames = List.of(
           "Inbox",
           "Archive",
@@ -103,30 +107,16 @@ public class LocalDiscStorage implements Storage {
           "Drafts",
           "Trash"
         );
-        int i1 = orderedNames.indexOf(f1.name());
-        int i2 = orderedNames.indexOf(f2.name());
-        return Integer.compare(i1, i2);
+        int index1 = orderedNames.indexOf(folder1.name());
+        int index2 = orderedNames.indexOf(folder2.name());
+        return Integer.compare(index1, index2);
       })
       .collect(Collectors.toList());
   }
 
   /**
-   * @param folderName the name of the desired folder
-   * @return returns a list of emails for the specific folder
-   * @throws IOException            If there are any problems when locating the file
-   * @throws ClassNotFoundException Of the classes required is not on the classpath?
-   * @author David Zamanian
-   * <p>
-   * Creates a path for the specific OS down to the folderName. The path is then deserialized and cased to Folder
-   * and returns the emails in that folder.
+   * retrieve all saved accounts
    */
-
-  @Override
-  public List<Email> retrieveEmails(Account account, String folderName) throws IOException, ClassNotFoundException {
-    String path = appPath + separator + account.emailAddress() + separator + folderName + separator + "EmailListObject";
-    return (List<Email>) deserialize(path);
-  }
-
   @Override
   public List<Account> retrieveAccounts() {
     File[] accountDirs = (new File(appPath)).listFiles();
@@ -134,13 +124,13 @@ public class LocalDiscStorage implements Storage {
     if (accountDirs != null) {
       accounts = Arrays.stream(accountDirs)
         .map(f -> {
-          Account a = null;
+          Account account = null;
           try {
-            a = (Account) deserialize(f.getPath() + separator + "Account");
+            account = (Account) deserialize(f.getPath() + separator + "Account");
           } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
           }
-          return a;
+          return account;
         })
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
@@ -174,7 +164,7 @@ public class LocalDiscStorage implements Storage {
     file.createNewFile(); //Create new file.
   }
 
-  private void mkdir(String path) throws IOException {
+  private void mkdir(String path) {
     File file = new File(path);
     file.mkdir(); //TODO does this create the directory if it exists? (hampus)
   }

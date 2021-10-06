@@ -19,7 +19,6 @@ import java.util.stream.*;
 
 public class MasterController {
   @FXML private Button refreshBtn;
-  @FXML private Button addAccountBtn;
   @FXML private Button writeBtn;
   @FXML private FlowPane foldersFlow;
   @FXML private Pane readingPane;
@@ -49,24 +48,28 @@ public class MasterController {
         e.printStackTrace(); // TODO feedback
       }
     });
-    addAccountBtn.setOnAction(i -> WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close()));
     writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
     accountsCombo.setOnAction(i -> {
       Account selected = accountsCombo.getSelectionModel().getSelectedItem();
 
-      if (selected.emailAddress().equals("Add New Account")){
-        //Call addAccount
-          System.out.println("Add New Account");
-      } else{
-
       if (selected != null) {
-        model.activeAccount.set(selected);
-      }}
+        if(selected.emailAddress().equals("Add New Account")) {
+          WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close());
+        }else{
+          model.activeAccount.set(selected);
+        }
+      }
     });
 
 
     // change handlers
-    model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
+    model.activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
+      accountsCombo.setValue(newAccount);
+    });
+    model.folders.addListener((ListChangeListener<? super Folder>) c -> {
+      loadFolders(c.getList(), model);
+      model.activeFolder.set(c.getList().get(0));
+    });
     model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
     model.accounts.addListener((ListChangeListener<? super Account>) c -> populateAccountCombo(c.getList(), model));
     model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> model.visibleEmails.setAll(newFolder.emails()));

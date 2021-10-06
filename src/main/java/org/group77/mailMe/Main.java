@@ -26,9 +26,8 @@ public class Main extends Application {
       };
       WindowOpener.openAddAccount(model, onClose);
     }else if(model.accounts.size() == 1){
-      model.activeAccount.set(model.accounts.get(0));
-
       WindowOpener.openMaster(model);
+      model.activeAccount.set(model.accounts.get(0));
     }else{
       WindowOpener.openStartPage(model);
     }

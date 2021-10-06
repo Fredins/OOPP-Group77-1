@@ -1,6 +1,7 @@
 package org.group77.mailMe.model;
 
 import javafx.beans.property.*;
+import javafx.beans.value.*;
 import javafx.collections.*;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.*;
@@ -23,17 +24,20 @@ public class Model {
   public SimpleObjectProperty<Email> readingEmail = new SimpleObjectProperty<>(null);
 
   /**
-   * loads persistent data from storage and sets the corresponding values
+   * 1. load accounts from storage
+   * 2. add event handler to state field active account
    */
   public Model() throws OSNotFoundException, IOException {
     accounts.setAll(storage.retrieveAccounts());
 
-    if(!accounts.isEmpty()){
-      activeAccount.set(accounts.get(0));
-    }
-    if (activeAccount.get() != null) {
-      folders.setAll(storage.retrieveFolders(activeAccount.get()));
-    }
+
+    // change event handlers
+    activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
+      if(newAccount != null){
+        folders.setAll(storage.retrieveFolders(activeAccount.get()));
+      }
+    });
+
   }
 
   /**
@@ -43,20 +47,28 @@ public class Model {
    */
   public void refresh() throws Exception {
     if (activeAccount.get() != null && !folders.isEmpty()) {
+      // get inbox from state folders
       Folder inbox = folders.stream()
         .filter(folder -> folder.name().equals("Inbox"))
         .findFirst()
         .orElseThrow(Exception::new);
-      List<Email> emails = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).refreshFromServer(activeAccount.get());
-      List<Email> diffEmails = emails.stream()
-        .filter(email -> !inbox.emails().contains(email))
+      // diffEmails = serverEmails \ inboxEmails
+      List<Email> serverEmails = EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).refreshFromServer(activeAccount.get());
+      List<Email> inboxEmails = inbox.emails();
+      List<Email> diffEmails = serverEmails.stream()
+        .filter(email -> !inboxEmails.contains(email))
         .collect(Collectors.toList());
+
       Folder newInbox = new Folder(inbox.name(),
                                    Stream.of(diffEmails, inbox.emails())
                                      .flatMap(Collection::stream)
                                      .collect(Collectors.toList())
       );
+      // replace inbox with newInbox
+      folders.set(folders.indexOf(inbox), newInbox);
+      // set active folder to newInbox
       activeFolder.set(newInbox);
+      // replace inbox in storage with newInbox
       storage.store(activeAccount.get(), newInbox);
     } else {
       throw new Exception("no active account");
