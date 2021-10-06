@@ -32,10 +32,21 @@ public class Model {
 
 
     // change event handlers
+    // these handlers are for relations between the different states
+
+    // update folders when active account is changed
     activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
       if(newAccount != null){
         folders.setAll(storage.retrieveFolders(activeAccount.get()));
+        if(folders.isEmpty()){
+          createFolders();
+        }
       }
+    });
+    // if a new account is added then set it as active
+    accounts.addListener((ListChangeListener<? super Account>) changeEvent -> {
+      Account newAccount = changeEvent.getList().get(changeEvent.getList().size() - 1);
+      activeAccount.set(newAccount);
     });
 
   }
@@ -80,10 +91,10 @@ public class Model {
    * 4. create initial folders for the account
    */
   public void addAccount(Account account) throws Exception {
-    storage.store(account);
-    accounts.add(account); // TODO change these to be in master controller listener (SRP)
-    activeAccount.set(account);
-    createFolders();
+    if (EmailServiceProviderFactory.getEmailServiceProvider(account).testConnection(account)){
+      storage.store(account);
+      accounts.add(account);
+    }
   }
 
   /**
