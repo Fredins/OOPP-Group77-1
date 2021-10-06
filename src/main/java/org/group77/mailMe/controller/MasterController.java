@@ -61,8 +61,13 @@ public class MasterController {
     });
 
     // change handlers
-    model.activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> accountsCombo.setValue(newAccount));
-    model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
+    model.activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
+      accountsCombo.setValue(newAccount);
+    });
+    model.folders.addListener((ListChangeListener<? super Folder>) c -> {
+      loadFolders(c.getList(), model);
+      model.activeFolder.set(c.getList().get(0));
+    });
     model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
     model.accounts.addListener((ListChangeListener<? super Account>) c -> populateAccountCombo(c.getList(), model));
     model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> model.visibleEmails.setAll(newFolder.emails()));
