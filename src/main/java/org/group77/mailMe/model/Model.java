@@ -37,12 +37,12 @@ public class Model {
     // update folders when active account is changed
     activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
       if(newAccount != null){
-        folders.setAll(storage.retrieveFolders(activeAccount.get()));
-        if(folders.isEmpty()){
-          List<Folder> newFolders = createFolders();
-          folders.setAll(newFolders);
+        List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
+        if(newFolders.isEmpty()){
+          newFolders = createFolders();
           storage.store(activeAccount.get(), newFolders);
         }
+        folders.setAll(newFolders);
       }
     });
     // if a new account is added then set it as active
