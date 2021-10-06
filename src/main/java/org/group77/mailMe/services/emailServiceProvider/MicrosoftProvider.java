@@ -6,7 +6,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.*;
 
-public class MicrosoftProvider extends EmailServiceProviderStrategy {
+public class MicrosoftProvider extends EmailServiceProvider {
 
   public MicrosoftProvider() {
     super("outlook.office365.com", "smtp-mail.outlook.com", "imaps", "smtp", 993, 587);

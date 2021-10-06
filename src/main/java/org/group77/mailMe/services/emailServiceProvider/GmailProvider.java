@@ -1,6 +1,5 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.mail.util.*;
 import org.group77.mailMe.model.data.*;
 
@@ -8,7 +7,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.*;
 
-public class GmailProvider extends EmailServiceProviderStrategy {
+public class GmailProvider extends EmailServiceProvider {
 
   public GmailProvider() {
     super("pop.gmail.com",

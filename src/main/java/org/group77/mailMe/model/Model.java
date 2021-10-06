@@ -80,10 +80,15 @@ public class Model {
    * 4. create initial folders for the account
    */
   public void addAccount(Account account) throws Exception {
-    accounts.add(account); // TODO change these to be in master controller listener (SRP)
     storage.store(account);
+    accounts.add(account); // TODO change these to be in master controller listener (SRP)
+    System.out.println("accounts.add");
+
+    System.out.println("storage.store");
     activeAccount.set(account);
+    System.out.println("activeAccount.set");
     createFolders();
+    System.out.println("accounts.add");
   }
 
   /**

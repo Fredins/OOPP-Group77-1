@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
-import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderStrategy;
+import org.group77.mailMe.services.emailServiceProvider.EmailServiceProvider;
 import org.group77.mailMe.services.emailServiceProvider.GmailProvider;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class TestEmailServiceProviderFactory {
         AccountFactory accountFactory = new AccountFactory();
         Account account = accountFactory.createAccount("lol@gmail.com", "1345".toCharArray());
         EmailServiceProviderFactory espFactory = new EmailServiceProviderFactory();
-        EmailServiceProviderStrategy esp = espFactory.getEmailServiceProvider(account);
+        EmailServiceProvider esp = espFactory.getEmailServiceProvider(account);
         assertTrue(esp instanceof GmailProvider);
     }
 
