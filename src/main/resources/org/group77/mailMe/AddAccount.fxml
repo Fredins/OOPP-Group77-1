@@ -14,6 +14,6 @@
       <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="78.0" prefHeight="17.0" prefWidth="105.0" styleClass="textFieldLabels" text="Email Address:" AnchorPane.rightAnchor="369.6666666666667" />
       <Label alignment="CENTER_RIGHT" layoutX="46.0" layoutY="111.0" prefHeight="17.0" prefWidth="85.0" styleClass="textFieldLabels" text="Password: " AnchorPane.rightAnchor="368.6666666666667" />
       <Label fx:id="errorLabel" layoutX="141.0" layoutY="141.0" prefHeight="17.0" prefWidth="353.0" styleClass="errorLabel" />
-      <Label alignment="CENTER" layoutX="167.0" layoutY="29.0" prefHeight="17.0" prefWidth="165.0" styleClass="textFieldLabels" text="Login to a new account!" />
+      <Label alignment="CENTER" layoutX="167.0" layoutY="29.0" prefHeight="19.0" prefWidth="185.0" styleClass="welcomeLabel" text="Login to a new account!" />
    </children>
 </AnchorPane>

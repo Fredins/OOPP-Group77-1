@@ -27,6 +27,12 @@
     -fx-font-size: 13 px;
 }
 
+/* welcome label */
+.welcomeLabel {
+    -fx-font-family: Georgia, serif;
+    -fx-font-size: 16 px;
+}
+
 /* error message */
 .errorLabel {
     -fx-font-family: Arial;
