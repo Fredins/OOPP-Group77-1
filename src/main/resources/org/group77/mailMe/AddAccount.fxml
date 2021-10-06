@@ -8,12 +8,12 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" stylesheets="@AddAccountStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.AddAccountController">
    <children>
-      <TextField fx:id="emailTextField" layoutX="141.0" layoutY="74.0" prefHeight="25.0" prefWidth="314.0" promptText="email address" AnchorPane.rightAnchor="45.0" />
-      <PasswordField fx:id="passwordField" layoutX="141.0" layoutY="107.0" prefHeight="25.0" prefWidth="314.0" promptText="password" AnchorPane.rightAnchor="45.0" />
+      <TextField fx:id="emailTextField" layoutX="109.0" layoutY="67.0" prefHeight="38.0" prefWidth="301.0" promptText="email address" AnchorPane.leftAnchor="109.0" AnchorPane.rightAnchor="90.0" />
+      <PasswordField fx:id="passwordField" layoutX="109.0" layoutY="122.0" prefHeight="38.0" prefWidth="301.0" promptText="password" AnchorPane.leftAnchor="109.0" AnchorPane.rightAnchor="90.0" />
       <Button fx:id="addAccountButton" layoutX="199.0" layoutY="211.0" mnemonicParsing="false" styleClass="addAccountButton" text="Add Account" />
-      <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="78.0" prefHeight="17.0" prefWidth="105.0" styleClass="textFieldLabels" text="Email Address:" AnchorPane.rightAnchor="369.6666666666667" />
-      <Label alignment="CENTER_RIGHT" layoutX="46.0" layoutY="111.0" prefHeight="17.0" prefWidth="85.0" styleClass="textFieldLabels" text="Password: " AnchorPane.rightAnchor="368.6666666666667" />
-      <Label fx:id="errorLabel" layoutX="141.0" layoutY="141.0" prefHeight="17.0" prefWidth="353.0" styleClass="errorLabel" />
+      <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="78.0" prefHeight="17.0" prefWidth="96.0" styleClass="textFieldLabels" text="Email Address:" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="395.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="23.0" layoutY="132.0" prefHeight="17.0" prefWidth="85.0" styleClass="textFieldLabels" text="Password: " AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="391.6666666666667" />
+      <Label fx:id="errorLabel" layoutX="109.0" layoutY="172.0" prefHeight="17.0" prefWidth="353.0" styleClass="errorLabel" />
       <Label alignment="CENTER" layoutX="167.0" layoutY="29.0" prefHeight="19.0" prefWidth="185.0" styleClass="welcomeLabel" text="Login to a new account!" />
    </children>
 </AnchorPane>
