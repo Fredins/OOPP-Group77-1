@@ -17,6 +17,7 @@ public class FolderItemController {
    */
   void init(Model model, Folder folder) {
     nameLabel.setText(folder.name());
+    button.getStyleClass().add(folder.name().equals("Inbox") ? "focused" : "unfocused");
 
     // input handlers
     button.setOnMouseClicked(i -> model.activeFolder.set(folder));

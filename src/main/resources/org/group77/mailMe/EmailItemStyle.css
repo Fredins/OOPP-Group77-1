@@ -5,7 +5,7 @@
 }
 
 
-.button: focused{
+.dropshadow{
 -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
 }
 

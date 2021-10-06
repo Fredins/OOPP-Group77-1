@@ -1,5 +1,6 @@
 package org.group77.mailMe.controller;
 
+import javafx.beans.value.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -23,5 +24,14 @@ public class EmailItemController {
 
     // input handler
     button.setOnMouseClicked(inputEvent -> model.readingEmail.set(email));
+
+    // change handler
+    model.readingEmail.addListener((ChangeListener<? super Email>) (obs, oldEmail, newEmail) -> {
+      if(email.equals(newEmail)){
+        button.getStyleClass().add("dropshadow");
+      }else{
+        button.getStyleClass().remove("dropshadow");
+      }
+    });
   }
 }
