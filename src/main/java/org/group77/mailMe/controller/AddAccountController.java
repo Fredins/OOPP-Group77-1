@@ -62,8 +62,8 @@ public class AddAccountController {
       // call the closing function
       onClose.accept((Node) inputEvent.getSource());
     } catch (Exception e) {
-      // errorLabel.setText(e.getMessage()); TODO: give a good exception message in Model
-      errorLabel.setText("Wrong login credentials, or domain is not supported");
+      errorLabel.setText(e.getMessage()); //TODO: give a good exception message in Model
+      // errorLabel.setText("Wrong login credentials, or domain is not supported");
     }
   }
 
