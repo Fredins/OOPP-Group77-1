@@ -45,15 +45,9 @@ public class StartPageController {
 
     initStoredAccounts(model);
 
-    // onClose is a close function for AddAccountView
-    Consumer<Node> onClose = node -> {
-      ((Stage) node.getScene().getWindow()).close();
-      WindowOpener.openMaster(model);
-    };
     addAccountButton.setOnAction(actionEvent -> openAddAccount(
                                       actionEvent,
-                                      model,
-                                      onClose));
+                                      model));
 
   }
 
@@ -86,9 +80,9 @@ public class StartPageController {
 
         // add OnMouseClicked to accountPane TODO: move to AccountListItemController??
         accountPane.setOnMouseClicked(inputEvent -> {
-          model.activeAccount.set(account);
           ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
           WindowOpener.openMaster(model);
+          model.activeAccount.set(account);
         });
 
       } catch (Exception e) {
@@ -105,13 +99,17 @@ public class StartPageController {
    *
    * @param actionEvent occurs when user clicks on this addAccountButton
    * @param model holds the application state
-   * @param onClose describes how closing Add Account View should be handled
    *
    * @author Elin Hagman
    */
 
-  private void openAddAccount(ActionEvent actionEvent, Model model, Consumer<Node> onClose) {
+  private void openAddAccount(ActionEvent actionEvent, Model model) {
     ((Stage)((Node) actionEvent.getSource()).getScene().getWindow()).close();
+    // onClose is a close function for AddAccountView
+    Consumer<Node> onClose = node -> {
+      ((Stage) node.getScene().getWindow()).close();
+      WindowOpener.openMaster(model);
+    };
     WindowOpener.openAddAccount(model,onClose);
 
   }
