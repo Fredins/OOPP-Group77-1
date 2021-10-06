@@ -53,10 +53,17 @@ public class MasterController {
     writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
     accountsCombo.setOnAction(i -> {
       Account selected = accountsCombo.getSelectionModel().getSelectedItem();
+
+      if (selected.emailAddress().equals("Add New Account")){
+        //Call addAccount
+          System.out.println("Add New Account");
+      } else{
+
       if (selected != null) {
         model.activeAccount.set(selected);
-      }
+      }}
     });
+
 
     // change handlers
     model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
