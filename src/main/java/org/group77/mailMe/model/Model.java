@@ -66,8 +66,6 @@ public class Model {
       );
       // replace inbox with newInbox
       folders.set(folders.indexOf(inbox), newInbox);
-      // set active folder to newInbox
-      activeFolder.set(newInbox);
       // replace inbox in storage with newInbox
       storage.store(activeAccount.get(), newInbox);
     } else {
