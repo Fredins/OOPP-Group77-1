@@ -82,13 +82,8 @@ public class Model {
   public void addAccount(Account account) throws Exception {
     storage.store(account);
     accounts.add(account); // TODO change these to be in master controller listener (SRP)
-    System.out.println("accounts.add");
-
-    System.out.println("storage.store");
     activeAccount.set(account);
-    System.out.println("activeAccount.set");
     createFolders();
-    System.out.println("accounts.add");
   }
 
   /**
