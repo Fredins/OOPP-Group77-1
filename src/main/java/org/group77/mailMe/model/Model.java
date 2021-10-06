@@ -39,7 +39,9 @@ public class Model {
       if(newAccount != null){
         folders.setAll(storage.retrieveFolders(activeAccount.get()));
         if(folders.isEmpty()){
-          createFolders();
+          List<Folder> newFolders = createFolders();
+          folders.setAll(newFolders);
+          storage.store(activeAccount.get(), newFolders);
         }
       }
     });
@@ -119,16 +121,14 @@ public class Model {
    * 1. create folders and set the corresponding state field
    * 2. store the folders
    */
-  public void createFolders() {
-    List<Folder> folderList = List.of(
+  public List<Folder> createFolders() {
+    return List.of(
       new Folder("Inbox", new ArrayList<>()),
       new Folder("Archive", new ArrayList<>()),
       new Folder("Sent", new ArrayList<>()),
       new Folder("Drafts", new ArrayList<>()),
       new Folder("Trash", new ArrayList<>())
     );
-    folders.setAll(folderList);
-    storage.store(activeAccount.get(), folderList);
   }
 }
 

@@ -67,8 +67,11 @@ public class MasterController {
       accountsCombo.setValue(newAccount);
     });
     model.folders.addListener((ListChangeListener<? super Folder>) c -> {
-      loadFolders(c.getList(), model);
-      model.activeFolder.set(c.getList().get(0));
+      ObservableList<? extends Folder> newFolders =  c.getList();
+      if(!newFolders.isEmpty()){
+        loadFolders(newFolders, model);
+        model.activeFolder.set(newFolders.get(0));
+      }
     });
     model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
     model.accounts.addListener((ListChangeListener<? super Account>) c -> populateAccountCombo(c.getList(), model));
