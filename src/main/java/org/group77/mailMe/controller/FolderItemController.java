@@ -1,17 +1,14 @@
 package org.group77.mailMe.controller;
 
-import javafx.application.*;
 import javafx.beans.value.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
 
 
 public class FolderItemController {
   @FXML private Label nameLabel;
-  @FXML private AnchorPane root;
   @FXML private Button button;
 
   /**
@@ -25,9 +22,8 @@ public class FolderItemController {
     button.setOnMouseClicked(i -> model.activeFolder.set(folder));
     // change handlers
     model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> {
-      if(folder.equals(newFolder)){
-        button.requestFocus();
-      }
+        button.getStyleClass().clear();
+        button.getStyleClass().add(folder.equals(newFolder) ? "focused" : "unfocused");
     });
   }
 }
