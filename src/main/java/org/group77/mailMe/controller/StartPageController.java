@@ -32,6 +32,15 @@ public class StartPageController {
   @FXML
   private VBox accountsVbox;
 
+  /**
+   *
+   * Initializes and populates StartPage view depending on the state of model.
+   *
+   * @param model holds the application state
+   *
+   * @author Elin Hagman
+   */
+
   public void init(Model model) {
 
     initStoredAccounts(model);
@@ -56,7 +65,9 @@ public class StartPageController {
    *    2) closes StartPage and opens Master
    *
    *
-   * @param model that holds the application state
+   * @param model holds the application state
+   *
+   * @author Elin Hagman
    */
 
   private void initStoredAccounts(Model model) {
@@ -86,6 +97,17 @@ public class StartPageController {
 
     }
   }
+
+  /**
+   * Closes Stage that this StartPageController is displayed on
+   * and opens and calls openAddAccount() in WindowOpener to open Add Account View.
+   *
+   * @param actionEvent occurs when user clicks on this addAccountButton
+   * @param model holds the application state
+   * @param onClose describes how closing Add Account View should be handled
+   *
+   * @author Elin Hagman
+   */
 
   private void openAddAccount(ActionEvent actionEvent, Model model, Consumer<Node> onClose) {
     ((Stage)((Node) actionEvent.getSource()).getScene().getWindow()).close();
