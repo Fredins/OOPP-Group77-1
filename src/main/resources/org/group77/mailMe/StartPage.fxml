@@ -32,7 +32,11 @@
          <center>
             <FlowPane fx:id="accountsFlowPane" alignment="CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="accountsVbox" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="353.0" />
+                  <VBox fx:id="accountsVbox" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="353.0" spacing="10.0">
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </VBox>
                </children></FlowPane>
          </center>
         </BorderPane>
