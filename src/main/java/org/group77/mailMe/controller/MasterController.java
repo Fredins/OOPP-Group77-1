@@ -19,7 +19,6 @@ import java.util.stream.*;
 
 public class MasterController {
   @FXML private Button refreshBtn;
-  @FXML private Button addAccountBtn;
   @FXML private Button writeBtn;
   @FXML private FlowPane foldersFlow;
   @FXML private Pane readingPane;
@@ -62,6 +61,7 @@ public class MasterController {
     });
 
     // change handlers
+    model.activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> accountsCombo.setValue(newAccount));
     model.folders.addListener((ListChangeListener<? super Folder>) c -> loadFolders(c.getList(), model));
     model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
     model.accounts.addListener((ListChangeListener<? super Account>) c -> populateAccountCombo(c.getList(), model));

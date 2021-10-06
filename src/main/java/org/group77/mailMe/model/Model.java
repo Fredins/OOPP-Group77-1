@@ -1,6 +1,7 @@
 package org.group77.mailMe.model;
 
 import javafx.beans.property.*;
+import javafx.beans.value.*;
 import javafx.collections.*;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.*;
@@ -23,17 +24,20 @@ public class Model {
   public SimpleObjectProperty<Email> readingEmail = new SimpleObjectProperty<>(null);
 
   /**
-   * loads persistent data from storage and sets the corresponding values
+   * 1. load accounts from storage
+   * 2. add event handler to state field active account
    */
   public Model() throws OSNotFoundException, IOException {
     accounts.setAll(storage.retrieveAccounts());
 
-    if(!accounts.isEmpty()){
-      activeAccount.set(accounts.get(0));
-    }
-    if (activeAccount.get() != null) {
-      folders.setAll(storage.retrieveFolders(activeAccount.get()));
-    }
+
+    // change event handlers
+    activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
+      if(newAccount != null){
+        folders.setAll(storage.retrieveFolders(activeAccount.get()));
+      }
+    });
+
   }
 
   /**
