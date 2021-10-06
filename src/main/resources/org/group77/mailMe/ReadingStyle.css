@@ -9,6 +9,15 @@
         -fx-background-radius: 0, 0, 0, 0;
 }
 
+.replyButton{
+ -fx-background-color: #ffffff;
+
+}
+
+.replyButton:hover{
+-fx-background-color: #D3D3D3;
+}
+
 .textarea .content {
     -fx-background-color: #ffffff;
 }

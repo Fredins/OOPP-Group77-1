@@ -11,6 +11,7 @@ public class EmailItemController {
   @FXML private AnchorPane root;
   @FXML private Label fromLabel;
   @FXML private Label subjectLabel;
+  @FXML private Button button;
 
   /**
    * 1. set initial values for nodes
@@ -21,6 +22,6 @@ public class EmailItemController {
     subjectLabel.setText(email.subject());
 
     // input handler
-    root.setOnMouseClicked(inputEvent -> model.readingEmail.set(email));
+    button.setOnMouseClicked(inputEvent -> model.readingEmail.set(email));
   }
 }

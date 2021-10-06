@@ -1,3 +1,13 @@
-.item{
 
+
+.button: hover{
+-fx-background-color: #E5E5E5
+}
+
+.button{
+-fx-background-color: #ffffff
+}
+
+.button: focused{
+-fx-background-color: #E5E5E5
 }
