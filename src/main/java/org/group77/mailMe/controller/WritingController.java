@@ -99,8 +99,8 @@ public class WritingController {
     // Example of alert type: Alert.AlertType.INFORMATION
     Alert alert = new Alert(alertType);
     alert.setTitle("MeAlert");
-    alert.setHeaderText(message);
-    //alert.setContentText("Are you ok with this?");
+    //alert.setHeaderText(message);
+    alert.setContentText(message);
     alert.getDialogPane().setPrefSize(300, 300);
     Optional<ButtonType> result = alert.showAndWait();
     return result;
