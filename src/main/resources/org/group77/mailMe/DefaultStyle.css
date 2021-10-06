@@ -1,0 +1,37 @@
+
+/* Prominent pink button (used by eg "New", "Add Account"-buttons) */
+.prominentButton {
+ -fx-color: #E03A5B;
+ -fx-border-radius: 100;
+ -fx-border-width: 1;
+ -fx-display: inline-block;
+ -fx-font-size: 14px;
+ -fx-line-height: 17px;
+ -fx-padding: 11px;
+ -fx-font-family: Georgia, serif;
+ -fx-background-radius: 10;
+}
+
+.prominentButton:pressed {
+    -fx-background-color: #AA374E;
+    -fx-text-fill: white;
+}
+
+.prominentButton:hover {
+    -fx-color: #EA5572;
+    -fx-text-fill: white;
+}
+
+/* Headline text */
+.standardFontFamily {
+    -fx-font-family: Georgia, serif;
+}
+
+.headlineFontSize {
+    -fx-font-size: 16 px;
+}
+
+.standardTextFontSize {
+    -fx-font-size: 14 px;
+}
+

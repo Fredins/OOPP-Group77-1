@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -8,26 +9,30 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.StartPageController">
+<AnchorPane prefHeight="400.0" prefWidth="400.0" stylesheets="@StartPageStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.StartPageController">
     <children>
         <BorderPane fx:id="startPageBorderPane" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>
-                <Label fx:id="welcomeLabel" text="Choose account or login to a new one!" BorderPane.alignment="CENTER">
+                <Label fx:id="welcomeLabel" stylesheets="@DefaultStyle.css" text="Choose account or login to a new one!" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets bottom="20.0" top="40.0" />
                     </BorderPane.margin>
+               <styleClass>
+                  <String fx:value="standardFontFamily" />
+                  <String fx:value="headlineFontSize" />
+               </styleClass>
                 </Label>
             </top>
          <bottom>
-            <Button fx:id="addAccountButton" mnemonicParsing="false" text="Add new account" BorderPane.alignment="CENTER">
+            <Button fx:id="addAccountButton" mnemonicParsing="false" styleClass="prominentButton" stylesheets="@DefaultStyle.css" text="Add new account" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="20.0" top="20.0" />
                </BorderPane.margin></Button>
          </bottom>
          <center>
-            <FlowPane fx:id="accountsFlowPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <FlowPane fx:id="accountsFlowPane" alignment="CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox fx:id="accountsVbox" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="401.0" />
+                  <VBox fx:id="accountsVbox" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="353.0" />
                </children></FlowPane>
          </center>
         </BorderPane>
