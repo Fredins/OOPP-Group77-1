@@ -5,6 +5,7 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 import javafx.util.*;
+import org.apache.commons.mail.HtmlEmail;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
 

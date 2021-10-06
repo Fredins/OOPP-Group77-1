@@ -1,5 +1,6 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
+import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.mail.util.*;
 import org.group77.mailMe.model.data.*;
 
@@ -127,6 +128,8 @@ public class GmailProvider extends EmailServiceProviderStrategy {
       System.out.println(recipient); // For testing.
       msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
       msg.setSubject(subject);
+      //msg.setText(content);
+
 
       // Create the Multipart and add MimeBodyParts to it.
       Multipart multipart = new MimeMultipart();
@@ -134,7 +137,7 @@ public class GmailProvider extends EmailServiceProviderStrategy {
       // Create and fill the first message part.
       MimeBodyPart messageBodyPart = new MimeBodyPart();
       //Content of the message.
-      messageBodyPart.setContent(content, "text/html");
+      messageBodyPart.setText(content);
       // Add multipart to message.
       multipart.addBodyPart(messageBodyPart);
       msg.setContent(multipart);
@@ -151,7 +154,9 @@ public class GmailProvider extends EmailServiceProviderStrategy {
 
       msg.setSentDate(new Date());
 
+
       return msg;
+
     } catch (Exception e) {
       e.printStackTrace();
       return null;

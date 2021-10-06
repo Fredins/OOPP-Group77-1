@@ -72,6 +72,7 @@ public class Model {
       throw new Exception("no active account");
     }
   }
+
   /**
    * 1. add account to state field accounts
    * 2. store the account

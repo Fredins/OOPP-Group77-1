@@ -32,6 +32,7 @@ public class Main extends Application {
       WindowOpener.openStartPage(model);
     }
   }
+
   public static void main(String[] args) {
     launch();
   }
