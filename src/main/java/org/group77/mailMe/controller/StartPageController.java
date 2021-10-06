@@ -40,17 +40,22 @@ public class StartPageController {
 
     // Add buttons for every stored accounts with actionEvent listeners
     initStoredAccounts(model);
+    Consumer<Node> onClose = node -> {
+      ((Stage) node.getScene().getWindow()).close();
+      WindowOpener.openMaster(model);
+    };
+
     addAccountButton.setOnAction(actionEvent -> openAddAccount(
                                       actionEvent,
                                       model,
-                                      node -> ((Stage) node.getScene().getWindow()).close()));
+                                      onClose));
 
   }
 
   /**
    *
-   * Creates a label for each account in model's accounts and displays them in this VBox.
-   * Also adds listeners to each label that
+   * Creates a AccountListItemController for each account in model's accounts and displays them in this VBox.
+   * Also adds listeners to each AccountListItemController that
    *    1) sets model's active account to the one user pressed on
    *    2) closes StartPage and opens Master
    *
@@ -78,6 +83,11 @@ public class StartPageController {
           WindowOpener.openMaster(model);
         });
 
+        if (model.accounts.indexOf(account) % 2 != 0) {
+          AnchorPane background =((AccountListItemController) fxmlLoader.getController()).getBackgroundPane();
+          background.setStyle("-fx-background-color: #B7CBBB");
+        }
+
 
       } catch (Exception e) {
         e.printStackTrace();
@@ -92,9 +102,8 @@ public class StartPageController {
 
   private void openAddAccount(ActionEvent actionEvent, Model model, Consumer<Node> onClose) {
     ((Stage)((Node) actionEvent.getSource()).getScene().getWindow()).close();
-    WindowOpener.openMaster(model);
     WindowOpener.openAddAccount(model,onClose);
-    // TODO: add account doesnt open a new StartPage.. so i do it here instead, maybe there is a better solution?
+
   }
 
 
