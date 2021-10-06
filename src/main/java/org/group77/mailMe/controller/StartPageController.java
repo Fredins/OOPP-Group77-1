@@ -8,13 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.Account;
-
-import java.io.IOException;
 import java.util.function.Consumer;
 
 
@@ -37,14 +34,13 @@ public class StartPageController {
 
   public void init(Model model) {
 
-
-    // Add buttons for every stored accounts with actionEvent listeners
     initStoredAccounts(model);
+
+    // onClose is a close function for AddAccountView
     Consumer<Node> onClose = node -> {
       ((Stage) node.getScene().getWindow()).close();
       WindowOpener.openMaster(model);
     };
-
     addAccountButton.setOnAction(actionEvent -> openAddAccount(
                                       actionEvent,
                                       model,
@@ -76,26 +72,17 @@ public class StartPageController {
         // add it to VBox
         accountsVbox.getChildren().add(accountPane);
 
-        // add Listener to it TODO: move to AccountListItem.fxml??
+        // add OnMouseClicked to accountPane TODO: move to AccountListItemController??
         accountPane.setOnMouseClicked(inputEvent -> {
           model.activeAccount.set(account);
           ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
           WindowOpener.openMaster(model);
         });
 
-        if (model.accounts.indexOf(account) % 2 != 0) {
-          AnchorPane background =((AccountListItemController) fxmlLoader.getController()).getBackgroundPane();
-          background.setStyle("-fx-background-color: #B7CBBB");
-        }
-
-
       } catch (Exception e) {
         e.printStackTrace();
+        // AccountListItem.fxml file cannot be find or any of the javafx components is wrong
       }
-
-      // TODO: ev fit labels to dimensions
-      // add OnMouseClicked listeners to each email address label
-
 
     }
   }
