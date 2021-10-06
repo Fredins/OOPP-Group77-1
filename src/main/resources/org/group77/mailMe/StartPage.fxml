@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.StartPageController">
     <children>
@@ -13,7 +14,7 @@
             <top>
                 <Label fx:id="welcomeLabel" text="Choose account or login to a new one!" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
-                        <Insets top="40.0" />
+                        <Insets bottom="20.0" top="40.0" />
                     </BorderPane.margin>
                 </Label>
             </top>
@@ -24,7 +25,10 @@
                </BorderPane.margin></Button>
          </bottom>
          <center>
-            <FlowPane fx:id="accountsFlowPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <FlowPane fx:id="accountsFlowPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="accountsVbox" prefHeight="283.0" prefWidth="401.0" />
+               </children></FlowPane>
          </center>
         </BorderPane>
     </children>
