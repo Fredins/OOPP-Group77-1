@@ -49,12 +49,15 @@ public class MasterController {
         e.printStackTrace(); // TODO feedback
       }
     });
-    addAccountBtn.setOnAction(i -> WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close()));
     writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
     accountsCombo.setOnAction(i -> {
       Account selected = accountsCombo.getSelectionModel().getSelectedItem();
       if (selected != null) {
-        model.activeAccount.set(selected);
+        if(selected.emailAddress().equals("Add New Account")) {
+          WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close());
+        }else{
+          model.activeAccount.set(selected);
+        }
       }
     });
 
