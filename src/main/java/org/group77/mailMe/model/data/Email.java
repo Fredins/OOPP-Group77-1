@@ -3,6 +3,13 @@ package org.group77.mailMe.model.data;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Class representing an email, with fields for from- and to-email addresses,
+ * subject and text content.
+ *
+ * @author Elin Hagman
+ * @author Martin Fredin (made it a record, override the equals).
+ */
 public record Email(
   String from,
   String[] to,

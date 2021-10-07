@@ -6,16 +6,15 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane fx:id="backgroundPane" prefHeight="60.0" prefWidth="400.0" styleClass="backgroundPane" stylesheets="@AccountListItemStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.AccountListItemController">
+<AnchorPane fx:id="backgroundPane" prefHeight="60.0" prefWidth="400.0" styleClass="backgroundPane" stylesheets="@AccountListItemStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.AccountListItemController">
    <children>
-      <Label fx:id="emailAddressLabel" layoutX="89.0" layoutY="5.0" prefHeight="50.0" prefWidth="258.0" stylesheets="@DefaultStyle.css" text="Email Address" AnchorPane.leftAnchor="89.0">
+      <Label fx:id="emailAddressLabel" layoutX="70.0" layoutY="5.0" prefHeight="50.0" prefWidth="258.0" stylesheets="@DefaultStyle.css" text="Email Address" AnchorPane.leftAnchor="70.0">
          <styleClass>
             <String fx:value="headlineFontSize" />
             <String fx:value="standardFontFamily" />
          </styleClass>
       </Label>
-      <ImageView fitHeight="63.0" fitWidth="53.0" layoutX="14.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="14.0">
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="12.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="10.0">
          <image>
             <Image url="@ImagesAndIcons/UserIconEmailItem.png" />
          </image>

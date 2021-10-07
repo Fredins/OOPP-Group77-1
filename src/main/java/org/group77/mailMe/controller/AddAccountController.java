@@ -10,50 +10,31 @@ import org.group77.mailMe.model.data.*;
 import java.util.function.*;
 
 public class AddAccountController {
-  @FXML
-  private TextField emailTextField;
-
-  @FXML
-  private PasswordField passwordField;
-
-  @FXML
-  private Button addAccountButton;
-
-  @FXML
-  private Label errorLabel;
+  @FXML private TextField emailTextField;
+  @FXML private PasswordField passwordField;
+  @FXML private Button addAccountButton;
+  @FXML private Label errorLabel;
 
   /**
-   *
    * Initializes the AddAccount view.
-   *
    * Adds listeners to this addAccountButton and the login TextFields.
-   *
    * @param model hold the application state
-   * @param onClose
+   * @param onClose function which determines the behaviour when closing the window
+   * @author Martin, Elin
    */
   public void init(Model model, Consumer<Node> onClose) {
-
     addAccountButton.setOnAction(inputEvent -> addAccount(model, inputEvent, onClose));
     emailTextField.setOnKeyTyped(keyEvent -> clearErrorMessage());
     passwordField.setOnKeyTyped(keyEvent -> clearErrorMessage());
-
-    //passwordField.setOnAction(inputEvent -> addAccount(model, inputEvent, onClose));
-    // Why did we call this??? ^^^^
   }
-
   /**
-   *
    * Tries to add an account from the user input in this emailTextfield and this passwordField.
-   *
    * If login is successful, sets new account as active account in model and closes window.
    * If login fails, displays an error message thrown by Model in this errorLabel.
-   *
    * @param model holds the application state
    * @param inputEvent occurs when user presses this addAccountButton
-   * @param onClose // TODO: ask martin what this is
-   *
-   * @author Elin Hagman
-   *
+   * @param onClose function which determines the behaviour when closing the window
+   * @author Elin Hagman, Martin
    */
   private void addAccount(Model model, Event inputEvent, Consumer<Node> onClose) {
     try {
@@ -66,7 +47,6 @@ public class AddAccountController {
       // errorLabel.setText("Wrong login credentials, or domain is not supported");
     }
   }
-
   private void clearErrorMessage() {
     errorLabel.setText("");
   }

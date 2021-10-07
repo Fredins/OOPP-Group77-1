@@ -7,35 +7,35 @@ package org.group77.mailMe.services.storage;
  */
 public class OSHandler {
 
-  /**
-   * @return Array of form: [App Directory, Separator]
-   * @throws OSNotFoundException if OS is not MacOS, Windows or Linux.
-   * @author Hampus Jernkrook
-   * Get the right app directory and separator for the user's OS.
-   */
-  public static String[] getAppDirAndSeparator() throws OSNotFoundException {
-    // The variables that will be returned:
-    String appDir;
-    String separator;
+    /**
+     * @return Array of form: [App Directory, Separator]
+     * @throws OSNotFoundException if OS is not MacOS, Windows or Linux.
+     * @author Hampus Jernkrook
+     * Get the right app directory and separator for the user's OS.
+     */
+    public static String[] getAppDirAndSeparator() throws OSNotFoundException {
+        // The variables that will be returned:
+        String appDir;
+        String separator;
 
-    // Get the operating system of the machine.
-    String os = System.getProperty("os.name").toLowerCase();
-    // Get the username on the user's machine.
-    String userName = System.getProperty("user.name");
-    // Set appDir according to os and username.
-    // If os does not match mac/osx, windows or linux then throw exception.
-    if (os.contains("mac")) {
-      appDir = "/Users/" + userName + "/Library/Application Support/Group77";
-      separator = "/";
-    } else if (os.contains("win")) {
-      appDir = "C:\\Users\\" + userName + "\\AppData\\Local\\Group77";
-      separator = "\\";
-    } else if (os.contains("nux")) {
-      appDir = "/home/" + userName + "/.local/share/Group77";
-      separator = "/";
-    } else {
-      throw new OSNotFoundException("Your operating system is either not supported or not found.");
+        // Get the operating system of the machine.
+        String os = System.getProperty("os.name").toLowerCase();
+        // Get the username on the user's machine.
+        String userName = System.getProperty("user.name");
+        // Set appDir according to os and username.
+        // If os does not match mac/osx, windows or linux then throw exception.
+        if (os.contains("mac")) {
+            appDir = "/Users/" + userName + "/Library/Application Support/Group77";
+            separator = "/";
+        } else if (os.contains("win")) {
+            appDir = "C:\\Users\\" + userName + "\\AppData\\Local\\Group77";
+            separator = "\\";
+        } else if (os.contains("nux")) {
+            appDir = "/home/" + userName + "/.local/share/Group77";
+            separator = "/";
+        } else {
+            throw new OSNotFoundException("Your operating system is either not supported or not found.");
+        }
+        return new String[]{appDir, separator};
     }
-    return new String[]{appDir, separator};
-  }
 }

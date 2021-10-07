@@ -24,6 +24,9 @@ public class ReadingController {
   /**
    * 1. set initial values for nodes
    * 2. set event handler for node
+   * @param model the model
+   * @param email the corresponding email
+   * @author Martin
    */
   void init(Model model, Email email) {
     contentArea.setText(email.content());

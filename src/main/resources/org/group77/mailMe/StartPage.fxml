@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="400.0" stylesheets="@StartPageStyle.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.StartPageController">
+<AnchorPane prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.StartPageController">
     <children>
         <BorderPane fx:id="startPageBorderPane" prefHeight="400.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>
@@ -24,21 +26,39 @@
                 </Label>
             </top>
          <bottom>
-            <Button fx:id="addAccountButton" mnemonicParsing="false" styleClass="prominentButton" stylesheets="@DefaultStyle.css" text="Add new account" BorderPane.alignment="CENTER">
+            <Button fx:id="addAccountButton" mnemonicParsing="false" stylesheets="@DefaultStyle.css" text="Add new account" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="20.0" top="20.0" />
-               </BorderPane.margin></Button>
+               </BorderPane.margin>
+               <styleClass>
+                  <String fx:value="prominentButton" />
+                  <String fx:value="removeFocus" />
+               </styleClass></Button>
          </bottom>
          <center>
-            <FlowPane fx:id="accountsFlowPane" alignment="CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <VBox fx:id="accountsVbox" alignment="TOP_CENTER" prefHeight="283.0" prefWidth="353.0" spacing="10.0">
-                     <padding>
-                        <Insets top="10.0" />
-                     </padding>
-                  </VBox>
-               </children></FlowPane>
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+               <content>
+                  <FlowPane fx:id="accountsFlowPane" alignment="CENTER" columnHalignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="398.0">
+                     <children>
+                        <VBox fx:id="accountsVbox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="382.0" spacing="10.0">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </FlowPane>
+               </content>
+               <styleClass>
+                  <String fx:value="removeFocus" />
+                  <String fx:value="scrollPane" />
+               </styleClass>
+            </ScrollPane>
          </center>
         </BorderPane>
     </children>
+   <stylesheets>
+      <URL value="@StartPageStyle.css" />
+      <URL value="@DefaultStyle.css" />
+      <URL value="@StartPageStyle.css" />
+   </stylesheets>
 </AnchorPane>

@@ -13,8 +13,10 @@ import java.util.function.*;
 
 public class WindowOpener {
 
-  /**
+  /*
    * open master window
+   * @param model the model
+   * @author Martin
    */
   public static void openMaster(Model model){
     try {
@@ -24,6 +26,8 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("MailMe");
       stage.setScene(new Scene(pane));
+      stage.setMinHeight(700);
+      stage.setMinWidth(1050);
       stage.show();
     }catch (IOException e){
       e.printStackTrace();
@@ -31,6 +35,8 @@ public class WindowOpener {
   }
   /**
    * open start page window
+   * @param model the model
+   * @author Martin
    */
   public static void openStartPage(Model model){
     try {
@@ -40,6 +46,7 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("Welcome");
       stage.setScene(new Scene(pane));
+      stage.setResizable(false);
       stage.show();
 
     }catch (IOException e){
@@ -48,6 +55,8 @@ public class WindowOpener {
   }
   /**
    * open add-account window
+   * @param model the model
+   * @author Martin
    */
   public static void openAddAccount(Model model, Consumer<Node> onClose) {
 
@@ -58,6 +67,7 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("Add Account");
       stage.setScene(new Scene(pane));
+      stage.setResizable(false);
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();
@@ -65,6 +75,8 @@ public class WindowOpener {
   }
   /**
    * open writing window
+   * @param model the model
+   * @author Martin
    */
   public static void openWriting(Model model) {
     try {
@@ -74,6 +86,7 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("New MeMail");
       stage.setScene(new Scene(pane));
+      stage.setResizable(false);
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();
@@ -81,6 +94,9 @@ public class WindowOpener {
   }
   /**
    * open reply window
+   * @param model the model
+   * @param to the email address which the user is replying to
+   * @author Martin
    */
   public static void openReply(Model model, String to) {
     try {
@@ -90,6 +106,7 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("Reply");
       stage.setScene(new Scene(pane));
+      stage.setResizable(false);
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();

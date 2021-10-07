@@ -13,7 +13,6 @@ import java.io.*;
 import java.util.*;
 
 public class WritingController {
-
   @FXML private TextField toField;
   @FXML private Label fromLabel;
   @FXML private TextField contentField;
@@ -23,6 +22,11 @@ public class WritingController {
 
   private final List<String> attachments = new ArrayList<>();
 
+  /**
+   * normal init method when not replying
+   * @param model the model
+   * @author Martin, Alexey
+   */
   public void init(Model model) {
     init(model, null);
   }
@@ -30,6 +34,8 @@ public class WritingController {
   /**
    * 1. set initial values for nodes
    * 2. set event handlers for nodes and state fields
+   * @param model the model
+   * @param to the email address which the user is replying to
    */
   public void init(Model model, String to) {
     if (to != null) {
@@ -47,6 +53,8 @@ public class WritingController {
   /**
    * 1. send email
    * 2. display feedback if sending was successful
+   * @param model the model
+   * @author Alexey
    */
   private void send(Model model) {
     try {
@@ -108,6 +116,7 @@ public class WritingController {
   }
 
   /** @author Alexey Ryabov
+   * @param stage the stage of the window
    * For testing. This closes the stage of the window where certain stage is located.
    */
   @FXML
