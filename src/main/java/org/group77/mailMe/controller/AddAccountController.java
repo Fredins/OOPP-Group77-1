@@ -28,9 +28,9 @@ public class AddAccountController {
     passwordField.setOnKeyTyped(keyEvent -> clearErrorMessage());
   }
   /**
-   * Tries to add an account from the user input in this emailTextfield and this passwordField.
+   * Tries to add an account in model from the user input in this emailTextField and this passwordField.
    * If login is successful, sets new account as active account in model and closes window.
-   * If login fails, displays an error message thrown by Model in this errorLabel.
+   * If login fails, displays an error message thrown by model in this errorLabel.
    * @param model holds the application state
    * @param inputEvent occurs when user presses this addAccountButton
    * @param onClose function which determines the behaviour when closing the window
@@ -38,8 +38,7 @@ public class AddAccountController {
    */
   private void addAccount(Model model, Event inputEvent, Consumer<Node> onClose) {
     try {
-      Account account = AccountFactory.createAccount(emailTextField.getText(), passwordField.getText().toCharArray());
-      model.addAccount(account);
+      model.addAccount(emailTextField.getText(), passwordField.getText());
       // call the closing function
       onClose.accept((Node) inputEvent.getSource());
     } catch (Exception e) {

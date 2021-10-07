@@ -104,16 +104,27 @@ public class Model {
     }
 
     /**
-     * Adds a new account by adding it to the application state and storing it.
+     * Tries to add a new account to accounts.
      *
-     * @throws Exception if stoage or email serive provider have problems
+     * If emailAddress does not belong to a supported domain, throws Exception with informative message.
+     * If account cannot connect to server or store account, throws Exception.
+     *
+     * @throws Exception if domain is not supported or authentication to server fails
      * @author Elin Hagman, Martin
      */
-    public void addAccount(Account account) throws Exception {
-        // if the new account can connect to the server then store it and add to state.
-        if (EmailServiceProviderFactory.getEmailServiceProvider(account).testConnection(account)) {
-            storage.store(account);
-            accounts.add(account);
+    public void addAccount(String emailAddress, String password) throws Exception {
+        // if the new account can connect to the server then store it and add to state
+        Account account = AccountFactory.createAccount(emailAddress, password.toCharArray());
+
+        if (account != null) {
+
+            if (EmailServiceProviderFactory.getEmailServiceProvider(account).testConnection(account)) {
+                storage.store(account); // throws authentication exception
+                accounts.add(account);
+
+            }
+        } else {
+            throw new Exception("Domain not supported");
         }
     }
 
