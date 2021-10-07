@@ -12,6 +12,18 @@ import java.util.List;
  * @author Hampus Jernkrook
  */
 public class TextFinder {
+    /*
+    - dateSorter : Sorter<Email, Date>
+- stringFilter : Filter<Email, String>
+- dateFilter : Filer<Email, Date>
+     */
+    private final Filter<Email, String> stringFilter = new Filter<>();
+    private final Filter<Email, Date> dateFilter = new Filter<>();
+    private final Sorter<Email, Date> dateSorter = new Sorter<>();
+    private final InFromPredicate inFromPredicate = new InFromPredicate();
+    private final InToPredicate inToPredicate = new InToPredicate();
+    private final MaxDatePredicate maxDatePredicate = new MaxDatePredicate();
+
 
     public List<Email> search(List<Email> emails, String searchWord) {
         return null;
@@ -22,7 +34,7 @@ public class TextFinder {
     }
 
     List<Email> filterOnFrom(List<Email> emails, String searchWord) {
-        return null;
+        return stringFilter.filter(emails, inFromPredicate, searchWord);
     }
 
     List<Email> filterOnMaxDate(List<Email> emails, Date maxDate) {
