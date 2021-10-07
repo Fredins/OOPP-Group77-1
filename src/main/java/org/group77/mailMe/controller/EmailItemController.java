@@ -17,6 +17,9 @@ public class EmailItemController {
   /**
    * 1. set initial values for nodes
    * 2. set event handlers for nodes
+   * @param model the model
+   * @param email the corresponding email
+   * @author Martin
    */
   void init(Model model, Email email) {
     fromLabel.setText(email.from());

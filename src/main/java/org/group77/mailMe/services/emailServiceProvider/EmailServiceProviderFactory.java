@@ -9,12 +9,12 @@ import org.group77.mailMe.model.data.*;
  * the account details.
  */
 public class EmailServiceProviderFactory {
+
   /**
    * @param account - the account that should be connected against some
    *                email service provider.
    * @return an EmailServiceProviderStrategy.
    * @author Hampus Jernkrook
-   * <p>
    * Determines what EmailServiceProviderStrategy to use depending on
    * account's ServerProvider enum.
    */

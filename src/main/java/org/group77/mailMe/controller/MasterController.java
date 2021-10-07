@@ -32,6 +32,8 @@ public class MasterController {
    * 1. load/display folders in flowPane
    * 2. populate account comboBox
    * 3. add event handlers to nodes and state fields
+   * @param model the model
+   * @author Martin
    */
   public void init(Model model) {
     loadFolders(model.folders, model);
@@ -51,7 +53,6 @@ public class MasterController {
     writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
     accountsCombo.setOnAction(i -> {
       Account selected = accountsCombo.getSelectionModel().getSelectedItem();
-
       if (selected != null) {
         if(selected.emailAddress().equals("Add New Account")) {
           WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close());
@@ -61,24 +62,23 @@ public class MasterController {
       }
     });
 
-
     // change handlers
     model.activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
       accountsCombo.setValue(newAccount);
     });
-    model.folders.addListener((ListChangeListener<? super Folder>) c -> {
-      ObservableList<? extends Folder> newFolders =  c.getList();
+    model.folders.addListener((ListChangeListener<? super Folder>) changeEvent -> {
+      ObservableList<? extends Folder> newFolders =  changeEvent.getList();
       if(!newFolders.isEmpty()){
         loadFolders(newFolders, model);
         model.activeFolder.set(newFolders.get(0));
       }
     });
-    model.visibleEmails.addListener((ListChangeListener<? super Email>) c -> loadEmails(c.getList(), model));
-    model.accounts.addListener((ListChangeListener<? super Account>) c -> populateAccountCombo(c.getList(), model));
+    model.visibleEmails.addListener((ListChangeListener<? super Email>) changeEvent -> loadEmails(changeEvent.getList(), model));
+    model.accounts.addListener((ListChangeListener<? super Account>) changeEvent -> populateAccountCombo(changeEvent.getList(), model));
     model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> model.visibleEmails.setAll(newFolder.emails()));
-    model.readingEmail.addListener((o, op, p) -> {
-      if (p != null) {
-        loadReading(p, model);
+    model.readingEmail.addListener((obs, oldEmail, newEmail) -> {
+      if (newEmail != null) {
+        loadReading(newEmail, model);
       } else {
         readingPane.getChildren().clear();
       }
@@ -87,6 +87,9 @@ public class MasterController {
 
   /**
    * populates the comboBox with accounts
+   * @param accounts all the accounts
+   * @param model the model
+   * @author Martin
    */
   private void populateAccountCombo(List<? extends Account> accounts, Model model) {
     accountsCombo.getItems().clear();
@@ -115,6 +118,9 @@ public class MasterController {
 
   /**
    * loads/display email
+   * @param email the email to be displayed
+   * @param model the model
+   * @author Martin
    */
  private void loadReading(Email email, Model model) {
     try {
@@ -131,6 +137,9 @@ public class MasterController {
   /**
    * 1. initialize every folder in state field folders
    * 2. display every folder in the folder flowPane
+   * @param folders all the folders to be loaded
+   * @param model the model
+   * @author Martin
    */
   private void loadFolders(List<? extends Folder> folders, Model model) {
     foldersFlow.getChildren().clear();
@@ -152,6 +161,9 @@ public class MasterController {
   /**
    * 1. initialize every email in state field visibleEmails
    * 2. display every email in the emails flowPane
+   * @param emails the emails to be displayed
+   * @param model the model
+   * @author Martin
    */
   private void loadEmails(List<? extends Email> emails, Model model) {
     emailsFlow.getChildren().clear();

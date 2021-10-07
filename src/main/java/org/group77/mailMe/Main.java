@@ -16,7 +16,7 @@ public class Main extends Application {
    * opens different views depending on number of accounts
    */
   @Override
-  public void start(Stage stage) throws IOException, OSNotFoundException {
+  public void start(Stage stage) throws Exception {
     Model model = new Model();
     if (model.accounts.isEmpty()) {
       // consumer that closes active window and open master widow.

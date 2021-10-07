@@ -6,21 +6,31 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.*;
 
+/**
+ * Class is a subclass to the EmailServiceProvider.
+ * It is responsible for parsing information from the outlook server,
+ * setting outlook properties and creating a session to be able to send an email message.
+ * @author Martin Fredin.
+ * @author David Zamanian.
+ * @author Alexey Ryabov
+ */
+
 public class MicrosoftProvider extends EmailServiceProvider {
 
+  /**@author Martin Fredin
+   * Input information required to establish connection with the server.
+   */
   public MicrosoftProvider() {
     super("outlook.office365.com", "smtp-mail.outlook.com", "imaps", "smtp", 993, 587);
   }
 
-
   /**
-   * @param from       - active account
-   * @param recipients - List of to-account emails will be sent to.
-   * @param subject    - subject.
-   * @param content    - content.
-   * @return
+   * @param from       - active account.
+   * @param recipients - List of to-account that email will be sent to.
+   * @param subject    - subject text.
+   * @param content    - content text.
+   * @return - boolean if email is sent successful.
    * @author Alexey Ryabov
-   * TODO Replace TESTAccount, TESTAccountPassword with fromAccount, fromAccountPassword.
    */
   @Override
   public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
@@ -42,18 +52,19 @@ public class MicrosoftProvider extends EmailServiceProvider {
     return true;
   }
 
+  //TODO
   @Override
   protected List<Email> parse(Store store) throws MessagingException {
     return null;
   }
 
   /**
-   * @param properties
-   * @param account
-   * @param password
-   * @return
+   * @param properties - are properties of the session, are set in the sendEmail method.
+   * @param account - active account.
+   * @param password - password of the active account.
+   * @return - session object.
    * @author Alexey Ryabov
-   * Helper function. Returns Authenticated Session. For testing only.
+   * Asks server to authorice the session. Returns Authenticated Session.
    */
   private static Session getAuthentication(Properties properties, String account, String password) {
     Session session = Session.getInstance(properties, new Authenticator() {
@@ -66,9 +77,8 @@ public class MicrosoftProvider extends EmailServiceProvider {
   }
 
   /**
-   * @param properties
+   * @param properties - are connection properties to the server.
    * @author Alexey Ryabov
-   * Sets properties. For testing only.
    */
   private static void setMicrosoftOutlookProperties(Properties properties) {
     properties.put("mail.smtp.starttls.enable", "true");
@@ -78,15 +88,15 @@ public class MicrosoftProvider extends EmailServiceProvider {
   }
 
   /**
-   * @param session
-   * @param from
-   * @param recipient
-   * @param subject
-   * @param content
-   * @return
+   * @param session - session of the connection.
+   * @param from - active account.
+   * @param recipient - email address of the recipient.
+   * @param subject - email subject string.
+   * @param content - email content.
+   * @return - message object.
    * @throws Exception
    * @author Alexey Ryabov
-   * Helper function. Composes a message.
+   * Composes a message, returnt message object..
    */
   private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<String> attachments) throws Exception {
     try {
