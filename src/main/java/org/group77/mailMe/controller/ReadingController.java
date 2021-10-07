@@ -20,13 +20,14 @@ public class ReadingController {
   @FXML private Label toLabel;
   @FXML private Label dateLabel;
   @FXML private Button replyButton;
+  @FXML private Button bin;
 
   /**
    * 1. set initial values for nodes
    * 2. set event handler for node
    * @param model the model
    * @param email the corresponding email
-   * @author Martin
+   * @author Martin, David
    */
   void init(Model model, Email email) {
     contentArea.setText(email.content());
@@ -34,7 +35,13 @@ public class ReadingController {
     subjectLabel.setText(email.subject());
     toLabel.setText((Arrays.toString(email.to())));
     // TODO date
-
+    bin.setOnAction(i -> {
+      try {
+        DeleteEmail(model);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    });
     replyButton.setOnAction(inputEvent -> WindowOpener.openReply(model, fromLabel.getText()));
   }
 
@@ -47,5 +54,31 @@ public class ReadingController {
   private String removeBrackets(String s){
     s = s.replaceAll("[\\[\\](){}]","");
     return s;
+  }
+
+  //TODO Could potentially move these methods below into MasterController but then we need to make some changes in the GUI
+
+  /**
+   * Calls the DeleteEmail method in model
+   * @param model
+   * @throws Exception
+   * @author David Zamanian
+   */
+
+  @FXML
+  private void DeleteEmail(Model model) throws Exception {
+    model.DeleteEmail();
+  }
+
+  /**
+   * Calls the MoveEmail method in model
+   * @param model
+   * @throws Exception
+   * @author David Zamanian
+   */
+
+  @FXML
+  private void MoveEmail(Model model) throws Exception {
+    model.MoveEmail();
   }
 }

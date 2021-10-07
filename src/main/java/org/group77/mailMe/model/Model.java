@@ -1,5 +1,6 @@
 package org.group77.mailMe.model;
 
+import javafx.fxml.FXML;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.*;
 import org.group77.mailMe.services.storage.*;
@@ -156,7 +157,32 @@ public class Model {
                 new Folder("Trash", new ArrayList<>())
         );
     }
+
+
+
+    public void DeleteEmail() throws Exception {
+
+        List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
+        newFolders.get(4).emails().add(readingEmail.get());
+        newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
+        storage.store(activeAccount.get(), newFolders);
+        folders.replaceAll(newFolders);
+        refresh();
+
+    }
+
+    public void MoveEmail() throws Exception {
+
+        List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
+        newFolders.get(4).emails().add(readingEmail.get());
+        newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
+        storage.store(activeAccount.get(), newFolders);
+        folders.replaceAll(newFolders);
+        refresh();
+
+    }
 }
+
 
 
 

@@ -82,6 +82,7 @@ public class MasterController {
         readingPane.getChildren().clear();
       }
     });
+
   }
 
     /** Populates the comboBox with the emailAddresses of the accounts in model's accounts.
@@ -184,4 +185,33 @@ public class MasterController {
                                       .collect(Collectors.toList())
     );
   }
+  @FXML
+  private void MoveEmail(){
+
+  }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
