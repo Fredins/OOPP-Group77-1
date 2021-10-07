@@ -42,6 +42,7 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("Welcome");
       stage.setScene(new Scene(pane));
+      stage.setResizable(false);
       stage.show();
 
     }catch (IOException e){
@@ -60,6 +61,7 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("Add Account");
       stage.setScene(new Scene(pane));
+      stage.setResizable(false);
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();
@@ -76,6 +78,7 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("New MeMail");
       stage.setScene(new Scene(pane));
+      stage.setResizable(false);
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();
@@ -92,6 +95,7 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("Reply");
       stage.setScene(new Scene(pane));
+      stage.setResizable(false);
       stage.show();
     } catch (IOException e) {
       e.printStackTrace();

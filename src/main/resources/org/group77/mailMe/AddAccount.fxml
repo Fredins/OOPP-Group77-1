@@ -12,17 +12,17 @@
    <children>
       <TextField fx:id="emailTextField" layoutX="109.0" layoutY="67.0" prefHeight="38.0" prefWidth="301.0" promptText="email address" styleClass="removeFocus" AnchorPane.leftAnchor="109.0" AnchorPane.rightAnchor="90.0" />
       <PasswordField fx:id="passwordField" layoutX="109.0" layoutY="122.0" prefHeight="38.0" prefWidth="301.0" promptText="password" styleClass="removeFocus" AnchorPane.leftAnchor="109.0" AnchorPane.rightAnchor="90.0" />
-      <Button fx:id="addAccountButton" layoutX="199.0" layoutY="211.0" mnemonicParsing="false" stylesheets="@DefaultStyle.css" text="Add Account">
+      <Button fx:id="addAccountButton" layoutX="199.0" layoutY="211.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="38.0" prefWidth="102.0" stylesheets="@DefaultStyle.css" text="Add Account" AnchorPane.leftAnchor="199.0" AnchorPane.rightAnchor="199.0">
          <styleClass>
             <String fx:value="prominentButton" />
             <String fx:value="removeFocus" />
          </styleClass></Button>
-      <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="78.0" prefHeight="17.0" prefWidth="96.0" stylesheets="@DefaultStyle.css" text="Email Address:" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="395.0">
+      <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="78.0" prefHeight="17.0" prefWidth="96.0" stylesheets="@DefaultStyle.css" text="Email Address:" AnchorPane.leftAnchor="9.0">
          <styleClass>
             <String fx:value="standardFontFamily" />
             <String fx:value="standardTextFontSize" />
          </styleClass></Label>
-      <Label alignment="CENTER_RIGHT" layoutX="23.0" layoutY="132.0" prefHeight="17.0" prefWidth="85.0" stylesheets="@DefaultStyle.css" text="Password: " AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="391.6666666666667">
+      <Label alignment="CENTER_RIGHT" layoutX="23.0" layoutY="132.0" prefHeight="17.0" prefWidth="85.0" stylesheets="@DefaultStyle.css" text="Password: " AnchorPane.leftAnchor="23.0">
          <styleClass>
             <String fx:value="standardFontFamily" />
             <String fx:value="standardTextFontSize" />
