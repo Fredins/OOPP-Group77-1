@@ -76,7 +76,7 @@ public class ReadingController {
 
   /**
    * Calls the DeleteEmail method in model
-   * @param model
+   * @param model holds the state of the application
    * @throws Exception
    * @author David Zamanian
    */
@@ -88,7 +88,7 @@ public class ReadingController {
 
   /**
    * Calls the MoveEmail method in model
-   * @param model
+   * @param model holds the state of the application
    * @throws Exception
    * @author David Zamanian
    */
@@ -99,9 +99,10 @@ public class ReadingController {
   }
 
   /**
+   * Populates the comboBox with the names of the folders in model's folders.
    *
-   * @param folders
-   * @param model
+   * @param folders all folders in model's folders
+   * @param model holds the state of the application
    * @author David Zamanian
    */
 
@@ -128,30 +129,3 @@ public class ReadingController {
     moveEmailComboBox.getItems().addAll(folders);
   }
 }
-
-/*
-  private void populateAccountCombo(List<? extends Account> accounts, Model model) {
-    accountsCombo.getItems().clear();
-    Account addAcc = new Account("Add New Account", new char[]{}, ServerProvider.GMAIL);
-    // override toString() and fromString() to make account correspond to its email address
-    accountsCombo.setConverter(new StringConverter<>() {
-      @Override public String toString(Account account) {
-        return account != null ? account.emailAddress() : null;
-      }
-      @Override public Account fromString(String string) {
-        Account account = null;
-        try {
-          account = model.accounts.stream()
-            .filter(acc -> acc.emailAddress().equals(string))
-            .findAny()
-            .orElseThrow(Exception::new);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        return account;
-      }
-    });
-    accountsCombo.getItems().addAll(accounts);
-    accountsCombo.getItems().add(addAcc);
-  }
- */

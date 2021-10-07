@@ -179,6 +179,7 @@ public class Model {
     /**
      * Moves tha email to the desired folder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
      * @throws Exception
+     * @param folder The folder that was selected in the "Move" comboBox in readingView
      * @author David Zamanian
      */
 
