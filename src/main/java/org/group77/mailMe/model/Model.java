@@ -157,7 +157,7 @@ public class Model {
                 new Folder("Trash", new ArrayList<>())
         );
     }
-    
+
     /**
      * Removes the currently open email and moves it to the trash.
      * @throws Exception
@@ -171,7 +171,7 @@ public class Model {
         newFolders.get(4).emails().add(readingEmail.get()); //TODO Fix better index if we want to add more folders in the future (from 4 to compare name to "Trash" somehow..)
         //Remove currently open email from the activeFolder
         newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
-        //storage.store(activeAccount.get(), newFolders);
+        storage.store(activeAccount.get(), newFolders);
         folders.replaceAll(newFolders);
         refresh();
     }
@@ -189,7 +189,7 @@ public class Model {
         newFolders.get(newFolders.indexOf(folder)).emails().add(readingEmail.get());
         //Delete the currently open email from the activeFolder
         newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
-        //storage.store(activeAccount.get(), newFolders);
+        storage.store(activeAccount.get(), newFolders);
         folders.replaceAll(newFolders);
         refresh();
 
