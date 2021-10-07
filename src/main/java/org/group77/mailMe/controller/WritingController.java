@@ -15,7 +15,7 @@ import java.util.*;
 public class WritingController {
   @FXML private TextField toField;
   @FXML private Label fromLabel;
-  @FXML private TextField contentField;
+  @FXML private TextArea contentField;
   @FXML private Button sendBtn;
   @FXML private Button attachBtn;
   @FXML private TextField subjectField;

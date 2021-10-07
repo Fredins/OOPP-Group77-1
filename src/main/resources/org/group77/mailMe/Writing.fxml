@@ -26,7 +26,7 @@
       <Label layoutX="44.0" layoutY="84.0" text="Subject:" AnchorPane.leftAnchor="51.0" />
       <TextField fx:id="subjectField" layoutX="110.0" layoutY="80.0" prefHeight="25.0" prefWidth="439.0" promptText="Subject..." styleClass="removeFocus" stylesheets="@WritingStyle.css" AnchorPane.rightAnchor="51.0" />
       <Label fx:id="fromLabel" layoutX="110.0" layoutY="52.0" prefHeight="25.0" prefWidth="439.0" text="Label" />
-      <TextArea layoutX="51.0" layoutY="113.0" prefHeight="241.0" prefWidth="505.0" promptText="Write an email..." styleClass="removeFocus" wrapText="true" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0" />
+      <TextArea fx:id="contentField" layoutX="51.0" layoutY="113.0" prefHeight="241.0" prefWidth="505.0" promptText="Write an email..." styleClass="removeFocus" wrapText="true" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0" />
    </children>
    <stylesheets>
       <URL value="@WritingStyle.css" />
