@@ -24,7 +24,7 @@ mvn javafx:run
 There are currently no binaries available. 
 
 ## Usage
-Currently the only support email domain is gmail. To use your gmail account you need to allow [less secure apps](https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4Opn2VvV4M2FVc8GL4t5w2MV0dbOlMLrMpvHxL4yBg2BE5bOlubol8AT-zBCMExfS5rNOcaS4ehlx93WNOve30nCRPeNw),
+Currently the only supported email domain is gmail. To use your gmail account you need to allow [less secure apps](https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4Opn2VvV4M2FVc8GL4t5w2MV0dbOlMLrMpvHxL4yBg2BE5bOlubol8AT-zBCMExfS5rNOcaS4ehlx93WNOve30nCRPeNw),
 because Oauth is not implemented yet.
 
 ## Package Structure
