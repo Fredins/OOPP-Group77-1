@@ -33,7 +33,7 @@ public class MasterController {
    * 2. populate account comboBox
    * 3. add event handlers to nodes and state fields
    * @param model the model
-   * @author Martin
+   * @author Martin, David
    */
   public void init(Model model) {
     loadFolders(model.folders, model);
@@ -89,7 +89,7 @@ public class MasterController {
    * populates the comboBox with accounts
    * @param accounts all the accounts
    * @param model the model
-   * @author Martin
+   * @author Martin, David
    */
   private void populateAccountCombo(List<? extends Account> accounts, Model model) {
     accountsCombo.getItems().clear();
@@ -120,7 +120,7 @@ public class MasterController {
    * loads/display email
    * @param email the email to be displayed
    * @param model the model
-   * @author Martin
+   * @author David, Martin
    */
  private void loadReading(Email email, Model model) {
     try {
@@ -163,7 +163,7 @@ public class MasterController {
    * 2. display every email in the emails flowPane
    * @param emails the emails to be displayed
    * @param model the model
-   * @author Martin
+   * @author David, Martin
    */
   private void loadEmails(List<? extends Email> emails, Model model) {
     emailsFlow.getChildren().clear();
