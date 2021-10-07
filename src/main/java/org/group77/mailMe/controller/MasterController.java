@@ -86,10 +86,12 @@ public class MasterController {
   }
 
   /**
-   * populates the comboBox with accounts
-   * @param accounts all the accounts
-   * @param model the model
-   * @author Martin
+   * Populates the comboBox with the emailAddresses of the accounts in model's accounts.
+   * Adds an Account with emailAddress "Add New Account" that can be clicked on to open AddAccountView.
+   *
+   * @param accounts all accounts in model's accounts.
+   * @param model holds the state of the application
+   * @author Martin, Elin Hagman, David Ågren Zamanian
    */
   private void populateAccountCombo(List<? extends Account> accounts, Model model) {
     accountsCombo.getItems().clear();
