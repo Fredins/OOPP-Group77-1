@@ -50,7 +50,7 @@ public class StartPageController {
    * @author Elin
    */
   private void initStoredAccounts(Model model) {
-    for (Account account : model.accounts) {
+    for (Account account : model.accounts.get()) {
       try {
         // load AccountListItem.fxml
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountListItem.fxml"));

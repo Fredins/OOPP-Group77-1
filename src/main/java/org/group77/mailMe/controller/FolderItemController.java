@@ -25,7 +25,7 @@ public class FolderItemController {
     // input handlers
     button.setOnMouseClicked(i -> model.activeFolder.set(folder));
     // change handlers
-    model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> {
+    model.activeFolder.addObserver(newFolder -> {
         button.getStyleClass().clear();
         button.getStyleClass().add(folder.equals(newFolder) ? "focused" : "unfocused");
     });

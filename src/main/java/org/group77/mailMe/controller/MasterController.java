@@ -36,10 +36,10 @@ public class MasterController {
    * @author Martin, David
    */
   public void init(Model model) {
-    loadFolders(model.folders, model);
+    loadFolders(model.folders.get(), model);
 
     if (model.accounts != null) {
-      populateAccountCombo(model.accounts, model);
+      populateAccountCombo(model.accounts.get(), model);
     }
 
     // input handlers
@@ -63,20 +63,19 @@ public class MasterController {
     });
 
     // change handlers
-    model.activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
+    model.activeAccount.addObserver(newAccount -> {
       accountsCombo.setValue(newAccount);
     });
-    model.folders.addListener((ListChangeListener<? super Folder>) changeEvent -> {
-      ObservableList<? extends Folder> newFolders =  changeEvent.getList();
+    model.folders.addObserver(newFolders -> {
       if(!newFolders.isEmpty()){
         loadFolders(newFolders, model);
         model.activeFolder.set(newFolders.get(0));
       }
     });
-    model.visibleEmails.addListener((ListChangeListener<? super Email>) changeEvent -> loadEmails(changeEvent.getList(), model));
-    model.accounts.addListener((ListChangeListener<? super Account>) changeEvent -> populateAccountCombo(changeEvent.getList(), model));
-    model.activeFolder.addListener((ChangeListener<? super Folder>) (obs, oldFolder, newFolder) -> model.visibleEmails.setAll(newFolder.emails()));
-    model.readingEmail.addListener((obs, oldEmail, newEmail) -> {
+    model.visibleEmails.addObserver(newEmails -> loadEmails(newEmails, model));
+    model.accounts.addObserver(newEmails -> populateAccountCombo(newEmails, model));
+    model.activeFolder.addObserver(newFolder -> model.visibleEmails.replaceAll(newFolder.emails()));
+    model.readingEmail.addObserver(newEmail -> {
       if (newEmail != null) {
         loadReading(newEmail, model);
       } else {
@@ -143,7 +142,7 @@ public class MasterController {
    * @param model the model
    * @author Martin
    */
-  private void loadFolders(List<? extends Folder> folders, Model model) {
+  private void loadFolders(List<Folder> folders, Model model) {
     foldersFlow.getChildren().clear();
     foldersFlow.getChildren().addAll(folders
                                        .stream()
@@ -167,7 +166,7 @@ public class MasterController {
    * @param model the model
    * @author David, Martin
    */
-  private void loadEmails(List<? extends Email> emails, Model model) {
+  private void loadEmails(List<Email> emails, Model model) {
     emailsFlow.getChildren().clear();
     emailsFlow.getChildren().addAll(emails
                                       .stream()

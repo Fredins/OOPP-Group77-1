@@ -29,7 +29,7 @@ public class EmailItemController {
     button.setOnMouseClicked(inputEvent -> model.readingEmail.set(email));
 
     // change handler
-    model.readingEmail.addListener((ChangeListener<? super Email>) (obs, oldEmail, newEmail) -> {
+    model.readingEmail.addObserver(newEmail -> {
       if(email.equals(newEmail)){
         button.getStyleClass().add("dropshadow");
       }else{

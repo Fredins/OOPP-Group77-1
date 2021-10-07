@@ -47,7 +47,7 @@ public class WritingController {
     attachBtn.setOnAction(inputEvent -> attachFiles());
 
     // change handlers
-    model.activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> fromLabel.setText(newAccount.emailAddress()));
+    model.activeAccount.addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
   }
 
   /**

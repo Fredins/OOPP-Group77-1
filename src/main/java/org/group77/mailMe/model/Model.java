@@ -1,13 +1,8 @@
 package org.group77.mailMe.model;
 
-import javafx.beans.property.*;
-import javafx.beans.value.*;
-import javafx.collections.*;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.*;
 import org.group77.mailMe.services.storage.*;
-
-import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -20,14 +15,12 @@ public class Model {
     private final Storage storage = new LocalDiscStorage();
 
     // Application state
-    public ObservableList<Email> visibleEmails = FXCollections.observableList(new ArrayList<>());
-    public ObservableList<Folder> folders = FXCollections.observableList(new ArrayList<>());
-    public ObservableList<Account> accounts = FXCollections.observableList(new ArrayList<>());
-    public SimpleObjectProperty<Account> activeAccount = new SimpleObjectProperty<>(null);
-    public SimpleObjectProperty<Folder> activeFolder = new SimpleObjectProperty<>(null);
-    // the email currently read by the user
-    public SimpleObjectProperty<Email> readingEmail = new SimpleObjectProperty<>(null);
-
+    public SubjectList<Email> visibleEmails = new SubjectList<>(new ArrayList<>());
+    public SubjectList<Folder> folders = new SubjectList<>(new ArrayList<>());
+    public SubjectList<Account> accounts = new SubjectList<>(new ArrayList<>());
+    public Subject<Account> activeAccount = new Subject<>(null);
+    public Subject<Folder> activeFolder = new Subject<>(null);
+    public Subject<Email> readingEmail = new Subject<>(null);
     /**
      * 1. load accounts from storage
      * 2. add event handler to state field active account
@@ -36,14 +29,14 @@ public class Model {
      */
     public Model() throws Exception {
         // get all accounts stored from previous sessions
-        accounts.setAll(storage.retrieveAccounts());
+        accounts.replaceAll(storage.retrieveAccounts());
 
 
         // change event handlers
         // these handlers are for relations between the different states
 
         // update folders when active account is changed
-        activeAccount.addListener((ChangeListener<? super Account>) (obs, oldAccount, newAccount) -> {
+        activeAccount.addObserver( newAccount -> {
             // if a new account is set as active, get the stored folders of that account.
             if (newAccount != null) {
                 List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
@@ -51,12 +44,12 @@ public class Model {
                     newFolders = createFolders();
                     storage.store(activeAccount.get(), newFolders);
                 }
-                folders.setAll(newFolders);
+                folders.replaceAll(newFolders);
             }
         });
         // if a new account is added then set it as active
-        accounts.addListener((ListChangeListener<? super Account>) changeEvent -> {
-            Account newAccount = changeEvent.getList().get(changeEvent.getList().size() - 1);
+        accounts.addObserver(newAccounts -> {
+            Account newAccount = newAccounts.get(newAccounts.size() - 1);
             activeAccount.set(newAccount);
         });
 
@@ -95,7 +88,7 @@ public class Model {
                             .collect(Collectors.toList())
             );
             // replace inbox with newInbox
-            folders.set(folders.indexOf(inbox), newInbox);
+            folders.replace(inbox, newInbox);
             // replace inbox in storage with newInbox
             storage.store(activeAccount.get(), newInbox);
         } else { // if there was no active account of there were no folders
