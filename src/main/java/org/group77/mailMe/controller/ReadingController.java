@@ -5,6 +5,7 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
+import javafx.util.StringConverter;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
@@ -21,6 +22,7 @@ public class ReadingController {
   @FXML private Label dateLabel;
   @FXML private Button replyButton;
   @FXML private Button bin;
+  @FXML private ComboBox<Folder> moveEmailComboBox;
 
   /**
    * 1. set initial values for nodes
@@ -43,6 +45,20 @@ public class ReadingController {
       }
     });
     replyButton.setOnAction(inputEvent -> WindowOpener.openReply(model, fromLabel.getText()));
+    if (model.folders != null) {
+      PopulateFolderComboBox(model.folders.get(), model);
+    }
+
+    moveEmailComboBox.setOnAction(i -> {
+      Folder selected = moveEmailComboBox.getSelectionModel().getSelectedItem();
+      if (selected != null) {
+        try {
+          MoveEmail(selected, model);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
   }
 
   /**
@@ -78,7 +94,64 @@ public class ReadingController {
    */
 
   @FXML
-  private void MoveEmail(Model model) throws Exception {
-    model.MoveEmail();
+  private void MoveEmail(Folder folder, Model model) throws Exception {
+    model.MoveEmail(folder);
+  }
+
+  /**
+   *
+   * @param folders
+   * @param model
+   * @author David Zamanian
+   */
+
+  private void PopulateFolderComboBox(List<? extends Folder> folders, Model model){
+    moveEmailComboBox.getItems().clear();
+    moveEmailComboBox.setConverter(new StringConverter<Folder>() {
+      @Override
+      public String toString(Folder folder) {
+        return folder!= null ? folder.name() : null;
+      }
+      @Override
+      public Folder fromString(String s) {
+        Folder folder = null;
+        try {
+          folder = model.folders.stream().filter(fol -> fol.name().equals(s))
+                  .findAny()
+                  .orElseThrow(Exception::new);
+        }catch (Exception e){
+          e.printStackTrace();
+        }
+        return folder;
+      }
+    });
+    moveEmailComboBox.getItems().addAll(folders);
   }
 }
+
+/*
+  private void populateAccountCombo(List<? extends Account> accounts, Model model) {
+    accountsCombo.getItems().clear();
+    Account addAcc = new Account("Add New Account", new char[]{}, ServerProvider.GMAIL);
+    // override toString() and fromString() to make account correspond to its email address
+    accountsCombo.setConverter(new StringConverter<>() {
+      @Override public String toString(Account account) {
+        return account != null ? account.emailAddress() : null;
+      }
+      @Override public Account fromString(String string) {
+        Account account = null;
+        try {
+          account = model.accounts.stream()
+            .filter(acc -> acc.emailAddress().equals(string))
+            .findAny()
+            .orElseThrow(Exception::new);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return account;
+      }
+    });
+    accountsCombo.getItems().addAll(accounts);
+    accountsCombo.getItems().add(addAcc);
+  }
+ */

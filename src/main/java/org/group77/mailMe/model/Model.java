@@ -157,26 +157,39 @@ public class Model {
                 new Folder("Trash", new ArrayList<>())
         );
     }
-
-
+    
+    /**
+     * Removes the currently open email and moves it to the trash.
+     * @throws Exception
+     * @author David Zamanian
+     */
 
     public void DeleteEmail() throws Exception {
 
         List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
-        newFolders.get(4).emails().add(readingEmail.get());
+        //Move the currently open email to the trash
+        newFolders.get(4).emails().add(readingEmail.get()); //TODO Fix better index if we want to add more folders in the future (from 4 to compare name to "Trash" somehow..)
+        //Remove currently open email from the activeFolder
         newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
-        storage.store(activeAccount.get(), newFolders);
+        //storage.store(activeAccount.get(), newFolders);
         folders.replaceAll(newFolders);
         refresh();
-
     }
 
-    public void MoveEmail() throws Exception {
+    /**
+     * Moves tha email to the desired folder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
+     * @throws Exception
+     * @author David Zamanian
+     */
+
+    public void MoveEmail(Folder folder) throws Exception {
 
         List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
-        newFolders.get(4).emails().add(readingEmail.get());
+        //Move the currently open email to the chosen folder in the comboBox
+        newFolders.get(newFolders.indexOf(folder)).emails().add(readingEmail.get());
+        //Delete the currently open email from the activeFolder
         newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
-        storage.store(activeAccount.get(), newFolders);
+        //storage.store(activeAccount.get(), newFolders);
         folders.replaceAll(newFolders);
         refresh();
 
