@@ -35,3 +35,8 @@
     -fx-font-size: 14 px;
 }
 
+.removeFocus{
+-fx-focus-color: #BABABA;
+-fx-faint-focus-color: transparent;
+}
+

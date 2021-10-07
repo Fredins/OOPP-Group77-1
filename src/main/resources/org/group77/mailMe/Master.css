@@ -43,11 +43,6 @@ folderPane{
 background: #E03A5B; }
 }
 
-.removeFocus{
--fx-focus-color: #BABABA;
--fx-faint-focus-color: transparent;
-}
-
 .searchBar{
 -fx-background-radius: 6;
 }
