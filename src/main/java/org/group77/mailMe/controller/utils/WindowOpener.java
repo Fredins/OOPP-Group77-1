@@ -24,6 +24,8 @@ public class WindowOpener {
       Stage stage = new Stage();
       stage.setTitle("MailMe");
       stage.setScene(new Scene(pane));
+      stage.setMinHeight(700);
+      stage.setMinWidth(1050);
       stage.show();
     }catch (IOException e){
       e.printStackTrace();
