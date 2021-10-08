@@ -22,7 +22,6 @@ public class ReadingController {
   @FXML private Label dateLabel;
   @FXML private Button replyButton;
   @FXML private Button bin;
-  @FXML private Button permDelete;
   @FXML private ComboBox<Folder> moveEmailComboBox;
 
 
@@ -39,10 +38,12 @@ public class ReadingController {
     subjectLabel.setText(email.subject());
     toLabel.setText((Arrays.toString(email.to())));
     // TODO date
+    //Moves email to trash if not already in trash. If in trash --> Deletes permanently (but with confirmation).
     bin.setOnAction(i -> {
       if((model.activeFolder.get().name().equals("Trash"))){
         try {
-          PermDeleteEmail(model);
+          if (customAlert("Are you sure you want to permanently delete this email?", Alert.AlertType.CONFIRMATION).get().equals(ButtonType.OK)){
+          PermDeleteEmail(model);}
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -53,16 +54,7 @@ public class ReadingController {
         e.printStackTrace();
       }
     }});
-  /*
-    permDelete.setOnAction(i -> {
-      try {
-        PermDeleteEmail(model);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    });
 
-   */
     replyButton.setOnAction(inputEvent -> WindowOpener.openReply(model, fromLabel.getText()));
     if (model.folders != null) {
       PopulateFolderComboBox(model.folders.get(), model);
@@ -78,6 +70,22 @@ public class ReadingController {
         }
       }
     });
+  }
+
+  /**
+   * Displays a confirmation alert when you try to permanently delete an email.
+   * @param message Type in your message you want user to see in an alert.
+   * @param alertType What types of alert you want to display (CONFIRMATION in this case)
+   * @author David Zamanian
+   */
+
+  private Optional<ButtonType> customAlert(String message, Alert.AlertType alertType) {
+    Alert alert = new Alert(alertType);
+    alert.setTitle("Delete Email");
+    alert.setContentText(message);
+    alert.getDialogPane().setPrefSize(300, 200);
+    Optional<ButtonType> result = alert.showAndWait();
+    return result;
   }
 
   /**
