@@ -74,12 +74,14 @@ public class Model {
             // get all new emails from server
             List<Email> serverEmails = EmailServiceProviderFactory.getEmailServiceProvider(
                     activeAccount.get()).refreshFromServer(activeAccount.get());
-            // get emails currently in inbox in application.
-            List<Email> inboxEmails = inbox.emails();
-            // diffEmails = serverEmails \ inboxEmails.
+            // get emails currently in application.
+            List<Email> localEmails = folders.stream()
+              .flatMap(folder -> folder.emails().stream())
+              .collect(Collectors.toList());
+            // diffEmails = serverEmails \ localEmails.
             // This is needed in case some email previously fetched is left on the pop3 server.
             List<Email> diffEmails = serverEmails.stream()
-                    .filter(email -> !inboxEmails.contains(email))
+                    .filter(email -> !localEmails.contains(email))
                     .collect(Collectors.toList());
 
             Folder newInbox = new Folder(inbox.name(),
