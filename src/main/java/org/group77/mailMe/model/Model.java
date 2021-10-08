@@ -68,6 +68,7 @@ public class Model {
         // if there is an active account and all folders are set then refresh from server.
         if (activeAccount.get() != null && !folders.isEmpty()) {
             // get inbox from state folders
+            System.out.println("folders in refresh: "+folders.get().get(0) + "\n\n");
             Folder inbox = folders.stream()
                     .filter(folder -> folder.name().equals("Inbox"))
                     .findFirst()
@@ -82,6 +83,7 @@ public class Model {
             List<Email> diffEmails = serverEmails.stream()
                     .filter(email -> !inboxEmails.contains(email))
                     .collect(Collectors.toList());
+            System.out.println("Diff: " +diffEmails);
 
             Folder newInbox = new Folder(inbox.name(),
                     Stream.of(diffEmails, inbox.emails())
@@ -167,13 +169,18 @@ public class Model {
     public void DeleteEmail() throws Exception {
 
         List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
+        //System.out.println("ReadingEmail: "+ readingEmail.get() + "\nNewFolder index 4:" + newFolders.get(4) + "\nActiveFolder: "+ activeFolder.get() + "\n");
         //Move the currently open email to the trash
         newFolders.get(4).emails().add(readingEmail.get()); //TODO Fix better index if we want to add more folders in the future (from 4 to compare name to "Trash" somehow..)
         //Remove currently open email from the activeFolder
+        //System.out.println(newFolders.get(newFolders.indexOf(activeFolder.get())).emails());
         newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
         storage.store(activeAccount.get(), newFolders);
         folders.replaceAll(newFolders);
+        //System.out.println("newFolders: "+newFolders.get(0) + "\n\n");
+        System.out.println("folders before refresh: "+folders.get().get(0) + "\n\n");
         refresh();
+        System.out.println("folders after refresh: "+folders.get().get(0)+ "\n\n");
     }
 
     /** Used when deleting emails from the trash. Will remove it from all inboxes and will not be able to recover it
@@ -198,7 +205,7 @@ public class Model {
      */
 
     public void MoveEmail(Folder folder) throws Exception {
-
+        System.out.println("ReadingEmail: "+ readingEmail.get() + "ActiveFolder: "+ activeFolder.get());
         List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
         //Move the currently open email to the chosen folder in the comboBox
         newFolders.get(newFolders.indexOf(folder)).emails().add(readingEmail.get());
