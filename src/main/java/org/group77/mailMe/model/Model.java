@@ -1,5 +1,6 @@
 package org.group77.mailMe.model;
 
+import javafx.fxml.FXML;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.*;
 import org.group77.mailMe.services.storage.*;
@@ -83,7 +84,6 @@ public class Model {
             List<Email> diffEmails = serverEmails.stream()
                     .filter(email -> !localEmails.contains(email))
                     .collect(Collectors.toList());
-
             Folder newInbox = new Folder(inbox.name(),
                     Stream.of(diffEmails, inbox.emails())
                             .flatMap(Collection::stream)
@@ -158,7 +158,59 @@ public class Model {
                 new Folder("Trash", new ArrayList<>())
         );
     }
+
+    /**
+     * Removes the currently open email and moves it to the trash.
+     * @throws Exception
+     * @author David Zamanian
+     */
+
+    public void DeleteEmail() throws Exception {
+
+        List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
+        //Move the currently open email to the trash
+        newFolders.get(4).emails().add(readingEmail.get()); //TODO Fix better index if we want to add more folders in the future (from 4 to compare name to "Trash" somehow..)
+        //Remove currently open email from the activeFolder
+        newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
+        storage.store(activeAccount.get(), newFolders);
+        folders.replaceAll(newFolders);
+        refresh();
+    }
+
+    /** Used when deleting emails from the trash. Will remove it from all inboxes and will not be able to recover it
+     *
+     * @throws Exception
+     * @author David Zamanian
+     */
+
+    public void PermDeleteEmail() throws Exception {
+        List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
+        newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
+        storage.store(activeAccount.get(), newFolders);
+        folders.replaceAll(newFolders);
+        refresh();
+    }
+
+    /**
+     * Moves tha email to the desired folder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
+     * @throws Exception
+     * @param folder The folder that was selected in the "Move" comboBox in readingView
+     * @author David Zamanian
+     */
+
+    public void MoveEmail(Folder folder) throws Exception {
+        List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
+        //Move the currently open email to the chosen folder in the comboBox
+        newFolders.get(newFolders.indexOf(folder)).emails().add(readingEmail.get());
+        //Delete the currently open email from the activeFolder
+        newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
+        storage.store(activeAccount.get(), newFolders);
+        folders.replaceAll(newFolders);
+        refresh();
+
+    }
 }
+
 
 
 
