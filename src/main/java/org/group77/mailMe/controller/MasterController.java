@@ -3,7 +3,9 @@ package org.group77.mailMe.controller;
 import javafx.beans.value.*;
 import javafx.collections.*;
 import javafx.fxml.*;
+import javafx.geometry.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
@@ -25,7 +27,7 @@ public class MasterController {
   @FXML private ComboBox<Account> accountsCombo;
   @FXML private TextField searchField;
   @FXML private ImageView searchImg;
-  @FXML private ImageView accountImg;
+  @FXML private Button addAccountBtn;
   @FXML private FlowPane emailsFlow;
 
   /**
@@ -37,7 +39,6 @@ public class MasterController {
    */
   public void init(Model model) {
     loadFolders(model.folders.get(), model);
-
     if (model.accounts != null) {
       populateAccountCombo(model.accounts.get(), model);
     }
@@ -51,16 +52,7 @@ public class MasterController {
       }
     });
     writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
-    accountsCombo.setOnAction(i -> {
-      Account selected = accountsCombo.getSelectionModel().getSelectedItem();
-      if (selected != null) {
-        if(selected.emailAddress().equals("Add New Account")) {
-          WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close());
-        }else{
-          model.activeAccount.set(selected);
-        }
-      }
-    });
+    addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close()));
 
     // change handlers
     model.activeAccount.addObserver(newAccount -> {
@@ -73,7 +65,7 @@ public class MasterController {
       }
     });
     model.visibleEmails.addObserver(newEmails -> loadEmails(newEmails, model));
-    model.accounts.addObserver(newEmails -> populateAccountCombo(newEmails, model));
+    model.accounts.addObserver(newEmails -> accountsCombo.setItems(FXCollections.observableList(newEmails)));
     model.activeFolder.addObserver(newFolder -> model.visibleEmails.replaceAll(newFolder.emails()));
     model.readingEmail.addObserver(newEmail -> {
       if (newEmail != null) {
@@ -99,9 +91,8 @@ public class MasterController {
    */
 
   private void populateAccountCombo(List<? extends Account> accounts, Model model) {
-    accountsCombo.getItems().clear();
-    Account addAcc = new Account("Add New Account", new char[]{}, ServerProvider.GMAIL);
-    // override toString() and fromString() to make account correspond to its email address
+    accountsCombo.getItems().addAll(accounts);
+    accountsCombo.setOnAction(inputEvent -> model.activeAccount.set(accountsCombo.getValue()));
     accountsCombo.setConverter(new StringConverter<>() {
       @Override public String toString(Account account) {
         return account != null ? account.emailAddress() : null;
@@ -119,8 +110,13 @@ public class MasterController {
         return account;
       }
     });
-    accountsCombo.getItems().addAll(accounts);
-    accountsCombo.getItems().add(addAcc);
+    accountsCombo.setButtonCell(new ListCell<>(){
+      @Override protected void updateItem(Account item, boolean empty) {
+        if(model.activeAccount.get() != null){
+          setText(model.activeAccount.get().emailAddress());
+        }
+      }
+    });
   }
 
   /**

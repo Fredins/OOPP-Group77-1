@@ -14,7 +14,7 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     Model model = new Model();
-    if (model.accounts.get().isEmpty()) {
+    if (model.accounts.isEmpty()) {
       // consumer that closes active window and open master widow.
       Consumer<Node> onClose = node -> {
         ((Stage) node.getScene().getWindow()).close();

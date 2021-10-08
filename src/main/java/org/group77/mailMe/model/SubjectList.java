@@ -16,7 +16,7 @@ public class SubjectList<T> {
   }
 
   public final void add(T value){
-    add(list.size() - 1, value);
+    add(list.size(), value);
   }
 
   public final void add(int index, T value){

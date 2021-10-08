@@ -22,6 +22,10 @@ folderPane{
 -fx-background-color: #E5E5E5
 }
 
+.add-button{
+ -fx-color: #E03A5B;
+}
+
 .writeButton{
  -fx-color: #E03A5B;
  -fx-border-radius: 100;
