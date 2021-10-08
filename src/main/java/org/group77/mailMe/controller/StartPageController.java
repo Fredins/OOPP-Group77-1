@@ -10,6 +10,8 @@ import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.Account;
+
+import java.io.IOException;
 import java.util.function.Consumer;
 
 
@@ -63,7 +65,7 @@ public class StartPageController {
           WindowOpener.openMaster(model);
           model.activeAccount.set(account);
         });
-      } catch (Exception e) {
+      } catch (IOException e) {
         e.printStackTrace();
         // AccountListItem.fxml file cannot be find or any of the javafx components is wrong
       }
