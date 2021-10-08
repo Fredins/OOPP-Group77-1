@@ -22,7 +22,9 @@ public class ReadingController {
   @FXML private Label dateLabel;
   @FXML private Button replyButton;
   @FXML private Button bin;
+  @FXML private Button permDelete;
   @FXML private ComboBox<Folder> moveEmailComboBox;
+
 
   /**
    * 1. set initial values for nodes
@@ -38,12 +40,29 @@ public class ReadingController {
     toLabel.setText((Arrays.toString(email.to())));
     // TODO date
     bin.setOnAction(i -> {
+      if((model.activeFolder.get().name().equals("Trash"))){
+        try {
+          PermDeleteEmail(model);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      } else {
       try {
         DeleteEmail(model);
       } catch (Exception e) {
         e.printStackTrace();
       }
+    }});
+  /*
+    permDelete.setOnAction(i -> {
+      try {
+        PermDeleteEmail(model);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     });
+
+   */
     replyButton.setOnAction(inputEvent -> WindowOpener.openReply(model, fromLabel.getText()));
     if (model.folders != null) {
       PopulateFolderComboBox(model.folders.get(), model);
@@ -84,6 +103,11 @@ public class ReadingController {
   @FXML
   private void DeleteEmail(Model model) throws Exception {
     model.DeleteEmail();
+  }
+
+  @FXML
+  private void PermDeleteEmail(Model model) throws Exception {
+    model.PermDeleteEmail();
   }
 
   /**

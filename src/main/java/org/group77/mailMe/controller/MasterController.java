@@ -82,6 +82,11 @@ public class MasterController {
         readingPane.getChildren().clear();
       }
     });
+    //Clear readingView when changing folders (else, BUG in moving and deleting emails)
+      model.activeFolder.addObserver(newFolder -> {
+         if (model.readingEmail != null){
+          readingPane.getChildren().clear();}
+      });
 
   }
 
@@ -185,12 +190,6 @@ public class MasterController {
                                       .collect(Collectors.toList())
     );
   }
-  @FXML
-  private void MoveEmail(){
-
-  }
-
-
 }
 
 

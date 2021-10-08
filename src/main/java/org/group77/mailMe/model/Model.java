@@ -176,6 +176,20 @@ public class Model {
         refresh();
     }
 
+    /** Used when deleting emails from the trash. Will remove it from all inboxes and will not be able to recover it
+     *
+     * @throws Exception
+     * @author David Zamanian
+     */
+
+    public void PermDeleteEmail() throws Exception {
+        List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
+        newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
+        storage.store(activeAccount.get(), newFolders);
+        folders.replaceAll(newFolders);
+        refresh();
+    }
+
     /**
      * Moves tha email to the desired folder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
      * @throws Exception

@@ -26,7 +26,9 @@ public class EmailItemController {
     subjectLabel.setText(email.subject());
 
     // input handler
-    button.setOnMouseClicked(inputEvent -> model.readingEmail.set(email));
+    button.setOnMouseClicked(inputEvent -> {
+      model.readingEmail.set(null); //Need to first set it to null because otherwise it does not count as a newEmail when we want to render the email in readingView
+      model.readingEmail.set(email);});
 
     // change handler
     model.readingEmail.addObserver(newEmail -> {
