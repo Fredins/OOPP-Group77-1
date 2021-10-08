@@ -46,7 +46,12 @@ public abstract class EmailServiceProvider {
    * @author Martin Fredin.
    */
   public List<Email> refreshFromServer(Account account) throws MessagingException {
-    return parse(connectStore(account));
+    Store store = connectStore(account);
+    List<Email> emails = parse(store);
+    // closing the store is important because otherwise the email provider will not mark the emails as popped,
+    // because the email provider thinks the client crashed because no QUIT command was executed.
+    store.close();
+    return emails;
   }
 
   /**
