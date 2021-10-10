@@ -4,6 +4,7 @@ import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -33,7 +34,7 @@ public class MicrosoftProvider extends EmailServiceProvider {
    * @author Alexey Ryabov
    */
   @Override
-  public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
+  public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
     System.out.println("Preparing to send message.."); // For Testing
 
     String fromAccount = from.emailAddress();
@@ -98,7 +99,7 @@ public class MicrosoftProvider extends EmailServiceProvider {
    * @author Alexey Ryabov
    * Composes a message, returnt message object..
    */
-  private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<String> attachments) throws Exception {
+  private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) throws Exception {
     try {
       Message msg = new MimeMessage(session);
       msg.setFrom(new InternetAddress(from));

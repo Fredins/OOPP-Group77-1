@@ -4,6 +4,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.web.WebView;
 import javafx.stage.*;
 import javafx.util.StringConverter;
 import org.group77.mailMe.*;
@@ -15,7 +16,7 @@ import java.io.*;
 import java.util.*;
 
 public class ReadingController {
-  @FXML private TextArea contentArea;
+  @FXML private WebView contentArea;
   @FXML private Label fromLabel;
   @FXML private Label subjectLabel;
   @FXML private Label toLabel;
@@ -33,7 +34,7 @@ public class ReadingController {
    * @author Martin, David
    */
   void init(Model model, Email email) {
-    contentArea.setText(email.content());
+    contentArea.getEngine().loadContent(email.content());
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
     toLabel.setText((Arrays.toString(email.to())));

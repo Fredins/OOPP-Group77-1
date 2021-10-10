@@ -1,26 +1,29 @@
 package org.group77.mailMe.controller;
 
-import javafx.beans.value.*;
-import javafx.fxml.*;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.*;
-import javafx.util.*;
-import org.apache.commons.mail.HtmlEmail;
-import org.group77.mailMe.model.*;
-import org.group77.mailMe.model.data.*;
+import javafx.scene.web.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.group77.mailMe.model.Model;
 
-import java.io.*;
-import java.util.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class WritingController {
   @FXML private TextField toField;
   @FXML private Label fromLabel;
-  @FXML private TextArea contentField;
+  //@FXML private TextArea contentField;
   @FXML private Button sendBtn;
   @FXML private Button attachBtn;
   @FXML private TextField subjectField;
+  @FXML private HTMLEditor contentField;
 
-  private final List<String> attachments = new ArrayList<>();
+  private final List<File> attachments = new ArrayList<File>();
 
   /**
    * normal init method when not replying
@@ -61,7 +64,7 @@ public class WritingController {
       model.send(
         fromTextFieldToListOfRecipients(toField.getText()),
         subjectField.getText(),
-        contentField.getText(),
+        contentField.getHtmlText(),
         attachments
       );
       if (customAlert("Confirmation !", Alert.AlertType.CONFIRMATION).get() == ButtonType.OK) {closeWindowAction((Stage) sendBtn.getScene().getWindow());}
@@ -79,7 +82,7 @@ public class WritingController {
     FileChooser fileChooser = new FileChooser();
     File selectedFile = fileChooser.showOpenDialog(null);
     if (selectedFile != null) {
-      attachments.add(selectedFile.toString());
+      attachments.add(selectedFile);
       System.out.println("File selected >" + " " + selectedFile); // For Testing
     }
   }

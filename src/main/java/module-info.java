@@ -3,6 +3,8 @@ module org.group77.mailMe {
     requires javafx.fxml;
     requires java.mail;
     requires commons.email;
+    requires javafx.web;
+    requires java.datatransfer;
 
     exports org.group77.mailMe;
     exports org.group77.mailMe.controller;

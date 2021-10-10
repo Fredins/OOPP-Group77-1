@@ -5,6 +5,7 @@ import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -51,7 +52,8 @@ public class GmailProvider extends EmailServiceProvider {
         String content = "no content";
         try {
           MimeMessageParser parser = new MimeMessageParser((MimeMessage) message);
-          content = parser.parse().getPlainContent();
+          //content = parser.parse().getPlainContent();
+          content = parser.parse().getHtmlContent();
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -76,7 +78,7 @@ public class GmailProvider extends EmailServiceProvider {
    * @author Alexey Ryabov
    */
   @Override
-  public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
+  public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
     //System.out.println("Preparing to send message.."); // For Testing
 
     String fromAccount = from.emailAddress();
@@ -85,7 +87,7 @@ public class GmailProvider extends EmailServiceProvider {
     Properties props = new Properties();
     setGmailProperties(props);
   
-    // An ema
+    // An email is sent to every address in the list.
     for (String recipient : recipients) {
       Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content, attachments);
 
@@ -136,7 +138,7 @@ public class GmailProvider extends EmailServiceProvider {
    * @author Alexey Ryabov
    * Composes a message, returnt message object..
    */
-  private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<String> attachments) throws Exception {
+  private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) throws Exception {
     try {
       Message msg = new MimeMessage(session);
       msg.setFrom(new InternetAddress(from));
@@ -149,14 +151,14 @@ public class GmailProvider extends EmailServiceProvider {
       // Create and fill the first message part.
       MimeBodyPart messageBodyPart = new MimeBodyPart();
       //Content of the message.
-      messageBodyPart.setText(content);
+      messageBodyPart.setContent(content, "text/html");
       // Add multipart to message.
       multipart.addBodyPart(messageBodyPart);
       msg.setContent(multipart);
       // adding attachments:
       if (attachments.size() > 0) {
         // For every file in attachments list, created new MimeBodyPart and add it to Multipart.
-        for (String file : attachments) {
+        for (File file : attachments) {
           MimeBodyPart mimeBodyPart = new MimeBodyPart();
           mimeBodyPart.attachFile(file);
           multipart.addBodyPart(mimeBodyPart);

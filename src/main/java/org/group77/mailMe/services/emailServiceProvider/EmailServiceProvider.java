@@ -3,6 +3,7 @@ package org.group77.mailMe.services.emailServiceProvider;
 import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
+import java.io.File;
 import java.util.*;
 
 
@@ -96,7 +97,7 @@ public abstract class EmailServiceProvider {
    * @return - boolean if email is sent successful.
    * @author Alexey Ryabov
    */
-  public abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content, List<String> attachments) throws Exception;
+  public abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content, List<File> attachments) throws Exception;
 
   /** @author Martin Fredin.
    * @param store - is a list of folders.

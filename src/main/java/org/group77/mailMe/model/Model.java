@@ -4,6 +4,7 @@ import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.services.emailServiceProvider.*;
 import org.group77.mailMe.services.storage.*;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.*;
 
@@ -118,7 +119,7 @@ public class Model {
    *
    * @author Alexey Ryabov
    */
-  public void send(List<String> recipients, String subject, String content, List<String> attachments) throws Exception {
+  public void send(List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
     // if there is an active account, then send a new email with the given arguments.
     if (activeAccount.get() != null) {
       EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).sendEmail(
