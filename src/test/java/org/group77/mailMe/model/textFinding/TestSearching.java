@@ -36,6 +36,24 @@ public class TestSearching {
     //===========================
     //  InAnyTextFieldPredicate
     //===========================
+    @Test
+    public void TestFindsUpperCasedTos() {
+        // TEST_nr_2 is in the to:s
+        Assertions.assertTrue( inAnyTextFieldPredicate.test(
+                input.get(0),
+                "test_nr_2"
+        ));
+    }
+
+    @Test
+    public void TestFindsCapitalizedSubject() {
+        Assertions.assertTrue(
+                inAnyTextFieldPredicate.test(
+                        input.get(2),
+                        "not"
+                )
+        );
+    }
 
     //===========================
     //  Filter
