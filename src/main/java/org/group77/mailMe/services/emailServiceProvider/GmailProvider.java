@@ -6,6 +6,8 @@ import org.group77.mailMe.model.data.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -39,6 +41,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @return List of emails.
      * @throws MessagingException
      * @author Martin Fredin.
+     * @author Hampus Jernkrook (added date support).
      */
     @Override
     protected List<Email> parse(Store store) throws MessagingException {
@@ -53,9 +56,14 @@ public class GmailProvider extends EmailServiceProvider {
                 String[] to = Arrays.stream(message.getAllRecipients()).map(Address::toString).toArray(String[]::new);
                 String subject = message.getSubject();
                 String content = "no content";
+
                 String date = message.getSentDate().toString(); // Date
                 String contentType = message.getContentType();
                 String attachments = "";
+
+                LocalDateTime receivedDate = resolveReceivedDate((MimeMessage) message);  //get the received date of the email
+                System.out.println("DATE IS >> " + receivedDate.toString()); //TODO remove
+
                 try {
                     if (contentType.contains("multipart")) {
                         Multipart multipart = (Multipart) message.getContent();
@@ -92,11 +100,37 @@ public class GmailProvider extends EmailServiceProvider {
                         to,
                         subject,
                         content,
-                        attachments
+                        attachments,
+                        receivedDate
                 ));
             }
         }
         return emails;
+    }
+
+    /**
+     * Get the received date from an email.
+     * @param message - the message to find the received date for.
+     * @return The received date of the email if it could be found and parsed, else the current date.
+     * @throws MessagingException
+     * @author Hampus Jernkrook
+     */
+    private LocalDateTime resolveReceivedDate(MimeMessage message) throws MessagingException {
+        LocalDateTime res = LocalDateTime.now(ZoneId.systemDefault());
+        // if received date can be extracted directly, use that.
+        if (message.getReceivedDate() != null) {
+            return message.getReceivedDate()
+                    .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        }
+        String[] receivedHeaders = message.getHeader("Received");
+        // if no received-header was found, return the current date
+        if (receivedHeaders == null) {
+            return res;
+        }
+        // if header was found then scan it for the date and parse into LocalDateTime format.
+        // TODO
+        // if no date was found or could be parsed, set current date as received date
+        return res;
     }
 
     /**
