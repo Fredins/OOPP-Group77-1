@@ -40,7 +40,7 @@ public class TestFilter {
     }
 
     // ===================================================
-    // TO
+    // TO - filter
     // ===================================================
 
     @Test
@@ -78,7 +78,7 @@ public class TestFilter {
     }
 
     // ===================================================
-    // FROM
+    // FROM - filter
     // ===================================================
     @Test
     public void testFindsNothingIfFromNotThere() {
@@ -115,6 +115,9 @@ public class TestFilter {
         Assertions.assertArrayEquals(expected, actual);
     }
 
+    //===========================
+    //  TextFinder
+    //===========================
 
     // Running the same test on TextFinder, which calls the previously used Filter-class.
     @Test
