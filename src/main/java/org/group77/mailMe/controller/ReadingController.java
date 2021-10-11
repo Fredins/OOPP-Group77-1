@@ -24,6 +24,7 @@ public class ReadingController {
   @FXML private Button replyButton;
   @FXML private Button bin;
   @FXML private ComboBox<Folder> moveEmailComboBox;
+  @FXML private Label attachmentsLabel;
 
 
   /**
@@ -38,6 +39,8 @@ public class ReadingController {
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
     toLabel.setText((Arrays.toString(email.to())));
+    attachmentsLabel.setText(email.attachments());
+
     // TODO date
     //Moves email to trash if not already in trash. If in trash --> Deletes permanently (but with confirmation).
     bin.setOnAction(i -> {

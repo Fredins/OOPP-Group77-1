@@ -50,10 +50,36 @@ public class GmailProvider extends EmailServiceProvider {
         String[] to = Arrays.stream(message.getAllRecipients()).map(Address::toString).toArray(String[]::new);
         String subject = message.getSubject();
         String content = "no content";
+        String date = message.getSentDate().toString(); // Date
+        String contentType = message.getContentType();
+        String attachments = "";
         try {
-          MimeMessageParser parser = new MimeMessageParser((MimeMessage) message);
+          if (contentType.contains("multipart")) {
+            Multipart multipart = (Multipart) message.getContent();
+            int numberOfPart = multipart.getCount();
+            for (int partCount = 0; partCount < numberOfPart; partCount++) {
+              MimeBodyPart part = (MimeBodyPart) multipart.getBodyPart(partCount);
+              if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
+                String fileName = part.getFileName();
+                attachments += fileName + ", ";
+                //TODO Save file here
+              } else {
+                content = part.getContent().toString();
+              }
+            }
+            if (attachments.length() > 1) {
+              attachments = attachments.substring(0, attachments.length() - 2);
+            }
+          } else if (contentType.contains("text/plain") || contentType.contains("text/html")) {
+            Object c = message.getContent();
+            if (c != null) {
+              content = c.toString();
+            }
+
+          }
+          //MimeMessageParser parser = new MimeMessageParser((MimeMessage) message);
           //content = parser.parse().getPlainContent();
-          content = parser.parse().getHtmlContent();
+          //content = parser.parse().getHtmlContent();
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -62,7 +88,8 @@ public class GmailProvider extends EmailServiceProvider {
           from,
           to,
           subject,
-          content
+          content,
+          attachments
         ));
       }
     }
