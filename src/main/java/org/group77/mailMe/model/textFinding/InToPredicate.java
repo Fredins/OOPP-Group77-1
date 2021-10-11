@@ -14,6 +14,7 @@ import java.util.function.BiPredicate;
 public class InToPredicate implements BiPredicate<Email, String> {
     /**
      * Tests whether the given substring is in any of the email's to-addresses.
+     * Case-insensitive.
      *
      * @param email     - the email to scan through 'to:s' in.
      * @param substring - the substring to search for in the to-addresses.
@@ -22,7 +23,7 @@ public class InToPredicate implements BiPredicate<Email, String> {
      */
     @Override
     public boolean test(Email email, String substring) {
-        List<String> toList = Arrays.asList(email.to());
-        return (toList.stream().anyMatch(to -> to.contains(substring.toLowerCase())));
+        // convert array of to-addresses to stream and filter out those that contain the substring.
+        return (Arrays.stream(email.to()).anyMatch(to -> to.toLowerCase().contains(substring.toLowerCase())));
     }
 }

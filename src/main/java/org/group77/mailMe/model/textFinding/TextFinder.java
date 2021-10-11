@@ -29,9 +29,11 @@ public class TextFinder {
 
     /**
      * Searches all text fields of an email for a given search word.
-     * @param emails - the list of emails to search through.
-     * @param searchWord  - the search word to find.
+     *
+     * @param emails     - the list of emails to search through.
+     * @param searchWord - the search word to find.
      * @return - a list of emails that all contain the given search word in at least one of their text fields.
+     * @author Hampus Jernkrook
      */
     public List<Email> search(List<Email> emails, String searchWord) {
         return stringFilter.filter(emails, inAnyTextFieldPredicate, searchWord);
@@ -43,10 +45,10 @@ public class TextFinder {
 
     /**
      * Filter out all emails that contain the given search word in their 'to' field.
-     * @param emails - the list of emails to filter.
+     *
+     * @param emails     - the list of emails to filter.
      * @param searchWord - the string to look for in the 'to' field.
      * @return a list of emails with the searchWord in one of the 'to' addresses.
-     *
      * @author Hampus Jernkrook
      */
     List<Email> filterOnFrom(List<Email> emails, String searchWord) {

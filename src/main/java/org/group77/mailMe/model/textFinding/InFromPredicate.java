@@ -12,6 +12,7 @@ import java.util.function.BiPredicate;
 public class InFromPredicate implements BiPredicate<Email, String> {
     /**
      * Tests whether the given substring is in the email's from-address.
+     * Case-insensitive.
      *
      * @param email     - the email to scan through 'from' in.
      * @param substring - the substring to search for in the from-address.
@@ -20,6 +21,6 @@ public class InFromPredicate implements BiPredicate<Email, String> {
      */
     @Override
     public boolean test(Email email, String substring) {
-        return (email.from().contains(substring.toLowerCase()));
+        return (email.from().toLowerCase().contains(substring.toLowerCase()));
     }
 }

@@ -20,7 +20,7 @@ public class TestSearching {
     private static final Filter<Email, String> filter = new Filter<>();
 
     @BeforeAll
-    public static void setup() {
+    public static void Setup() {
         to = new String[]{
                 "TEST_nr_1@gmail.com",
                 "TEST_nr_2@gmail.com",
