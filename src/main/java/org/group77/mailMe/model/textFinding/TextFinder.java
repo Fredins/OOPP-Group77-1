@@ -2,7 +2,6 @@ package org.group77.mailMe.model.textFinding;
 
 import org.group77.mailMe.model.data.Email;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +12,7 @@ import java.util.List;
  * @author Hampus Jernkrook
  */
 public class TextFinder {
-    /*
-    - dateSorter : Sorter<Email, Date>
-- stringFilter : Filter<Email, String>
-- dateFilter : Filer<Email, Date>
-     */
+
     private final Filter<Email, String> stringFilter = new Filter<>();
     private final Filter<Email, Date> dateFilter = new Filter<>();
     private final Sorter<Email, Date> dateSorter = new Sorter<>();
@@ -39,16 +34,24 @@ public class TextFinder {
         return stringFilter.filter(emails, inAnyTextFieldPredicate, searchWord);
     }
 
-    List<Email> filterOnTo(List<Email> emails, String searchWord) {
-        return null;
-    }
-
     /**
      * Filter out all emails that contain the given search word in their 'to' field.
      *
      * @param emails     - the list of emails to filter.
      * @param searchWord - the string to look for in the 'to' field.
      * @return a list of emails with the searchWord in one of the 'to' addresses.
+     * @author Hampus Jernkrook
+     */
+    List<Email> filterOnTo(List<Email> emails, String searchWord) {
+        return stringFilter.filter(emails, inToPredicate, searchWord);
+    }
+
+    /**
+     * Filter out all emails that contain the given search word in their 'from' field.
+     *
+     * @param emails     - the list of emails to filter.
+     * @param searchWord - the string to look for in the 'from' field.
+     * @return a list of emails with the searchWord in the from-address.
      * @author Hampus Jernkrook
      */
     List<Email> filterOnFrom(List<Email> emails, String searchWord) {

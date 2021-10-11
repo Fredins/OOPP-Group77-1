@@ -22,7 +22,7 @@ public class TestFilter {
     private final MaxDatePredicate maxDatePredicate = new MaxDatePredicate();
 
     @BeforeAll
-    public static void setup() {
+    public static void Setup() {
         to1 = new String[]{"TEST_nr_1@gmail.com",
                 "lol@gmail.com"
         };
@@ -121,7 +121,7 @@ public class TestFilter {
 
     // Running the same test on TextFinder, which calls the previously used Filter-class.
     @Test
-    public void testTextFinder() {
+    public void TestFilterOnFromTextFinder() {
         // find the last element of the input
         TextFinder textFinder = new TextFinder();
         List<Email> res = textFinder.filterOnFrom(emails, "LOL");
@@ -130,7 +130,20 @@ public class TestFilter {
         };
         //convert result to array
         Email[] actual = res.toArray(new Email[0]);
-        //check that first and 4th elements are in both.
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void TestFilterOnToTextFinder() {
+        // find the first and second email
+        TextFinder textFinder = new TextFinder();
+        List<Email> res = textFinder.filterOnTo(emails, "LOL");
+        Email[] expected = new Email[]{
+                emails.get(0),
+                emails.get(1)
+        };
+        //convert result to array
+        Email[] actual = res.toArray(new Email[0]);
         Assertions.assertArrayEquals(expected, actual);
     }
 
