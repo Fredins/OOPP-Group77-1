@@ -110,6 +110,7 @@ public class GmailProvider extends EmailServiceProvider {
 
     /**
      * Get the received date from an email.
+     *
      * @param message - the message to find the received date for.
      * @return The received date of the email if it could be found and parsed, else the current date.
      * @throws MessagingException
@@ -124,6 +125,8 @@ public class GmailProvider extends EmailServiceProvider {
         }
         String[] receivedHeaders = message.getHeader("Received");
         // if no received-header was found, return the current date
+        System.out.println("\nHEADER IS >> " + Arrays.toString(receivedHeaders) + "\n"); //TODO remove
+        // if no recieved-header was found, return the current date
         if (receivedHeaders == null) {
             return res;
         }
