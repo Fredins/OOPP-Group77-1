@@ -13,6 +13,7 @@ import javafx.util.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 
 import java.io.*;
@@ -37,22 +38,22 @@ public class MasterController {
    * @param model the model
    * @author Martin, David
    */
-  public void init(Model model) {
-    loadFolders(model.folders.get(), model);
-    if (model.accounts != null) {
-      populateAccountCombo(model.accounts.get(), model);
+  public void init(Control control) {
+    loadFolders(control.getActiveFolders(), control);
+    if (control.getAccounts() != null) {
+      populateAccountCombo(control.getAccounts(), control);
     }
 
     // input handlers
     refreshBtn.setOnAction(i -> {
       try {
-        model.refresh();
+        control.refresh();
       } catch (Exception e) {
         e.printStackTrace(); // TODO feedback
       }
     });
-    writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
-    addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close()));
+    writeBtn.setOnAction(i -> WindowOpener.openWriting(control));
+    addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(control, node -> ((Stage) node.getScene().getWindow()).close()));
 
     // change handlers
     model.activeAccount.addObserver(newAccount -> {

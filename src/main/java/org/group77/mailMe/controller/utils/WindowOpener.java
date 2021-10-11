@@ -18,11 +18,11 @@ public class WindowOpener {
    * @param model the model
    * @author Martin
    */
-  public static void openMaster(Model model){
+  public static void openMaster(Control control){
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
       Pane pane = fxmlLoader.load();
-      ((MasterController) fxmlLoader.getController()).init(model);
+      ((MasterController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();
       stage.setTitle("MailMe");
       stage.setScene(new Scene(pane));
@@ -38,11 +38,11 @@ public class WindowOpener {
    * @param model the model
    * @author Martin
    */
-  public static void openStartPage(Model model){
+  public static void openStartPage(Control control){
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StartPage.fxml"));
       Pane pane = fxmlLoader.load();
-      ((StartPageController) fxmlLoader.getController()).init(model);
+      ((StartPageController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();
       stage.setTitle("Welcome");
       stage.setScene(new Scene(pane));
@@ -58,12 +58,12 @@ public class WindowOpener {
    * @param model the model
    * @author Martin
    */
-  public static void openAddAccount(Model model, Consumer<Node> onClose) {
+  public static void openAddAccount(Control control, Consumer<Node> onClose) {
 
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccount.fxml"));
       Pane pane = fxmlLoader.load();
-      ((AddAccountController) fxmlLoader.getController()).init(model, onClose);
+      ((AddAccountController) fxmlLoader.getController()).init(control, onClose);
       Stage stage = new Stage();
       stage.setTitle("Add Account");
       stage.setScene(new Scene(pane));
@@ -78,11 +78,11 @@ public class WindowOpener {
    * @param model the model
    * @author Martin
    */
-  public static void openWriting(Model model) {
+  public static void openWriting(Control control) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
       Pane pane = fxmlLoader.load();
-      ((WritingController) fxmlLoader.getController()).init(model);
+      ((WritingController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();
       stage.setTitle("New MeMail");
       stage.setScene(new Scene(pane));
@@ -98,11 +98,11 @@ public class WindowOpener {
    * @param to the email address which the user is replying to
    * @author Martin
    */
-  public static void openReply(Model model, String to) {
+  public static void openReply(Control control, String to) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
       Pane pane = fxmlLoader.load();
-      ((WritingController) fxmlLoader.getController()).init(model, to);
+      ((WritingController) fxmlLoader.getController()).init(control, to);
       Stage stage = new Stage();
       stage.setTitle("Reply");
       stage.setScene(new Scene(pane));

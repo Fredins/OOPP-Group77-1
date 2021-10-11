@@ -10,6 +10,7 @@ import javafx.util.StringConverter;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 
 import java.io.*;
@@ -33,7 +34,7 @@ public class ReadingController {
    * @param email the corresponding email
    * @author Martin, David
    */
-  void init(Model model, Email email) {
+  void init(Control control, Email email) {
     contentArea.getEngine().loadContent(email.content());
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
@@ -110,13 +111,13 @@ public class ReadingController {
    */
 
   @FXML
-  private void DeleteEmail(Model model) throws Exception {
-    model.DeleteEmail();
+  private void DeleteEmail(Control control) throws Exception {
+    control.DeleteEmail();
   }
 
   @FXML
-  private void PermDeleteEmail(Model model) throws Exception {
-    model.PermDeleteEmail();
+  private void PermDeleteEmail(Control control) throws Exception {
+    control.PermDeleteEmail();
   }
 
   /**
@@ -127,8 +128,8 @@ public class ReadingController {
    */
 
   @FXML
-  private void MoveEmail(Folder folder, Model model) throws Exception {
-    model.MoveEmail(folder);
+  private void MoveEmail(Folder folder, Control control) throws Exception {
+    control.MoveEmail(folder);
   }
 
   /**
@@ -139,7 +140,7 @@ public class ReadingController {
    * @author David Zamanian
    */
 
-  private void PopulateFolderComboBox(List<? extends Folder> folders, Model model){
+  private void PopulateFolderComboBox(List<? extends Folder> folders, Control control){
     moveEmailComboBox.getItems().clear();
     moveEmailComboBox.setConverter(new StringConverter<Folder>() {
       @Override
@@ -150,7 +151,7 @@ public class ReadingController {
       public Folder fromString(String s) {
         Folder folder = null;
         try {
-          folder = model.folders.stream().filter(fol -> fol.name().equals(s))
+          folder = control.getActiveFolders().stream().filter(fol -> fol.name().equals(s))
                   .findAny()
                   .orElseThrow(Exception::new);
         }catch (Exception e){
