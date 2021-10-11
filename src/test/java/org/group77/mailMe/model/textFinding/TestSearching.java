@@ -128,4 +128,15 @@ public class TestSearching {
     //===========================
     //  TextFinder
     //===========================
+    @Test
+    public void TestFindsBothUpperAndLowerCased() {
+        // get first and second emails of input
+        List<Email> res = new TextFinder().search(input, "sausage");
+        Email[] expected = new Email[]{
+                input.get(0),
+                input.get(1)
+        };
+        Email[] actual = res.toArray(new Email[0]);
+        Assertions.assertArrayEquals(expected, actual);
+    }
 }
