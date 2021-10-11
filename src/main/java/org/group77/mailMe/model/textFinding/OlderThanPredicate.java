@@ -10,7 +10,7 @@ import java.util.function.BiPredicate;
  *
  * @author Hampus Jernkrook
  */
-public class MaxDatePredicate implements BiPredicate<Email, LocalDateTime> {
+public class OlderThanPredicate implements BiPredicate<Email, LocalDateTime> {
     @Override
     public boolean test(Email email, LocalDateTime maxDate) {
         return email.date().isBefore(maxDate);

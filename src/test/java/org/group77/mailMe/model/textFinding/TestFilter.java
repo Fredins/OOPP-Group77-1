@@ -5,7 +5,6 @@ import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,10 +18,11 @@ public class TestFilter {
     private static String[] to2;
     private static String[] to3;
     private static List<Email> emails;
-    private final Filter<Email,String> filter = new Filter<>();
+    private final Filter<Email,String> stringFilter = new Filter<>();
+    private final Filter<Email,LocalDateTime> dateFilter = new Filter<>();
     private final InFromPredicate inFromPredicate = new InFromPredicate();
     private final InToPredicate inToPredicate = new InToPredicate();
-    private final MaxDatePredicate maxDatePredicate = new MaxDatePredicate();
+    private final OlderThanPredicate olderThanPredicate = new OlderThanPredicate();
 
     @BeforeAll
     public static void Setup() {
@@ -52,7 +52,7 @@ public class TestFilter {
     @Test
     public void testFindsNothingInToIfNotThere() {
         // search for a word not in any of the to:s
-        List<Email> res = filter.filter(emails, inToPredicate, "HELLO");
+        List<Email> res = stringFilter.filter(emails, inToPredicate, "HELLO");
         // assert that no email is in the result.
         Assertions.assertEquals(0, res.size());
     }
@@ -60,7 +60,7 @@ public class TestFilter {
     @Test
     public void testFindsTo() {
         // find the first and last element of the input.
-        List<Email> res = filter.filter(emails, inToPredicate, "gmail");
+        List<Email> res = stringFilter.filter(emails, inToPredicate, "gmail");
         Email[] expected = new Email[]{
                 emails.get(0),
                 emails.get(2)
@@ -74,7 +74,7 @@ public class TestFilter {
     @Test
     public void testFindsUppercasedTo() {
         // find the first and second elements of the input
-        List<Email> res = filter.filter(emails, inToPredicate, "LOL");
+        List<Email> res = stringFilter.filter(emails, inToPredicate, "LOL");
         Email[] expected = new Email[]{
                 emails.get(0),
                 emails.get(1)
@@ -89,7 +89,7 @@ public class TestFilter {
     @Test
     public void testFindsNothingIfFromNotThere() {
         // search for a word not in the from
-        List<Email> res = filter.filter(emails, inFromPredicate, "stop");
+        List<Email> res = stringFilter.filter(emails, inFromPredicate, "stop");
         // assert that no email is in the result.
         Assertions.assertEquals(0, res.size());
     }
@@ -97,7 +97,7 @@ public class TestFilter {
     @Test
     public void testFindsFrom() {
         // find the first and second emails of the input
-        List<Email> res = filter.filter(emails, inFromPredicate, "me");
+        List<Email> res = stringFilter.filter(emails, inFromPredicate, "me");
         Email[] expected = new Email[]{
                 emails.get(0),
                 emails.get(1)
@@ -111,7 +111,7 @@ public class TestFilter {
     @Test
     public void testFindsUppercasedFrom() {
         // find the last element of the input
-        List<Email> res = filter.filter(emails, inFromPredicate, "LOL");
+        List<Email> res = stringFilter.filter(emails, inFromPredicate, "LOL");
         Email[] expected = new Email[]{
                 emails.get(2)
         };
@@ -155,12 +155,12 @@ public class TestFilter {
 
 
     // ===================================================
-    // MAX DATE  - MaxDatePredicate
+    // MAX DATE  - OlderThanPredicate
     // ===================================================
     @Test
     public void TestCorrectlyClaimsOlder() {
         // see that the predicate correctly outputs that the last email is older than 2012
-        Assertions.assertTrue(maxDatePredicate.test(
+        Assertions.assertTrue(olderThanPredicate.test(
                 emails.get(2), LocalDateTime.of(2012, Month.JANUARY, 1, 0, 0)
         ));
     }
@@ -168,19 +168,19 @@ public class TestFilter {
     @Test
     public void TestCorrectlyClaimsNewer() {
         // see that the predicate correctly outputs that the last email is newer than 10th of Jan 2010
-        Assertions.assertFalse(maxDatePredicate.test(
+        Assertions.assertFalse(olderThanPredicate.test(
                 emails.get(2), LocalDateTime.of(2010, Month.JANUARY, 10, 0, 0)
         ));
     }
 
     // ===================================================
-    // MIN DATE  - MaxDatePredicate negated
+    // MIN DATE  - OlderThanPredicate negated
     // ===================================================
 
     @Test
     public void TestCorrectlyClaimsNewer2() {
         // see that the predicate correctly outputs that the first email is newer than 2012
-        Assertions.assertTrue(maxDatePredicate.negate().test(
+        Assertions.assertTrue(olderThanPredicate.negate().test(
                 emails.get(0), LocalDateTime.of(2012, Month.JANUARY, 1, 0, 0)
         ));
     }
@@ -188,7 +188,7 @@ public class TestFilter {
     @Test
     public void TestCorrectlyClaimsOlder2() {
         // see that the predicate correctly outputs that the last email is not newer than 31st of Jan 2010
-        Assertions.assertFalse(maxDatePredicate.negate().test(
+        Assertions.assertFalse(olderThanPredicate.negate().test(
                 emails.get(2), LocalDateTime.of(2010, Month.JANUARY, 31, 0, 0)
         ));
     }
@@ -197,8 +197,34 @@ public class TestFilter {
     // MAX DATE  - filter
     // ===================================================
 
+    @Test
+    public void TestAllClaimedOlder() {
+        // all email are older than 1st of november 2021
+        List<Email> res = dateFilter.filter(emails, olderThanPredicate, LocalDateTime.of(2021, Month.NOVEMBER, 1, 0, 0));
+        Email[] expected = emails.toArray(new Email[0]);
+        // check that all emails are still there
+        Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
+    }
+
+    @Test
+    public void TestOneClaimedOlder() {
+        // only one email older than 1st of Jan 2021
+        List<Email> res = dateFilter.filter(emails, olderThanPredicate, LocalDateTime.of(2021, Month.JANUARY, 1, 0, 0));
+        Email[] expected = new Email[]{emails.get(2)};
+        // check that all emails are still there
+        Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
+    }
+
+    // ===================================================
+    // MIN DATE  - filter
+    // ===================================================
+
     // ===================================================
     // MAX DATE  - TextFinder
+    // ===================================================
+
+    // ===================================================
+    // MIN DATE  - TextFinder
     // ===================================================
 
 

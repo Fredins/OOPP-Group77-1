@@ -2,7 +2,7 @@ package org.group77.mailMe.model.textFinding;
 
 import org.group77.mailMe.model.data.Email;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -14,12 +14,12 @@ import java.util.List;
 public class TextFinder {
 
     private final Filter<Email, String> stringFilter = new Filter<>();
-    private final Filter<Email, Date> dateFilter = new Filter<>();
-    private final Sorter<Email, Date> dateSorter = new Sorter<>();
+    private final Filter<Email, LocalDateTime> dateFilter = new Filter<>();
+    private final Sorter<Email, LocalDateTime> dateSorter = new Sorter<>();
     private final InFromPredicate inFromPredicate = new InFromPredicate();
     private final InToPredicate inToPredicate = new InToPredicate();
     private final InAnyTextFieldPredicate inAnyTextFieldPredicate = new InAnyTextFieldPredicate();
-    private final MaxDatePredicate maxDatePredicate = new MaxDatePredicate();
+    private final OlderThanPredicate olderThanPredicate = new OlderThanPredicate();
 
 
     /**
@@ -58,8 +58,29 @@ public class TextFinder {
         return stringFilter.filter(emails, inFromPredicate, searchWord);
     }
 
-    List<Email> filterOnMaxDate(List<Email> emails, Date maxDate) {
-        return null;
+    /**
+     * Filter out all emails that have a date less than the given max date.
+     *
+     * @param emails  - the list of emails to filter.
+     * @param maxDate - the maximum date of any email in the result.
+     * @return a list of emails with date less than the given max date.
+     * @author Hampus Jernkrook
+     */
+    List<Email> filterOnMaxDate(List<Email> emails, LocalDateTime maxDate) {
+        return dateFilter.filter(emails, olderThanPredicate, maxDate);
+    }
+
+    /**
+     * Filter out all emails that have a date greater than the given min date.
+     *
+     * @param emails  - the list of emails to filter.
+     * @param minDate - the minimum date of any email in the result.
+     * @return a list of emails with date greater than the given max date.
+     * @author Hampus Jernkrook
+     */
+    List<Email> filterOnMinDate(List<Email> emails, LocalDateTime minDate) {
+        // get all emails with dates after the minDate, by running tests with negated olderThanPredicate.
+        return dateFilter.filter(emails, olderThanPredicate.negate(), minDate);
     }
 
     public List<Email> sortByOldToNew(List<Email> emails) {
