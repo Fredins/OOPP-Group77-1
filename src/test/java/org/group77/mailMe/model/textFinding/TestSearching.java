@@ -27,9 +27,9 @@ public class TestSearching {
                 "TEST_nr_3@gmail.com"
         };
         input = Arrays.asList(
-                new Email("lol@gmail.com", to, "Upper", "contains SAUSAGE"),
-                new Email("lol@gmail.com", to, "Lower", "contains sausage"),
-                new Email("lol@gmail.com", to, "Nothing", "contains no meat at all")
+                new Email("lol@gmail.com", to, "Upper", "contains SAUSAGE", null),
+                new Email("lol@gmail.com", to, "Lower", "contains sausage", null),
+                new Email("lol@gmail.com", to, "Nothing", "contains no meat at all", null)
         );
     }
 
@@ -75,9 +75,9 @@ public class TestSearching {
     @Test
     public void testFindsSubstringInAddress() {
         List<Email> input = Arrays.asList(
-                new Email("lol@gmail.com", to, "Upper", "contains SAUSAGE"),
-                new Email("lol@gmail.com", to, "Lower", "contains sausage"),
-                new Email("lolyMcSwag@gmail.com", to, "Nothing", "contains no meat at all")
+                new Email("lol@gmail.com", to, "Upper", "contains SAUSAGE", null),
+                new Email("lol@gmail.com", to, "Lower", "contains sausage", null),
+                new Email("lolyMcSwag@gmail.com", to, "Nothing", "contains no meat at all", null)
         );
         // search emails for part of last elements address
         List<Email> res = filter.filter(input, inAnyTextFieldPredicate,"yMcSwag");
@@ -93,9 +93,9 @@ public class TestSearching {
     @Test
     public void testFindsUpperCasedSubstring() {
         List<Email> input = Arrays.asList(
-                new Email("lol@gmail.com", new String[]{"TEST_nr_1@gmail.com"}, "Upper", "contains SAUSAGE"),
-                new Email("lol@gmail.com", to, "Lower", "contains sausage"),
-                new Email("lol@gmail.com", new String[]{"TEST_nr_1@gmail.com"}, "Nothing", "contains no meat at all")
+                new Email("lol@gmail.com", new String[]{"TEST_nr_1@gmail.com"}, "Upper", "contains SAUSAGE", null),
+                new Email("lol@gmail.com", to, "Lower", "contains sausage", null),
+                new Email("lol@gmail.com", new String[]{"TEST_nr_1@gmail.com"}, "Nothing", "contains no meat at all", null)
         );
         // search emails for part of second element's to, but upper-cased.
         List<Email> res = filter.filter(input, inAnyTextFieldPredicate,"NR_2");

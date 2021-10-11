@@ -33,9 +33,9 @@ public class TestFilter {
                 "haha@gmail.com"
         };
         emails = Arrays.asList(
-                new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE"),
-                new Email("memail@live.com", to2, "Second", "contains sausage"),
-                new Email("lol@hotmail.com", to3, "third", "contains no meat at all")
+                new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE", null),
+                new Email("memail@live.com", to2, "Second", "contains sausage", null),
+                new Email("lol@hotmail.com", to3, "third", "contains no meat at all", null)
         );
     }
 
