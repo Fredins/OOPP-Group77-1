@@ -256,7 +256,24 @@ public class TestFilter {
 
     // ===================================================
     // MIN DATE  - TextFinder
+    // same tests as for filter but called on textFinder
     // ===================================================
+    @Test
+    public void TestAllClaimedNewer2() {
+        // all email are newer than 1st of november 2009
+        List<Email> res = new TextFinder().filterOnMinDate(emails, LocalDateTime.of(2009, Month.NOVEMBER, 1, 0, 0));
+        Email[] expected = emails.toArray(new Email[0]);
+        // check that all emails are still there
+        Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
+    }
+
+    @Test
+    public void TestOneClaimedNewer2() {
+        // only one email newer than 12 of May 2021
+        List<Email> res = new TextFinder().filterOnMinDate(emails, LocalDateTime.of(2021, Month.MAY, 12, 0, 0));
+        Email[] expected = new Email[]{emails.get(0)};
+        Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
+    }
 
 
 
