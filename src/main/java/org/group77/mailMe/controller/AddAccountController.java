@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 import java.util.function.*;
 
@@ -22,8 +23,8 @@ public class AddAccountController {
    * @param onClose function which determines the behaviour when closing the window
    * @author Martin, Elin
    */
-  public void init(Model model, Consumer<Node> onClose) {
-    addAccountButton.setOnAction(inputEvent -> addAccount(model, inputEvent, onClose));
+  public void init(Control control, Consumer<Node> onClose) {
+    addAccountButton.setOnAction(inputEvent -> addAccount(control, inputEvent, onClose));
     emailTextField.setOnKeyTyped(keyEvent -> clearErrorMessage());
     passwordField.setOnKeyTyped(keyEvent -> clearErrorMessage());
   }
@@ -36,9 +37,9 @@ public class AddAccountController {
    * @param onClose function which determines the behaviour when closing the window
    * @author Elin Hagman, Martin
    */
-  private void addAccount(Model model, Event inputEvent, Consumer<Node> onClose) {
+  private void addAccount(Control control, Event inputEvent, Consumer<Node> onClose) {
     try {
-      model.addAccount(emailTextField.getText(), passwordField.getText());
+      control.addAccount(emailTextField.getText(), passwordField.getText());
       // call the closing function
       onClose.accept((Node) inputEvent.getSource());
     } catch (Exception e) {
