@@ -211,17 +211,48 @@ public class TestFilter {
         // only one email older than 1st of Jan 2021
         List<Email> res = dateFilter.filter(emails, olderThanPredicate, LocalDateTime.of(2021, Month.JANUARY, 1, 0, 0));
         Email[] expected = new Email[]{emails.get(2)};
-        // check that all emails are still there
         Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
     }
 
     // ===================================================
     // MIN DATE  - filter
     // ===================================================
+    @Test
+    public void TestAllClaimedNewer() {
+        // all email are newer than 1st of november 2009
+        List<Email> res = dateFilter.filter(emails, olderThanPredicate.negate(), LocalDateTime.of(2009, Month.NOVEMBER, 1, 0, 0));
+        Email[] expected = emails.toArray(new Email[0]);
+        // check that all emails are still there
+        Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
+    }
 
+    @Test
+    public void TestOneClaimedNewer() {
+        // only one email newer than 12 of May 2021
+        List<Email> res = dateFilter.filter(emails, olderThanPredicate.negate(), LocalDateTime.of(2021, Month.MAY, 12, 0, 0));
+        Email[] expected = new Email[]{emails.get(0)};
+        Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
+    }
     // ===================================================
     // MAX DATE  - TextFinder
+    // same tests as for filter but called on textFinder
     // ===================================================
+    @Test
+    public void TestAllClaimedOlder2() {
+        // all email are older than 1st of november 2021
+        List<Email> res = new TextFinder().filterOnMaxDate(emails, LocalDateTime.of(2021, Month.NOVEMBER, 1, 0, 0));
+        Email[] expected = emails.toArray(new Email[0]);
+        // check that all emails are still there
+        Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
+    }
+
+    @Test
+    public void TestOneClaimedOlder2() {
+        // only one email older than 1st of Jan 2021
+        List<Email> res = new TextFinder().filterOnMaxDate(emails, LocalDateTime.of(2021, Month.JANUARY, 1, 0, 0));
+        Email[] expected = new Email[]{emails.get(2)};
+        Assertions.assertArrayEquals(expected, res.toArray(new Email[0]));
+    }
 
     // ===================================================
     // MIN DATE  - TextFinder
