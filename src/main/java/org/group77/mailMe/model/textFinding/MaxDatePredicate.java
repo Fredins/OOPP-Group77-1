@@ -2,7 +2,7 @@ package org.group77.mailMe.model.textFinding;
 
 import org.group77.mailMe.model.data.Email;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.function.BiPredicate;
 
 /**
@@ -10,9 +10,10 @@ import java.util.function.BiPredicate;
  *
  * @author Hampus Jernkrook
  */
-public class MaxDatePredicate implements BiPredicate<Email, Date> {
+public class MaxDatePredicate implements BiPredicate<Email, LocalDateTime> {
     @Override
-    public boolean test(Email email, Date maxDate) {
+    public boolean test(Email email, LocalDateTime maxDate) {
+
         return false;
     }
 }

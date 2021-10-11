@@ -3,6 +3,9 @@ package org.group77.mailMe.model.textFinding;
 import org.group77.mailMe.model.data.Email;
 import org.junit.jupiter.api.*;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,9 +36,12 @@ public class TestFilter {
                 "haha@gmail.com"
         };
         emails = Arrays.asList(
-                new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE", null),
-                new Email("memail@live.com", to2, "Second", "contains sausage", null),
-                new Email("lol@hotmail.com", to3, "third", "contains no meat at all", null)
+                new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE",
+                        LocalDateTime.of(2021, Month.OCTOBER, 11, 15, 30, 45)),
+                new Email("memail@live.com", to2, "Second", "contains sausage",
+                        LocalDateTime.of(2021, Month.MAY, 11, 15, 30, 45)),
+                new Email("lol@hotmail.com", to3, "third", "contains no meat at all",
+                        LocalDateTime.of(2010, Month.JANUARY, 11, 15, 30, 45))
         );
     }
 
@@ -149,7 +155,50 @@ public class TestFilter {
 
 
     // ===================================================
-    // MAX DATE
+    // MAX DATE  - MaxDatePredicate
+    // ===================================================
+    @Test
+    public void TestCorrectlyClaimsOlder() {
+        // see that the predicate correctly outputs that the last email is older than 2012
+        Assertions.assertTrue(maxDatePredicate.test(
+                emails.get(2), LocalDateTime.of(2012, Month.JANUARY, 1, 0, 0)
+        ));
+    }
+
+    @Test
+    public void TestCorrectlyClaimsNewer() {
+        // see that the predicate correctly outputs that the last email is newer than 10th of Jan 2010
+        Assertions.assertFalse(maxDatePredicate.test(
+                emails.get(2), LocalDateTime.of(2010, Month.JANUARY, 10, 0, 0)
+        ));
+    }
+
+    // ===================================================
+    // MIN DATE  - MaxDatePredicate negated
+    // ===================================================
+
+    @Test
+    public void TestCorrectlyClaimsNewer2() {
+        // see that the predicate correctly outputs that the first email is newer than 2012
+        Assertions.assertTrue(maxDatePredicate.negate().test(
+                emails.get(0), LocalDateTime.of(2012, Month.JANUARY, 1, 0, 0)
+        ));
+    }
+
+    @Test
+    public void TestCorrectlyClaimsOlder2() {
+        // see that the predicate correctly outputs that the last email is not newer than 31st of Jan 2010
+        Assertions.assertFalse(maxDatePredicate.negate().test(
+                emails.get(2), LocalDateTime.of(2010, Month.JANUARY, 31, 0, 0)
+        ));
+    }
+
+    // ===================================================
+    // MAX DATE  - filter
+    // ===================================================
+
+    // ===================================================
+    // MAX DATE  - TextFinder
     // ===================================================
 
 
