@@ -17,9 +17,9 @@ public class TestFolder {
         String a1 = "Inbox";
 
         List<Email> emails = Arrays.asList(
-                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello", "my message", null),
-                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello2", "another message", null),
-                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello3", "very important email", null));
+                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello", "my message"),
+                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello2", "another message"),
+                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello3", "very important email"));
 
         Folder folder = new Folder(a1, emails);
 
@@ -32,9 +32,9 @@ public class TestFolder {
     public void testFolderEmails() {
 
         List<Email> a1 = Arrays.asList(
-                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello", "my message", null),
-                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello2", "another message", null),
-                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello3", "very important email", null));
+                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello", "my message"),
+                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello2", "another message"),
+                new Email("test@gmail.com", new String[]{"77grupp@gmail.com"}, "Hello3", "very important email"));
 
         Folder folder = new Folder("Inbox", a1);
         List<Email> a2 = folder.emails();
