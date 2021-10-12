@@ -23,7 +23,29 @@ public class Control {
     public Control(Storage storage) {
         this.storage = storage;
 
-        // retrieve data from storage and give to model
+        this.model = new Model();
+        model.getAccounts().replaceAll(storage.retrieveAccounts());
+
+        // update folders when active account is changed
+        model.getActiveAccount().addObserver(newAccount -> {
+            // if a new account is set as active, get the stored folders of that account.
+            if (newAccount != null) {
+                List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
+                if (newFolders.isEmpty()) { //if user has no folders stored, create new ones and store.
+                    newFolders = model.createFolders();
+                    storage.store(model.getActiveAccount().get(), newFolders);
+                }
+                model.getActiveFolders().replaceAll(newFolders);
+            }
+        });
+        // if a new account is added then set it as active
+        model.getAccounts().addObserver(newAccounts -> {
+            Account newAccount = newAccounts.get(newAccounts.size() - 1);
+            model.getActiveAccount().set(newAccount);
+        });
+
+        // ALTERNATIVE: send stored data to model directly
+        /*
         Map<Account, List<Folder>> accountsData = new HashMap<>();
         for (Account account : storage.retrieveAccounts()) {
             List<Folder> folders = storage.retrieveFolders(account);
@@ -31,6 +53,8 @@ public class Control {
 
         }
         this.model = new Model(accountsData);
+
+         */
 
     }
 

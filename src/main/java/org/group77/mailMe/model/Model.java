@@ -13,6 +13,10 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Holds the application state.
+ */
+
 public class Model {
 
     // all accounts
@@ -30,6 +34,11 @@ public class Model {
 
 
     AccountFactory accountFactory;
+
+    public Model() {
+
+
+    /* ALTERNATIVE: Model gets data from storage when it is created
 
     public Model(Map<Account,List<Folder>> accountFolderMap) {
 
@@ -55,7 +64,7 @@ public class Model {
 
                 activeFolders.replaceAll(newActiveAccountFolders);
             }
-        });
+        });*/
 
     }
 
@@ -91,7 +100,7 @@ public class Model {
     }
 
 
-    private List<Folder> createFolders() {
+    public List<Folder> createFolders() {
         return List.of(
                 new Folder("Inbox", new ArrayList<>()),
                 new Folder("Archive", new ArrayList<>()),
@@ -116,6 +125,8 @@ public class Model {
     public SubjectList<Folder> getActiveFolders() {
         return activeFolders;
     }
+
+    // --- view ---
 
     public Subject<Folder> getActiveFolder() {
         return activeFolder;
