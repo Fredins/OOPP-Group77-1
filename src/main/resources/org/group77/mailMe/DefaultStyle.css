@@ -40,3 +40,7 @@
 -fx-faint-focus-color: transparent;
 }
 
+.removeFocusWV{
+faint-focus-color: transparent;
+}
+
