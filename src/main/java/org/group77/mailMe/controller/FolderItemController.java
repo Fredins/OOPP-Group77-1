@@ -14,7 +14,7 @@ public class FolderItemController {
   /**
    * 1. set initial values for nodes
    * 2. set event handlers for nodes
-   * @param model the model
+   * @param control control
    * @param folder the corresponding folder
    * @author Martin
    */

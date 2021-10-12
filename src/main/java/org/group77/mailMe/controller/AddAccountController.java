@@ -18,7 +18,7 @@ public class AddAccountController {
   /**
    * Initializes the AddAccount view.
    * Adds listeners to this addAccountButton and the login TextFields.
-   * @param model hold the application state
+   * @param control hold the application state
    * @param onClose function which determines the behaviour when closing the window
    * @author Martin, Elin
    */
@@ -31,7 +31,7 @@ public class AddAccountController {
    * Tries to add an account in model from the user input in this emailTextField and this passwordField.
    * If login is successful, sets new account as active account in model and closes window.
    * If login fails, displays an error message thrown by model in this errorLabel.
-   * @param model holds the application state
+   * @param control holds the application state
    * @param inputEvent occurs when user presses this addAccountButton
    * @param onClose function which determines the behaviour when closing the window
    * @author Elin Hagman, Martin

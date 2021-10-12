@@ -29,7 +29,7 @@ public class ReadingController {
   /**
    * 1. set initial values for nodes
    * 2. set event handler for node
-   * @param model the model
+   * @param control the model
    * @param email the corresponding email
    * @author Martin, David
    */
@@ -104,7 +104,7 @@ public class ReadingController {
 
   /**
    * Calls the DeleteEmail method in model
-   * @param model holds the state of the application
+   * @param control the facade to model
    * @throws Exception
    * @author David Zamanian
    */

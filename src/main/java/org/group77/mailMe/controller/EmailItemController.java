@@ -17,7 +17,7 @@ public class EmailItemController {
   /**
    * 1. set initial values for nodes
    * 2. set event handlers for nodes
-   * @param model the model
+   * @param control the model
    * @param email the corresponding email
    * @author David, Martin
    */

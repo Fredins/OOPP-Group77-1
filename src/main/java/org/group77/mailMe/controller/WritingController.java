@@ -27,7 +27,7 @@ public class WritingController {
 
   /**
    * normal init method when not replying
-   * @param model the model
+   * @param control the model
    * @author Martin, Alexey
    */
   public void init(Control control) {
@@ -37,7 +37,7 @@ public class WritingController {
   /**
    * 1. set initial values for nodes
    * 2. set event handlers for nodes and state fields
-   * @param model the model
+   * @param control the model
    * @param to the email address which the user is replying to
    */
   public void init(Control control, String to) {
@@ -56,7 +56,7 @@ public class WritingController {
   /**
    * 1. send email
    * 2. display feedback if sending was successful
-   * @param model the model
+   * @param control the model
    * @author Alexey
    */
   private void send(Control control) {

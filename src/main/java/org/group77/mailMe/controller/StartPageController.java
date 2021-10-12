@@ -29,7 +29,7 @@ public class StartPageController {
    * that sets the active account to the one that is clicked on by user.
    * Adds action handler to this addAccountButton.
    *
-   * @param model holds the application state
+   * @param control holds the application state
    * @author Elin Hagman
    */
   public void init(Control control) {
@@ -46,7 +46,7 @@ public class StartPageController {
    * Also adds onMouseClicked handlers to each AccountListItemController that:
    *    1) sets model's active account to the one user pressed on
    *    2) closes StartPage and opens MasterView
-   * @param model holds the application state
+   * @param control holds the application state
    * @author Elin Hagman
    */
 
@@ -77,7 +77,7 @@ public class StartPageController {
    * Closes Stage that this StartPageController is displayed on,
    * calls openAddAccount() in WindowOpener to open Add Account View.
    * @param actionEvent occurs when user clicks on this addAccountButton
-   * @param model holds the application state
+   * @param control holds the application state
    * @author Elin Hagman
    */
   private void openAddAccount(ActionEvent actionEvent, Control control) {
