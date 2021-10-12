@@ -5,7 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.web.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.group77.mailMe.model.Model;
+import org.group77.mailMe.model.Control;
 
 
 import java.io.File;
@@ -30,8 +30,8 @@ public class WritingController {
    * @param model the model
    * @author Martin, Alexey
    */
-  public void init(Model model) {
-    init(model, null);
+  public void init(Control control) {
+    init(control, null);
   }
 
   /**
@@ -40,17 +40,17 @@ public class WritingController {
    * @param model the model
    * @param to the email address which the user is replying to
    */
-  public void init(Model model, String to) {
+  public void init(Control control, String to) {
     if (to != null) {
       toField.setText(to);
     }
-    fromLabel.setText(model.activeAccount.get().emailAddress());
+    fromLabel.setText(control.getActiveAccount().get().emailAddress());
     // input handlers
-    sendBtn.setOnAction(inputEvent -> send(model));
+    sendBtn.setOnAction(inputEvent -> send(control));
     attachBtn.setOnAction(inputEvent -> attachFiles());
 
     // change handlers
-    model.activeAccount.addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
+    control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
   }
 
   /**
@@ -59,9 +59,9 @@ public class WritingController {
    * @param model the model
    * @author Alexey
    */
-  private void send(Model model) {
+  private void send(Control control) {
     try {
-      model.send(
+      control.send(
         fromTextFieldToListOfRecipients(toField.getText()),
         subjectField.getText(),
         contentField.getHtmlText(),

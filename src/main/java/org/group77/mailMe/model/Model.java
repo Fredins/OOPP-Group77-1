@@ -1,208 +1,164 @@
 package org.group77.mailMe.model;
 
-import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.services.emailServiceProvider.*;
-import org.group77.mailMe.services.storage.*;
+import javafx.util.Pair;
+import org.group77.mailMe.model.data.Account;
+import org.group77.mailMe.model.data.Email;
+import org.group77.mailMe.model.data.Folder;
 
-import java.io.File;
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/**
- * Class carrying the state of the application and
- * delegating work to other components of the application.
- */
 public class Model {
-  // Services //TODO change so that this is set via constructor from main
-  private final Storage storage = new LocalDiscStorage();
 
-  // Application state
-  public SubjectList<Email> visibleEmails = new SubjectList<>(new ArrayList<>());
-  public SubjectList<Folder> folders = new SubjectList<>(new ArrayList<>());
-  public SubjectList<Account> accounts = new SubjectList<>(new ArrayList<>());
-  public Subject<Account> activeAccount = new Subject<>(null);
-  public Subject<Folder> activeFolder = new Subject<>(null);
-  public Subject<Email> readingEmail = new Subject<>(null);
-  /**
-   * 1. load accounts from storage
-   * 2. add event handler to state field active account
-   *
-   * @author Martin Fredin
-   */
-  public Model() throws Exception {
-    // get all accounts stored from previous sessions
-    accounts.replaceAll(storage.retrieveAccounts());
+    // all accounts
+    private SubjectList<Account> accounts = new SubjectList<>(new ArrayList<>());
+    // all accounts and their folders
+    private Subject<Map<Account,List<Folder>>> folders = new Subject<>(null);
+    // active account
+    private Subject<Account> activeAccount = new Subject<>(null);
+    // active accounts folders
+    private SubjectList<Folder> activeFolders = new SubjectList<>(new ArrayList<>());
+    private Subject<Folder> activeFolder = new Subject<>(null);
+    private Subject<Email> readingEmail = new Subject<>(null);
+    private SubjectList<Email> visibleEmails = new SubjectList<>(new ArrayList<>());
 
-    // change event handlers
-    // these handlers are for relations between the different states
 
-    // update folders when active account is changed
-    activeAccount.addObserver(newAccount -> {
-      // if a new account is set as active, get the stored folders of that account.
-      if (newAccount != null) {
-        List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
-        if (newFolders.isEmpty()) { //if user has no folders stored, create new ones and store.
-          newFolders = createFolders();
-          storage.store(activeAccount.get(), newFolders);
+
+    AccountFactory accountFactory;
+
+    public Model(Map<Account,List<Folder>> accountFolderMap) {
+
+        // ---- set attributes ----
+        folders.set(accountFolderMap);
+        accounts.replaceAll(accountFolderMap.keySet());
+
+        // ----  set observers ----
+        // if new account is added to this.accounts, set it as active
+        this.accounts.addObserver(newAccounts -> {
+            Account newAccount = newAccounts.get(newAccounts.size() - 1);
+            activeAccount.set(newAccount);
+        });
+
+        // if active account is switched, set activeFolders to active accounts stored folders
+        this.activeAccount.addObserver(newActiveAccount -> {
+            if (newActiveAccount != null) {
+                List<Folder> newActiveAccountFolders = folders.get().get(newActiveAccount);
+
+                if (newActiveAccountFolders.isEmpty()) {
+                    newActiveAccountFolders = createFolders();
+                }
+
+                activeFolders.replaceAll(newActiveAccountFolders);
+            }
+        });
+
+    }
+
+    public void updateInbox(List<Email> newEmails) throws Exception {
+
+        // TODO: copied from oldModel, not sure if it's correct
+
+        Folder inbox = activeFolders.stream()
+                .filter(folders -> folders.name().equals("Inbox"))
+                .findFirst()
+                .orElseThrow(Exception::new); // inbox not found
+        Folder newInbox = new Folder(inbox.name(),
+                Stream.of(newEmails, inbox.emails())
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList())
+        );
+        // replace inbox with newInbox
+        activeFolders.replace(inbox, newInbox);
+    }
+
+    public void setActiveAccount(Account account) {
+        // check if account is in active account
+        if (accounts.get().contains(account)) {
+            activeAccount.set(account);
         }
-        folders.replaceAll(newFolders);
-      }
-    });
-    // if a new account is added then set it as active
-    accounts.addObserver(newAccounts -> {
-      Account newAccount = newAccounts.get(newAccounts.size() - 1);
-      activeAccount.set(newAccount);
-    });
-  }
-
-  /**
-   * 1. retrieve emails from server
-   * 2. set activeFolder = inbox
-   * 3. store emails
-   *
-   * @throws Exception if inbox doesn't exist or if refreshFromServerFails
-   * @author Martin Fredin
-   */
-  public void refresh() throws Exception {
-    // if there is an active account and all folders are set then refresh from server.
-    if (activeAccount.get() != null && !folders.isEmpty()) {
-      // get all new emails from server
-      List<Email> newEmails = EmailServiceProviderFactory.getEmailServiceProvider(
-        activeAccount.get()).refreshFromServer(activeAccount.get());
-
-      // get inbox from state folders
-      Folder inbox = folders.stream()
-        .filter(folder -> folder.name().equals("Inbox"))
-        .findFirst()
-        .orElseThrow(Exception::new);
-      Folder newInbox = new Folder(inbox.name(),
-                                   Stream.of(newEmails, inbox.emails())
-                                     .flatMap(Collection::stream)
-                                     .collect(Collectors.toList())
-      );
-      // replace inbox with newInbox
-      folders.replace(inbox, newInbox);
-      // replace inbox in storage with newInbox
-      storage.store(activeAccount.get(), newInbox);
-    } else { // if there was no active account of there were no folders
-      throw new Exception("no active account");
     }
-  }
 
-  /**
-   * Tries to add a new account to accounts.
-   * <p>
-   * If emailAddress does not belong to a supported domain, throws Exception with informative message.
-   * If account cannot connect to server or store account, throws Exception.
-   *
-   * @throws Exception if domain is not supported or authentication to server fails
-   * @author Elin Hagman, Martin
-   */
-  public void addAccount(String emailAddress, String password) throws Exception {
-    // if the new account can connect to the server then store it and add to state
-    Account account = AccountFactory.createAccount(emailAddress, password.toCharArray());
-
-    if (account != null) {
-
-      if (EmailServiceProviderFactory.getEmailServiceProvider(account).testConnection(account)) {
-        storage.store(account); // throws authentication exception
-        accounts.add(account);
-      }
-    } else {
-      throw new Exception("Domain not supported");
+    public void addAccount(Account account) {
+        // add account if it does not already exist in this accounts
+        if (!(accounts.get().contains(account))) {
+            accounts.add(account);
+        }
     }
-  }
 
-  /**
-   * sends the email via the appropriate email service provider
-   * TODO Alexey kan vi byta till send(Account) och sedan fixa med resten på backend?
-   *
-   * @author Alexey Ryabov
-   */
-  public void send(List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
-    // if there is an active account, then send a new email with the given arguments.
-    if (activeAccount.get() != null) {
-      EmailServiceProviderFactory.getEmailServiceProvider(activeAccount.get()).sendEmail(
-        activeAccount.get(),
-        recipients,
-        subject,
-        content,
-        attachments
-      );
-    } else {
-      throw new Exception("no active account");
+
+    private List<Folder> createFolders() {
+        return List.of(
+                new Folder("Inbox", new ArrayList<>()),
+                new Folder("Archive", new ArrayList<>()),
+                new Folder("Sent", new ArrayList<>()),
+                new Folder("Drafts", new ArrayList<>()),
+                new Folder("Trash", new ArrayList<>())
+        );
     }
-  }
 
-  /**
-   * Create new folders.
-   *
-   * @author Martin Fredin
-   */
-  public List<Folder> createFolders() {
-    return List.of(
-      new Folder("Inbox", new ArrayList<>()),
-      new Folder("Archive", new ArrayList<>()),
-      new Folder("Sent", new ArrayList<>()),
-      new Folder("Drafts", new ArrayList<>()),
-      new Folder("Trash", new ArrayList<>())
-    );
-  }
+    public SubjectList<Account> getAccounts() {
+        return accounts;
+    }
 
-  /**
-   * Removes the currently open email and moves it to the trash.
-   *
-   * @throws Exception
-   * @author David Zamanian
-   */
+    public Subject<Map<Account, List<Folder>>> getFolders() {
+        return folders;
+    }
 
-  public void DeleteEmail() throws Exception {
+    public Subject<Account> getActiveAccount() {
+        return activeAccount;
+    }
 
-    List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
-    //Move the currently open email to the trash
-    newFolders.get(4).emails().add(readingEmail.get()); //TODO Fix better index if we want to add more folders in the future (from 4 to compare name to "Trash" somehow..)
-    //Remove currently open email from the activeFolder
-    newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
-    storage.store(activeAccount.get(), newFolders);
-    folders.replaceAll(newFolders);
-    refresh();
-  }
+    public SubjectList<Folder> getActiveFolders() {
+        return activeFolders;
+    }
 
-  /**
-   * Used when deleting emails from the trash. Will remove it from all inboxes and will not be able to recover it
-   *
-   * @throws Exception
-   * @author David Zamanian
-   */
+    public Subject<Folder> getActiveFolder() {
+        return activeFolder;
+    }
 
-  public void PermDeleteEmail() throws Exception {
-    List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
-    newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
-    storage.store(activeAccount.get(), newFolders);
-    folders.replaceAll(newFolders);
-    refresh();
-  }
+    public Subject<Email> getReadingEmail() {
+        return readingEmail;
+    }
 
-  /**
-   * Moves tha email to the desired folder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
-   *
-   * @param folder The folder that was selected in the "Move" comboBox in readingView
-   * @throws Exception
-   * @author David Zamanian
-   */
+    public SubjectList<Email> getVisibleEmails() {
+        return visibleEmails;
+    }
 
-  public void MoveEmail(Folder folder) throws Exception {
-    List<Folder> newFolders = storage.retrieveFolders(activeAccount.get());
-    //Move the currently open email to the chosen folder in the comboBox
-    newFolders.get(newFolders.indexOf(folder)).emails().add(readingEmail.get());
-    //Delete the currently open email from the activeFolder
-    newFolders.get(newFolders.indexOf(activeFolder.get())).emails().remove(readingEmail.get());
-    storage.store(activeAccount.get(), newFolders);
-    folders.replaceAll(newFolders);
-    refresh();
-  }
+    public void setActiveFolder(Folder activeFolder) {
+        this.activeFolder.set(activeFolder);
+    }
+
+    public void setReadingEmail(Email readingEmail) {
+        this.readingEmail.set(readingEmail);
+    }
+
+    public void setVisibleEmails(List<Email> visibleEmails) {
+        this.visibleEmails.replaceAll(visibleEmails);
+    }
+
+    /*
+    public Account getActiveAccount() {
+        return activeAccount.get();
+        // will not return Subject, only account in it, so no one can change it.
+        // register as an observer in some other way
+    }
+
+    public List<Folder> getActiveFolders() {
+        return activeFolders.get(); // will not return SubjectList...
+    }
+
+    public List<Account> getAccounts() {
+        return accounts.get();
+    }
+
+    public Map<Account,List<Folder>> getFolders() {
+        return folders.get();
+    }
+
+     */
 }
-
-
-
-

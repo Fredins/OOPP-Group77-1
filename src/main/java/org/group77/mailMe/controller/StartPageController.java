@@ -8,7 +8,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.Account;
 
@@ -52,7 +51,7 @@ public class StartPageController {
    */
 
   private void initStoredAccounts(Control control) {
-    for (Account account : control.getAccounts()) {
+    for (Account account : control.getAccounts().get()) {
       try {
         // load AccountListItem.fxml
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountListItem.fxml"));

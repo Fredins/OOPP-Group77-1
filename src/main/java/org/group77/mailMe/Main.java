@@ -25,9 +25,9 @@ public class Main extends Application {
         WindowOpener.openMaster(control);
       };
       WindowOpener.openAddAccount(control, onClose);
-    } else if(control.getAccounts().size() == 1) {
+    } else if(control.getAccounts().get().size() == 1) {
       WindowOpener.openMaster(control);
-      control.setActiveAccount(control.getAccounts().get(0));
+      control.setActiveAccount(control.getAccounts().get().get(0));
 
     } else {
       WindowOpener.openStartPage(control);

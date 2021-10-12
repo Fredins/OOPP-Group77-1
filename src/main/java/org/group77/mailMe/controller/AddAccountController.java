@@ -5,7 +5,6 @@ import javafx.fxml.*;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
-import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 import java.util.function.*;

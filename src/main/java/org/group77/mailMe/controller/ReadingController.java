@@ -9,7 +9,6 @@ import javafx.stage.*;
 import javafx.util.StringConverter;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 
@@ -42,31 +41,31 @@ public class ReadingController {
     // TODO date
     //Moves email to trash if not already in trash. If in trash --> Deletes permanently (but with confirmation).
     bin.setOnAction(i -> {
-      if((model.activeFolder.get().name().equals("Trash"))){
+      if((control.getActiveFolder().get().name().equals("Trash"))){
         try {
           if (customAlert("Are you sure you want to permanently delete this email?", Alert.AlertType.CONFIRMATION).get().equals(ButtonType.OK)){
-          PermDeleteEmail(model);}
+          PermDeleteEmail(control);}
         } catch (Exception e) {
           e.printStackTrace();
         }
       } else {
       try {
-        DeleteEmail(model);
+        DeleteEmail(control);
       } catch (Exception e) {
         e.printStackTrace();
       }
     }});
 
-    replyButton.setOnAction(inputEvent -> WindowOpener.openReply(model, fromLabel.getText()));
-    if (model.folders != null) {
-      PopulateFolderComboBox(model.folders.get(), model);
+    replyButton.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
+    if (control.getActiveFolders() != null) {
+      PopulateFolderComboBox(control.getActiveFolders().get(), control);
     }
 
     moveEmailComboBox.setOnAction(i -> {
       Folder selected = moveEmailComboBox.getSelectionModel().getSelectedItem();
       if (selected != null) {
         try {
-          MoveEmail(selected, model);
+          MoveEmail(selected, control);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -122,7 +121,7 @@ public class ReadingController {
 
   /**
    * Calls the MoveEmail method in model
-   * @param model holds the state of the application
+   * @param control holds the state of the application
    * @throws Exception
    * @author David Zamanian
    */
@@ -136,7 +135,7 @@ public class ReadingController {
    * Populates the comboBox with the names of the folders in model's folders.
    *
    * @param folders all folders in model's folders
-   * @param model holds the state of the application
+   * @param control holds the state of the application
    * @author David Zamanian
    */
 
