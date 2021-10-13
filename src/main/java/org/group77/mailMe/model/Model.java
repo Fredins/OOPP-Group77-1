@@ -68,9 +68,16 @@ public class Model {
 
     }
 
-    public void updateInbox(List<Email> newEmails) throws Exception {
+    /**
+     * Add emails to this activeFolder's inbox folder.
+     *
+     * Emails already in inbox are not removed.
+     *
+     * @param newEmails emails to added to inbox folder in active account
+     * @throws Exception if activeFolders does not have a inbox folder
+     */
 
-        // TODO: copied from oldModel, not sure if it's correct
+    public void updateInbox(List<Email> newEmails) throws Exception {
 
         Folder inbox = activeFolders.stream()
                 .filter(folders -> folders.name().equals("Inbox"))
@@ -86,7 +93,7 @@ public class Model {
     }
 
     public void setActiveAccount(Account account) {
-        // check if account is in active account
+        // check if account is in this accounts
         if (accounts.get().contains(account)) {
             activeAccount.set(account);
         }
