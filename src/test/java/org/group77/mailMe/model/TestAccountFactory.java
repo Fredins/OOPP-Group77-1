@@ -1,14 +1,19 @@
 package org.group77.mailMe.model;
 import org.group77.mailMe.model.data.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.function.*;
 
 public class TestAccountFactory {
 
     @Test
-    void testCreateAccount() throws EmailDomainNotSupportedException {
-        AccountFactory factory = new AccountFactory();
-        Account a = factory.createAccount("77grupp@gmail.com", "password123".toCharArray());
-        Account a1 = factory.createAccount("gmail@outlook.com", "password123".toCharArray());
-        Assertions.assertNotEquals(a, a1);
+    void testSupportedDomain(){
+        Assertions.assertDoesNotThrow(() ->
+          AccountFactory.createAccount("name@gmail.com", "pwd".toCharArray()));
+    }
+
+    @Test
+    void testNotSupportedDomain(){
+        Assertions.assertThrows(EmailDomainNotSupportedException.class, () ->
+          AccountFactory.createAccount("gmail@wrongDomain.com", "pwd".toCharArray()));
     }
 }
