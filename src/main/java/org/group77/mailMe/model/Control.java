@@ -126,8 +126,12 @@ public class Control {
         Account tempAccount = AccountFactory.createAccount(emailAddress,password.toCharArray());
 
         if (tempAccount != null) {
-            storage.store(tempAccount); // throws authentication exception
-            model.addAccount(tempAccount); // will set tempAccount to activeAccount
+
+            // test connection
+            if (EmailServiceProviderFactory.getEmailServiceProvider(tempAccount).testConnection(tempAccount)) {
+                storage.store(tempAccount); // throws account already exists exception
+                model.addAccount(tempAccount); // will set tempAccount to activeAccount
+            }
 
         } else {
             throw new Exception("Domain is not supported");
