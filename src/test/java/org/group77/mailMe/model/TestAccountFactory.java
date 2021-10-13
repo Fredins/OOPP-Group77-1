@@ -14,6 +14,9 @@ public class TestAccountFactory {
           AccountFactory.createAccount("name@gmail.com", "pwd".toCharArray()));
     }
 
+    /**
+     * @author Martin
+     */
     @Test
     void testNotSupportedDomain(){
         Assertions.assertThrows(EmailDomainNotSupportedException.class, () ->

@@ -12,6 +12,9 @@ import java.util.List;
 
 public class TestFolder {
 
+    /**
+     * @author Elin
+     */
     @Test
     public void testFolderName() {
         String a1 = "Inbox";
@@ -28,6 +31,9 @@ public class TestFolder {
         Assertions.assertEquals(a1,a2);
     }
 
+    /**
+     * @author Elin
+     */
     @Test
     public void testFolderEmails() {
 
