@@ -5,6 +5,9 @@ import org.junit.jupiter.api.function.*;
 
 public class TestAccountFactory {
 
+    /**
+     * @author Martin
+     */
     @Test
     void testSupportedDomain(){
         Assertions.assertDoesNotThrow(() ->
