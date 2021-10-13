@@ -1,6 +1,5 @@
 package org.group77.mailMe.model;
 
-import javafx.util.Pair;
 import org.group77.mailMe.model.data.Account;
 import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
@@ -8,8 +7,6 @@ import org.group77.mailMe.model.data.Folder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,19 +16,22 @@ import java.util.stream.Stream;
 
 public class Model {
 
-    // all accounts
-    private SubjectList<Account> accounts = new SubjectList<>(new ArrayList<>());
-    // all accounts and their folders
     //private Subject<Map<Account,List<Folder>>> folders = new Subject<>(null);
-    // active account
-    private Subject<Account> activeAccount = new Subject<>(null);
-    // active accounts folders
-    private SubjectList<Folder> activeFolders = new SubjectList<>(new ArrayList<>());
-    private Subject<Folder> activeFolder = new Subject<>(null);
-    private Subject<Email> readingEmail = new Subject<>(null);
-    private SubjectList<Email> visibleEmails = new SubjectList<>(new ArrayList<>());
+    // state fields
+    private final SubjectList<Account> accounts = new SubjectList<>(new ArrayList<>());
+    private final SubjectList<Folder> folders = new SubjectList<>(new ArrayList<>());
+    private final SubjectList<Email> emails = new SubjectList<>(new ArrayList<>());
+    private final Subject<Account> activeAccount = new Subject<>(null);
+    private final Subject<Folder> activeFolder = new Subject<>(null);
+    private final Subject<Email> activeEmail = new Subject<>(null);
 
-    private AccountFactory accountFactory;
+    public Model(){
+        // if a new account is added then set it as active
+        accounts.addObserver(newAccounts -> {
+            Account newAccount = newAccounts.get(newAccounts.size() - 1);
+            activeAccount.set(newAccount);
+        }); // -- moved this cause it doesn't have anything to do with services. Martin
+    }
 
     /**
      * Add emails to this activeFolder's inbox folder.
@@ -43,8 +43,7 @@ public class Model {
      */
 
     public void updateInbox(List<Email> newEmails) throws InboxNotFoundException {
-
-        Folder inbox = activeFolders.stream()
+        Folder inbox = folders.stream()
                 .filter(folders -> folders.name().equals("Inbox"))
                 .findFirst()
                 .orElseThrow(InboxNotFoundException::new); // inbox not found
@@ -54,7 +53,7 @@ public class Model {
                         .collect(Collectors.toList())
         );
         // replace inbox with newInbox
-        activeFolders.replace(inbox, newInbox);
+        folders.replace(inbox, newInbox);
     }
 
     public void setActiveAccount(Account account) {
@@ -87,44 +86,15 @@ public class Model {
         );
     }
 
-    public SubjectList<Account> getAccounts() {
-        return accounts;
-    }
-
-
-    public Subject<Account> getActiveAccount() {
-        return activeAccount;
-    }
-
-    public SubjectList<Folder> getActiveFolders() {
-        return activeFolders;
-    }
-
-    // --- view ---
-
-    public Subject<Folder> getActiveFolder() {
-        return activeFolder;
-    }
-
-    public Subject<Email> getReadingEmail() {
-        return readingEmail;
-    }
-
-    public SubjectList<Email> getVisibleEmails() {
-        return visibleEmails;
-    }
-
-    public void setActiveFolder(Folder activeFolder) {
-        this.activeFolder.set(activeFolder);
-    }
-
-    public void setReadingEmail(Email readingEmail) {
-        this.readingEmail.set(readingEmail);
-    }
-
-    public void setVisibleEmails(List<Email> visibleEmails) {
-        this.visibleEmails.replaceAll(visibleEmails);
-    }
+    public SubjectList<Account> getAccounts() { return accounts; }
+    public Subject<Account> getActiveAccount() { return activeAccount; }
+    public SubjectList<Folder> getFolders() { return folders; }
+    public Subject<Folder> getActiveFolder() { return activeFolder; }
+    public Subject<Email> getActiveEmail() { return activeEmail; }
+    public SubjectList<Email> getEmails() { return emails; }
+    public void setActiveFolder(Folder activeFolder) { this.activeFolder.set(activeFolder); }
+    public void setActiveEmail(Email activeEmail) { this.activeEmail.set(activeEmail); }
+    public void setEmails(List<Email> emails) { this.emails.replaceAll(emails); }
 
     /*
     public Account getActiveAccount() {

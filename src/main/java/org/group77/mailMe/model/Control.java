@@ -9,9 +9,7 @@ import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
 import org.group77.mailMe.services.storage.Storage;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Control is a facade between the frontend and backend.
@@ -30,7 +28,7 @@ public class Control {
     /**
      * The model which holds the logic of the application and its state.
      */
-    private Model model;
+    private final Model model;
 
     /**
      * Creates a Control with the specified storage solution.
@@ -50,23 +48,17 @@ public class Control {
         this.model = new Model(); //TODO: add as parameter?
         model.getAccounts().replaceAll(storage.retrieveAccounts());
 
-        // if a new account is added then set it as active
-        model.getAccounts().addObserver(newAccounts -> {
-            Account newAccount = newAccounts.get(newAccounts.size() - 1);
-            model.getActiveAccount().set(newAccount);
-        });
 
         // update folders when active account is changed
         model.getActiveAccount().addObserver(newAccount -> {
             // if a new account is set as active, get the stored folders of that account.
-
             if (newAccount != null) {
                 List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
                 if (newFolders.isEmpty()) { //if user has no folders stored, create new ones and store.
                     newFolders = model.createFolders();
                     storage.store(model.getActiveAccount().get(), newFolders);
                 }
-                model.getActiveFolders().replaceAll(newFolders);
+                model.getFolders().replaceAll(newFolders);
             }
         });
 
@@ -81,7 +73,6 @@ public class Control {
         this.model = new Model(accountsData);
 
          */
-
     }
 
     /**
@@ -92,27 +83,21 @@ public class Control {
      * @throws Exception if inbox doesn't exist or if refreshFromServerFails
      * @author Martin Fredin
      */
-
     public void refresh() throws Exception {
-
-        if (model.getActiveAccount() != null && model.getActiveFolders() != null) {
-
+        if (model.getActiveAccount() != null && model.getFolders() != null) {
             EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
             // receive new emails from server
             List<Email> newEmails = esp.refreshFromServer(model.getActiveAccount().get());
-
             // add new emails to inbox in model
             try {
                 model.updateInbox(newEmails);
-                storage.store(model.getActiveAccount().get(), model.getActiveFolders().get()); // replaces old inbox with new emails
+                storage.store(model.getActiveAccount().get(), model.getFolders().get()); // replaces old inbox with new emails
             } catch (InboxNotFoundException e){
                 throw new Exception("No folder named Inbox");
             }
-
         } else {
             throw new Exception("No active account");
         }
-
 
     }
 
@@ -127,7 +112,6 @@ public class Control {
      * @author Martin
      * @author Hampus Jernkrook
      */
-
     public void addAccount(String emailAddress, String password) throws Exception {
         try {
             Account account = model.createAccount(emailAddress, password.toCharArray());
@@ -147,11 +131,8 @@ public class Control {
      *
      * @author Alexey Ryabov
      */
-
     public void send(List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
-
         if (model.getActiveAccount() != null) {
-
             EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
             esp.sendEmail(model.getActiveAccount().get(),recipients,subject,content,attachments);
 
@@ -167,15 +148,15 @@ public class Control {
      * @author David Zamanian
      */
 
-    public void DeleteEmail() throws Exception {
+    public void deleteEmail() throws Exception {
 
         List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
         //Move the currently open email to the trash
-        newFolders.get(4).emails().add(model.getReadingEmail().get()); //TODO Fix better index if we want to add more folders in the future (from 4 to compare name to "Trash" somehow..)
+        newFolders.get(4).emails().add(model.getActiveEmail().get()); //TODO Fix better index if we want to add more folders in the future (from 4 to compare name to "Trash" somehow..)
         //Remove currently open email from the activeFolder
-        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getReadingEmail().get());
+        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getActiveEmail().get());
         storage.store(model.getActiveAccount().get(), newFolders);
-        model.getActiveFolders().replaceAll(newFolders);
+        model.getFolders().replaceAll(newFolders);
         refresh();
     }
 
@@ -186,11 +167,11 @@ public class Control {
      * @author David Zamanian
      */
 
-    public void PermDeleteEmail() throws Exception {
+    public void permDeleteEmail() throws Exception {
         List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
-        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getReadingEmail().get());
+        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getActiveEmail().get());
         storage.store(model.getActiveAccount().get(), newFolders);
-        model.getActiveFolders().replaceAll(newFolders);
+        model.getFolders().replaceAll(newFolders);
         refresh();
     }
 
@@ -203,67 +184,33 @@ public class Control {
      * @author David Zamanian
      */
 
-    public void MoveEmail(Folder folder) throws Exception {
+    public void moveEmail(Folder folder) throws Exception {
         List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
         //Move the currently open email to the chosen folder in the comboBox
-        newFolders.get(newFolders.indexOf(folder)).emails().add(model.getReadingEmail().get());
+        newFolders.get(newFolders.indexOf(folder)).emails().add(model.getActiveEmail().get());
         //Delete the currently open email from the activeFolder
-        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getReadingEmail().get());
+        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getActiveEmail().get());
         storage.store(model.getActiveAccount().get(), newFolders);
-        model.getActiveFolders().replaceAll(newFolders);
+        model.getFolders().replaceAll(newFolders);
         refresh();
     }
 
-
-    /*
-    public void deleteEmail(Email emailToBeDeleted) {
+    /* public void deleteEmail(Email emailToBeDeleted) {
         // use method in model like: model.deleteEmail(emailToBeDeleted)
         // model returns new folder structure, store new copy in storage
     }
     */
 
-
-
-    public Subject<Account> getActiveAccount() {
-        return model.getActiveAccount();
-    }
-
-    public SubjectList<Account> getAccounts() {
-        return model.getAccounts();
-    }
-
-    public void setActiveAccount(Account account) {
-        model.setActiveAccount(account);
-    }
-
-    public SubjectList<Folder> getActiveFolders() {
-        return model.getActiveFolders();
-    }
-
-    // view subjects
-
-    public Subject<Folder> getActiveFolder() {
-        return model.getActiveFolder();
-    }
-
-    public Subject<Email> getReadingEmail() {
-        return model.getReadingEmail();
-    }
-
-    public SubjectList<Email> getVisibleEmails() {
-        return model.getVisibleEmails();
-    }
-
-    public void setActiveFolder(Folder activeFolder) {
-        model.setActiveFolder(activeFolder);
-    }
-
-    public void setReadingEmail(Email readingEmail) {
-        model.setReadingEmail(readingEmail);
-    }
-
-    public void setVisibleEmails(List<Email> visibleEmails) {
-        model.setVisibleEmails(visibleEmails);
-    }
+    // state getters and setters
+    public Subject<Account> getActiveAccount() { return model.getActiveAccount(); }
+    public SubjectList<Account> getAccounts() { return model.getAccounts(); }
+    public void setActiveAccount(Account account) { model.setActiveAccount(account); }
+    public SubjectList<Folder> getActiveFolders() { return model.getFolders(); }
+    public Subject<Folder> getActiveFolder() { return model.getActiveFolder(); }
+    public Subject<Email> getReadingEmail() { return model.getActiveEmail(); }
+    public SubjectList<Email> getVisibleEmails() { return model.getEmails(); }
+    public void setActiveFolder(Folder activeFolder) { model.setActiveFolder(activeFolder); }
+    public void setReadingEmail(Email readingEmail) { model.setActiveEmail(readingEmail); }
+    public void setVisibleEmails(List<Email> visibleEmails) { model.setEmails(visibleEmails); }
 
 }

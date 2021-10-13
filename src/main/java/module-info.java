@@ -6,6 +6,7 @@ module org.group77.mailMe {
     requires javafx.web;
     requires java.datatransfer;
 
+    exports org.group77.mailMe.services.storage;
     exports org.group77.mailMe;
     exports org.group77.mailMe.controller;
     exports org.group77.mailMe.model;

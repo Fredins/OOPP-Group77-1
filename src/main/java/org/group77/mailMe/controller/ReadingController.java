@@ -1,18 +1,13 @@
 package org.group77.mailMe.controller;
 
 import javafx.fxml.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
-import javafx.stage.*;
 import javafx.util.StringConverter;
-import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 
-import java.io.*;
 import java.util.*;
 
 public class ReadingController {
@@ -114,12 +109,12 @@ public class ReadingController {
 
   @FXML
   private void DeleteEmail(Control control) throws Exception {
-    control.DeleteEmail();
+    control.deleteEmail();
   }
 
   @FXML
   private void PermDeleteEmail(Control control) throws Exception {
-    control.PermDeleteEmail();
+    control.permDeleteEmail();
   }
 
   /**
@@ -131,7 +126,7 @@ public class ReadingController {
 
   @FXML
   private void MoveEmail(Folder folder, Control control) throws Exception {
-    control.MoveEmail(folder);
+    control.moveEmail(folder);
   }
 
   /**
