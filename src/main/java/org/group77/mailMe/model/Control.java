@@ -49,9 +49,16 @@ public class Control {
         this.model = new Model(); //TODO: add as parameter?
         model.getAccounts().replaceAll(storage.retrieveAccounts());
 
+        // if a new account is added then set it as active
+        model.getAccounts().addObserver(newAccounts -> {
+            Account newAccount = newAccounts.get(newAccounts.size() - 1);
+            model.getActiveAccount().set(newAccount);
+        });
+
         // update folders when active account is changed
         model.getActiveAccount().addObserver(newAccount -> {
             // if a new account is set as active, get the stored folders of that account.
+
             if (newAccount != null) {
                 List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
                 if (newFolders.isEmpty()) { //if user has no folders stored, create new ones and store.
