@@ -35,7 +35,7 @@ public class WindowOpener {
   }
   /**
    * open start page window
-   * @param model the model
+   * @param control the model
    * @author Martin
    */
   public static void openStartPage(Control control){
@@ -55,7 +55,7 @@ public class WindowOpener {
   }
   /**
    * open add-account window
-   * @param model the model
+   * @param control the model
    * @author Martin
    */
   public static void openAddAccount(Control control, Consumer<Node> onClose) {
@@ -75,7 +75,7 @@ public class WindowOpener {
   }
   /**
    * open writing window
-   * @param model the model
+   * @param control the model
    * @author Martin
    */
   public static void openWriting(Control control) {
@@ -94,7 +94,7 @@ public class WindowOpener {
   }
   /**
    * open reply window
-   * @param model the model
+   * @param control the model
    * @param to the email address which the user is replying to
    * @author Martin
    */
@@ -115,15 +115,15 @@ public class WindowOpener {
 
   /** Call this function when clicking on the filter button in MainView to open the filterView
    *
-   * @param model
+   * @param control
    * @author David Zamanian
    */
 
-  public static void openFilter(Model model){
+  public static void openFilter(Control control){
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FilterView.fxml"));
       Pane pane = fxmlLoader.load();
-      ((FilterController) fxmlLoader.getController()).init(model);
+      ((FilterController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();
       stage.setTitle("Filter");
       stage.setScene(new Scene(pane));

@@ -53,7 +53,7 @@ public class MasterController {
     writeBtn.setOnAction(i -> WindowOpener.openWriting(control));
     addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(control, node -> ((Stage) node.getScene().getWindow()).close()));
 
-    filterButton.setOnAction(i -> WindowOpener.openFilter(model));
+    filterButton.setOnAction(i -> WindowOpener.openFilter(control));
 
     // change handlers
     control.getActiveAccount().addObserver(newAccount -> {

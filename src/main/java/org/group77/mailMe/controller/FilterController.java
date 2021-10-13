@@ -5,8 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import org.group77.mailMe.model.Model;
-
+import org.group77.mailMe.model.Control;
 /**
  * For applying filter to search
  *
@@ -24,11 +23,11 @@ public class FilterController {
 
     /** init function
      *
-     * @param model
+     * @param control
      * @author David Zamanian
      */
 
-    public void init(Model model){
+    public void init(Control control){
         clearFilterButton.setOnMouseClicked(inputEvent -> {
             toTextField.clear();
             fromTextField.clear();
