@@ -8,7 +8,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.Account;
 
 import java.io.IOException;
@@ -29,14 +29,14 @@ public class StartPageController {
    * that sets the active account to the one that is clicked on by user.
    * Adds action handler to this addAccountButton.
    *
-   * @param model holds the application state
+   * @param control holds the application state
    * @author Elin Hagman
    */
-  public void init(Model model) {
-    initStoredAccounts(model);
+  public void init(Control control) {
+    initStoredAccounts(control);
     addAccountButton.setOnAction(actionEvent -> openAddAccount(
                                       actionEvent,
-                                      model));
+                                      control));
   }
 
   /**
@@ -46,12 +46,12 @@ public class StartPageController {
    * Also adds onMouseClicked handlers to each AccountListItemController that:
    *    1) sets model's active account to the one user pressed on
    *    2) closes StartPage and opens MasterView
-   * @param model holds the application state
+   * @param control holds the application state
    * @author Elin Hagman
    */
 
-  private void initStoredAccounts(Model model) {
-    for (Account account : model.accounts.get()) {
+  private void initStoredAccounts(Control control) {
+    for (Account account : control.getAccounts().get()) {
       try {
         // load AccountListItem.fxml
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountListItem.fxml"));
@@ -62,8 +62,9 @@ public class StartPageController {
         // add OnMouseClicked to accountPane TODO: move to AccountListItemController??
         accountPane.setOnMouseClicked(inputEvent -> {
           ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
-          WindowOpener.openMaster(model);
-          model.activeAccount.set(account);
+          WindowOpener.openMaster(control);
+          control.setActiveAccount(account);
+          // control.setActiveAccount(account)
         });
       } catch (IOException e) {
         e.printStackTrace();
@@ -76,17 +77,17 @@ public class StartPageController {
    * Closes Stage that this StartPageController is displayed on,
    * calls openAddAccount() in WindowOpener to open Add Account View.
    * @param actionEvent occurs when user clicks on this addAccountButton
-   * @param model holds the application state
+   * @param control holds the application state
    * @author Elin Hagman
    */
-  private void openAddAccount(ActionEvent actionEvent, Model model) {
+  private void openAddAccount(ActionEvent actionEvent, Control control) {
     ((Stage)((Node) actionEvent.getSource()).getScene().getWindow()).close();
     // onClose is a function for AddAccountView that determines how closing the view should be handled
     Consumer<Node> onClose = node -> {
       ((Stage) node.getScene().getWindow()).close();
-      WindowOpener.openMaster(model);
+      WindowOpener.openMaster(control);
     };
-    WindowOpener.openAddAccount(model,onClose);
+    WindowOpener.openAddAccount(control,onClose);
 
   }
 }

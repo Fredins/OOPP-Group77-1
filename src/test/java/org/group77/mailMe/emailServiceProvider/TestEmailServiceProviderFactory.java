@@ -15,7 +15,7 @@ import org.junit.Test;
 public class TestEmailServiceProviderFactory {
     // test that gmail account gets associated with a gmail provider
     @Test
-    public void TestGmailAccount() {
+    public void TestGmailAccount() throws EmailDomainNotSupportedException {
         AccountFactory accountFactory = new AccountFactory();
         Account account = accountFactory.createAccount("lol@gmail.com", "1345".toCharArray());
         EmailServiceProviderFactory espFactory = new EmailServiceProviderFactory();

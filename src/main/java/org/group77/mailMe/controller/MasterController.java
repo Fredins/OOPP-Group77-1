@@ -5,14 +5,13 @@ import javafx.collections.*;
 import javafx.fxml.*;
 import javafx.geometry.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.util.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 
 import java.io.*;
@@ -34,51 +33,51 @@ public class MasterController {
    * 1. load/display folders in flowPane
    * 2. populate account comboBox
    * 3. add event handlers to nodes and state fields
-   * @param model the model
+   * @param control the model
    * @author Martin, David
    */
-  public void init(Model model) {
-    loadFolders(model.folders.get(), model);
-    if (model.accounts != null) {
-      populateAccountCombo(model.accounts.get(), model);
+  public void init(Control control) {
+    loadFolders(control.getActiveFolders().get(), control);
+    if (control.getAccounts() != null) {
+      populateAccountCombo(control.getAccounts().get(), control);
     }
 
     // input handlers
     refreshBtn.setOnAction(i -> {
       try {
-        model.refresh();
+        control.refresh();
       } catch (Exception e) {
         e.printStackTrace(); // TODO feedback
       }
     });
-    writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
-    addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close()));
+    writeBtn.setOnAction(i -> WindowOpener.openWriting(control));
+    addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(control, node -> ((Stage) node.getScene().getWindow()).close()));
 
     filterButton.setOnAction(i -> WindowOpener.openFilter(model));
 
     // change handlers
-    model.activeAccount.addObserver(newAccount -> {
+    control.getActiveAccount().addObserver(newAccount -> {
       accountsCombo.setValue(newAccount);
     });
-    model.folders.addObserver(newFolders -> {
+    control.getActiveFolders().addObserver(newFolders -> {
       if(!newFolders.isEmpty()){
-        loadFolders(newFolders, model);
-        model.activeFolder.set(newFolders.get(0));
+        loadFolders(newFolders, control);
+        control.getActiveFolder().set(newFolders.get(0));
       }
     });
-    model.visibleEmails.addObserver(newEmails -> loadEmails(newEmails, model));
-    model.accounts.addObserver(newEmails -> accountsCombo.setItems(FXCollections.observableList(newEmails)));
-    model.activeFolder.addObserver(newFolder -> model.visibleEmails.replaceAll(newFolder.emails()));
-    model.readingEmail.addObserver(newEmail -> {
+    control.getVisibleEmails().addObserver(newEmails -> loadEmails(newEmails, control));
+    control.getAccounts().addObserver(newEmails -> accountsCombo.setItems(FXCollections.observableList(newEmails)));
+    control.getActiveFolder().addObserver(newFolder -> control.getVisibleEmails().replaceAll(newFolder.emails()));
+    control.getReadingEmail().addObserver(newEmail -> {
       if (newEmail != null) {
-        loadReading(newEmail, model);
+        loadReading(newEmail, control);
       } else {
         readingPane.getChildren().clear();
       }
     });
     //Clear readingView when changing folders (else, BUG in moving and deleting emails)
-      model.activeFolder.addObserver(newFolder -> {
-         if (model.readingEmail != null){
+      control.getActiveFolder().addObserver(newFolder -> {
+         if (control.getReadingEmail() != null){
           readingPane.getChildren().clear();}
       });
 
@@ -88,13 +87,13 @@ public class MasterController {
      * Adds an Account with emailAddress "Add New Account" that can be clicked on to open AddAccountView.
      *
      * @param accounts all accounts in model's accounts.
-     * @param model holds the state of the application
+     * @param control holds the state of the application
      * @author Martin, Elin Hagman, David Ågren Zamanian
    */
 
-  private void populateAccountCombo(List<? extends Account> accounts, Model model) {
+  private void populateAccountCombo(List<? extends Account> accounts, Control control) {
     accountsCombo.getItems().addAll(accounts);
-    accountsCombo.setOnAction(inputEvent -> model.activeAccount.set(accountsCombo.getValue()));
+    accountsCombo.setOnAction(inputEvent -> control.getActiveAccount().set(accountsCombo.getValue()));
     accountsCombo.setConverter(new StringConverter<>() {
       @Override public String toString(Account account) {
         return account != null ? account.emailAddress() : null;
@@ -102,7 +101,7 @@ public class MasterController {
       @Override public Account fromString(String string) {
         Account account = null;
         try {
-          account = model.accounts.stream()
+          account = control.getAccounts().stream()
             .filter(acc -> acc.emailAddress().equals(string))
             .findAny()
             .orElseThrow(Exception::new);
@@ -114,8 +113,8 @@ public class MasterController {
     });
     accountsCombo.setButtonCell(new ListCell<>(){
       @Override protected void updateItem(Account item, boolean empty) {
-        if(model.activeAccount.get() != null){
-          setText(model.activeAccount.get().emailAddress());
+        if(control.getActiveAccount().get() != null){
+          setText(control.getActiveAccount().get().emailAddress());
         }
       }
     });
@@ -124,14 +123,14 @@ public class MasterController {
   /**
    * loads/display email
    * @param email the email to be displayed
-   * @param model the model
+   * @param control the model
    * @author David, Martin
    */
- private void loadReading(Email email, Model model) {
+ private void loadReading(Email email, Control control) {
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Reading.fxml"));
       Pane pane = fxmlLoader.load();
-      ((ReadingController) fxmlLoader.getController()).init(model, email);
+      ((ReadingController) fxmlLoader.getController()).init(control, email);
       readingPane.getChildren().clear();
       readingPane.getChildren().add(pane);
     } catch (IOException e) {
@@ -143,10 +142,10 @@ public class MasterController {
    * 1. initialize every folder in state field folders
    * 2. display every folder in the folder flowPane
    * @param folders all the folders to be loaded
-   * @param model the model
+   * @param control the model
    * @author Martin
    */
-  private void loadFolders(List<Folder> folders, Model model) {
+  private void loadFolders(List<Folder> folders, Control control) {
     foldersFlow.getChildren().clear();
     foldersFlow.getChildren().addAll(folders
                                        .stream()
@@ -155,7 +154,7 @@ public class MasterController {
                                          try {
                                            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItem.fxml"));
                                            pane = fxmlLoader.load();
-                                           ((FolderItemController) fxmlLoader.getController()).init(model, folder);
+                                           ((FolderItemController) fxmlLoader.getController()).init(control, folder);
                                          } catch (IOException e) {
                                            e.printStackTrace();
                                          }
@@ -167,10 +166,10 @@ public class MasterController {
    * 1. initialize every email in state field visibleEmails
    * 2. display every email in the emails flowPane
    * @param emails the emails to be displayed
-   * @param model the model
+   * @param control the model
    * @author David, Martin
    */
-  private void loadEmails(List<Email> emails, Model model) {
+  private void loadEmails(List<Email> emails, Control control) {
     emailsFlow.getChildren().clear();
     emailsFlow.getChildren().addAll(emails
                                       .stream()
@@ -179,7 +178,7 @@ public class MasterController {
                                         try {
                                           FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("EmailItem.fxml"));
                                           pane = fxmlLoader.load();
-                                          ((EmailItemController) fxmlLoader.getController()).init(model, email);
+                                          ((EmailItemController) fxmlLoader.getController()).init(control, email);
                                         } catch (IOException e) {
                                           e.printStackTrace();
                                         }

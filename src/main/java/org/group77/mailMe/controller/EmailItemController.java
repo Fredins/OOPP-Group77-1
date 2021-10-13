@@ -5,7 +5,7 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.*;
-import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 
 public class EmailItemController {
@@ -17,21 +17,21 @@ public class EmailItemController {
   /**
    * 1. set initial values for nodes
    * 2. set event handlers for nodes
-   * @param model the model
+   * @param control the model
    * @param email the corresponding email
    * @author David, Martin
    */
-  void init(Model model, Email email) {
+  void init(Control control, Email email) {
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
 
     // input handler
     button.setOnMouseClicked(inputEvent -> {
-      model.readingEmail.set(null); //Need to first set it to null because otherwise it does not count as a newEmail when we want to render the email in readingView
-      model.readingEmail.set(email);});
+      control.setReadingEmail(null); //Need to first set it to null because otherwise it does not count as a newEmail when we want to render the email in readingView
+      control.setReadingEmail(email);});
 
     // change handler
-    model.readingEmail.addObserver(newEmail -> {
+    control.getReadingEmail().addObserver(newEmail -> {
       if(email.equals(newEmail)){
         button.getStyleClass().add("dropshadow");
       }else{

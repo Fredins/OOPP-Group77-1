@@ -9,7 +9,7 @@ import javafx.stage.*;
 import javafx.util.StringConverter;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.model.*;
+import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 
 import java.io.*;
@@ -30,11 +30,11 @@ public class ReadingController {
   /**
    * 1. set initial values for nodes
    * 2. set event handler for node
-   * @param model the model
+   * @param control the model
    * @param email the corresponding email
    * @author Martin, David
    */
-  void init(Model model, Email email) {
+  void init(Control control, Email email) {
     contentArea.getEngine().loadContent(email.content());
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
@@ -44,31 +44,31 @@ public class ReadingController {
     // TODO date
     //Moves email to trash if not already in trash. If in trash --> Deletes permanently (but with confirmation).
     bin.setOnAction(i -> {
-      if((model.activeFolder.get().name().equals("Trash"))){
+      if((control.getActiveFolder().get().name().equals("Trash"))){
         try {
           if (customAlert("Are you sure you want to permanently delete this email?", Alert.AlertType.CONFIRMATION).get().equals(ButtonType.OK)){
-          PermDeleteEmail(model);}
+          PermDeleteEmail(control);}
         } catch (Exception e) {
           e.printStackTrace();
         }
       } else {
       try {
-        DeleteEmail(model);
+        DeleteEmail(control);
       } catch (Exception e) {
         e.printStackTrace();
       }
     }});
 
-    replyButton.setOnAction(inputEvent -> WindowOpener.openReply(model, fromLabel.getText()));
-    if (model.folders != null) {
-      PopulateFolderComboBox(model.folders.get(), model);
+    replyButton.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
+    if (control.getActiveFolders() != null) {
+      PopulateFolderComboBox(control.getActiveFolders().get(), control);
     }
 
     moveEmailComboBox.setOnAction(i -> {
       Folder selected = moveEmailComboBox.getSelectionModel().getSelectedItem();
       if (selected != null) {
         try {
-          MoveEmail(selected, model);
+          MoveEmail(selected, control);
         } catch (Exception e) {
           e.printStackTrace();
         }
@@ -107,42 +107,42 @@ public class ReadingController {
 
   /**
    * Calls the DeleteEmail method in model
-   * @param model holds the state of the application
+   * @param control the facade to model
    * @throws Exception
    * @author David Zamanian
    */
 
   @FXML
-  private void DeleteEmail(Model model) throws Exception {
-    model.DeleteEmail();
+  private void DeleteEmail(Control control) throws Exception {
+    control.DeleteEmail();
   }
 
   @FXML
-  private void PermDeleteEmail(Model model) throws Exception {
-    model.PermDeleteEmail();
+  private void PermDeleteEmail(Control control) throws Exception {
+    control.PermDeleteEmail();
   }
 
   /**
    * Calls the MoveEmail method in model
-   * @param model holds the state of the application
+   * @param control holds the state of the application
    * @throws Exception
    * @author David Zamanian
    */
 
   @FXML
-  private void MoveEmail(Folder folder, Model model) throws Exception {
-    model.MoveEmail(folder);
+  private void MoveEmail(Folder folder, Control control) throws Exception {
+    control.MoveEmail(folder);
   }
 
   /**
    * Populates the comboBox with the names of the folders in model's folders.
    *
    * @param folders all folders in model's folders
-   * @param model holds the state of the application
+   * @param control holds the state of the application
    * @author David Zamanian
    */
 
-  private void PopulateFolderComboBox(List<? extends Folder> folders, Model model){
+  private void PopulateFolderComboBox(List<? extends Folder> folders, Control control){
     moveEmailComboBox.getItems().clear();
     moveEmailComboBox.setConverter(new StringConverter<Folder>() {
       @Override
@@ -153,7 +153,7 @@ public class ReadingController {
       public Folder fromString(String s) {
         Folder folder = null;
         try {
-          folder = model.folders.stream().filter(fol -> fol.name().equals(s))
+          folder = control.getActiveFolders().stream().filter(fol -> fol.name().equals(s))
                   .findAny()
                   .orElseThrow(Exception::new);
         }catch (Exception e){

@@ -20,11 +20,21 @@ public class AccountFactory {
      *
      * @author Martin Fredin
      * @author Hampus Jernkrook
+     * @author Elin Hagman
+     *
      */
-    public static Account createAccount(String emailAddress, char[] password) {
+    public static Account createAccount(String emailAddress, char[] password) throws EmailDomainNotSupportedException {
         if (emailAddress.contains("@gmail.com")) {
             return new Account(emailAddress, password, ServerProvider.GMAIL);
         }
-        return null;
+        /*
+        else if (emailAddress.contains("@hotmail.com") || emailAddress.contains("@live.com")
+                || emailAddress.contains("@outlook.com")) {
+            return new Account(emailAddress, password, ServerProvider.MICROSOFT);
+        }
+         */
+        else {
+            throw new EmailDomainNotSupportedException();
+        }
     }
 }

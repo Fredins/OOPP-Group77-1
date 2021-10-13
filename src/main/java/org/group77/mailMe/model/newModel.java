@@ -13,41 +13,57 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Holds the application state.
- */
-
-public class Model {
+public class newModel {
 
     // all accounts
     private SubjectList<Account> accounts = new SubjectList<>(new ArrayList<>());
     // all accounts and their folders
-    //private Subject<Map<Account,List<Folder>>> folders = new Subject<>(null);
+    private Subject<Map<Account,List<Folder>>> folders = new Subject<>(null);
     // active account
     private Subject<Account> activeAccount = new Subject<>(null);
     // active accounts folders
     private SubjectList<Folder> activeFolders = new SubjectList<>(new ArrayList<>());
-    private Subject<Folder> activeFolder = new Subject<>(null);
-    private Subject<Email> readingEmail = new Subject<>(null);
-    private SubjectList<Email> visibleEmails = new SubjectList<>(new ArrayList<>());
 
-    private AccountFactory accountFactory;
+    // ev activeFolder, visableEmails osv, men känns som det är väldigt kopplat till View ist för Modell
 
-    /**
-     * Add emails to this activeFolder's inbox folder.
-     *
-     * Emails already in inbox are not removed.
-     *
-     * @param newEmails emails to added to inbox folder in active account
-     * @throws InboxNotFoundException if activeFolders does not have a inbox folder
-     */
+    AccountFactory accountFactory;
 
-    public void updateInbox(List<Email> newEmails) throws InboxNotFoundException {
+    public newModel(Map<Account,List<Folder>> accountFolderMap) {
+
+        // ---- set attributes ----
+        folders.set(accountFolderMap);
+        accounts.replaceAll(accountFolderMap.keySet());
+
+        // ----  set observers ----
+        // if new account is added to this.accounts, set it as active
+        this.accounts.addObserver(newAccounts -> {
+            Account newAccount = newAccounts.get(newAccounts.size() - 1);
+            activeAccount.set(newAccount);
+        });
+
+        // if active account is switched, set activeFolders to active accounts stored folders
+        this.activeAccount.addObserver(newActiveAccount -> {
+            if (newActiveAccount != null) {
+                List<Folder> newActiveAccountFolders = folders.get().get(newActiveAccount);
+
+                if (newActiveAccountFolders.isEmpty()) {
+                    newActiveAccountFolders = createFolders();
+                }
+
+                activeFolders.replaceAll(newActiveAccountFolders);
+            }
+        });
+
+    }
+
+    public void updateInbox(List<Email> newEmails) throws Exception {
+
+        // TODO: copied from Model, not sure if it's correct
 
         Folder inbox = activeFolders.stream()
                 .filter(folders -> folders.name().equals("Inbox"))
                 .findFirst()
-                .orElseThrow(InboxNotFoundException::new); // inbox not found
+                .orElseThrow(Exception::new); // inbox not found
         Folder newInbox = new Folder(inbox.name(),
                 Stream.of(newEmails, inbox.emails())
                         .flatMap(Collection::stream)
@@ -58,11 +74,10 @@ public class Model {
     }
 
     public void setActiveAccount(Account account) {
-        // check if account is in this accounts
-        activeAccount.set(account);
-        /*if (accounts.get().contains(account)) {
-
-        }*/
+        // check if account is in active account
+        if (accounts.get().contains(account)) {
+            activeAccount.set(account);
+        }
     }
 
     public void addAccount(Account account) {
@@ -72,12 +87,8 @@ public class Model {
         }
     }
 
-    public Account createAccount(String emailAddress, char[] password) throws EmailDomainNotSupportedException {
-        return AccountFactory.createAccount(emailAddress, password);
-    }
 
-
-    public List<Folder> createFolders() {
+    private List<Folder> createFolders() {
         return List.of(
                 new Folder("Inbox", new ArrayList<>()),
                 new Folder("Archive", new ArrayList<>()),
@@ -87,46 +98,6 @@ public class Model {
         );
     }
 
-    public SubjectList<Account> getAccounts() {
-        return accounts;
-    }
-
-
-    public Subject<Account> getActiveAccount() {
-        return activeAccount;
-    }
-
-    public SubjectList<Folder> getActiveFolders() {
-        return activeFolders;
-    }
-
-    // --- view ---
-
-    public Subject<Folder> getActiveFolder() {
-        return activeFolder;
-    }
-
-    public Subject<Email> getReadingEmail() {
-        return readingEmail;
-    }
-
-    public SubjectList<Email> getVisibleEmails() {
-        return visibleEmails;
-    }
-
-    public void setActiveFolder(Folder activeFolder) {
-        this.activeFolder.set(activeFolder);
-    }
-
-    public void setReadingEmail(Email readingEmail) {
-        this.readingEmail.set(readingEmail);
-    }
-
-    public void setVisibleEmails(List<Email> visibleEmails) {
-        this.visibleEmails.replaceAll(visibleEmails);
-    }
-
-    /*
     public Account getActiveAccount() {
         return activeAccount.get();
         // will not return Subject, only account in it, so no one can change it.
@@ -145,5 +116,4 @@ public class Model {
         return folders.get();
     }
 
-     */
 }

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 public class TestAccountFactory {
 
     @Test
-    void testCreateAccount(){
+    void testCreateAccount() throws EmailDomainNotSupportedException {
         AccountFactory factory = new AccountFactory();
         Account a = factory.createAccount("77grupp@gmail.com", "password123".toCharArray());
         Account a1 = factory.createAccount("gmail@outlook.com", "password123".toCharArray());

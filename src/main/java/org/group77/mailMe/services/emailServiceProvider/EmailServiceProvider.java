@@ -1,5 +1,6 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
+import org.group77.mailMe.model.CouldNotConnectToServerException;
 import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
@@ -59,9 +60,14 @@ public abstract class EmailServiceProvider {
    * @param account is an account.
    * @return boolean if the connection was successful.
    * @author Martin
+   * @author Hampus Jernkrook
    */
-  public boolean testConnection(Account account) throws MessagingException {
-    connectStore(account);
+  public boolean testConnection(Account account) throws CouldNotConnectToServerException {
+    try {
+      connectStore(account);
+    } catch (MessagingException e) {
+        throw new CouldNotConnectToServerException();
+    }
     return true;
   }
 
