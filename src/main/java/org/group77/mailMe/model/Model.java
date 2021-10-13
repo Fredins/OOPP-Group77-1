@@ -31,42 +31,7 @@ public class Model {
     private Subject<Email> readingEmail = new Subject<>(null);
     private SubjectList<Email> visibleEmails = new SubjectList<>(new ArrayList<>());
 
-
-
-    AccountFactory accountFactory;
-
-    public Model() {
-
-
-    /* ALTERNATIVE: Model gets data from storage when it is created
-
-    public Model(Map<Account,List<Folder>> accountFolderMap) {
-
-        // ---- set attributes ----
-        folders.set(accountFolderMap);
-        accounts.replaceAll(accountFolderMap.keySet());
-
-        // ----  set observers ----
-        // if new account is added to this.accounts, set it as active
-        this.accounts.addObserver(newAccounts -> {
-            Account newAccount = newAccounts.get(newAccounts.size() - 1);
-            activeAccount.set(newAccount);
-        });
-
-        // if active account is switched, set activeFolders to active accounts stored folders
-        this.activeAccount.addObserver(newActiveAccount -> {
-            if (newActiveAccount != null) {
-                List<Folder> newActiveAccountFolders = folders.get().get(newActiveAccount);
-
-                if (newActiveAccountFolders.isEmpty()) {
-                    newActiveAccountFolders = createFolders();
-                }
-
-                activeFolders.replaceAll(newActiveAccountFolders);
-            }
-        });*/
-
-    }
+    private AccountFactory accountFactory;
 
     /**
      * Add emails to this activeFolder's inbox folder.
@@ -74,7 +39,7 @@ public class Model {
      * Emails already in inbox are not removed.
      *
      * @param newEmails emails to added to inbox folder in active account
-     * @throws Exception if activeFolders does not have a inbox folder
+     * @throws InboxNotFoundException if activeFolders does not have a inbox folder
      */
 
     public void updateInbox(List<Email> newEmails) throws InboxNotFoundException {
@@ -105,6 +70,10 @@ public class Model {
         if (!(accounts.get().contains(account))) {
             accounts.add(account);
         }
+    }
+
+    public Account createAccount(String emailAddress, char[] password) throws EmailDomainNotSupportedException {
+        return AccountFactory.createAccount(emailAddress, password);
     }
 
 

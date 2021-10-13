@@ -5,6 +5,7 @@ import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProvider;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
+import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
 import org.group77.mailMe.services.storage.Storage;
 
 import java.io.File;
@@ -103,7 +104,7 @@ public class Control {
             // add new emails to inbox in model
             try {
                 model.updateInbox(newEmails);
-                storage.store(model.getActiveAccount().get(),model.getActiveFolders().get()); // replaces old inbox with new emails
+                storage.store(model.getActiveAccount().get(), model.getActiveFolders().get()); // replaces old inbox with new emails
             } catch (InboxNotFoundException e){
                 throw new Exception("No folder named Inbox");
             }
@@ -122,25 +123,22 @@ public class Control {
      * If account cannot connect to server or store account, throws Exception.
      *
      * @throws Exception if domain is not supported or authentication to server fails
-     * @author Elin Hagman, Martin
+     * @author Elin Hagman
+     * @author Martin
+     * @author Hampus Jernkrook
      */
 
     public void addAccount(String emailAddress, String password) throws Exception {
-
-        Account tempAccount = AccountFactory.createAccount(emailAddress,password.toCharArray());
-
-        if (tempAccount != null) {
-
+        try {
+            Account account = model.createAccount(emailAddress, password.toCharArray());
             // test connection
-            if (EmailServiceProviderFactory.getEmailServiceProvider(tempAccount).testConnection(tempAccount)) {
-                storage.store(tempAccount); // throws account already exists exception
-                model.addAccount(tempAccount); // will set tempAccount to activeAccount
+            if (EmailServiceProviderFactory.getEmailServiceProvider(account).testConnection(account)) {
+                storage.store(account); // throws account already exists exception
+                model.addAccount(account); // will set created account to activeAccount
             }
-
-        } else {
-            throw new Exception("Domain is not supported");
+        } catch (EmailDomainNotSupportedException | AccountAlreadyExistsException | CouldNotConnectToServerException e) {
+            throw new Exception(e.getMessage());
         }
-
     }
 
     /**
