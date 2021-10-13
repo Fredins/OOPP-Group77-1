@@ -6,6 +6,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import org.group77.mailMe.model.Model;
 
+/**
+ * For applying filter to search
+ *
+ * @author David zamanian
+ */
+
 public class FilterController {
     @FXML private Button clearFilterButton;
     @FXML private Button addFilterButton;
@@ -14,7 +20,11 @@ public class FilterController {
     @FXML private DatePicker maxDatePicker;
 
 
-
+    /** init function
+     * 
+     * @param model
+     * @author David Zamanian
+     */
 
     public void init(Model model){
         clearFilterButton.setOnMouseClicked(inputEvent -> {
@@ -23,7 +33,7 @@ public class FilterController {
             maxDatePicker.setValue(null);
         });
         addFilterButton.setOnMouseClicked(inputEvent -> {
-            System.out.println("Do something");
+            System.out.println("Do something"); //TODO for Hampus to add
         });
     }
 }

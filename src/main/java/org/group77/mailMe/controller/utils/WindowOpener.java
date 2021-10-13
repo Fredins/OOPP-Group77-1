@@ -113,6 +113,12 @@ public class WindowOpener {
     }
   }
 
+  /** Call this function when clicking on the filter button in MainView to open the filterView
+   *
+   * @param model
+   * @author David Zamanian
+   */
+
   public static void openFilter(Model model){
     try {
       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FilterView.fxml"));
