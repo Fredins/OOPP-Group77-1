@@ -26,7 +26,7 @@ public class MasterController {
   @FXML private Pane readingPane;
   @FXML private ComboBox<Account> accountsCombo;
   @FXML private TextField searchField;
-  @FXML private ImageView searchImg;
+  @FXML private Button filterButton;
   @FXML private Button addAccountBtn;
   @FXML private FlowPane emailsFlow;
 
@@ -53,6 +53,8 @@ public class MasterController {
     });
     writeBtn.setOnAction(i -> WindowOpener.openWriting(model));
     addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(model, node -> ((Stage) node.getScene().getWindow()).close()));
+
+    filterButton.setOnAction(i -> WindowOpener.openFilter(model));
 
     // change handlers
     model.activeAccount.addObserver(newAccount -> {

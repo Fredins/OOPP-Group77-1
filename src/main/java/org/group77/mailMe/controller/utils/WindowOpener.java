@@ -112,4 +112,20 @@ public class WindowOpener {
       e.printStackTrace();
     }
   }
+
+  public static void openFilter(Model model){
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FilterView.fxml"));
+      Pane pane = fxmlLoader.load();
+      ((FilterController) fxmlLoader.getController()).init(model);
+      Stage stage = new Stage();
+      stage.setTitle("Filter");
+      stage.setScene(new Scene(pane));
+      stage.setResizable(false);
+      stage.show();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
 }

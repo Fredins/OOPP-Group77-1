@@ -16,7 +16,7 @@ public class FilterController {
 
 
 
-    void init (Model model){
+    public void init(Model model){
         clearFilterButton.setOnMouseClicked(inputEvent -> {
             toTextField.clear();
             fromTextField.clear();
