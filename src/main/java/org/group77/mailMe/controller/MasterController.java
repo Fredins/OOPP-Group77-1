@@ -41,6 +41,9 @@ public class MasterController {
     if (control.getAccounts() != null) {
       populateAccountCombo(control.getAccounts().get(), control);
     }
+    if(control.getActiveAccount().get() != null){
+      accountsCombo.setValue(control.getActiveAccount().get());
+    }
 
     // input handlers
     refreshBtn.setOnAction(i -> {
