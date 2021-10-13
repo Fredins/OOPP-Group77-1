@@ -12,18 +12,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Control is a facade between the frontend and backend.
+ * It also separates the model from the services used in the application.
+ *
+ * @author Elin Hagman
+ */
+
 public class Control {
 
-    // services
+    /**
+     * The storage solution.
+     */
     private final Storage storage;
 
-    // model
+    /**
+     * The model which holds the logic of the application and its state.
+     */
     private Model model;
+
+    /**
+     * Creates a Control with the specified storage solution.
+     * Connects model with the storage solution so that everytime activeAccount is switched
+     * the new active accounts folders will be retrieved from storage.
+     *
+     * @param storage storage solution used for storing user data
+     */
 
     public Control(Storage storage) {
         this.storage = storage;
 
-        this.model = new Model();
+        this.model = new Model(); //TODO: add as parameter?
         model.getAccounts().replaceAll(storage.retrieveAccounts());
 
         // update folders when active account is changed
@@ -37,11 +56,6 @@ public class Control {
                 }
                 model.getActiveFolders().replaceAll(newFolders);
             }
-        });
-        // if a new account is added then set it as active
-        model.getAccounts().addObserver(newAccounts -> {
-            Account newAccount = newAccounts.get(newAccounts.size() - 1);
-            model.getActiveAccount().set(newAccount);
         });
 
         // ALTERNATIVE: send stored data to model directly

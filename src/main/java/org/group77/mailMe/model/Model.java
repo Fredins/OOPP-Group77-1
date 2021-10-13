@@ -37,7 +37,11 @@ public class Model {
 
     public Model() {
 
-
+        // if a new account is added then set it as active
+        accounts.addObserver(newAccounts -> {
+            Account newAccount = newAccounts.get(newAccounts.size() - 1);
+            activeAccount.set(newAccount);
+        });
     /* ALTERNATIVE: Model gets data from storage when it is created
 
     public Model(Map<Account,List<Folder>> accountFolderMap) {
