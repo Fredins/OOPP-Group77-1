@@ -33,10 +33,14 @@ public class Control {
 
     /**
      * Creates a Control with the specified storage solution.
-     * Connects model with the storage solution so that everytime activeAccount is switched
-     * the new active accounts folders will be retrieved from storage.
      *
-     * @param storage storage solution used for storing user data
+     * Creates and initiates a Model with necessary data from storage.
+     * Adds logic to model so that when active account changes its folders are retrieved
+     * from storage.
+     *
+     * @param storage storage solution used for storing user data.
+     *
+     * @author Elin Hagman, Martin Fredin
      */
 
     public Control(Storage storage) {
@@ -82,15 +86,6 @@ public class Control {
      */
 
     public void refresh() throws Exception {
-        // 1) check that there is an active account and folders is not empty in model
-        // 2a) if true:
-        //      a) get ESP for model's activeAccount
-        //      b) send activeAccount to refreshFromServer, will receive List<Emails> INBOX
-        //      c) add the new emails to model's inbox folder (TODO: refreshFolder in model)
-        //      d) add the new emails to storage
-        //
-        // 2b) if not true:
-        //      a) throw exception that there is no active account
 
         if (model.getActiveAccount() != null && model.getActiveFolders() != null) {
 
@@ -125,18 +120,6 @@ public class Control {
 
     public void addAccount(String emailAddress, String password) throws Exception {
 
-        // 1) try to create account with addAccount method in model or use AccountFactory directly? (TODO: addAccount in model)
-        // 2a) if successful:
-        //      a) get ESP for added account
-        //      b) esp.testConnection(account)
-        //          if connection successful:
-        //              i) store account (throws an exception?)
-        //              ii) add account in model's accounts (TODO: method that adds account to accounts attribute)
-        //          if connection not successful:
-        //              i) throw authentication exception
-        // 2b) if not successful:
-        //      a) throw domain not supported exception
-
         Account tempAccount = AccountFactory.createAccount(emailAddress,password.toCharArray());
 
         if (tempAccount != null) {
@@ -161,12 +144,7 @@ public class Control {
      */
 
     public void send(List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
-        // 1) check that there is an active account in model
-        // 2a) if true:
-        //      a) get active account ESP
-        //      b) esp.sendEmail(recipients,subject,content,attachment)
-        // 2b) if not true:
-        //      a) throw exception: no active account
+
         if (model.getActiveAccount() != null) {
 
             EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
