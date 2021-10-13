@@ -58,6 +58,15 @@ public class Control {
 
     }
 
+    /**
+     * 1. retrieve emails from server
+     * 2. set activeFolder = inbox
+     * 3. store emails
+     *
+     * @throws Exception if inbox doesn't exist or if refreshFromServerFails
+     * @author Martin Fredin
+     */
+
     public void refresh() throws Exception {
         // 1) check that there is an active account and folders is not empty in model
         // 2a) if true:
@@ -90,6 +99,16 @@ public class Control {
 
     }
 
+    /**
+     * Tries to add a new account to accounts.
+     * <p>
+     * If emailAddress does not belong to a supported domain, throws Exception with informative message.
+     * If account cannot connect to server or store account, throws Exception.
+     *
+     * @throws Exception if domain is not supported or authentication to server fails
+     * @author Elin Hagman, Martin
+     */
+
     public void addAccount(String emailAddress, String password) throws Exception {
 
         // 1) try to create account with addAccount method in model or use AccountFactory directly? (TODO: addAccount in model)
@@ -116,6 +135,13 @@ public class Control {
 
     }
 
+    /**
+     * sends the email via the appropriate email service provider
+     * TODO Alexey kan vi byta till send(Account) och sedan fixa med resten på backend?
+     *
+     * @author Alexey Ryabov
+     */
+
     public void send(List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
         // 1) check that there is an active account in model
         // 2a) if true:
@@ -132,6 +158,13 @@ public class Control {
             throw new Exception("No active account");
         }
     }
+
+    /**
+     * Removes the currently open email and moves it to the trash.
+     *
+     * @throws Exception
+     * @author David Zamanian
+     */
 
     public void DeleteEmail() throws Exception {
 
@@ -160,8 +193,9 @@ public class Control {
         refresh();
     }
 
+
     /**
-     * Moves tha email to the desired folder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
+     * Moves the email to the desired folder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
      *
      * @param folder The folder that was selected in the "Move" comboBox in readingView
      * @throws Exception
