@@ -22,14 +22,14 @@
             <String fx:value="standardTextFontSize" />
          </styleClass>
       </Label>
-      <Button fx:id="clearFilterButton" layoutX="443.0" layoutY="7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="60.0" text="Clear " AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="12.0">
+      <Button fx:id="clearFilterButton" layoutX="360.0" layoutY="106.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Clear " AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="124.0" AnchorPane.topAnchor="106.0">
          <styleClass>
             <String fx:value="removeFocus" />
-            <String fx:value="prominentButton" />
+            <String fx:value="prominentButtonSmall" />
          </styleClass>
       </Button>
-      <TextField fx:id="toTextField" layoutX="70.0" layoutY="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="280.0" styleClass="removeFocus" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="12.0" />
-      <TextField fx:id="fromTextField" layoutX="70.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="280.0" styleClass="removeFocus" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="58.0" />
+      <TextField fx:id="toTextField" layoutX="70.0" layoutY="18.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="369.0" styleClass="removeFocus" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="51.0" AnchorPane.topAnchor="12.0" />
+      <TextField fx:id="fromTextField" layoutX="70.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="369.0" styleClass="removeFocus" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="51.0" AnchorPane.topAnchor="58.0" />
       <DatePicker fx:id="maxDatePicker" layoutX="80.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="140.0" styleClass="removeFocus" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="80.0" />
       <Label layoutX="12.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="Max Date" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0">
          <styleClass>
@@ -37,10 +37,10 @@
             <String fx:value="standardTextFontSize" />
          </styleClass>
       </Label>
-      <Button fx:id="addFilterButton" layoutX="430.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="60.0" text="Add" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="12.0">
+      <Button fx:id="addFilterButton" layoutX="430.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Add" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="51.0">
          <styleClass>
             <String fx:value="removeFocus" />
-            <String fx:value="prominentButton" />
+            <String fx:value="prominentButtonSmall" />
          </styleClass>
       </Button>
    </children>

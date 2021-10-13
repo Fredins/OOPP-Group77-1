@@ -22,6 +22,13 @@ folderPane{
 -fx-background-color: #E5E5E5
 }
 
+.filterButton{
+-fx-background-color: #f4f4f4
+}
+.filterButton: hover{
+-fx-background-color: #E5E5E5
+}
+
 .add-button{
  -fx-color: #E03A5B;
 }

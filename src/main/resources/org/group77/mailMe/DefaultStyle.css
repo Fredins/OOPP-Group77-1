@@ -22,6 +22,36 @@
     -fx-text-fill: white;
 }
 
+/* Prominent pink button (Smaller, used by eg "Send", "Attach"-buttons) */
+
+.prominentButtonSmall {
+ -fx-color: #E03A5B;
+ -fx-border-radius: 50;
+ -fx-border-width: 1;
+ -fx-display: inline-block;
+ -fx-font-size: 14px;
+ -fx-line-height: 17px;
+ -fx-padding: 5px;
+ -fx-font-family: Georgia, serif;
+ -fx-background-radius: 10;
+ -fx-focus-color: transparent;
+}
+
+.prominentButtonSmall:pressed {
+    -fx-background-color: #AA374E;
+    -fx-text-fill: white;
+}
+
+.prominentButtonSmall:hover {
+    -fx-color: #EA5572;
+    -fx-text-fill: white;
+}
+
+.prominentButtonSmall:active {
+background: #E03A5B; }
+}
+
+
 /* Headline text */
 .standardFontFamily {
     -fx-font-family: Georgia, serif;
@@ -39,8 +69,3 @@
 -fx-focus-color: #BABABA;
 -fx-faint-focus-color: transparent;
 }
-
-.removeFocusWV{
-faint-focus-color: transparent;
-}
-

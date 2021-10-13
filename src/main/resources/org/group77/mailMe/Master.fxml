@@ -69,13 +69,8 @@
             <String fx:value="removeFocus" />
          </styleClass>
       </Button>
-      <Button fx:id="filterButton" layoutX="364.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" text="Button" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="22.0">
-         <styleClass>
-            <String fx:value="add-button" />
-            <String fx:value="refreshButton" />
-         </styleClass>
-      </Button>
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="364.0" layoutY="22.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="22.0">
+      <Button fx:id="filterButton" layoutX="364.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="filterButton" text="Button" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="22.0" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="364.0" layoutY="22.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" styleClass="filterButton" AnchorPane.topAnchor="22.0">
          <image>
             <Image url="@ImagesAndIcons/filter-icon.png" />
          </image>
