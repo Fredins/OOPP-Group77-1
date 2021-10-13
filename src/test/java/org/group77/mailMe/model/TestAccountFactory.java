@@ -4,6 +4,9 @@ import org.junit.jupiter.api.*;
 
 public class TestAccountFactory {
 
+    /**
+     * @author Martin
+     */
     @Test
     void testCreateAccount(){
         AccountFactory factory = new AccountFactory();
