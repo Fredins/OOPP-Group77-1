@@ -39,6 +39,8 @@ public class ReadingController {
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
     toLabel.setText(removeBrackets(Arrays.toString(email.to())));
+    dateLabel.setText(email.date().toString());
+
     attachmentsLabel.setText(email.attachments());
 
     // TODO date
