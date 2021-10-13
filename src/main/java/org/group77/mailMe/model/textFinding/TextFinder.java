@@ -15,11 +15,12 @@ public class TextFinder {
 
     private final Filter<Email, String> stringFilter = new Filter<>();
     private final Filter<Email, LocalDateTime> dateFilter = new Filter<>();
-    private final Sorter<Email, LocalDateTime> dateSorter = new Sorter<>();
+    private final Sorter<Email> emailSorter = new Sorter<>();
     private final InFromPredicate inFromPredicate = new InFromPredicate();
     private final InToPredicate inToPredicate = new InToPredicate();
     private final InAnyTextFieldPredicate inAnyTextFieldPredicate = new InAnyTextFieldPredicate();
     private final OlderThanPredicate olderThanPredicate = new OlderThanPredicate();
+    private final NewToOldComparator newToOldComparator = new NewToOldComparator();
 
 
     /**
@@ -84,10 +85,10 @@ public class TextFinder {
     }
 
     public List<Email> sortByOldToNew(List<Email> emails) {
-        return null;
+        return emailSorter.sort(emails, newToOldComparator.reversed());
     }
 
     public List<Email> sortByNewToOld(List<Email> emails) {
-        return null;
+        return emailSorter.sort(emails, newToOldComparator);
     }
 }
