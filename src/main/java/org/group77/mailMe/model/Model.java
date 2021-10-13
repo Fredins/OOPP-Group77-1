@@ -77,12 +77,12 @@ public class Model {
      * @throws Exception if activeFolders does not have a inbox folder
      */
 
-    public void updateInbox(List<Email> newEmails) throws Exception {
+    public void updateInbox(List<Email> newEmails) throws InboxNotFoundException {
 
         Folder inbox = activeFolders.stream()
                 .filter(folders -> folders.name().equals("Inbox"))
                 .findFirst()
-                .orElseThrow(Exception::new); // inbox not found
+                .orElseThrow(InboxNotFoundException::new); // inbox not found
         Folder newInbox = new Folder(inbox.name(),
                 Stream.of(newEmails, inbox.emails())
                         .flatMap(Collection::stream)

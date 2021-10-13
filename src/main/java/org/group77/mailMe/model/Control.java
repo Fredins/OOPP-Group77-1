@@ -104,8 +104,8 @@ public class Control {
             try {
                 model.updateInbox(newEmails);
                 storage.store(model.getActiveAccount().get(),model.getActiveFolders().get()); // replaces old inbox with new emails
-            } catch (Exception e){
-                throw new Exception("No folder named inbox");
+            } catch (InboxNotFoundException e){
+                throw new Exception("No folder named Inbox");
             }
 
         } else {
