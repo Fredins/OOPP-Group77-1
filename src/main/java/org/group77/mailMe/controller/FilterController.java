@@ -60,13 +60,14 @@ public class FilterController {
             }
             if (!Objects.equals(maxDatePicker.getValue(), null)) {
                 System.out.println("GOING TO FILTER ON MAX DATE"); //todo remove
-                // convert the selected date to LocalDateTime
-                LocalDateTime date = maxDatePicker.getValue().atStartOfDay();
+                // convert the selected date to LocalDateTime.
+                // For max date to be inclusive, set max date to be start of day after the chosen date.
+                LocalDateTime date = maxDatePicker.getValue().plusDays(1).atStartOfDay();
                 control.filterOnMaxDate(date);
             }
             if (!Objects.equals(minDatePicker.getValue(), null)) {
                 System.out.println("GOING TO FILTER ON MIN DATE"); //todo remove
-                // convert the selected date to LocalDateTime
+                // convert the selected date to LocalDateTime. Min date is inclusive.
                 LocalDateTime date = minDatePicker.getValue().atStartOfDay();
                 control.filterOnMinDate(date);
             }
