@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.web.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 import org.group77.mailMe.model.Control;
 
 
@@ -31,6 +32,9 @@ public class WritingController {
    * @author Martin, Alexey
    */
   public void init(Control control) {
+    String[] s = {"1", "2", "3"};
+
+    TextFields.bindAutoCompletion(toField, s);
     init(control, null);
   }
 

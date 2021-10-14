@@ -107,6 +107,10 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>org.group77.mailMe/org.group77.mailMe.Main</mainClass>
+                            <options>
+                                <option>--add-exports</option>
+                                <option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
+                            </options>
                         </configuration>
                     </execution>
                 </executions>
