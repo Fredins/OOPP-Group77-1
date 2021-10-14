@@ -45,8 +45,8 @@ public class Control {
     public Control(Storage storage) {
         this.storage = storage;
 
-        this.model = new Model(); //TODO: add as parameter?
-        model.getAccounts().replaceAll(storage.retrieveAccounts());
+        this.model = new Model(storage.retrieveAccounts()); //TODO: add as parameter?
+        //model.getAccounts().replaceAll(storage.retrieveAccounts());
 
 
         // update folders when active account is changed

@@ -25,9 +25,10 @@ public class Model {
     private final Subject<Folder> activeFolder = new Subject<>(null);
     private final Subject<Email> activeEmail = new Subject<>(null);
 
-    public Model(){
+    public Model(List<Account> accounts){
         // if a new account is added then set it as active
-        accounts.addObserver(newAccounts -> {
+        this.accounts.replaceAll(accounts);
+        this.accounts.addObserver(newAccounts -> {
             Account newAccount = newAccounts.get(newAccounts.size() - 1);
             activeAccount.set(newAccount);
         }); // -- moved this cause it doesn't have anything to do with services. Martin
