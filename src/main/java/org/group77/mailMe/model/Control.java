@@ -204,7 +204,7 @@ public class Control {
     // state getters and setters
     public Subject<Account> getActiveAccount() { return model.getActiveAccount(); }
     public SubjectList<Account> getAccounts() { return model.getAccounts(); }
-    public void setActiveAccount(Account account) { model.setActiveAccount(account); }
+    public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {model.setActiveAccount(account);}
     public SubjectList<Folder> getActiveFolders() { return model.getFolders(); }
     public Subject<Folder> getActiveFolder() { return model.getActiveFolder(); }
     public Subject<Email> getReadingEmail() { return model.getActiveEmail(); }

@@ -32,6 +32,8 @@ public class Model {
             Account newAccount = newAccounts.get(newAccounts.size() - 1);
             activeAccount.set(newAccount);
         }); // -- moved this cause it doesn't have anything to do with services. Martin
+
+
     }
 
     /**
@@ -57,12 +59,14 @@ public class Model {
         folders.replace(inbox, newInbox);
     }
 
-    public void setActiveAccount(Account account) {
+    public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {
         // check if account is in this accounts
-        activeAccount.set(account);
-        /*if (accounts.get().contains(account)) {
 
-        }*/
+        if (accounts.get().contains(account)) {
+            activeAccount.set(account);
+        } else {
+            throw new ActiveAccountNotInAccounts();
+        }
     }
 
     public void addAccount(Account account) {

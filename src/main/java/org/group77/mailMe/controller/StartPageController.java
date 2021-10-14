@@ -8,6 +8,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
+import org.group77.mailMe.model.ActiveAccountNotInAccounts;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.Account;
 
@@ -63,7 +64,11 @@ public class StartPageController {
         accountPane.setOnMouseClicked(inputEvent -> {
           ((Stage)((Node) inputEvent.getSource()).getScene().getWindow()).close();
           WindowOpener.openMaster(control);
-          control.setActiveAccount(account);
+          try {
+            control.setActiveAccount(account);
+          } catch (ActiveAccountNotInAccounts e) {
+            e.printStackTrace(); // TODO: give error message to user
+          }
           // control.setActiveAccount(account)
         });
       } catch (IOException e) {
