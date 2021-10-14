@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="250.0" prefWidth="500.0" stylesheets="@DefaultStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.FilterController">
+<AnchorPane prefHeight="250.0" prefWidth="500.0" style="-fx-background-color: ffffff;" stylesheets="@DefaultStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.FilterController">
    <children>
       <Label layoutX="12.0" layoutY="67.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="To" AnchorPane.leftAnchor="12.0">
          <styleClass>

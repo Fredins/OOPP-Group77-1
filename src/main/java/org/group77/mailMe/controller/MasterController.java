@@ -28,6 +28,7 @@ public class MasterController {
   @FXML private Button filterButton;
   @FXML private Button addAccountBtn;
   @FXML private FlowPane emailsFlow;
+  @FXML private FlowPane filterFlowPane;
 
   /**
    * 1. load/display folders in flowPane
@@ -189,6 +190,19 @@ public class MasterController {
                                       })
                                       .collect(Collectors.toList())
     );
+  }
+
+  //TODO init this view upon launch and use the same view each time filter button is pressed...
+  private void loadFilterView(Control control) {
+      try {
+          FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FilterView.fxml"));
+          Pane pane = fxmlLoader.load();
+          ((FilterController) fxmlLoader.getController()).init(control);
+          filterFlowPane.getChildren().clear();
+          filterFlowPane.getChildren().add(pane);
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
   }
 }
 
