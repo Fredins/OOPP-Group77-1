@@ -208,9 +208,22 @@ public class Control {
     public SubjectList<Folder> getActiveFolders() { return model.getFolders(); }
     public Subject<Folder> getActiveFolder() { return model.getActiveFolder(); }
     public Subject<Email> getReadingEmail() { return model.getActiveEmail(); }
-    public SubjectList<Email> getVisibleEmails() { return model.getEmails(); }
+    public SubjectList<Email> getVisibleEmails() { return model.getActiveEmails(); }
     public void setActiveFolder(Folder activeFolder) { model.setActiveFolder(activeFolder); }
     public void setReadingEmail(Email readingEmail) { model.setActiveEmail(readingEmail); }
-    public void setVisibleEmails(List<Email> visibleEmails) { model.setEmails(visibleEmails); }
+    public void setVisibleEmails(List<Email> visibleEmails) { model.setActiveEmails(visibleEmails); }
+
+
+    public void filterOnTo(String searchWord) {
+        model.filterOnTo(searchWord);
+    }
+
+    public void filterOnFrom(String searchWord) {
+        model.filterOnFrom(searchWord);
+    }
+
+    public void clearFilter() {
+        model.clearFilter();
+    }
 
 }

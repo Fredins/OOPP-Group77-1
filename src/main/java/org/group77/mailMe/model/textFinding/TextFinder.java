@@ -43,7 +43,7 @@ public class TextFinder {
      * @return a list of emails with the searchWord in one of the 'to' addresses.
      * @author Hampus Jernkrook
      */
-    List<Email> filterOnTo(List<Email> emails, String searchWord) {
+    public List<Email> filterOnTo(List<Email> emails, String searchWord) {
         return stringFilter.filter(emails, inToPredicate, searchWord);
     }
 
@@ -55,7 +55,7 @@ public class TextFinder {
      * @return a list of emails with the searchWord in the from-address.
      * @author Hampus Jernkrook
      */
-    List<Email> filterOnFrom(List<Email> emails, String searchWord) {
+    public List<Email> filterOnFrom(List<Email> emails, String searchWord) {
         return stringFilter.filter(emails, inFromPredicate, searchWord);
     }
 
@@ -67,7 +67,7 @@ public class TextFinder {
      * @return a list of emails with date less than the given max date.
      * @author Hampus Jernkrook
      */
-    List<Email> filterOnMaxDate(List<Email> emails, LocalDateTime maxDate) {
+    public List<Email> filterOnMaxDate(List<Email> emails, LocalDateTime maxDate) {
         return dateFilter.filter(emails, olderThanPredicate, maxDate);
     }
 
@@ -79,7 +79,7 @@ public class TextFinder {
      * @return a list of emails with date greater than the given max date.
      * @author Hampus Jernkrook
      */
-    List<Email> filterOnMinDate(List<Email> emails, LocalDateTime minDate) {
+    public List<Email> filterOnMinDate(List<Email> emails, LocalDateTime minDate) {
         // get all emails with dates after the minDate, by running tests with negated olderThanPredicate.
         return dateFilter.filter(emails, olderThanPredicate.negate(), minDate);
     }

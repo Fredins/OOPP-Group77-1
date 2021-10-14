@@ -3,6 +3,7 @@ package org.group77.mailMe.model;
 import org.group77.mailMe.model.data.Account;
 import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
+import org.group77.mailMe.model.textFinding.TextFinder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,10 +21,11 @@ public class Model {
     // state fields
     private final SubjectList<Account> accounts = new SubjectList<>(new ArrayList<>());
     private final SubjectList<Folder> folders = new SubjectList<>(new ArrayList<>());
-    private final SubjectList<Email> emails = new SubjectList<>(new ArrayList<>());
+    private final SubjectList<Email> activeEmails = new SubjectList<>(new ArrayList<>());
     private final Subject<Account> activeAccount = new Subject<>(null);
     private final Subject<Folder> activeFolder = new Subject<>(null);
     private final Subject<Email> activeEmail = new Subject<>(null);
+    private final TextFinder textFinder = new TextFinder();
 
     public Model(List<Account> accounts){
         // if a new account is added then set it as active
@@ -92,10 +94,10 @@ public class Model {
     public SubjectList<Folder> getFolders() { return folders; }
     public Subject<Folder> getActiveFolder() { return activeFolder; }
     public Subject<Email> getActiveEmail() { return activeEmail; }
-    public SubjectList<Email> getEmails() { return emails; }
+    public SubjectList<Email> getActiveEmails() { return activeEmails; }
     public void setActiveFolder(Folder activeFolder) { this.activeFolder.set(activeFolder); }
     public void setActiveEmail(Email activeEmail) { this.activeEmail.set(activeEmail); }
-    public void setEmails(List<Email> emails) { this.emails.replaceAll(emails); }
+    public void setActiveEmails(List<Email> activeEmails) { this.activeEmails.replaceAll(activeEmails); }
 
     /*
     public Account getActiveAccount() {
@@ -117,4 +119,19 @@ public class Model {
     }
 
      */
+
+    public void filterOnTo(String searchWord) {
+        List<Email> newActiveEmails = textFinder.filterOnTo(activeEmails.get(), searchWord);
+        setActiveEmails(newActiveEmails);
+    }
+
+    public void filterOnFrom(String searchWord) {
+        List<Email> newActiveEmails = textFinder.filterOnFrom(activeEmails.get(), searchWord);
+        setActiveEmails(newActiveEmails);
+    }
+
+    public void clearFilter() {
+        // set active emails to all emails in the current folder
+        setActiveEmails(activeFolder.get().emails());
+    }
 }

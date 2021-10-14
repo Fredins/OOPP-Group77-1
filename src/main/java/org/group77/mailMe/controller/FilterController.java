@@ -6,6 +6,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import org.group77.mailMe.model.Control;
+
+import java.util.Objects;
+
 /**
  * For applying filter to search
  *
@@ -32,9 +35,21 @@ public class FilterController {
             toTextField.clear();
             fromTextField.clear();
             maxDatePicker.setValue(null);
+            // notify control to restore active emails
+            System.out.println("FILTERS ARE CLEARED!"); //todo remoVE
+            control.clearFilter();
         });
         addFilterButton.setOnMouseClicked(inputEvent -> {
             System.out.println("Do something"); //TODO for Hampus to add
+            // if some string is entered in the to-field, then filter on to
+            if (!Objects.equals(toTextField.getText(), "")) {
+                System.out.println("GOING TO FILTER ON TO"); //TODO REMOVE
+                control.filterOnTo(toTextField.getText());
+            }
+            if (!Objects.equals(fromTextField.getText(), "")) {
+                System.out.println("GOING TO FILTER ON FROM"); //TODO REMOVE
+                control.filterOnFrom(fromTextField.getText());
+            }
         });
         populateChoiceBox();
     }
