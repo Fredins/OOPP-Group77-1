@@ -136,6 +136,11 @@ public class Model {
         setActiveEmails(newActiveEmails);
     }
 
+    public void filterOnMinDate(LocalDateTime date) {
+        List<Email> newActiveEmails = textFinder.filterOnMinDate(activeEmails.get(), date);
+        setActiveEmails(newActiveEmails);
+    }
+
     public void clearFilter() {
         // set active emails to all emails in the current folder
         setActiveEmails(activeFolder.get().emails());

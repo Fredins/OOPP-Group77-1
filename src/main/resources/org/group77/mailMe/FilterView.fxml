@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="200.0" prefWidth="500.0" stylesheets="@DefaultStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.FilterController">
+<AnchorPane prefHeight="250.0" prefWidth="500.0" stylesheets="@DefaultStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.FilterController">
    <children>
       <Label layoutX="12.0" layoutY="67.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="To" AnchorPane.leftAnchor="12.0">
          <styleClass>
@@ -16,7 +16,7 @@
             <String fx:value="standardTextFontSize" />
          </styleClass>
       </Label>
-      <Label layoutX="12.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="From" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="12.0">
+      <Label layoutX="12.0" layoutY="112.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="From" AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="12.0">
          <styleClass>
             <String fx:value="standardFontFamily" />
             <String fx:value="standardTextFontSize" />
@@ -29,9 +29,9 @@
          </styleClass>
       </Button>
       <TextField fx:id="toTextField" layoutX="97.0" layoutY="67.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="352.0" styleClass="removeFocus" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="51.0" />
-      <TextField fx:id="fromTextField" layoutX="95.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="354.0" styleClass="removeFocus" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="51.0" />
-      <DatePicker fx:id="maxDatePicker" layoutX="94.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="126.0" styleClass="removeFocus" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="95.0" />
-      <Label layoutX="12.0" layoutY="100.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="Max Date" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0">
+      <TextField fx:id="fromTextField" layoutX="95.0" layoutY="112.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="354.0" styleClass="removeFocus" AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="51.0" />
+      <DatePicker fx:id="maxDatePicker" layoutX="95.0" layoutY="158.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="126.0" styleClass="removeFocus" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="95.0" />
+      <Label layoutX="12.0" layoutY="158.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="Max Date" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="12.0">
          <styleClass>
             <String fx:value="standardFontFamily" />
             <String fx:value="standardTextFontSize" />
@@ -50,5 +50,12 @@
          </styleClass>
       </Label>
       <ChoiceBox fx:id="timeChoiceBox" layoutX="94.0" layoutY="23.0" prefHeight="27.0" prefWidth="126.0" styleClass="removeFocus" AnchorPane.leftAnchor="95.0" />
+      <Label layoutX="12.0" layoutY="199.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="Min Date" AnchorPane.leftAnchor="12.0">
+         <styleClass>
+            <String fx:value="standardFontFamily" />
+            <String fx:value="standardTextFontSize" />
+         </styleClass>
+      </Label>
+      <DatePicker fx:id="minDatePicker" layoutX="95.0" layoutY="200.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="126.0" styleClass="removeFocus" />
    </children>
 </AnchorPane>

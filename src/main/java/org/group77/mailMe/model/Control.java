@@ -228,6 +228,10 @@ public class Control {
         model.filterOnMaxDate(date);
     }
 
+    public void filterOnMinDate(LocalDateTime date) {
+        model.filterOnMinDate(date);
+    }
+
     public void clearFilter() {
         model.clearFilter();
     }

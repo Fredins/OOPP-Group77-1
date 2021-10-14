@@ -13,7 +13,8 @@ import java.util.Objects;
 /**
  * For applying filter to search
  *
- * @author David zamanian
+ * @author David Zamanian
+ * @author Hampus Jernkrook
  */
 
 public class FilterController {
@@ -22,6 +23,7 @@ public class FilterController {
     @FXML private TextField toTextField;
     @FXML private TextField fromTextField;
     @FXML private DatePicker maxDatePicker;
+    @FXML private DatePicker minDatePicker;
     @FXML private ChoiceBox<String> timeChoiceBox;
 
 
@@ -29,6 +31,7 @@ public class FilterController {
      *
      * @param control
      * @author David Zamanian
+     * @author Hampus Jernkrook
      */
 
     public void init(Control control){
@@ -36,6 +39,7 @@ public class FilterController {
             toTextField.clear();
             fromTextField.clear();
             maxDatePicker.setValue(null);
+            minDatePicker.setValue(null);
             // notify control to restore active emails
             System.out.println("FILTERS ARE CLEARED!"); //todo remoVE
             control.clearFilter();
@@ -56,6 +60,12 @@ public class FilterController {
                 // convert the selected date to LocalDateTime
                 LocalDateTime date = maxDatePicker.getValue().atStartOfDay();
                 control.filterOnMaxDate(date);
+            }
+            if (!Objects.equals(minDatePicker.getValue(), null)) {
+                System.out.println("GOING TO FILTER ON MIN DATE"); //todo remove
+                // convert the selected date to LocalDateTime
+                LocalDateTime date = minDatePicker.getValue().atStartOfDay();
+                control.filterOnMinDate(date);
             }
         });
         populateChoiceBox();
