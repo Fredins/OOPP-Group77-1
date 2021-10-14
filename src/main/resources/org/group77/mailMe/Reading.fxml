@@ -13,9 +13,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="600.0" styleClass="pane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.ReadingController">
+<AnchorPane styleClass="pane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.ReadingController">
     <children>
-      <Button fx:id="replyButton" layoutX="18.0" layoutY="436.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="replyButton" stylesheets="@ReadingStyle.css" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="14.0">
+      <Button fx:id="replyButton" layoutX="18.0" layoutY="436.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="replyButton" stylesheets="@ReadingStyle.css" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="14.0">
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -23,37 +23,36 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="bin" layoutX="46.0" layoutY="435.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="replyButton" AnchorPane.bottomAnchor="38.0">
+      <Button fx:id="bin" layoutX="46.0" layoutY="435.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="replyButton" AnchorPane.bottomAnchor="12.0">
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@ImagesAndIcons/trashIcon.png" />
                </image>
             </ImageView>
-         </graphic>
-      </Button>
-      <ComboBox fx:id="moveEmailComboBox" layoutX="79.0" layoutY="435.0" prefHeight="27.0" prefWidth="100.0" promptText="Move to..." styleClass="removeFocus" AnchorPane.bottomAnchor="36.0" />
+         </graphic></Button>
+      <ComboBox fx:id="moveEmailComboBox" layoutX="98.0" layoutY="608.0" prefHeight="27.0" prefWidth="100.0" promptText="Move to..." styleClass="removeFocus" AnchorPane.bottomAnchor="10.0" />
         <Label fx:id="fromLabel" layoutX="51.0" layoutY="14.0" prefHeight="17.0" prefWidth="193.0" text="From" AnchorPane.leftAnchor="51.0" AnchorPane.topAnchor="14.0" />
         <Label fx:id="toLabel" layoutX="51.0" layoutY="31.0" prefHeight="17.0" prefWidth="272.0" text="To" AnchorPane.topAnchor="33.0" />
-        <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutX="14.0" layoutY="113.0" pannable="true" prefHeight="316.0" prefWidth="573.0" vbarPolicy="NEVER" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+        <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="14.0" layoutY="113.0" pannable="true" vbarPolicy="NEVER" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0">
             <content>
-                <AnchorPane fx:id="anchorPaneInScrollPane" minHeight="0.0" minWidth="0.0" prefHeight="313.0" prefWidth="570.0" styleClass="removeFocus">
+                <AnchorPane fx:id="anchorPaneInScrollPane" styleClass="removeFocus">
                <children>
-                  <WebView fx:id="contentArea" disable="true" layoutX="-1.0" layoutY="-1.0" prefHeight="316.0" prefWidth="573.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <WebView fx:id="contentArea" disable="true" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <cursor>
                         <Cursor fx:constant="W_RESIZE" />
                      </cursor></WebView>
                </children></AnchorPane>
             </content>
         </ScrollPane>
-        <Label fx:id="subjectLabel" layoutX="14.0" layoutY="65.0" prefHeight="17.0" prefWidth="193.0" text="Subject" AnchorPane.leftAnchor="14.0">
+        <Label fx:id="subjectLabel" layoutX="14.0" layoutY="57.0" prefHeight="17.0" prefWidth="193.0" text="Subject" AnchorPane.leftAnchor="14.0">
          <font>
             <Font name="System Bold" size="21.0" />
          </font></Label>
         <Label layoutX="14.0" layoutY="33.0" prefHeight="17.0" prefWidth="37.0" text="To:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="33.0" />
       <Label layoutX="11.0" layoutY="14.0" text="From:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
       <Label fx:id="dateLabel" layoutX="450.0" layoutY="20.0" text="Date" AnchorPane.topAnchor="14.0" />
-        <Label fx:id="attachmentsLabel" layoutX="226.0" layoutY="439.0" prefHeight="24.0" prefWidth="358.0" text="Attachments" AnchorPane.leftAnchor="226.0" AnchorPane.topAnchor="439.0" />
+        <Label fx:id="attachmentsLabel" layoutX="450.0" layoutY="610.0" prefHeight="24.0" prefWidth="182.0" text="Attachments" AnchorPane.bottomAnchor="11.0" />
     </children>
    <opaqueInsets>
       <Insets left="50.0" right="50.0" />

@@ -25,10 +25,9 @@ public class WindowOpener {
       ((MasterController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();
       stage.setTitle("MailMe");
-      stage.setScene(new Scene(pane));
-      stage.setMinHeight(700);
-      stage.setMinWidth(1050);
+      stage.setScene(new Scene(pane, 1800, 1000));
       stage.show();
+      stage.setMaximized(true);
     }catch (IOException e){
       e.printStackTrace();
     }

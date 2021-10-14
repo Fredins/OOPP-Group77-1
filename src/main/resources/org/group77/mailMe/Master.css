@@ -33,6 +33,12 @@ folderPane{
  -fx-color: #E03A5B;
 }
 
+.account-comboBox{
+-fx-font-size: 13px;
+-fx-color: #ffffff;
+
+}
+
 .writeButton{
  -fx-color: #E03A5B;
  -fx-border-radius: 100;

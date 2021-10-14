@@ -15,21 +15,47 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="flowFolder" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1050.0" styleClass="root" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.MasterController">
+<AnchorPane fx:id="flowFolder" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0" styleClass="root" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.MasterController">
    <children>
-      <FlowPane fx:id="foldersFlow" layoutY="74.0" minWidth="0.0" prefHeight="630.0" prefWidth="150.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0" />
-      <Pane layoutX="150.0" prefHeight="700.0" prefWidth="259.0" style="-fx-background-color: f4f4f4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="0.0" />
-      <ScrollPane hbarPolicy="NEVER" layoutX="149.0" layoutY="60.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="259.0" style="-fx-background-color: f4f4f4;" vbarPolicy="NEVER" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="58.0">
-         <content>
-
-                                                <FlowPane fx:id="emailsFlow" prefHeight="638.0" prefWidth="248.0" vgap="10.0">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-            </FlowPane>
-         </content>
-      </ScrollPane>
-      <Button fx:id="writeBtn" layoutX="36.0" layoutY="13.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="75.0" stylesheets="@Master.css" text="New" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="22.0">
+      <FlowPane fx:id="foldersFlow" layoutY="74.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="120.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0" />
+      <Pane layoutX="150.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="300.0" style="-fx-background-color: #f4f4f4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ScrollPane hbarPolicy="NEVER" layoutY="68.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="300.0" style="-fx-background-color: f4f4f4;" vbarPolicy="NEVER">
+               <content>
+      
+                                                      <FlowPane fx:id="emailsFlow" alignment="TOP_CENTER" prefWidth="300.0" prefWrapLength="0.0" vgap="5.0">
+                     <padding>
+                        <Insets bottom="5.0" left="2.0" right="5.0" top="2.0" />
+                     </padding>
+                  </FlowPane>
+               </content>
+            </ScrollPane>
+            <Button fx:id="filterButton" contentDisplay="CENTER" ellipsisString="" layoutX="218.0" layoutY="23.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="filterButton" text="Button">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" styleClass="filterButton">
+                     <image>
+                        <Image url="@ImagesAndIcons/filter-icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <TextField fx:id="searchField" layoutX="14.0" layoutY="22.0" prefHeight="27.0" prefWidth="185.0" promptText="Search..." stylesheets="@Master.css">
+               <styleClass>
+                  <String fx:value="searchBar" />
+                  <String fx:value="removeFocus" />
+               </styleClass>
+            </TextField>
+            <Button fx:id="refreshBtn" layoutX="259.0" layoutY="23.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="21.0" styleClass="refreshButton" stylesheets="@Master.css">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@ImagesAndIcons/RefreshIcon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children></Pane>
+      <Button fx:id="writeBtn" layoutX="23.0" layoutY="17.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="75.0" stylesheets="@Master.css" text="New" AnchorPane.leftAnchor="23.0" AnchorPane.topAnchor="17.0">
          <font>
             <Font name="Georgia Bold" size="13.0" />
          </font>
@@ -37,20 +63,7 @@
             <String fx:value="writeButton" />
             <String fx:value="removeFocus" />
          </styleClass></Button>
-      <TextField fx:id="searchField" layoutX="171.0" layoutY="22.0" prefHeight="27.0" prefWidth="185.0" promptText="Search..." stylesheets="@Master.css" AnchorPane.topAnchor="22.0">
-         <styleClass>
-            <String fx:value="searchBar" />
-            <String fx:value="removeFocus" />
-         </styleClass></TextField>
-      <Button fx:id="filterButton" contentDisplay="CENTER" ellipsisString="" layoutX="364.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="filterButton" text="Button" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="22.0">
-         <graphic>
-            <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" styleClass="filterButton">
-               <image>
-                  <Image url="@ImagesAndIcons/filter-icon.png" />
-               </image>
-            </ImageView>
-         </graphic></Button>
-      <Button fx:id="addAccountBtn" graphicTextGap="0.0" layoutX="985.0" layoutY="17.0" mnemonicParsing="false" stylesheets="@Master.css" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="22.0">
+      <Button fx:id="addAccountBtn" graphicTextGap="0.0" layoutX="989.0" layoutY="20.0" mnemonicParsing="false" stylesheets="@Master.css" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="20.0">
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -66,17 +79,9 @@
             <String fx:value="removeFocus" />
          </styleClass>
       </Button>
-      <Button fx:id="refreshBtn" layoutX="430.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="21.0" styleClass="refreshButton" stylesheets="@Master.css" AnchorPane.leftAnchor="430.0" AnchorPane.topAnchor="22.0">
-         <graphic>
-            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@ImagesAndIcons/RefreshIcon.png" />
-               </image>
-            </ImageView>
-         </graphic></Button>
 
-       <ComboBox fx:id="accountsCombo" layoutX="935.0" layoutY="22.0" prefHeight="30.0" style="-fx-background-color: ffffff;" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="22.0" />
-      <Pane fx:id="readingPane" layoutX="409.0" layoutY="58.0" prefHeight="646.0" prefWidth="574.0" />
+       <ComboBox fx:id="accountsCombo" layoutX="809.0" layoutY="22.0" maxWidth="178.0" prefHeight="27.0" prefWidth="173.0" styleClass="account-comboBox" stylesheets="@Master.css" AnchorPane.rightAnchor="68.0" AnchorPane.topAnchor="22.0" />
+      <Pane fx:id="readingPane" layoutX="444.0" layoutY="65.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="673.0" prefWidth="903.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="430.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0" />
       <FlowPane fx:id="filterFlowPane" layoutX="320.0" layoutY="200.0" prefHeight="250.0" prefWidth="500.0" />
    </children>
    <stylesheets>

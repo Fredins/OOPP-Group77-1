@@ -178,6 +178,8 @@ public class MasterController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Reading.fxml"));
             Pane pane = fxmlLoader.load();
+            pane.setPrefWidth(readingPane.getWidth());
+            pane.setPrefHeight(readingPane.getHeight());
             ((ReadingController) fxmlLoader.getController()).init(control, email);
             readingPane.getChildren().clear();
             readingPane.getChildren().add(pane);
