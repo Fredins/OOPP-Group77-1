@@ -57,7 +57,6 @@ public class GmailProvider extends EmailServiceProvider {
                 String subject = message.getSubject();
                 String content = "no content";
 
-                String date = message.getSentDate().toString(); // Date
                 String contentType = message.getContentType();
                 String attachments = "";
 
@@ -122,6 +121,9 @@ public class GmailProvider extends EmailServiceProvider {
         if (message.getReceivedDate() != null) {
             return message.getReceivedDate()
                     .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        }
+        if (message.getSentDate() != null) {
+            return message.getSentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         }
         String[] receivedHeaders = message.getHeader("Received");
         // if no received-header was found, return the current date

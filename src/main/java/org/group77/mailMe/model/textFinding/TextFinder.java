@@ -15,11 +15,12 @@ public class TextFinder {
 
     private final Filter<Email, String> stringFilter = new Filter<>();
     private final Filter<Email, LocalDateTime> dateFilter = new Filter<>();
-    private final Sorter<Email, LocalDateTime> dateSorter = new Sorter<>();
+    private final Sorter<Email> emailSorter = new Sorter<>();
     private final InFromPredicate inFromPredicate = new InFromPredicate();
     private final InToPredicate inToPredicate = new InToPredicate();
     private final InAnyTextFieldPredicate inAnyTextFieldPredicate = new InAnyTextFieldPredicate();
     private final OlderThanPredicate olderThanPredicate = new OlderThanPredicate();
+    private final NewToOldComparator newToOldComparator = new NewToOldComparator();
 
 
     /**
@@ -83,11 +84,25 @@ public class TextFinder {
         return dateFilter.filter(emails, olderThanPredicate.negate(), minDate);
     }
 
+    /**
+     * Sorts a list of emails by old to new dates.
+     *
+     * @param emails - list of emails to sort.
+     * @return A deep copy of the input list, sorted from old to new emails.
+     * @author Hampus Jernkrook
+     */
     public List<Email> sortByOldToNew(List<Email> emails) {
-        return null;
+        return emailSorter.sort(emails, newToOldComparator.reversed());
     }
 
+    /**
+     * Sorts a list of emails by new to old dates.
+     *
+     * @param emails - list of emails to sort.
+     * @return A deep copy of the input list, sorted from new to old emails.
+     * @author Hampus Jernkrook
+     */
     public List<Email> sortByNewToOld(List<Email> emails) {
-        return null;
+        return emailSorter.sort(emails, newToOldComparator);
     }
 }
