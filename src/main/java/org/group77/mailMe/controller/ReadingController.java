@@ -2,16 +2,18 @@ package org.group77.mailMe.controller;
 
 import javafx.fxml.*;
 import javafx.scene.control.*;
-import javafx.scene.web.WebView;
+import javafx.scene.layout.*;
+import javafx.scene.web.*;
 import javafx.util.StringConverter;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
+import javafx.concurrent.Worker.State;
 
 import java.util.*;
 
 public class ReadingController {
-  @FXML private WebView contentArea;
+  @FXML private WebView webView;
   @FXML private Label fromLabel;
   @FXML private Label subjectLabel;
   @FXML private Label toLabel;
@@ -20,6 +22,7 @@ public class ReadingController {
   @FXML private Button bin;
   @FXML private ComboBox<Folder> moveEmailComboBox;
   @FXML private Label attachmentsLabel;
+  @FXML private VBox vBox;
 
 
   /**
@@ -30,7 +33,6 @@ public class ReadingController {
    * @author Martin, David
    */
   void init(Control control, Email email) {
-    contentArea.getEngine().loadContent(email.content());
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
     toLabel.setText(removeBrackets(Arrays.toString(email.to())));
@@ -39,11 +41,32 @@ public class ReadingController {
     if (control.getFolders() != null) {
       PopulateFolderComboBox(control.getFolders().get(), control);
     }
-    // TODO date
+
+    WebEngine webEngine = webView.getEngine();
+    webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> adjustHeigth(webEngine, newState));
+    webEngine.loadContent(email.content());
     // attach event handlers
     bin.setOnAction(i -> handleDelete(control));
     replyButton.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
-    moveEmailComboBox.setOnAction(i -> moveEmail(control));
+    moveEmailComboBox.setOnAction(i -> moveEmail(control));;
+  }
+
+  /**
+   * @author Martin
+   * @param webEngine the webviews webengine
+   * @param newState the state of the webengine
+   * once the web content is loaded
+   * 1. get height of document
+   * 2. adjust height accordingly
+   */
+  private void adjustHeigth(WebEngine webEngine, State newState){
+    if (newState == State.SUCCEEDED) {
+      double height = Double.parseDouble(((String) webEngine.executeScript(
+        "window.getComputedStyle(document.body, null).getPropertyValue('height')"
+      )).replace("px", ""));
+      webView.setPrefHeight(height);
+      vBox.setPrefHeight(height);
+    }
   }
 
   /**

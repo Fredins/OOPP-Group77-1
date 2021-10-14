@@ -10,10 +10,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane styleClass="pane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.ReadingController">
+<AnchorPane fx:id="root" styleClass="pane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.ReadingController">
     <children>
       <Button fx:id="replyButton" layoutX="18.0" layoutY="436.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="replyButton" stylesheets="@ReadingStyle.css" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="14.0">
          <graphic>
@@ -32,26 +34,44 @@
             </ImageView>
          </graphic></Button>
       <ComboBox fx:id="moveEmailComboBox" layoutX="98.0" layoutY="608.0" prefHeight="27.0" prefWidth="100.0" promptText="Move to..." styleClass="removeFocus" AnchorPane.bottomAnchor="10.0" />
-        <Label fx:id="fromLabel" layoutX="51.0" layoutY="14.0" prefHeight="17.0" prefWidth="193.0" text="From" AnchorPane.leftAnchor="51.0" AnchorPane.topAnchor="14.0" />
-        <Label fx:id="toLabel" layoutX="51.0" layoutY="31.0" prefHeight="17.0" prefWidth="272.0" text="To" AnchorPane.topAnchor="33.0" />
-        <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" layoutX="14.0" layoutY="113.0" pannable="true" vbarPolicy="NEVER" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0">
-            <content>
-                <AnchorPane fx:id="anchorPaneInScrollPane" styleClass="removeFocus">
+      <ScrollPane hbarPolicy="NEVER" layoutY="70.0" style="-fx-background-color: #ffffff;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+         <content>
+            <VBox fx:id="vBox" prefHeight="4000.0" prefWidth="1490.0" style="-fx-background-color: #ffffff;">
                <children>
-                  <WebView fx:id="contentArea" disable="true" maxHeight="-1.0" maxWidth="-1.0" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane>
+                     <children>
+                          <Label prefHeight="17.0" prefWidth="37.0" style="-fx-font-size: 16;" text="To:" AnchorPane.leftAnchor="0.0" />
+                          <Label fx:id="toLabel" layoutX="55.0" style="-fx-font-size: 16;" text="To" AnchorPane.leftAnchor="60.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane>
+                     <children>
+                        <Label style="-fx-font-size: 16;" stylesheets="@ReadingStyle.css" text="From:" AnchorPane.leftAnchor="0.0" />
+                          <Label fx:id="fromLabel" style="-fx-font-size: 16;" text="From" AnchorPane.leftAnchor="60.0" />
+                     </children>
+                  </AnchorPane>
+                  <WebView fx:id="webView" disable="true" maxHeight="-1.0" maxWidth="1490.0" minHeight="4000.0" minWidth="500.0" prefHeight="4000.0" prefWidth="-1.0">
                      <cursor>
                         <Cursor fx:constant="W_RESIZE" />
-                     </cursor></WebView>
-               </children></AnchorPane>
-            </content>
-        </ScrollPane>
-        <Label fx:id="subjectLabel" layoutX="14.0" layoutY="57.0" prefHeight="17.0" prefWidth="193.0" text="Subject" AnchorPane.leftAnchor="14.0">
-         <font>
-            <Font name="System Bold" size="21.0" />
-         </font></Label>
-        <Label layoutX="14.0" layoutY="33.0" prefHeight="17.0" prefWidth="37.0" text="To:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="33.0" />
-      <Label layoutX="11.0" layoutY="14.0" text="From:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-      <Label fx:id="dateLabel" layoutX="450.0" layoutY="20.0" text="Date" AnchorPane.topAnchor="14.0" />
+                     </cursor>
+                  </WebView>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+      <HBox alignment="CENTER_LEFT" spacing="40.0" AnchorPane.topAnchor="20.0">
+         <children>
+              <Label fx:id="subjectLabel" maxWidth="1100.0" text="Subject">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
+            </Label>
+            <Label fx:id="dateLabel" style="-fx-font-size: 16;" text="Date" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
         <Label fx:id="attachmentsLabel" layoutX="450.0" layoutY="610.0" prefHeight="24.0" prefWidth="182.0" text="Attachments" AnchorPane.bottomAnchor="11.0" />
     </children>
    <opaqueInsets>
