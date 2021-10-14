@@ -25,7 +25,11 @@ public class FilterController {
     @FXML private DatePicker maxDatePicker;
     @FXML private DatePicker minDatePicker;
     @FXML private ChoiceBox<String> timeChoiceBox;
-
+    // Strings for the sorting choice box: timeChoiceBox.
+    private final String newToOldSorting = "Newest to Oldest";
+    private final String oldToNewSorting = "Oldest to Newest";
+    // set new to old sorting as default
+    private final String defaultSorting = newToOldSorting;
 
     /** init function
      *
@@ -35,11 +39,14 @@ public class FilterController {
      */
 
     public void init(Control control){
+        // upon clearing the filter, clear all fields except the sorting.
+        // Sorting instead is set to default.
         clearFilterButton.setOnMouseClicked(inputEvent -> {
             toTextField.clear();
             fromTextField.clear();
             maxDatePicker.setValue(null);
             minDatePicker.setValue(null);
+            timeChoiceBox.setValue(defaultSorting);
             // notify control to restore active emails
             System.out.println("FILTERS ARE CLEARED!"); //todo remoVE
             control.clearFilter();
@@ -71,13 +78,20 @@ public class FilterController {
                 LocalDateTime date = minDatePicker.getValue().atStartOfDay();
                 control.filterOnMinDate(date);
             }
+            if (!Objects.equals(timeChoiceBox.getValue(), null)) {
+                System.out.println("TIME CHOICE BOX IS NOT EMPTY");
+            }
         });
         populateChoiceBox();
+        // set value in time choice box to default sorting.
+        timeChoiceBox.setValue(defaultSorting);
+        //TODO: ask control to default sort upon initialisation? I.e.
+        // control.sortByNewToOld();
     }
 
     private void populateChoiceBox(){
         timeChoiceBox.getItems().clear();
-        timeChoiceBox.getItems().add(0, "Newest To Oldest");
-        timeChoiceBox.getItems().add(1, "Oldest To Newest");
+        timeChoiceBox.getItems().add(0, newToOldSorting);
+        timeChoiceBox.getItems().add(1, oldToNewSorting);
     }
 }
