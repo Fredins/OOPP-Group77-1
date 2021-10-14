@@ -50,6 +50,7 @@ public class FilterController {
             // notify control to restore active emails
             System.out.println("FILTERS ARE CLEARED!"); //todo remoVE
             control.clearFilter();
+            control.sortByNewToOld(); // apply default filter again
         });
         addFilterButton.setOnMouseClicked(inputEvent -> {
             //clear filter before applying anything
@@ -79,7 +80,14 @@ public class FilterController {
                 control.filterOnMinDate(date);
             }
             if (!Objects.equals(timeChoiceBox.getValue(), null)) {
-                System.out.println("TIME CHOICE BOX IS NOT EMPTY");
+                System.out.println("TIME CHOICE BOX IS NOT EMPTY"); //TODO REMOVE
+                if (Objects.equals(timeChoiceBox.getValue(), newToOldSorting)) {
+                    System.out.println("NEW TO OLD SORTING APPLIED"); //TODO REMOVE
+                    control.sortByNewToOld();
+                } else if (Objects.equals(timeChoiceBox.getValue(), oldToNewSorting)) {
+                    System.out.println("OLD TO NEW SORTING APPLIED"); //TODO REMOVE
+                    control.sortByOldToNew();
+                }
             }
         });
         populateChoiceBox();

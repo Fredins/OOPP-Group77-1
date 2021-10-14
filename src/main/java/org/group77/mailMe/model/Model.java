@@ -141,6 +141,16 @@ public class Model {
         setActiveEmails(newActiveEmails);
     }
 
+    public void sortByNewToOld() {
+        List<Email> newActiveEmails = textFinder.sortByNewToOld(activeEmails.get());
+        setActiveEmails(newActiveEmails);
+    }
+
+    public void sortByOldToNew() {
+        List<Email> newActiveEmails = textFinder.sortByOldToNew(activeEmails.get());
+        setActiveEmails(newActiveEmails);
+    }
+
     public void clearFilter() {
         // set active emails to all emails in the current folder
         setActiveEmails(activeFolder.get().emails());

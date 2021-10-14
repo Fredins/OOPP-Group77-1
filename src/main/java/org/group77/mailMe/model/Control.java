@@ -232,6 +232,14 @@ public class Control {
         model.filterOnMinDate(date);
     }
 
+    public void sortByNewToOld() {
+        model.sortByNewToOld();
+    }
+
+    public void sortByOldToNew() {
+        model.sortByOldToNew();
+    }
+
     public void clearFilter() {
         model.clearFilter();
     }
