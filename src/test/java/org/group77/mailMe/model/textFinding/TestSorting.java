@@ -10,6 +10,12 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Tests for the sorting functionality based on emails' dates.
+ * Tests both sorting based on new to old dates and old to new.
+ *
+ * @author Hampus Jernkrook
+ */
 public class TestSorting {
     private static Email[] emails;
     private static Email[] expectedNewToOld;
