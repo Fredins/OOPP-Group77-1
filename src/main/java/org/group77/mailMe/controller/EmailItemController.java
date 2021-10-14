@@ -1,10 +1,8 @@
 package org.group77.mailMe.controller;
 
-import javafx.beans.value.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.util.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 
@@ -25,18 +23,22 @@ public class EmailItemController {
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
 
-    // input handler
-    button.setOnMouseClicked(inputEvent -> {
-      control.setReadingEmail(null); //Need to first set it to null because otherwise it does not count as a newEmail when we want to render the email in readingView
-      control.setReadingEmail(email);});
+    // attach event handlers
+    button.setOnMouseClicked(inputEvent ->  control.setReadingEmail(email));
+    control.getActiveEmail().addObserver(newEmail -> dropShadow(newEmail, email));
+  }
 
-    // change handler
-    control.getReadingEmail().addObserver(newEmail -> {
-      if(email.equals(newEmail)){
-        button.getStyleClass().add("dropshadow");
-      }else{
-        button.getStyleClass().remove("dropshadow");
-      }
-    });
+  /**
+   * @author Martin
+   * @param newEmail the new email
+   * @param email the email associated with this controller
+   */
+  private void dropShadow(Email newEmail, Email email){
+    if(email.equals(newEmail)){
+      button.getStyleClass().add("dropshadow");
+    }else{
+      button.getStyleClass().remove("dropshadow");
+    }
+
   }
 }
