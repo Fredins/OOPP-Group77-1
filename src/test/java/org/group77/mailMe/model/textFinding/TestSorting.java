@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestSorting {
     private static Email[] emails;
@@ -47,7 +49,23 @@ public class TestSorting {
                         LocalDateTime.of(2020, Month.FEBRUARY, 28, 5, 20))
         };
         // expected order of new to old
-        // expected order of old to new
+        expectedNewToOld = new Email[]{
+                // 2021
+                emails[3], emails[4], emails[5], emails[6],
+                // 2020
+                emails[7], emails[8], emails[9],
+                // 2019
+                emails[1], emails[2], emails[0] // 1 and 2 have the same date. Order may be reversed, but should not be.
+        };
+        // expected order of old to new. Reverse order of new to old.
+        expectedOldToNew = new Email[]{
+                //2019
+                emails[0], emails[1], emails[2], // 1 and 2 have the same date. Order may be reversed, but should not be.
+                //2020
+                emails[9], emails[8], emails[7],
+                //2021
+                emails[6], emails[5], emails[4], emails[3]
+        };
     }
 
     // ===================================================
@@ -55,16 +73,16 @@ public class TestSorting {
     // ===================================================
     @Test
     public void TestBeforeNewToOld() {
-        // first email is before the second. res should be -1.
+        // first email is before the second (second should come first in sorting). res should be 1.
         int res = new NewToOldComparator().compare(emails[0], emails[1]);
-        Assertions.assertEquals(-1, res);
+        Assertions.assertEquals(1, res);
     }
 
     @Test
     public void TestAfterNewToOld() {
-        // fourth email is after the fifth. res should be 1.
+        // fourth email is after the fifth (fourth first in sorting). res should be -1.
         int res = new NewToOldComparator().compare(emails[3], emails[4]);
-        Assertions.assertEquals(1, res);
+        Assertions.assertEquals(-1, res);
     }
 
     @Test
@@ -78,16 +96,20 @@ public class TestSorting {
     // NEW TO OLD - Sorter
     // ===================================================
     @Test
-    public void TestSortNewToOld() {
-
+    public void TestSortNewToOldSorter() {
+        List<Email> res = new Sorter<Email>().sort(Arrays.asList(emails), new NewToOldComparator());
+        Email[] actual = res.toArray(new Email[0]);
+        Assertions.assertArrayEquals(expectedNewToOld, actual);
     }
 
     // ===================================================
     // NEW TO OLD - TextFinder
     // ===================================================
     @Test
-    public void TestSortNewToOld2() {
-
+    public void TestSortNewToOldTextFinder() {
+        List<Email> res = new TextFinder().sortByNewToOld(Arrays.asList(emails));
+        Email[] actual = res.toArray(new Email[0]);
+        Assertions.assertArrayEquals(expectedNewToOld, actual);
     }
 
     // ===================================================
@@ -95,16 +117,16 @@ public class TestSorting {
     // ===================================================
     @Test
     public void TestBeforeOldToNew() {
-        // first email is before the second. res should be 1.
+        // first email is before the second (first first in sorting). res should be -1.
         int res = new NewToOldComparator().reversed().compare(emails[0], emails[1]);
-        Assertions.assertEquals(1, res);
+        Assertions.assertEquals(-1, res);
     }
 
     @Test
     public void TestAfterOldToNew() {
-        // fourth email is after the fifth. res should be -1.
+        // fourth email is after the fifth (fifth first in sorting). res should be 1.
         int res = new NewToOldComparator().reversed().compare(emails[3], emails[4]);
-        Assertions.assertEquals(-1, res);
+        Assertions.assertEquals(1, res);
     }
 
     @Test
@@ -118,16 +140,20 @@ public class TestSorting {
     // OLD TO NEW - Sorter
     // ===================================================
     @Test
-    public void TestSorOldToNew() {
-
+    public void TestSortOldToNewSorter() {
+        List<Email> res = new Sorter<Email>().sort(Arrays.asList(emails), new NewToOldComparator().reversed());
+        Email[] actual = res.toArray(new Email[0]);
+        Assertions.assertArrayEquals(expectedOldToNew, actual);
     }
 
     // ===================================================
     // OLD TO NEW - TextFinder
     // ===================================================
     @Test
-    public void TestSortOldToNew2() {
-
+    public void TestSortOldToNewTextFinder() {
+        List<Email> res = new TextFinder().sortByOldToNew(Arrays.asList(emails));
+        Email[] actual = res.toArray(new Email[0]);
+        Assertions.assertArrayEquals(expectedOldToNew, actual);
     }
 
 

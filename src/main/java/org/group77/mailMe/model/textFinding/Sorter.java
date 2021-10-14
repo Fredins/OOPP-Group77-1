@@ -14,8 +14,7 @@ import java.util.List;
 public class Sorter <T> {
     public List<T> sort(List<T> list, Comparator<T> comp) {
         // make a copy of the input
-        List<T> cp = new ArrayList<>();
-        Collections.copy(cp, list);
+        List<T> cp = new ArrayList<>(list);
         // sort the copy
         cp.sort(comp);
         //return copy instead of input list
