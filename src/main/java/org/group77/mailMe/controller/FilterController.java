@@ -45,6 +45,9 @@ public class FilterController {
             control.clearFilter();
         });
         addFilterButton.setOnMouseClicked(inputEvent -> {
+            //clear filter before applying anything
+            control.clearFilter();
+            // apply all filters chosen
             System.out.println("Do something"); //TODO for Hampus to add
             // if some string is entered in the to-field, then filter on to
             if (!Objects.equals(toTextField.getText(), "")) {
