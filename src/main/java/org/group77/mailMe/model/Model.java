@@ -5,6 +5,7 @@ import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.model.textFinding.TextFinder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -127,6 +128,11 @@ public class Model {
 
     public void filterOnFrom(String searchWord) {
         List<Email> newActiveEmails = textFinder.filterOnFrom(activeEmails.get(), searchWord);
+        setActiveEmails(newActiveEmails);
+    }
+
+    public void filterOnMaxDate(LocalDateTime date) {
+        List<Email> newActiveEmails = textFinder.filterOnMaxDate(activeEmails.get(), date);
         setActiveEmails(newActiveEmails);
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import org.group77.mailMe.model.Control;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -49,6 +50,12 @@ public class FilterController {
             if (!Objects.equals(fromTextField.getText(), "")) {
                 System.out.println("GOING TO FILTER ON FROM"); //TODO REMOVE
                 control.filterOnFrom(fromTextField.getText());
+            }
+            if (!Objects.equals(maxDatePicker.getValue(), null)) {
+                System.out.println("GOING TO FILTER ON MAX DATE"); //todo remove
+                // convert the selected date to LocalDateTime
+                LocalDateTime date = maxDatePicker.getValue().atStartOfDay();
+                control.filterOnMaxDate(date);
             }
         });
         populateChoiceBox();

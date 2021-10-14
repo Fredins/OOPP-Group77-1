@@ -9,6 +9,8 @@ import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
 import org.group77.mailMe.services.storage.Storage;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -220,6 +222,10 @@ public class Control {
 
     public void filterOnFrom(String searchWord) {
         model.filterOnFrom(searchWord);
+    }
+
+    public void filterOnMaxDate(LocalDateTime date) {
+        model.filterOnMaxDate(date);
     }
 
     public void clearFilter() {
