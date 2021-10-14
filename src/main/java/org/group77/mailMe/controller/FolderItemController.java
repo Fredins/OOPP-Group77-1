@@ -22,12 +22,18 @@ public class FolderItemController {
     nameLabel.setText(folder.name());
     button.getStyleClass().add(folder.name().equals("Inbox") ? "focused" : "unfocused");
 
-    // input handlers
+    // attach event handlers
     button.setOnMouseClicked(i -> control.getActiveFolder().set(folder));
-    // change handlers
-    control.getActiveFolder().addObserver(newFolder -> {
-        button.getStyleClass().clear();
-        button.getStyleClass().add(folder.equals(newFolder) ? "focused" : "unfocused");
-    });
+    control.getActiveFolder().addObserver(newFolder -> focused(newFolder, folder));
+  }
+
+  /**
+   * @author Martin
+   * @param newFolder the new folder
+   * @param folder the folder associated with this controller
+   */
+  private void focused(Folder newFolder, Folder folder){
+    button.getStyleClass().clear();
+    button.getStyleClass().add(folder.equals(newFolder) ? "focused" : "unfocused");
   }
 }

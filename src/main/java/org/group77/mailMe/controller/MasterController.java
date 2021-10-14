@@ -1,11 +1,8 @@
 package org.group77.mailMe.controller;
 
-import javafx.beans.value.*;
 import javafx.collections.*;
 import javafx.fxml.*;
-import javafx.geometry.*;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.util.*;
@@ -38,7 +35,7 @@ public class MasterController {
    * @author Martin, David
    */
   public void init(Control control) {
-    loadFolders(control.getActiveFolders().get(), control);
+    loadFolders(control.getFolders().get(), control);
     if (control.getAccounts() != null) {
       populateAccountCombo(control.getAccounts().get(), control);
     }
@@ -46,44 +43,71 @@ public class MasterController {
       accountsCombo.setValue(control.getActiveAccount().get());
     }
 
-    // input handlers
-    refreshBtn.setOnAction(i -> {
-      try {
-        control.refresh();
-      } catch (Exception e) {
-        e.printStackTrace(); // TODO feedback
-      }
-    });
+    // attach event handlers
+    refreshBtn.setOnAction(i -> refresh(control));
     writeBtn.setOnAction(i -> WindowOpener.openWriting(control));
     addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(control, node -> ((Stage) node.getScene().getWindow()).close()));
-
     filterButton.setOnAction(i -> WindowOpener.openFilter(control));
-
-    // change handlers
-    control.getActiveAccount().addObserver(newAccount -> {
-      accountsCombo.setValue(newAccount);
-    });
-    control.getActiveFolders().addObserver(newFolders -> {
-      if(!newFolders.isEmpty()){
-        loadFolders(newFolders, control);
-        control.getActiveFolder().set(newFolders.get(0));
-      }
-    });
-    control.getVisibleEmails().addObserver(newEmails -> loadEmails(newEmails, control));
+    control.getActiveAccount().addObserver(newAccount -> accountsCombo.setValue(newAccount));
+    control.getFolders().addObserver(newFolders -> handleFoldersChange(newFolders, control));
+    control.getActiveEmails().addObserver(newEmails -> loadEmails(newEmails, control));
     control.getAccounts().addObserver(newEmails -> accountsCombo.setItems(FXCollections.observableList(newEmails)));
-    control.getActiveFolder().addObserver(newFolder -> control.getVisibleEmails().replaceAll(newFolder.emails()));
-    control.getReadingEmail().addObserver(newEmail -> {
-      if (newEmail != null) {
-        loadReading(newEmail, control);
-      } else {
-        readingPane.getChildren().clear();
-      }
-    });
-    //Clear readingView when changing folders (else, BUG in moving and deleting emails)
-      control.getActiveFolder().addObserver(newFolder -> {
-         if (control.getReadingEmail() != null){
-          readingPane.getChildren().clear();}
-      });
+    control.getActiveFolder().addObserver(newFolder -> control.getActiveEmails().replaceAll(newFolder.emails()));
+    control.getActiveEmail().addObserver(newEmail -> handleActiveEmailChange(newEmail, control));
+    control.getActiveFolder().addObserver(newFolder -> handleActiveFolderChange(control));
+  }
+
+  /**
+   * @author Martin
+   * @param control the control layer
+   */
+  private void refresh(Control control){
+    try {
+      control.refresh();
+    } catch (Exception e) {
+      e.printStackTrace(); // TODO feedback
+    }
+  }
+
+  /**
+   * when folders change:
+   * 1. load folders if not empty
+   * 2. set active folder to inbox
+   * @author Martin
+   * @param control the control layer
+   * @param newFolders the new folders
+   */
+  private void handleFoldersChange(List<Folder> newFolders, Control control){
+    if(!newFolders.isEmpty()){
+      loadFolders(newFolders, control);
+      control.getActiveFolder().set(newFolders.get(0));
+    }
+  }
+
+  /**
+   * when active email change:
+   * 1. load email in reading pane or clear it
+   * @author Martin
+   * @param newEmail the new Email
+   * @param control the control layer
+   */
+  private void handleActiveEmailChange(Email newEmail, Control control){
+    if (newEmail != null) {
+      loadReading(newEmail, control);
+    } else {
+      readingPane.getChildren().clear();
+    }
+  }
+
+  /**
+   * when active folder change:
+   * 1. clear reading pane
+   * @author Martin
+   * @param control the control layer
+   */
+  private void handleActiveFolderChange(Control control){
+    if (control.getActiveEmail() != null){
+      readingPane.getChildren().clear();}
 
   }
 
@@ -205,26 +229,3 @@ public class MasterController {
       }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

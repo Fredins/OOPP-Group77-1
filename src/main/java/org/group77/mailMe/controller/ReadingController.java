@@ -35,43 +35,56 @@ public class ReadingController {
     subjectLabel.setText(email.subject());
     toLabel.setText(removeBrackets(Arrays.toString(email.to())));
     dateLabel.setText(email.date().toString());
-
     attachmentsLabel.setText(email.attachments());
-
+    if (control.getFolders() != null) {
+      PopulateFolderComboBox(control.getFolders().get(), control);
+    }
     // TODO date
-    //Moves email to trash if not already in trash. If in trash --> Deletes permanently (but with confirmation).
-    bin.setOnAction(i -> {
-      if((control.getActiveFolder().get().name().equals("Trash"))){
-        try {
-          if (customAlert("Are you sure you want to permanently delete this email?", Alert.AlertType.CONFIRMATION).get().equals(ButtonType.OK)){
-          PermDeleteEmail(control);}
-        } catch (Exception e) {
-          e.printStackTrace();
+    // attach event handlers
+    bin.setOnAction(i -> handleDelete(control));
+    replyButton.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
+    moveEmailComboBox.setOnAction(i -> moveEmail(control));
+  }
+
+  /**
+   * Moves email to trash if not already in trash. If in trash --> Deletes permanently (but with confirmation).
+   * @author David
+   * @param control the control layer
+   */
+  private void handleDelete(Control control) {
+    if ((control.getActiveFolder().get().name().equals("Trash"))) {
+      try {
+        if (customAlert("Are you sure you want to permanently delete this email?", Alert.AlertType.CONFIRMATION).get().equals(ButtonType.OK)) {
+          PermDeleteEmail(control);
         }
-      } else {
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else {
       try {
         DeleteEmail(control);
       } catch (Exception e) {
         e.printStackTrace();
       }
-    }});
-
-    replyButton.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
-    if (control.getActiveFolders() != null) {
-      PopulateFolderComboBox(control.getActiveFolders().get(), control);
     }
+  }
 
-    moveEmailComboBox.setOnAction(i -> {
+    /**
+   * move email when clicking on comboBox item
+   * @author David
+   * @param control the control layer
+   */
+  private void moveEmail(Control control){
       Folder selected = moveEmailComboBox.getSelectionModel().getSelectedItem();
       if (selected != null) {
         try {
-          MoveEmail(selected, control);
+          moveEmail(selected, control);
         } catch (Exception e) {
           e.printStackTrace();
         }
       }
-    });
-  }
+    }
+
 
   /**
    * Displays a confirmation alert when you try to permanently delete an email.
@@ -127,7 +140,7 @@ public class ReadingController {
    */
 
   @FXML
-  private void MoveEmail(Folder folder, Control control) throws Exception {
+  private void moveEmail(Folder folder, Control control) throws Exception {
     control.moveEmail(folder);
   }
 
@@ -150,7 +163,7 @@ public class ReadingController {
       public Folder fromString(String s) {
         Folder folder = null;
         try {
-          folder = control.getActiveFolders().stream().filter(fol -> fol.name().equals(s))
+          folder = control.getFolders().stream().filter(fol -> fol.name().equals(s))
                   .findAny()
                   .orElseThrow(Exception::new);
         }catch (Exception e){
