@@ -100,27 +100,6 @@ public class Model {
     public void setActiveEmail(Email activeEmail) { this.activeEmail.set(activeEmail); }
     public void setActiveEmails(List<Email> activeEmails) { this.activeEmails.replaceAll(activeEmails); }
 
-    /*
-    public Account getActiveAccount() {
-        return activeAccount.get();
-        // will not return Subject, only account in it, so no one can change it.
-        // register as an observer in some other way
-    }
-
-    public List<Folder> getActiveFolders() {
-        return activeFolders.get(); // will not return SubjectList...
-    }
-
-    public List<Account> getAccounts() {
-        return accounts.get();
-    }
-
-    public Map<Account,List<Folder>> getFolders() {
-        return folders.get();
-    }
-
-     */
-
     public void filterOnTo(String searchWord) {
         List<Email> newActiveEmails = textFinder.filterOnTo(activeEmails.get(), searchWord);
         setActiveEmails(newActiveEmails);

@@ -34,7 +34,7 @@
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" styleClass="filterButton">
                      <image>
-                        <Image url="@ImagesAndIcons/filter-icon.png" />
+                        <Image url="@images_and_icons/filter-icon.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -49,7 +49,7 @@
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@ImagesAndIcons/RefreshIcon.png" />
+                        <Image url="@images_and_icons/RefreshIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -70,7 +70,7 @@
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@ImagesAndIcons/addAccount-white.png" />
+                  <Image url="@images_and_icons/addAccount-white.png" />
                </image>
             </ImageView>
          </graphic>

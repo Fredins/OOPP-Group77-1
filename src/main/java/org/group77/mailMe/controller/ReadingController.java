@@ -1,10 +1,13 @@
 package org.group77.mailMe.controller;
 
+import javafx.event.*;
 import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.web.*;
-import javafx.util.StringConverter;
+import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
@@ -13,17 +16,17 @@ import javafx.concurrent.Worker.State;
 import java.util.*;
 
 public class ReadingController {
-  @FXML private WebView webView;
   @FXML private Label fromLabel;
   @FXML private Label subjectLabel;
   @FXML private Label toLabel;
   @FXML private Label dateLabel;
-  @FXML private Button replyButton;
-  @FXML private Button bin;
-  @FXML private ComboBox<Folder> moveEmailComboBox;
   @FXML private Label attachmentsLabel;
+  @FXML private Button replyBtn;
+  @FXML private Button trashBtn;
+  @FXML private Button archiveBtn;
   @FXML private VBox vBox;
-
+  @FXML private WebView webView;
+  @FXML private ImageView archiveImg;
 
   /**
    * 1. set initial values for nodes
@@ -38,17 +41,62 @@ public class ReadingController {
     toLabel.setText(removeBrackets(Arrays.toString(email.to())));
     dateLabel.setText(email.date().toString());
     attachmentsLabel.setText(email.attachments());
-    if (control.getFolders() != null) {
-      PopulateFolderComboBox(control.getFolders().get(), control);
-    }
+
+    // set button action handler and button icon
+    EventHandler<ActionEvent> archiveHandler = actionEvent -> moveEmailTo(control, "Archive");
+    EventHandler<ActionEvent> restoreHandler = actionEvent -> moveEmailTo(control, "Inbox");
+    setButtonHandler(control.getActiveFolder().get(), archiveHandler, restoreHandler);
+    setButtonImage(control.getActiveFolder().get());
 
     WebEngine webEngine = webView.getEngine();
     webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> adjustHeigth(webEngine, newState));
     webEngine.loadContent(email.content());
     // attach event handlers
-    bin.setOnAction(i -> handleDelete(control));
-    replyButton.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
-    moveEmailComboBox.setOnAction(i -> moveEmail(control));;
+    trashBtn.setOnAction(i -> handleDelete(control));
+    replyBtn.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
+  }
+
+
+  private void setButtonImage(Folder folder){
+    archiveImg.setImage(new Image(
+      String.valueOf((Main.class.getResource(
+        (folder.name().equals("Archive") | folder.name().equals("Trash")) ? "images_and_icons/restore.png" : "images_and_icons/archive.png"
+      )))
+    ));
+
+
+  }
+
+  private void moveEmailTo(Control control, String folderName){
+    Optional<Folder> maybeFolder = control
+      .getFolders()
+      .stream()
+      .filter(folder -> folder.name().equals(folderName))
+      .findFirst();
+    maybeFolder.ifPresent(folder -> {
+      try{
+        control.moveEmail(folder);
+      }catch (Exception e){
+        e.printStackTrace();
+      }
+    });
+  }
+
+  private void removeEventHandler(Node node, EventHandler<ActionEvent> eventHandler){
+    try{
+     node.removeEventHandler(ActionEvent.ACTION, eventHandler);
+    }catch (NullPointerException ignore){}
+  }
+
+  private void setButtonHandler(Folder folder,EventHandler<ActionEvent> archiveHandler, EventHandler<ActionEvent> restoreHandler){
+    if(folder == null){
+      return;
+    }
+    removeEventHandler(archiveBtn, archiveHandler);
+    removeEventHandler(archiveBtn, restoreHandler);
+    archiveBtn.setOnAction(
+      (folder.name().equals("Archive") | folder.name().equals("Trash")) ? restoreHandler : archiveHandler
+    );
   }
 
   /**
@@ -78,35 +126,19 @@ public class ReadingController {
     if ((control.getActiveFolder().get().name().equals("Trash"))) {
       try {
         if (customAlert("Are you sure you want to permanently delete this email?", Alert.AlertType.CONFIRMATION).get().equals(ButtonType.OK)) {
-          PermDeleteEmail(control);
+          control.permDeleteEmail();
         }
       } catch (Exception e) {
         e.printStackTrace();
       }
     } else {
       try {
-        DeleteEmail(control);
+        control.deleteEmail();
       } catch (Exception e) {
         e.printStackTrace();
       }
     }
   }
-
-    /**
-   * move email when clicking on comboBox item
-   * @author David
-   * @param control the control layer
-   */
-  private void moveEmail(Control control){
-      Folder selected = moveEmailComboBox.getSelectionModel().getSelectedItem();
-      if (selected != null) {
-        try {
-          moveEmail(selected, control);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
-    }
 
 
   /**
@@ -134,67 +166,5 @@ public class ReadingController {
   private String removeBrackets(String s){
     s = s.replaceAll("[\\[\\](){}]","");
     return s;
-  }
-
-  //TODO Could potentially move these methods below into MasterController but then we need to make some changes in the GUI
-
-  /**
-   * Calls the DeleteEmail method in model
-   * @param control the facade to model
-   * @throws Exception
-   * @author David Zamanian
-   */
-
-  @FXML
-  private void DeleteEmail(Control control) throws Exception {
-    control.deleteEmail();
-  }
-
-  @FXML
-  private void PermDeleteEmail(Control control) throws Exception {
-    control.permDeleteEmail();
-  }
-
-  /**
-   * Calls the MoveEmail method in model
-   * @param control holds the state of the application
-   * @throws Exception
-   * @author David Zamanian
-   */
-
-  @FXML
-  private void moveEmail(Folder folder, Control control) throws Exception {
-    control.moveEmail(folder);
-  }
-
-  /**
-   * Populates the comboBox with the names of the folders in model's folders.
-   *
-   * @param folders all folders in model's folders
-   * @param control holds the state of the application
-   * @author David Zamanian
-   */
-
-  private void PopulateFolderComboBox(List<? extends Folder> folders, Control control){
-    moveEmailComboBox.getItems().clear();
-    moveEmailComboBox.setConverter(new StringConverter<Folder>() {
-      @Override
-      public String toString(Folder folder) {
-        return folder!= null ? folder.name() : null;
-      }
-      @Override
-      public Folder fromString(String s) {
-        Folder folder = null;
-        try {
-          folder = control.getFolders().stream().filter(fol -> fol.name().equals(s))
-                  .findAny()
-                  .orElseThrow(Exception::new);
-        }catch (Exception e){
-          e.printStackTrace();
-        }
-        return folder;
-      }
-    });
-    moveEmailComboBox.getItems().addAll(folders);
   }
 }

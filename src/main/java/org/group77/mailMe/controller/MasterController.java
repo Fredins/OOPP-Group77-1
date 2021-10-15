@@ -66,9 +66,8 @@ public class MasterController {
     control.getFolders().addObserver(newFolders -> handleFoldersChange(newFolders, control));
     control.getActiveEmails().addObserver(newEmails -> loadEmails(newEmails, control));
     control.getAccounts().addObserver(newEmails -> accountsCombo.setItems(FXCollections.observableList(newEmails)));
-    control.getActiveFolder().addObserver(newFolder -> control.getActiveEmails().replaceAll(newFolder.emails()));
     control.getActiveEmail().addObserver(newEmail -> handleActiveEmailChange(newEmail, control));
-    control.getActiveFolder().addObserver(newFolder -> handleActiveFolderChange(control));
+    control.getActiveFolder().addObserver(newFolder -> handleActiveFolderChange(newFolder, control));
   }
 
   /**
@@ -119,9 +118,11 @@ public class MasterController {
    * @author Martin
    * @param control the control layer
    */
-    private void handleActiveFolderChange(Control control){
+    private void handleActiveFolderChange(Folder newFolder, Control control){
       if (control.getActiveEmail() != null){
-        readingPane.getChildren().clear();}
+        readingPane.getChildren().clear();
+      }
+      control.getActiveEmails().replaceAll(newFolder.emails());
 
     }
 

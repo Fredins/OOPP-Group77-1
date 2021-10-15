@@ -19,7 +19,7 @@
       <Label fx:id="subjectLabel" layoutX="57.0" layoutY="31.0" mouseTransparent="true" prefHeight="17.0" prefWidth="160.0" text="Subject" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="2.0" />
       <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="12.0" layoutY="12.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="12.0">
          <image>
-            <Image url="@ImagesAndIcons/UserIconEmailItem.png" />
+            <Image url="@images_and_icons/UserIconEmailItem.png" />
          </image>
       </ImageView>
    </children>
