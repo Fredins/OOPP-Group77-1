@@ -11,7 +11,7 @@ import org.group77.mailMe.services.storage.Storage;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 /**
  * Control is a facade between the frontend and backend.
@@ -147,34 +147,32 @@ public class Control {
      * Removes the currently open email and moves it to the trash.
      *
      * @throws Exception
-     * @author David Zamanian
+     * @author David Zamanian, Martin
      */
 
     public void deleteEmail() throws Exception {
-
-        List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
-        //Move the currently open email to the trash
-        newFolders.get(4).emails().add(model.getActiveEmail().get()); //TODO Fix better index if we want to add more folders in the future (from 4 to compare name to "Trash" somehow..)
-        //Remove currently open email from the activeFolder
-        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getActiveEmail().get());
-        storage.store(model.getActiveAccount().get(), newFolders);
-        model.getFolders().replaceAll(newFolders);
-        refresh();
+        Optional<Folder> maybeTrash = getFolders().stream()
+            .filter(folder -> folder.name().equals("Trash"))
+            .findFirst();
+        if(maybeTrash.isPresent()){
+            moveEmail(maybeTrash.get());
+        }
     }
 
     /**
      * Used when deleting emails from the trash. Will remove it from all inboxes and will not be able to recover it
      *
      * @throws Exception
-     * @author David Zamanian
+     * @author David Zamanian, Martin
      */
 
     public void permDeleteEmail() throws Exception {
-        List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
-        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getActiveEmail().get());
-        storage.store(model.getActiveAccount().get(), newFolders);
-        model.getFolders().replaceAll(newFolders);
-        refresh();
+        Email email = getActiveEmail().get();
+        Folder deleteFromFolder = getActiveFolder().get();
+        getActiveEmails().remove(email);
+        deleteFromFolder.emails().remove(email);
+        getActiveFolder().set(new Folder(deleteFromFolder.name(), deleteFromFolder.emails()));
+        storage.store(getActiveAccount().get(), deleteFromFolder);
     }
 
 
