@@ -2,9 +2,12 @@ package org.group77.mailMe.controller;
 
 import javafx.event.Event;
 import javafx.fxml.*;
+import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import javafx.util.*;
+import org.controlsfx.control.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 import java.util.function.*;
@@ -37,12 +40,22 @@ public class AddAccountController {
    * @author Elin Hagman, Martin
    */
   private void addAccount(Control control, Event inputEvent, Consumer<Node> onClose) {
+    Notifications notification = Notifications.create()
+      .position(Pos.TOP_CENTER)
+      .hideAfter(Duration.seconds(2));
     try {
       control.addAccount(emailTextField.getText(), passwordField.getText());
       // call the closing function
       onClose.accept((Node) inputEvent.getSource());
+      notification
+        .graphic(new Label(emailTextField.getText() + " added successfully"))
+        .show();
     } catch (Exception e) {
-      errorLabel.setText(e.getMessage()); //TODO: give a good exception message in Model
+      // errorLabel.setText(e.getMessage()); //TODO: give a good exception message in Model
+      notification
+        .title("Failure")
+        .text(e.getMessage())
+        .showWarning();
       // errorLabel.setText("Wrong login credentials, or domain is not supported");
     }
   }
