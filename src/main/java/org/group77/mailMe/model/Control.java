@@ -8,7 +8,7 @@ import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFact
 import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
 import org.group77.mailMe.services.storage.Storage;
 
-import java.io.File;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -179,22 +179,21 @@ public class Control {
 
 
     /**
-     * Moves the email to the desired folder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
+     * Moves the email to the desired MoveTofolder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
      *
-     * @param folder The folder that was selected in the "Move" comboBox in readingView
-     * @throws Exception
-     * @author David Zamanian
+     * @param MoveTofolder The MoveTofolder that was selected in the "Move" comboBox in readingView
+     * @author David Zamanian, Martin
      */
 
-    public void moveEmail(Folder folder) throws Exception {
-        List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
-        //Move the currently open email to the chosen folder in the comboBox
-        newFolders.get(newFolders.indexOf(folder)).emails().add(model.getActiveEmail().get());
-        //Delete the currently open email from the activeFolder
-        newFolders.get(newFolders.indexOf(model.getActiveFolder().get())).emails().remove(model.getActiveEmail().get());
-        storage.store(model.getActiveAccount().get(), newFolders);
-        model.getFolders().replaceAll(newFolders);
-        refresh();
+    public void moveEmail(Folder MoveTofolder) throws Exception {
+        Email email = getActiveEmail().get();
+        getActiveEmails().remove(email);
+        Folder moveFromFolder = getActiveFolder().get();
+        moveFromFolder.emails().remove(email);
+        getActiveFolder().set(new Folder(moveFromFolder.name(), moveFromFolder.emails()));
+        MoveTofolder.emails().add(email);
+        storage.store(getActiveAccount().get(), moveFromFolder);
+        storage.store(getActiveAccount().get(), MoveTofolder);
     }
 
     /* public void deleteEmail(Email emailToBeDeleted) {
@@ -204,6 +203,10 @@ public class Control {
     */
 
     // state getters and setters
+    public void setReadingEmail(Email readingEmail) {
+        model.setActiveEmail(null);
+        model.setActiveEmail(readingEmail);
+    }
     public Subject<Account> getActiveAccount() { return model.getActiveAccount(); }
     public SubjectList<Account> getAccounts() { return model.getAccounts(); }
     public void setActiveAccount(Account account) { model.setActiveAccount(account); }
@@ -212,7 +215,6 @@ public class Control {
     public Subject<Email> getActiveEmail() { return model.getActiveEmail(); }
     public SubjectList<Email> getActiveEmails() { return model.getActiveEmails(); }
     public void setActiveFolder(Folder activeFolder) { model.setActiveFolder(activeFolder); }
-    public void setReadingEmail(Email readingEmail) { model.setActiveEmail(readingEmail); }
     public void setVisibleEmails(List<Email> visibleEmails) { model.setActiveEmails(visibleEmails); }
 
 
