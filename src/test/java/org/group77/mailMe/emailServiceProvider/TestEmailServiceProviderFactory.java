@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.model.exceptions.*;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProvider;
 import org.group77.mailMe.services.emailServiceProvider.GmailProvider;

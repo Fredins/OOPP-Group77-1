@@ -3,13 +3,15 @@ package org.group77.mailMe.model;
 import org.group77.mailMe.model.data.Account;
 import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
+import org.group77.mailMe.model.exceptions.*;
+import org.group77.mailMe.model.exceptions.FolderNotFoundException;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProvider;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
 import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
 import org.group77.mailMe.services.storage.Storage;
 
+import javax.mail.*;
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -82,26 +84,34 @@ public class Control {
      * 2. set activeFolder = inbox
      * 3. store emails
      *
-     * @throws Exception if inbox doesn't exist or if refreshFromServerFails
+     * @throws Exception if refresh from server fails
      * @author Martin Fredin
+     * @return new emails form server
      */
-    public void refresh() throws Exception {
+    public List<Email> refresh() throws ProviderConnectionRefusedException {
         if (model.getActiveAccount() != null && model.getFolders() != null) {
             EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
-            // receive new emails from server
-            List<Email> newEmails = esp.refreshFromServer(model.getActiveAccount().get());
-            // add new emails to inbox in model
             try {
-                model.updateInbox(newEmails);
-                storage.store(model.getActiveAccount().get(), model.getFolders().get()); // replaces old inbox with new emails
-            } catch (InboxNotFoundException e){
-                throw new Exception("No folder named Inbox");
+                return esp.refreshFromServer(model.getActiveAccount().get());
+            } catch (MessagingException e) { // TODO make refreshFromServer throw ProviderConnectionRefusedException instead
+                throw new ProviderConnectionRefusedException();
             }
-        } else {
-            throw new Exception("No active account");
         }
+        return null;
+    }
+
+    public void updateFolder(String folderName, List<Email> newEmails) throws FolderNotFoundException {
+        Folder folder = model.getFolders().stream()
+          .filter(folder1 -> folder1.name().equals(folderName))
+          .findFirst()
+          .orElseThrow(() -> new FolderNotFoundException(folderName));
+
+        model.updateFolder(folder, newEmails);
+        storage.store(model.getActiveAccount().get(), folder);
+        storage.store(model.getActiveAccount().get(), model.getFolders().get()); // replaces old inbox with new emails
 
     }
+
 
     /**
      * Tries to add a new account to accounts.

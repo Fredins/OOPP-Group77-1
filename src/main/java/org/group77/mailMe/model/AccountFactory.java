@@ -1,6 +1,7 @@
 package org.group77.mailMe.model;
 
 import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.model.exceptions.*;
 
 /**
  * @author Martin Fredin.

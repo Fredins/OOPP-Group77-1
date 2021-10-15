@@ -1,7 +1,6 @@
 package org.group77.mailMe.model;
-import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.model.exceptions.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.function.*;
 
 public class TestAccountFactory {
 

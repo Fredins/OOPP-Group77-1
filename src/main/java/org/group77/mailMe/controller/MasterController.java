@@ -1,5 +1,6 @@
 package org.group77.mailMe.controller;
 
+import javafx.application.*;
 import javafx.collections.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
@@ -10,6 +11,7 @@ import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.model.exceptions.*;
 
 import java.io.*;
 import java.util.*;
@@ -26,6 +28,8 @@ public class MasterController {
   @FXML private Button addAccountBtn;
   @FXML private FlowPane emailsFlow;
   @FXML private FlowPane filterFlowPane;
+  @FXML private AnchorPane progressPane;
+  @FXML private Label progressLabel;
 
 
   /**
@@ -71,15 +75,32 @@ public class MasterController {
   }
 
   /**
+   * 1. display progressbar
+   * 2. refresh new emails without blocking the application thread
+   * 3. remove progressbar and display possible errors in progress bar label
    * @author Martin
    * @param control the control layer
    */
   private void refresh(Control control){
-    try {
-      control.refresh();
-    } catch (Exception e) {
-      e.printStackTrace(); // TODO feedback
-    }
+    progressPane.toFront();
+    progressLabel.setText(control.getActiveAccount().get().emailAddress() + ": downloading new messages...");
+    new Thread(() ->{
+      try {
+        List<Email> newEmails = control.refresh();
+        Platform.runLater(() -> {
+          try {
+            control.updateFolder("Inbox", newEmails);
+          } catch (FolderNotFoundException e) {
+            progressLabel.setText(e.toString());
+            e.printStackTrace();
+          }
+          progressPane.toBack();
+        });
+      } catch (Exception e) {
+        Platform.runLater(() -> progressLabel.setText(e.toString()));
+        e.printStackTrace();
+      }
+    }).start();
   }
 
   /**

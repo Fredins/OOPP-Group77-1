@@ -3,6 +3,7 @@ package org.group77.mailMe.model;
 import org.group77.mailMe.model.data.Account;
 import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
+import org.group77.mailMe.model.exceptions.*;
 import org.group77.mailMe.model.textFinding.TextFinder;
 
 import java.time.LocalDateTime;
@@ -38,26 +39,20 @@ public class Model {
     }
 
     /**
-     * Add emails to this activeFolder's inbox folder.
-     *
-     * Emails already in inbox are not removed.
-     *
+     * 1. find the correct folder
+     * 2. replace emails in folder
+     * @author Martin
      * @param newEmails emails to added to inbox folder in active account
-     * @throws InboxNotFoundException if activeFolders does not have a inbox folder
      */
 
-    public void updateInbox(List<Email> newEmails) throws InboxNotFoundException {
-        Folder inbox = folders.stream()
-                .filter(folders -> folders.name().equals("Inbox"))
-                .findFirst()
-                .orElseThrow(InboxNotFoundException::new); // inbox not found
-        Folder newInbox = new Folder(inbox.name(),
-                Stream.of(newEmails, inbox.emails())
+    public void updateFolder(Folder folder, List<Email> newEmails) {
+        Folder newFolder = new Folder(folder.name(),
+                Stream.of(newEmails, folder.emails())
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList())
         );
         // replace inbox with newInbox
-        folders.replace(inbox, newInbox);
+        folders.replace(folder, newFolder);
     }
 
     public void setActiveAccount(Account account) {
