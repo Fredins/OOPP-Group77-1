@@ -80,32 +80,40 @@ public class MasterController {
   /**
    * 1. display progressbar
    * 2. refresh new emails without blocking the application thread
-   * 3. remove progressbar and display possible errors in progress bar label
+   * 3. remove progressbar and give display feedback
    * @author Martin
    * @param control the control layer
    */
   private void refresh(Control control){
     progressPane.toFront();
     progressLabel.setText(control.getActiveAccount().get().emailAddress() + ": downloading new messages...");
+
+    Notifications notification  = Notifications.create()
+        .position(Pos.TOP_CENTER)
+        .hideAfter(Duration.seconds(2));
+
     new Thread(() ->{
       try {
         List<Email> newEmails = control.refresh();
         Platform.runLater(() -> {
           try {
             control.updateFolder("Inbox", newEmails);
-            Notifications.create()
-              .position(Pos.TOP_CENTER)
-              .hideAfter(Duration.seconds(2))
+            notification
               .graphic(new Label(newEmails.isEmpty() ? "No new messages" : newEmails.size() + " new messages"))
               .show();
           } catch (FolderNotFoundException e) {
-            progressLabel.setText(e.toString());
             e.printStackTrace();
           }
           progressPane.toBack();
         });
       } catch (Exception e) {
-        Platform.runLater(() -> progressLabel.setText(e.toString()));
+        Platform.runLater(() -> {
+          progressLabel.setText("failure");
+          notification
+            .title("Failure!")
+            .text(e.getMessage())
+            .showError();
+        });
         e.printStackTrace();
       }
     }).start();
