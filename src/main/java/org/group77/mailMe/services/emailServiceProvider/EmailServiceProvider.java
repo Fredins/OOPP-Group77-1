@@ -1,6 +1,6 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.group77.mailMe.model.CouldNotConnectToServerException;
+import org.group77.mailMe.model.exceptions.CouldNotConnectToServerException;
 import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;

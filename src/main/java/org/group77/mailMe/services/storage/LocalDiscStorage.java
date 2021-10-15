@@ -31,12 +31,12 @@ public class LocalDiscStorage implements Storage {
 
     /**
      * @param account - The account to be stored.
-     * @throws AccountAlreadyExistsException, IOException
+     * @throws StorageException if account already exists or problem with IO
      * @author Alexey Ryabov
      * @author Hampus Jernkrook
      */
     @Override
-    public void store(Account account) throws AccountAlreadyExistsException, IOException {
+    public void store(Account account) throws StorageException {
         String address = account.emailAddress();
         // store under appPath/emailAddress.
         String path = appPath + separator + address;
@@ -48,8 +48,12 @@ public class LocalDiscStorage implements Storage {
             mkdir(path);
             // path of the account file
             String accountFilePath = path + separator + "Account";
-            touch(accountFilePath);
-            serialize(account, accountFilePath);
+            try{
+                touch(accountFilePath);
+                serialize(account, accountFilePath);
+            }catch (IOException e){
+                throw new StorageException(e);
+            }
         }
     }
 
@@ -61,21 +65,20 @@ public class LocalDiscStorage implements Storage {
      * TODO: get rid of try-catch and propagate exception to control.
      */
     @Override
-    public void store(Account account, List<Folder> folders) {
+    public void store(Account account, List<Folder> folders) throws StorageException{
         // path to the given account's directory
         String accountPath = appPath + separator + account.emailAddress();
         // For each folder, create a directory with the folder name and store the folder object
-        folders.forEach(f -> {
-                    try {
-                        String folderPath = accountPath + separator + f.name();
-                        touch(folderPath);
-                        serialize(f, folderPath);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
-    }
+        folders.forEach(folder -> {
+            String folderPath = accountPath + separator + folder.name();
+            try {
+                touch(folderPath);
+                serialize(folder, folderPath);
+            } catch (IOException e) {
+                throw new StorageException(e);
+            }
+        });
+        }
 
     /**
      * store folder in corresponding account directory
@@ -83,10 +86,14 @@ public class LocalDiscStorage implements Storage {
      * @author Elin Hagman, Martin
      */
     @Override
-    public void store(Account account, Folder folder) throws IOException {
+    public void store(Account account, Folder folder) throws StorageException{
         String folderPath = appPath + separator + account.emailAddress() + separator + folder.name();
-        touch(folderPath);
-        serialize(folder, folderPath);
+        try{
+            touch(folderPath);
+            serialize(folder, folderPath);
+        }catch (IOException e){
+            throw new StorageException(e);
+        }
     }
 
     /**
@@ -99,7 +106,7 @@ public class LocalDiscStorage implements Storage {
      * @author Hampus Jernkrook
      */
     @Override
-    public List<Folder> retrieveFolders(Account account) {
+    public List<Folder> retrieveFolders(Account account) throws StorageException{
         // path to account directory
         String accountPath = appPath + separator + account.emailAddress();
         // get all files under the account directory (all folders).
@@ -109,12 +116,12 @@ public class LocalDiscStorage implements Storage {
         // returned the folders sorted by inbox,archive,sent,drafts,trash
         return Arrays.stream(files)
                 .map(file -> {
-                    Folder folder = null;
+                    Folder folder;
                     try {
                         //unpack the stored folder object
                         folder = (Folder) deserialize(file.getPath());
                     } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace(); //TODO propagate exception to control instead?
+                        throw new StorageException(e);
                     }
                     return folder;
                 })
@@ -142,7 +149,7 @@ public class LocalDiscStorage implements Storage {
      * @author David Zamanian.
      */
     @Override
-    public List<Account> retrieveAccounts() {
+    public List<Account> retrieveAccounts() throws StorageException{
         // get all account directories under the app root directory
         File[] accountDirs = (new File(appPath)).listFiles();
         List<Account> accounts = new ArrayList<>();
@@ -151,12 +158,12 @@ public class LocalDiscStorage implements Storage {
         if (accountDirs != null) {
             accounts = Arrays.stream(accountDirs)
                     .map(f -> {
-                        Account account = null;
+                        Account account;
                         try {
                             // unpack the account object under AppDir/*emailAddress*/Account
                             account = (Account) deserialize(f.getPath() + separator + "Account");
                         } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace(); // TODO propagate
+                            throw new StorageException(e);
                         }
                         return account;
                     })

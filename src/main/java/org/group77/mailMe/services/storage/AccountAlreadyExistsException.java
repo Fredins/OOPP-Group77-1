@@ -5,7 +5,7 @@ package org.group77.mailMe.services.storage;
  *
  * @author Hampus Jernkrook
  */
-public class AccountAlreadyExistsException extends Exception {
+public class AccountAlreadyExistsException extends StorageException {
     public AccountAlreadyExistsException(String msg) {
         super(msg);
     }

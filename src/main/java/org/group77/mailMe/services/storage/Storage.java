@@ -10,10 +10,10 @@ import java.util.*;
  * @author Martin, Elin, David
  */
 public interface Storage {
-  void store(Account account) throws Exception;
-  void store(Account account, List<Folder> folders);
-  void store(Account account, Folder folder) throws IOException;
+  void store(Account account) throws StorageException;
+  void store(Account account, List<Folder> folders) throws StorageException;
+  void store(Account account, Folder folder) throws StorageException;
 
-  List<Account> retrieveAccounts();
-  List<Folder> retrieveFolders(Account account);
+  List<Account> retrieveAccounts() throws StorageException;
+  List<Folder> retrieveFolders(Account account) throws StorageException;
 }
