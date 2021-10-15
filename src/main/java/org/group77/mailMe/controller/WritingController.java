@@ -1,10 +1,15 @@
 package org.group77.mailMe.controller;
 
+import javafx.application.*;
 import javafx.fxml.FXML;
+import javafx.geometry.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.web.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.*;
+import org.controlsfx.control.*;
 import org.group77.mailMe.model.Control;
 
 
@@ -46,7 +51,7 @@ public class WritingController {
     }
     fromLabel.setText(control.getActiveAccount().get().emailAddress());
     // input handlers
-    sendBtn.setOnAction(inputEvent -> send(control));
+    sendBtn.setOnAction(inputEvent -> send2(control, ((Node) sendBtn)));
     attachBtn.setOnAction(inputEvent -> attachFiles());
 
     // change handlers
@@ -72,6 +77,40 @@ public class WritingController {
       if (customAlert(e.getMessage(), Alert.AlertType.ERROR).get() == ButtonType.OK) {closeWindowAction((Stage) sendBtn.getScene().getWindow());}
       e.printStackTrace(); // TODO display feedback
     }
+  }
+
+  /**
+   * 1. try to send email
+   * 2. display notification if successful or not
+   * 3. close window
+   * @author Martin
+   * @param control the control layer
+   * @param node any node in active scene
+   */
+  private void send2(Control control, Node node){
+    Notifications notification = Notifications.create()
+      .position(Pos.TOP_CENTER)
+      .hideAfter(Duration.seconds(2));
+
+    new Thread(() -> {
+      try {
+        control.send(
+          fromTextFieldToListOfRecipients(toField.getText()),
+          subjectField.getText(),
+          contentField.getHtmlText(),
+          attachments
+        );
+        Platform.runLater(() -> notification
+          .graphic(new Label("Message sent successfully!"))
+          .show());
+      } catch (Exception e) {
+        Platform.runLater(() -> notification
+          .title("Failed")
+          .text(e.getMessage())
+          .showError());
+      }
+    }).start();
+    ((Stage) node.getScene().getWindow()).close();
   }
 
   /** @author Alexey Ryabov

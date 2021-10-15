@@ -98,7 +98,6 @@ public class MasterController {
               .hideAfter(Duration.seconds(2))
               .graphic(new Label(newEmails.isEmpty() ? "No new messages" : newEmails.size() + " new messages"))
               .show();
-
           } catch (FolderNotFoundException e) {
             progressLabel.setText(e.toString());
             e.printStackTrace();
