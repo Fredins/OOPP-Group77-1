@@ -3,10 +3,13 @@ package org.group77.mailMe.controller;
 import javafx.application.*;
 import javafx.collections.*;
 import javafx.fxml.*;
+import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.shape.*;
 import javafx.stage.*;
 import javafx.util.*;
+import org.controlsfx.control.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.Control;
@@ -90,6 +93,12 @@ public class MasterController {
         Platform.runLater(() -> {
           try {
             control.updateFolder("Inbox", newEmails);
+            Notifications.create()
+              .position(Pos.TOP_CENTER)
+              .hideAfter(Duration.seconds(2))
+              .graphic(new Label(newEmails.isEmpty() ? "No new messages" : newEmails.size() + " new messages"))
+              .show();
+
           } catch (FolderNotFoundException e) {
             progressLabel.setText(e.toString());
             e.printStackTrace();
