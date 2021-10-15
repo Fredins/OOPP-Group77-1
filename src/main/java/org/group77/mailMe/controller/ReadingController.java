@@ -30,7 +30,7 @@ public class ReadingController {
 
   /**
    * 1. set initial values for nodes
-   * 2. set event handler for node
+   * 2. add event handlers to nodes
    * @param control the model
    * @param email the corresponding email
    * @author Martin, David
@@ -57,16 +57,25 @@ public class ReadingController {
   }
 
 
+  /**
+   * set image to either a archive-image or a restore-image depending on current folder
+   * @author Martin
+   * @param folder active folder
+   */
   private void setButtonImage(Folder folder){
     archiveImg.setImage(new Image(
       String.valueOf((Main.class.getResource(
         (folder.name().equals("Archive") | folder.name().equals("Trash")) ? "images_and_icons/restore.png" : "images_and_icons/archive.png"
       )))
     ));
-
-
   }
 
+  /**
+   * finds folder based on folderName and then calls control.moveEmail()
+   * @author Martin
+   * @param control the control layer
+   * @param folderName the move-email-to-folder-name
+   */
   private void moveEmailTo(Control control, String folderName){
     Optional<Folder> maybeFolder = control
       .getFolders()
@@ -82,12 +91,26 @@ public class ReadingController {
     });
   }
 
+  /**
+   * try to remove event handler, if fail then do nothing
+   * @author Martin
+   * @param node the node to remove event handler
+   * @param eventHandler the event handler to be removed
+   */
   private void removeEventHandler(Node node, EventHandler<ActionEvent> eventHandler){
     try{
      node.removeEventHandler(ActionEvent.ACTION, eventHandler);
     }catch (NullPointerException ignore){}
   }
 
+  /**
+   * 1. remove all existing even handlers
+   * 2. set a new event handler depending on current folder
+   * @author Martin
+   * @param folder the current folder
+   * @param archiveHandler handler to execute if archive button
+   * @param restoreHandler handler to execute if restore button
+   */
   private void setButtonHandler(Folder folder,EventHandler<ActionEvent> archiveHandler, EventHandler<ActionEvent> restoreHandler){
     if(folder == null){
       return;
