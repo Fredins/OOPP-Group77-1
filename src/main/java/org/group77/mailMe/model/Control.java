@@ -75,6 +75,10 @@ public class Control {
          */
     }
 
+    public void addSuggestion(String s) throws Exception {
+        storage.store(getActiveAccount().get(), s);
+    }
+
     /**
      * 1. retrieve emails from server
      * 2. set activeFolder = inbox
@@ -202,6 +206,8 @@ public class Control {
     */
 
     // state getters and setters
+    public SubjectList<String> getAutoSuggestions() {return model.getAutoSuggestions();}
+
     public Subject<Account> getActiveAccount() { return model.getActiveAccount(); }
     public SubjectList<Account> getAccounts() { return model.getAccounts(); }
     public void setActiveAccount(Account account) { model.setActiveAccount(account); }

@@ -29,12 +29,12 @@ public class WritingController {
   /**
    * normal init method when not replying
    * @param control the model
-   * @author Martin, Alexey
+   * @author Martin, Alexey, David
    */
-  public void init(Control control) {
-    String[] s = {"1", "2", "3"};
 
-    TextFields.bindAutoCompletion(toField, s);
+  public void init(Control control) {
+    //Lets the tField get auto suggestions when typing
+    TextFields.bindAutoCompletion(toField, control.getAutoSuggestions().get());
     init(control, null);
   }
 
@@ -43,8 +43,12 @@ public class WritingController {
    * 2. set event handlers for nodes and state fields
    * @param control the model
    * @param to the email address which the user is replying to
+   * @author David
    */
+
   public void init(Control control, String to) {
+    //Lets the tField get auto suggestions when typing
+    TextFields.bindAutoCompletion(toField, control.getAutoSuggestions().get());
     if (to != null) {
       toField.setText(to);
     }
@@ -64,7 +68,9 @@ public class WritingController {
    * @author Alexey
    */
   private void send(Control control) {
+
     try {
+      control.addSuggestion(toField.getText());
       control.send(
         fromTextFieldToListOfRecipients(toField.getText()),
         subjectField.getText(),

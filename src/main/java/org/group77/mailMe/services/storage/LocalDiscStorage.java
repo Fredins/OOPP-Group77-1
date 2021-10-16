@@ -90,6 +90,60 @@ public class LocalDiscStorage implements Storage {
     }
 
     /**
+     * store list of email suggestions proposed when writing
+     *
+     * @author David Zamanian
+     */
+    @Override
+    public void store(Account account, String suggestion) throws Exception {
+        String address = account.emailAddress();
+        String path = appPath + separator + address + separator + "Suggestions";
+
+        if ( 1 != 1){ //TODO Create a testExists for this
+            throw new Exception();
+        } else {
+            mkdir(path);
+            String suggestionPath = path + separator + suggestion;
+            touch(suggestionPath);
+            serialize(suggestion, suggestionPath);
+        }
+
+
+
+
+    }
+
+    /**
+     * retrieve the list of suggestions for a specific account
+     *
+     * @author David Zamanian.
+     */
+    @Override
+    public List<String> retrieveSuggestions(Account account) {
+        // get all account directories under the app root directory
+        File[] suggDirs = (new File(appPath)).listFiles();
+        List<String> suggestions = new ArrayList<>();
+        // if there were any account directories, then unpack the account objects and
+        // add to resulting list.
+        if (suggDirs != null) {
+            suggestions = Arrays.stream(suggDirs)
+                    .map(f -> {
+                        String suggestion = null;
+                        try {
+                            // unpack the account object under AppDir/*emailAddress*/Account
+                            suggestion = (String) deserialize(f.getPath() + separator + "autoSuggestions");
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace(); // TODO propagate
+                        }
+                        return suggestion;
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        }
+        return suggestions;
+    }
+
+    /**
      * 1. retrieve all folders
      * 2. sort folders
      *

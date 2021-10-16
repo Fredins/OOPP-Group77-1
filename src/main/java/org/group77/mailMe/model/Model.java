@@ -25,6 +25,8 @@ public class Model {
     private final Subject<Folder> activeFolder = new Subject<>(null);
     private final Subject<Email> activeEmail = new Subject<>(null);
 
+    private final SubjectList<String> autoSuggestions = new SubjectList<>(new ArrayList<>());
+
     public Model(List<Account> accounts){
         // if a new account is added then set it as active
         this.accounts.replaceAll(accounts);
@@ -86,6 +88,8 @@ public class Model {
                 new Folder("Trash", new ArrayList<>())
         );
     }
+
+    public SubjectList<String> getAutoSuggestions() {return autoSuggestions;}
 
     public SubjectList<Account> getAccounts() { return accounts; }
     public Subject<Account> getActiveAccount() { return activeAccount; }
