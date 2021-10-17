@@ -34,7 +34,7 @@ public class WritingController {
 
   public void init(Control control) {
     //Lets the tField get auto suggestions when typing
-    TextFields.bindAutoCompletion(toField, control.getAutoSuggestions().get());
+    TextFields.bindAutoCompletion(toField, removeBracketAndMakeToList(control.getAutoSuggestions().get()));
     System.out.println(control.getAutoSuggestions().get());
     init(control, null);
   }
@@ -49,7 +49,7 @@ public class WritingController {
 
   public void init(Control control, String to) {
     //Lets the tField get auto suggestions when typing
-    TextFields.bindAutoCompletion(toField, control.getAutoSuggestions().get());
+    TextFields.bindAutoCompletion(toField, removeBracketAndMakeToList(control.getAutoSuggestions().get()));
     if (to != null) {
       toField.setText(to);
     }
@@ -60,6 +60,18 @@ public class WritingController {
 
     // change handlers
     control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
+  }
+
+  private List<String> removeBracketAndMakeToList(List<String> list){
+    if (!list.isEmpty()) {
+      String theList = list.get(0);
+      theList = theList.replaceAll("[\\[\\](){}]", "");
+      String strings[] = theList.split(";");
+      List newList = Arrays.asList(strings);
+
+      return newList;
+    } else return list;
+
   }
 
   /**

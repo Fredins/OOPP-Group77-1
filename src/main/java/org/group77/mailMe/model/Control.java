@@ -76,8 +76,28 @@ public class Control {
          */
     }
 
+    /** Adds the recipients email address to the suggestion list in storage by retrieving the old list and add the new email and store them together
+     * 
+     * @param s
+     * @throws Exception
+     * @author David Zamanian
+     */
+
     public void addSuggestion(String s) throws Exception {
-        storage.store(getActiveAccount().get(), s);
+        if (!storage.retrieveSuggestions(getActiveAccount().get()).isEmpty()){
+            if (!storage.retrieveSuggestions(getActiveAccount().get()).get(0).contains(s)){
+                 String newString = s + ";" + storage.retrieveSuggestions(getActiveAccount().get());
+                 storage.store(getActiveAccount().get(), newString);}
+        }
+        else {
+            storage.store(getActiveAccount().get(), s);
+        }
+
+    }
+
+    private String removeBrackets(String s){
+        s = s.replaceAll("[\\[\\](){}]","");
+        return s;
     }
 
     /**
