@@ -90,6 +90,7 @@ public class Model {
     }
 
     public SubjectList<String> getAutoSuggestions() {return autoSuggestions;}
+    public void setAutoSuggestions(List<String> list) {this.autoSuggestions.replaceAll(list);}
 
     public SubjectList<Account> getAccounts() { return accounts; }
     public Subject<Account> getActiveAccount() { return activeAccount; }

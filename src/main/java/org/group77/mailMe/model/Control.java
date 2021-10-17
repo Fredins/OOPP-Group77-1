@@ -62,6 +62,7 @@ public class Control {
             }
         });
 
+
         // ALTERNATIVE: send stored data to model directly
         /*
         Map<Account, List<Folder>> accountsData = new HashMap<>();
@@ -139,7 +140,8 @@ public class Control {
         if (model.getActiveAccount() != null) {
             EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
             esp.sendEmail(model.getActiveAccount().get(),recipients,subject,content,attachments);
-
+            model.setAutoSuggestions(storage.retrieveSuggestions(getActiveAccount().get()));
+            System.out.println("Storage: "+storage.retrieveSuggestions(getActiveAccount().get()));
         } else {
             throw new Exception("No active account");
         }

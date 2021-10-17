@@ -97,41 +97,37 @@ public class LocalDiscStorage implements Storage {
     @Override
     public void store(Account account, String suggestion) throws Exception {
         String address = account.emailAddress();
-        String path = appPath + separator + address + separator + "Suggestions";
+        String dirPath = appPath + separator + address + separator + "Suggestions";
 
         if ( 1 != 1){ //TODO Create a testExists for this
             throw new Exception();
         } else {
-            mkdir(path);
-            String suggestionPath = path + separator + suggestion;
+            mkdir(dirPath);
+            String suggestionPath = dirPath + separator + "Suggestion";
             touch(suggestionPath);
             serialize(suggestion, suggestionPath);
         }
-
-
-
-
     }
 
     /**
-     * retrieve the list of suggestions for a specific account
+     * Retrieve the list of suggestions for a specific account
      *
      * @author David Zamanian.
      */
     @Override
     public List<String> retrieveSuggestions(Account account) {
         // get all account directories under the app root directory
-        File[] suggDirs = (new File(appPath)).listFiles();
+        File[] accountsDir = (new File(appPath)).listFiles();
         List<String> suggestions = new ArrayList<>();
         // if there were any account directories, then unpack the account objects and
         // add to resulting list.
-        if (suggDirs != null) {
-            suggestions = Arrays.stream(suggDirs)
+        if (accountsDir != null) {
+            suggestions = Arrays.stream(accountsDir)
                     .map(f -> {
                         String suggestion = null;
                         try {
                             // unpack the account object under AppDir/*emailAddress*/Account
-                            suggestion = (String) deserialize(f.getPath() + separator + "autoSuggestions");
+                            suggestion = (String) deserialize(f.getPath() + separator + "Suggestions" + separator + "Suggestion");
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace(); // TODO propagate
                         }
@@ -158,7 +154,7 @@ public class LocalDiscStorage implements Storage {
         String accountPath = appPath + separator + account.emailAddress();
         // get all files under the account directory (all folders).
         File[] files = Arrays.stream(Objects.requireNonNull((new File(accountPath)).listFiles()))
-                .filter(file -> !file.getName().equals("Account"))
+                .filter(file -> !file.getName().equals("Account") && !file.getName().equals("Suggestions"))
                 .toArray(File[]::new);
         // returned the folders sorted by inbox,archive,sent,drafts,trash
         return Arrays.stream(files)
