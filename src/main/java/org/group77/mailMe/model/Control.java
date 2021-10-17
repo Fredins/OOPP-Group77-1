@@ -62,8 +62,8 @@ public class Control {
                 model.getFolders().replaceAll(newFolders);
             }
         });
-        //Will be empty when no emails have been sent yet
-        System.out.println("Active account"+ getActiveAccount().get());
+
+        //Updates the autoSuggestions as soon as an account gets active
         getActiveAccount().addObserver(i -> {
                 if (getActiveAccount().get() != null) {
                     model.setAutoSuggestions(storage.retrieveSuggestions(getActiveAccount().get()));

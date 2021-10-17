@@ -61,6 +61,13 @@ public class WritingController {
     control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
   }
 
+  /** Removes brackets from a list and takes the first element of that list and breaks it up where their are ; and creates a new list will all the new elements
+   *
+   * @param list a list with only one element
+   * @return
+   * @author David Zamanian
+   */
+
   private List<String> removeBracketAndMakeToList(List<String> list){
     if (!list.isEmpty()) {
       String theList = list.get(0);
@@ -82,6 +89,7 @@ public class WritingController {
   private void send(Control control) {
 
     try {
+      //When sending a new message, the recipient's email is saved in the suggestions in storage
       control.addSuggestion(toField.getText());
       control.send(
         fromTextFieldToListOfRecipients(toField.getText()),
