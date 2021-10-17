@@ -35,7 +35,6 @@ public class WritingController {
   public void init(Control control) {
     //Lets the tField get auto suggestions when typing
     TextFields.bindAutoCompletion(toField, removeBracketAndMakeToList(control.getAutoSuggestions().get()));
-    System.out.println(control.getAutoSuggestions().get());
     init(control, null);
   }
 

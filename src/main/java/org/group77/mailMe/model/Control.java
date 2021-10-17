@@ -49,6 +49,7 @@ public class Control {
         //model.getAccounts().replaceAll(storage.retrieveAccounts());
 
 
+
         // update folders when active account is changed
         model.getActiveAccount().addObserver(newAccount -> {
             // if a new account is set as active, get the stored folders of that account.
@@ -61,6 +62,14 @@ public class Control {
                 model.getFolders().replaceAll(newFolders);
             }
         });
+        //Will be empty when no emails have been sent yet
+        System.out.println("Active account"+ getActiveAccount().get());
+        getActiveAccount().addObserver(i -> {
+                if (getActiveAccount().get() != null) {
+                    model.setAutoSuggestions(storage.retrieveSuggestions(getActiveAccount().get()));
+
+                }});
+
 
 
         // ALTERNATIVE: send stored data to model directly
@@ -77,7 +86,7 @@ public class Control {
     }
 
     /** Adds the recipients email address to the suggestion list in storage by retrieving the old list and add the new email and store them together
-     * 
+     *
      * @param s
      * @throws Exception
      * @author David Zamanian
@@ -93,11 +102,6 @@ public class Control {
             storage.store(getActiveAccount().get(), s);
         }
 
-    }
-
-    private String removeBrackets(String s){
-        s = s.replaceAll("[\\[\\](){}]","");
-        return s;
     }
 
     /**
