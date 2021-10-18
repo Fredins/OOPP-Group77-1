@@ -75,6 +75,8 @@ public class MasterController {
     control.getAccounts().addObserver(newEmails -> accountsCombo.setItems(FXCollections.observableList(newEmails)));
     control.getActiveEmail().addObserver(newEmail -> handleActiveEmailChange(newEmail, control));
     control.getActiveFolder().addObserver(newFolder -> handleActiveFolderChange(newFolder, control));
+
+    searchField.setOnAction(i -> search(control));
   }
 
   /**
@@ -297,5 +299,9 @@ public class MasterController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void search(Control control) {
+        control.search(searchField.getText());
     }
 }

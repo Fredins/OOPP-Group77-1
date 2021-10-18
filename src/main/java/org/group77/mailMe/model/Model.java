@@ -134,4 +134,9 @@ public class Model {
         // set active emails to all emails in the current folder
         setActiveEmails(activeFolder.get().emails());
     }
+
+    public void search(String searchWord) {
+        List<Email> newActiveEmails = textFinder.search(activeEmails.get(), searchWord);
+        setActiveEmails(newActiveEmails);
+    }
 }

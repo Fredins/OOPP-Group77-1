@@ -309,4 +309,8 @@ public class Control {
         model.clearFilter();
     }
 
+    public void search(String searchWord) {
+        model.search(searchWord);
+    }
+
 }
