@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.*;
 
 public class WritingController {
   @FXML private TextField toField;
@@ -31,6 +32,7 @@ public class WritingController {
   @FXML private Button attachBtn;
   @FXML private TextField subjectField;
   @FXML private HTMLEditor contentField;
+  private final ExecutorService threadExecutor = Executors.newSingleThreadExecutor();
 
   private final List<File> attachments = new ArrayList<File>();
 
@@ -124,7 +126,7 @@ public class WritingController {
       .position(Pos.TOP_CENTER)
       .hideAfter(Duration.seconds(2));
 
-    new Thread(() -> {
+    threadExecutor.execute(() -> {
       try {
         control.addSuggestion(toField.getText());
         control.send(
@@ -142,7 +144,7 @@ public class WritingController {
           .text(e.getMessage())
           .showError());
       }
-    }).start();
+    });
     ((Stage) node.getScene().getWindow()).close();
   }
 
