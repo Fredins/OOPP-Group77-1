@@ -3,6 +3,8 @@ package org.group77.mailMe.model;
 import org.group77.mailMe.model.data.Account;
 import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
+import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -63,10 +65,8 @@ public class TestModel {
     }
 
     @Test
-    public void testSetNonExistingAccountAsActiveAccount() throws ActiveAccountNotInAccounts, EmailDomainNotSupportedException {
+    public void testSetNonExistingAccountAsActiveAccount() throws EmailDomainNotSupportedException {
         Model model = new Model(accounts);
-        // set an active Account
-        model.setActiveAccount(accounts.get(0));
 
         // create new account that is not in model's accounts
         Account newActiveAccountFake = AccountFactory.createAccount("fake@gmail.com","fake123".toCharArray());
@@ -75,7 +75,57 @@ public class TestModel {
         Assertions.assertThrows(ActiveAccountNotInAccounts.class, () -> model.setActiveAccount(newActiveAccountFake));
 
     }
-    
+
+    @Test
+    public void testAddNotAlreadyAddedAccount() throws EmailDomainNotSupportedException, AccountAlreadyExistsException {
+        Model model = new Model(accounts);
+
+        // create new account that is not in model and add it to model
+        Account newAccount = AccountFactory.createAccount("newEmail@gmail.com","test123".toCharArray());
+        model.addAccount(newAccount);
+
+        // assert that newAccount was added to model's accounts
+        Assertions.assertTrue(model.getAccounts().get().contains(newAccount));
+
+    }
+
+    @Test
+    public void testAddAlreadyAddedAccount()  {
+        Model model = new Model(accounts);
+
+        // try to add already existing account to model
+        Account existingAccount = model.getAccounts().get().get(0);
+
+        // assert that existingAccount cannot be added to model
+        Assertions.assertThrows(AccountAlreadyExistsException.class, () -> model.addAccount(existingAccount));
+    }
+
+    @Test
+    public void testCreateAccountEmailAddress() throws EmailDomainNotSupportedException {
+        Model model = new Model(accounts);
+        Account account = model.createAccount("hej@gmail.com","hej123".toCharArray());
+
+        Assertions.assertEquals("hej@gmail.com",account.emailAddress());
+    }
+
+    @Test
+    public void testCreateAccountPassword() throws EmailDomainNotSupportedException {
+        Model model = new Model(accounts);
+        Account account = model.createAccount("hej@gmail.com","hej123".toCharArray());
+
+        Assertions.assertEquals("hej123".toCharArray(),account.password());
+    }
+
+    @Test
+    public void testCreateNotValidAccount() {
+        Model model = new Model(accounts);
+
+        Assertions.assertThrows(EmailDomainNotSupportedException.class, () -> model.createAccount(
+                                                                            "notValid@yahoo.com",
+                                                                                        "fail123".toCharArray()));
+
+    }
+
 
     @Test
     public void testUpdateInbox() {
