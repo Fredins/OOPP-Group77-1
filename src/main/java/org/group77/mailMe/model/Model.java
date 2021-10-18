@@ -139,4 +139,9 @@ public class Model {
         List<Email> newActiveEmails = textFinder.search(activeEmails.get(), searchWord);
         setActiveEmails(newActiveEmails);
     }
+
+    // does same as clearFilter....
+    public void clearSearchResult() {
+        setActiveEmails(activeFolder.get().emails());
+    }
 }

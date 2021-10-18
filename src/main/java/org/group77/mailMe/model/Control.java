@@ -313,4 +313,8 @@ public class Control {
         model.search(searchWord);
     }
 
+    public void clearSearchResult() {
+        model.clearSearchResult();
+    }
+
 }

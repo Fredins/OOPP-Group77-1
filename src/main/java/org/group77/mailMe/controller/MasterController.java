@@ -6,7 +6,6 @@ import javafx.fxml.*;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.shape.*;
 import javafx.stage.*;
 import javafx.util.*;
 import org.controlsfx.control.*;
@@ -27,6 +26,8 @@ public class MasterController {
   @FXML private Pane readingPane;
   @FXML private ComboBox<Account> accountsCombo;
   @FXML private TextField searchField;
+  @FXML private Button applySearchButton;
+  @FXML private Button clearSearchButton;
   @FXML private Button filterButton;
   @FXML private Button addAccountBtn;
   @FXML private FlowPane emailsFlow;
@@ -76,7 +77,10 @@ public class MasterController {
     control.getActiveEmail().addObserver(newEmail -> handleActiveEmailChange(newEmail, control));
     control.getActiveFolder().addObserver(newFolder -> handleActiveFolderChange(newFolder, control));
 
-    searchField.setOnAction(i -> search(control));
+    //TODO: make sure that clearing the search does not clear filter and vice versa...
+    applySearchButton.setOnAction(i -> applySearch(control));
+    searchField.setOnAction(i -> applySearch(control)); // allows for direct search using 'ENTER' instead of pressing the button.
+    clearSearchButton.setOnAction(i -> clearSearch(control));
   }
 
   /**
@@ -301,7 +305,12 @@ public class MasterController {
         }
     }
 
-    private void search(Control control) {
+    private void applySearch(Control control) {
         control.search(searchField.getText());
+    }
+
+    private void clearSearch(Control control) {
+        searchField.setText(""); // clear search field
+        control.clearSearchResult(); // restore to original emails shown.
     }
 }
