@@ -126,6 +126,7 @@ public class WritingController {
 
     new Thread(() -> {
       try {
+        control.addSuggestion(toField.getText());
         control.send(
           fromTextFieldToListOfRecipients(toField.getText()),
           subjectField.getText(),
