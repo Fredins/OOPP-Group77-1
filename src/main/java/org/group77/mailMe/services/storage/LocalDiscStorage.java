@@ -95,7 +95,7 @@ public class LocalDiscStorage implements Storage {
      * @author David Zamanian
      */
     @Override
-    public void store(Account account, String suggestion) throws Exception { 
+    public void store(Account account, String suggestion) throws Exception {
         String address = account.emailAddress();
         String dirPath = appPath + separator + address + separator + "Suggestions";
 
@@ -118,13 +118,11 @@ public class LocalDiscStorage implements Storage {
         File[] accountsDir = Arrays.stream(Objects.requireNonNull((new File(accountPath)).listFiles())).filter(file -> file.getName().equals("Suggestions"))
                 .toArray(File[]::new);
         List<String> suggestions;
-        // if there were any account directories, then unpack the account objects and
-        // add to resulting list.
             suggestions = Arrays.stream(accountsDir)
                     .map(f -> {
                         String suggestion = null;
                         try {
-                            // unpack the account object under AppDir/*emailAddress*/Account
+                            // unpack the suggestion object under AppDir/*emailAddress*/Suggestions/Suggestion
                             suggestion = (String) deserialize(f.getPath() + separator + "Suggestion");
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace(); // TODO propagate
