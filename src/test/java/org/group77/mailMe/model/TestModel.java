@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -113,7 +114,7 @@ public class TestModel {
         Model model = new Model(accounts);
         Account account = model.createAccount("hej@gmail.com","hej123".toCharArray());
 
-        Assertions.assertEquals("hej123".toCharArray(),account.password());
+        Assertions.assertEquals("hej123",new String(account.password()));
     }
 
     @Test
