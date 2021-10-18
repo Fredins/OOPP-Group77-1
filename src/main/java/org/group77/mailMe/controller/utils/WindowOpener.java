@@ -9,6 +9,8 @@ import org.group77.mailMe.controller.*;
 import org.group77.mailMe.model.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.*;
 
 public class WindowOpener {

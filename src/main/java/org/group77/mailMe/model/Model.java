@@ -29,6 +29,8 @@ public class Model {
     private final Subject<Email> activeEmail = new Subject<>(null);
     private final TextFinder textFinder = new TextFinder();
 
+    private final SubjectList<String> autoSuggestions = new SubjectList<>(new ArrayList<>());
+
     public Model(List<Account> accounts){
         // if a new account is added then set it as active
         this.accounts.replaceAll(accounts);
@@ -84,6 +86,9 @@ public class Model {
                 new Folder("Trash", new ArrayList<>())
         );
     }
+
+    public SubjectList<String> getAutoSuggestions() {return autoSuggestions;}
+    public void setAutoSuggestions(List<String> list) {this.autoSuggestions.replaceAll(list);}
 
     public SubjectList<Account> getAccounts() { return accounts; }
     public Subject<Account> getActiveAccount() { return activeAccount; }

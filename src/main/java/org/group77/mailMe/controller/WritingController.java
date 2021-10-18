@@ -8,8 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.web.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import javafx.util.*;
 import org.controlsfx.control.*;
+
+import org.controlsfx.control.textfield.TextFields;
+
 import org.group77.mailMe.model.Control;
 
 
@@ -33,9 +37,12 @@ public class WritingController {
   /**
    * normal init method when not replying
    * @param control the model
-   * @author Martin, Alexey
+   * @author Martin, Alexey, David
    */
+
   public void init(Control control) {
+    //Lets the tField get auto suggestions when typing
+    TextFields.bindAutoCompletion(toField, splitAndMakeToList(control.getAutoSuggestions().get()));
     init(control, null);
   }
 
@@ -44,8 +51,12 @@ public class WritingController {
    * 2. set event handlers for nodes and state fields
    * @param control the model
    * @param to the email address which the user is replying to
+   * @author David
    */
+
   public void init(Control control, String to) {
+    //Lets the tField get auto suggestions when typing
+    TextFields.bindAutoCompletion(toField, splitAndMakeToList(control.getAutoSuggestions().get()));
     if (to != null) {
       toField.setText(to);
     }
@@ -58,6 +69,24 @@ public class WritingController {
     control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
   }
 
+  /** Removes brackets from a list and takes the first element of that list and breaks it up where there are ; and creates a new list will all the new elements
+   *
+   * @param list a list with only one element
+   * @return
+   * @author David Zamanian
+   */
+
+  private List<String> splitAndMakeToList(List<String> list){
+    if (!list.isEmpty()) {
+      String theList = list.get(0);
+      String strings[] = theList.split(";");
+      List newList = Arrays.asList(strings);
+
+      return newList;
+    } else return list;
+
+  }
+
   /**
    * 1. send email
    * 2. display feedback if sending was successful
@@ -65,7 +94,10 @@ public class WritingController {
    * @author Alexey
    */
   private void send(Control control) {
+
     try {
+      //When sending a new message, the recipient's email is saved in the suggestions in storage
+      control.addSuggestion(toField.getText());
       control.send(
         fromTextFieldToListOfRecipients(toField.getText()),
         subjectField.getText(),

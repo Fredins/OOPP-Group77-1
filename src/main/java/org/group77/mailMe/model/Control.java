@@ -10,10 +10,16 @@ import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFact
 import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
 import org.group77.mailMe.services.storage.Storage;
 
+
 import javax.mail.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * Control is a facade between the frontend and backend.
@@ -53,6 +59,7 @@ public class Control {
         //model.getAccounts().replaceAll(storage.retrieveAccounts());
 
 
+
         // update folders when active account is changed
         model.getActiveAccount().addObserver(newAccount -> {
             // if a new account is set as active, get the stored folders of that account.
@@ -66,6 +73,15 @@ public class Control {
             }
         });
 
+        //Updates the autoSuggestions as soon as an account gets active
+        getActiveAccount().addObserver(i -> {
+                if (getActiveAccount().get() != null) {
+                    model.setAutoSuggestions(storage.retrieveSuggestions(getActiveAccount().get()));
+
+                }});
+
+
+
         // ALTERNATIVE: send stored data to model directly
         /*
         Map<Account, List<Folder>> accountsData = new HashMap<>();
@@ -77,6 +93,39 @@ public class Control {
         this.model = new Model(accountsData);
 
          */
+    }
+
+    /** Adds the recipients email address to the suggestion list in storage by retrieving the old list and add the new email and store them together
+     *
+     * @param s
+     * @throws Exception
+     * @author David Zamanian
+     */
+
+    public void addSuggestion(String s) throws Exception {
+        //If there are already suggestions in the list
+        if (!storage.retrieveSuggestions(getActiveAccount().get()).isEmpty()){
+            //If there are no duplicates
+            if (!storage.retrieveSuggestions(getActiveAccount().get()).get(0).contains(s)){
+                System.out.println("Loks like this: " + storage.retrieveSuggestions(getActiveAccount().get()));
+                 String newString = s + ";" + (storage.retrieveSuggestions(getActiveAccount().get()));
+                 storage.store(getActiveAccount().get(), removeBrackets(newString));}
+        }
+        else {
+            storage.store(getActiveAccount().get(), s);
+        }
+
+    }
+
+    /**
+     * Removes brackets from a string. Used to remove "[" and "]" from recipients.
+     * @param s
+     * @author David Zamanian
+     */
+
+    public String removeBrackets(String s){
+        s = s.replaceAll("[\\[\\](){}]","");
+        return s;
     }
 
     /**
@@ -147,7 +196,8 @@ public class Control {
         if (model.getActiveAccount() != null) {
             EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
             esp.sendEmail(model.getActiveAccount().get(),recipients,subject,content,attachments);
-
+            model.setAutoSuggestions(storage.retrieveSuggestions(getActiveAccount().get()));
+            System.out.println("Storage: "+storage.retrieveSuggestions(getActiveAccount().get()));
         } else {
             throw new Exception("No active account");
         }
@@ -211,10 +261,15 @@ public class Control {
     */
 
     // state getters and setters
+
     public void setReadingEmail(Email readingEmail) {
         model.setActiveEmail(null);
         model.setActiveEmail(readingEmail);
     }
+
+    public SubjectList<String> getAutoSuggestions() {return model.getAutoSuggestions();}
+
+
     public Subject<Account> getActiveAccount() { return model.getActiveAccount(); }
     public SubjectList<Account> getAccounts() { return model.getAccounts(); }
     public void setActiveAccount(Account account) { model.setActiveAccount(account); }

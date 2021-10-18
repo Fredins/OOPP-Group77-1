@@ -38,7 +38,7 @@ public class ReadingController {
   void init(Control control, Email email) {
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
-    toLabel.setText(removeBrackets(Arrays.toString(email.to())));
+    toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
     dateLabel.setText(email.date().toString());
     attachmentsLabel.setText(email.attachments());
 
@@ -180,14 +180,16 @@ public class ReadingController {
     return result;
   }
 
+
   /**
    * Removes brackets from a string. Used to remove "[" and "]" from recipients.
    * @param s
    * @author David Zamanian
    */
 
-  private String removeBrackets(String s){
-    s = s.replaceAll("[\\[\\](){}]","");
+  private String removeBrackets(String s) {
+    s = s.replaceAll("[\\[\\](){}]", "");
     return s;
   }
+
 }
