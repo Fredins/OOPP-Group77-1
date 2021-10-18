@@ -3,6 +3,7 @@ package org.group77.mailMe.model;
 import org.group77.mailMe.model.data.Account;
 import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
+import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,10 +70,12 @@ public class Model {
         }
     }
 
-    public void addAccount(Account account) {
+    public void addAccount(Account account) throws AccountAlreadyExistsException {
         // add account if it does not already exist in this accounts
         if (!(accounts.get().contains(account))) {
             accounts.add(account);
+        } else {
+            throw new AccountAlreadyExistsException("Account already exists");
         }
     }
 
