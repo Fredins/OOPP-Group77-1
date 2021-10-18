@@ -95,25 +95,21 @@ public class LocalDiscStorage implements Storage {
      * @author David Zamanian
      */
     @Override
-    public void store(Account account, String suggestion) throws Exception { //TODO Maybe store the emails in another way, right now they are all stored in one string in one file (i could not figure out how to store them individually)
+    public void store(Account account, String suggestion) throws Exception { 
         String address = account.emailAddress();
         String dirPath = appPath + separator + address + separator + "Suggestions";
 
-        if ( 1 != 1){ //TODO Maybe create a testExists for this here instead of in control
-            throw new Exception();
-        } else {
             mkdir(dirPath);
             String suggestionPath = dirPath + separator + "Suggestion";
             touch(suggestionPath);
             serialize(suggestion, suggestionPath);
-        }
     }
 
     /**
      * Retrieve the list of suggestions for a specific account
      *
      * @author David Zamanian.
-     * @return
+     * @return Returns a list of all the auto-complete suggestions
      */
     @Override
     public List<String> retrieveSuggestions(Account account) {
