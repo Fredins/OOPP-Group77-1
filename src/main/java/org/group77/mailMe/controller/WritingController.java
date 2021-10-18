@@ -34,7 +34,7 @@ public class WritingController {
 
   public void init(Control control) {
     //Lets the tField get auto suggestions when typing
-    TextFields.bindAutoCompletion(toField, removeBracketAndMakeToList(control.getAutoSuggestions().get()));
+    TextFields.bindAutoCompletion(toField, splitAndMakeToList(control.getAutoSuggestions().get()));
     init(control, null);
   }
 
@@ -48,7 +48,7 @@ public class WritingController {
 
   public void init(Control control, String to) {
     //Lets the tField get auto suggestions when typing
-    TextFields.bindAutoCompletion(toField, removeBracketAndMakeToList(control.getAutoSuggestions().get()));
+    TextFields.bindAutoCompletion(toField, splitAndMakeToList(control.getAutoSuggestions().get()));
     if (to != null) {
       toField.setText(to);
     }
@@ -61,17 +61,16 @@ public class WritingController {
     control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
   }
 
-  /** Removes brackets from a list and takes the first element of that list and breaks it up where their are ; and creates a new list will all the new elements
+  /** Removes brackets from a list and takes the first element of that list and breaks it up where there are ; and creates a new list will all the new elements
    *
    * @param list a list with only one element
    * @return
    * @author David Zamanian
    */
 
-  private List<String> removeBracketAndMakeToList(List<String> list){
+  private List<String> splitAndMakeToList(List<String> list){
     if (!list.isEmpty()) {
       String theList = list.get(0);
-      theList = theList.replaceAll("[\\[\\](){}]", "");
       String strings[] = theList.split(";");
       List newList = Arrays.asList(strings);
 

@@ -9,6 +9,7 @@ import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
 import org.group77.mailMe.services.storage.Storage;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -93,15 +94,29 @@ public class Control {
      */
 
     public void addSuggestion(String s) throws Exception {
+        //If there are already suggestions in the list
         if (!storage.retrieveSuggestions(getActiveAccount().get()).isEmpty()){
+            //If there are no duplicates
             if (!storage.retrieveSuggestions(getActiveAccount().get()).get(0).contains(s)){
-                 String newString = s + ";" + storage.retrieveSuggestions(getActiveAccount().get());
-                 storage.store(getActiveAccount().get(), newString);}
+                System.out.println("Loks like this: " + storage.retrieveSuggestions(getActiveAccount().get()));
+                 String newString = s + ";" + (storage.retrieveSuggestions(getActiveAccount().get()));
+                 storage.store(getActiveAccount().get(), removeBrackets(newString));}
         }
         else {
             storage.store(getActiveAccount().get(), s);
         }
 
+    }
+
+    /**
+     * Removes brackets from a string. Used to remove "[" and "]" from recipients.
+     * @param s
+     * @author David Zamanian
+     */
+
+    public String removeBrackets(String s){
+        s = s.replaceAll("[\\[\\](){}]","");
+        return s;
     }
 
     /**

@@ -33,7 +33,7 @@ public class ReadingController {
     contentArea.getEngine().loadContent(email.content());
     fromLabel.setText(email.from());
     subjectLabel.setText(email.subject());
-    toLabel.setText(removeBrackets(Arrays.toString(email.to())));
+    toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
     dateLabel.setText(email.date().toString());
 
     attachmentsLabel.setText(email.attachments());
@@ -87,17 +87,6 @@ public class ReadingController {
     alert.getDialogPane().setPrefSize(300, 200);
     Optional<ButtonType> result = alert.showAndWait();
     return result;
-  }
-
-  /**
-   * Removes brackets from a string. Used to remove "[" and "]" from recipients.
-   * @param s
-   * @author David Zamanian
-   */
-
-  private String removeBrackets(String s){
-    s = s.replaceAll("[\\[\\](){}]","");
-    return s;
   }
 
   //TODO Could potentially move these methods below into MasterController but then we need to make some changes in the GUI
