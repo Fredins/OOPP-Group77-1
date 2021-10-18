@@ -51,18 +51,31 @@ public class TestModel {
     }
 
     @Test
-    public void testSetExistingAccountAsActiveAccount() {
+    public void testSetExistingAccountAsActiveAccount() throws ActiveAccountNotInAccounts {
         Model model = new Model(accounts);
-        Account activeAccount = accounts.get(0);
+        Account newActiveAccount = accounts.get(0);
 
-        Assertions.assertDoesNotThrow(model.setActiveAccount(activeAccount));
+        // try to set existing account as active account
+        model.setActiveAccount(newActiveAccount);
 
+        // check that newActiveAccount is equal to activeAccount in model
+        Assertions.assertEquals(newActiveAccount,model.getActiveAccount().get());
     }
 
     @Test
-    public void testSetNonExistingAccountAsActiveAccount() {
+    public void testSetNonExistingAccountAsActiveAccount() throws ActiveAccountNotInAccounts, EmailDomainNotSupportedException {
+        Model model = new Model(accounts);
+        // set an active Account
+        model.setActiveAccount(accounts.get(0));
+
+        // create new account that is not in model's accounts
+        Account newActiveAccountFake = AccountFactory.createAccount("fake@gmail.com","fake123".toCharArray());
+
+        // try to set new account that is not in model's accounts as activeAccount, should throw ActiveAccountNotInAccounts exception
+        Assertions.assertThrows(ActiveAccountNotInAccounts.class, () -> model.setActiveAccount(newActiveAccountFake));
 
     }
+    
 
     @Test
     public void testUpdateInbox() {
