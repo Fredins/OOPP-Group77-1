@@ -12,7 +12,7 @@ import java.util.Comparator;
  *
  * @author Hampus Jernkrook
  */
-public class NewToOldComparator implements Comparator<Email> {
+class NewToOldComparator implements Comparator<Email> {
     /**
      * Compares dates of two given emails.
      *

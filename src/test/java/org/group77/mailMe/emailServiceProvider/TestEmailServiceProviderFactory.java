@@ -19,8 +19,7 @@ public class TestEmailServiceProviderFactory {
     public void TestGmailAccount() throws EmailDomainNotSupportedException {
         AccountFactory accountFactory = new AccountFactory();
         Account account = accountFactory.createAccount("lol@gmail.com", "1345".toCharArray());
-        EmailServiceProviderFactory espFactory = new EmailServiceProviderFactory();
-        EmailServiceProvider esp = espFactory.getEmailServiceProvider(account);
+        EmailServiceProvider esp = EmailServiceProviderFactory.createEmailServiceProvider(account);
         assertTrue(esp instanceof GmailProvider);
     }
 

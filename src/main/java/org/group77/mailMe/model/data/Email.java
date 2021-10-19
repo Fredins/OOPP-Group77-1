@@ -19,18 +19,28 @@ public record Email(
         String subject,
         String content,
         String attachments,
+        List<File> attachmentsAsFile,
+        Map<byte[], String> attachmentsAsBytes,
         LocalDateTime date
 ) implements Serializable {
     public Email(String from, String[] to, String subject, String content) {
-        this(from, to, subject, content, null, LocalDateTime.now(ZoneId.systemDefault())); // set current time as date
+        this(from, to, subject, content, null, null,null, LocalDateTime.now(ZoneId.systemDefault())); // set current time as date
     }
 
     public Email(String from, String[] to, String subject, String content, LocalDateTime date) {
-        this(from, to, subject, content, null, date);
+        this(from, to, subject, content, null, null,null,date);
     }
 
     public Email(String from, String[] to, String subject, String content, String attachments) {
-        this(from, to, subject, content, attachments, LocalDateTime.now(ZoneId.systemDefault()));
+        this(from, to, subject, content, attachments, null,null,LocalDateTime.now(ZoneId.systemDefault()));
+    }
+
+    public Email(String from, String[] to, String subject, String content, String attachments, Map<byte[], String> attachmentsAsBytes, LocalDateTime date) {
+        this(from, to, subject, content, attachments, null, attachmentsAsBytes, date);
+    }
+
+    public Email(String from, String[] to, String subject, String content, List<File> attachmentsAsFile) {
+        this(from, to, subject, content, null, attachmentsAsFile,null, LocalDateTime.now(ZoneId.systemDefault()));
     }
 
     @Override

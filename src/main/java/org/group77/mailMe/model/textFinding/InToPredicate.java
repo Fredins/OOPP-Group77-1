@@ -11,7 +11,7 @@ import java.util.function.BiPredicate;
  *
  * @author Hampus Jernkrook
  */
-public class InToPredicate implements BiPredicate<Email, String> {
+class InToPredicate implements BiPredicate<Email, String> {
     /**
      * Tests whether the given substring is in any of the email's to-addresses.
      * Case-insensitive.

@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.web.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -14,6 +17,7 @@ import org.controlsfx.control.*;
 
 import org.controlsfx.control.textfield.TextFields;
 
+import org.group77.mailMe.Main;
 import org.group77.mailMe.model.Control;
 
 
@@ -32,9 +36,10 @@ public class WritingController {
   @FXML private Button attachBtn;
   @FXML private TextField subjectField;
   @FXML private HTMLEditor contentField;
+  @FXML private HBox attachmentsHBox;
   private final ExecutorService threadExecutor = Executors.newSingleThreadExecutor();
 
-  private final List<File> attachments = new ArrayList<File>();
+  private final List<File> attachments = new ArrayList<>();
 
   /**
    * normal init method when not replying
@@ -43,8 +48,6 @@ public class WritingController {
    */
 
   public void init(Control control) {
-    //Lets the tField get auto suggestions when typing
-    TextFields.bindAutoCompletion(toField, splitAndMakeToList(control.getAutoSuggestions().get()));
     init(control, null);
   }
 
@@ -66,9 +69,15 @@ public class WritingController {
     // input handlers
     sendBtn.setOnAction(inputEvent -> send2(control, ((Node) sendBtn)));
     attachBtn.setOnAction(inputEvent -> attachFiles());
-
     // change handlers
     control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
+    //remove attachments
+    attachmentsHBox.setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getTarget() == attachmentsHBox) {
+        clearAllAttachments();
+      }
+    });
+
   }
 
   /** Removes brackets from a list and takes the first element of that list and breaks it up where there are ; and creates a new list will all the new elements
@@ -81,37 +90,12 @@ public class WritingController {
   private List<String> splitAndMakeToList(List<String> list){
     if (!list.isEmpty()) {
       String theList = list.get(0);
-      String strings[] = theList.split(";");
-      List newList = Arrays.asList(strings);
-
-      return newList;
+      String[] strings = theList.split(";");
+      return Arrays.asList(strings);
     } else return list;
 
   }
 
-  /**
-   * 1. send email
-   * 2. display feedback if sending was successful
-   * @param control the model
-   * @author Alexey
-   */
-  private void send(Control control) {
-
-    try {
-      //When sending a new message, the recipient's email is saved in the suggestions in storage
-      control.addSuggestion(toField.getText());
-      control.send(
-        fromTextFieldToListOfRecipients(toField.getText()),
-        subjectField.getText(),
-        contentField.getHtmlText(),
-        attachments
-      );
-      if (customAlert("Confirmation !", Alert.AlertType.CONFIRMATION).get() == ButtonType.OK) {closeWindowAction((Stage) sendBtn.getScene().getWindow());}
-    } catch (Exception e) {
-      if (customAlert(e.getMessage(), Alert.AlertType.ERROR).get() == ButtonType.OK) {closeWindowAction((Stage) sendBtn.getScene().getWindow());}
-      e.printStackTrace(); // TODO display feedback
-    }
-  }
 
   /**
    * 1. try to send email
@@ -130,7 +114,7 @@ public class WritingController {
       try {
         control.addSuggestion(toField.getText());
         control.send(
-          fromTextFieldToListOfRecipients(toField.getText()),
+          removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())),
           subjectField.getText(),
           contentField.getHtmlText(),
           attachments
@@ -138,6 +122,7 @@ public class WritingController {
         Platform.runLater(() -> notification
           .graphic(new Label("Message sent successfully!"))
           .show());
+          control.moveSentEmail(removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())), subjectField.getText(), contentField.getHtmlText(), attachments, 2);
       } catch (Exception e) {
         Platform.runLater(() -> notification
           .title("Failed")
@@ -157,8 +142,41 @@ public class WritingController {
     File selectedFile = fileChooser.showOpenDialog(null);
     if (selectedFile != null) {
       attachments.add(selectedFile);
-      System.out.println("File selected >" + " " + selectedFile); // For Testing
+      Button button = hBoxButtonSetup(selectedFile);
+      attachmentsHBox.getChildren().add(button);
     }
+  }
+
+  /**
+   * @author Alexey Ryabov
+   * @param selectedFile - file that was added as an attachment.
+   * @return button for the HBox.
+   */
+  private Button hBoxButtonSetup(File selectedFile) {
+    //Creating image for attachments button
+    ImageView iv = new ImageView(new Image(String.valueOf(Main.class.getResource("images_and_icons/attachmentIcon.png"))));
+    iv.setFitHeight(30);
+    iv.setFitWidth(30);
+    //Creating button for the HBox
+    Button button = new Button();
+    Tooltip tt = new Tooltip(); // Tooltip for the button with attachment's name.
+    tt.setText(selectedFile.getName());
+    button.setTooltip(tt);
+    button.setGraphic(iv);
+    button.setMinSize(30,30);
+    button.setMaxSize(30, 30);
+    button.setStyle("-fx-background-color: white"); //  + "-fx-border-color: black;"
+
+    return button;
+  }
+
+  /**
+   * @author Alexey Ryabov
+   * Removed all attachments from from HBox and List of attachments
+   */
+  public void clearAllAttachments () {
+    attachments.clear();
+    attachmentsHBox.getChildren().removeAll(attachmentsHBox.getChildren());
   }
 
   /**
@@ -177,22 +195,6 @@ public class WritingController {
   }
 
   /** @author Alexey Ryabov
-   * @param message - Type in your message you want user to see in an alert.
-   * This will show conformation window when message has been sent.
-   * @return optional button.
-   */
-  private Optional<ButtonType> customAlert (String message, Alert.AlertType alertType) {
-    // Example of alert type: Alert.AlertType.INFORMATION
-    Alert alert = new Alert(alertType);
-    alert.setTitle("MeAlert");
-    //alert.setHeaderText(message);
-    alert.setContentText(message);
-    alert.getDialogPane().setPrefSize(300, 300);
-    Optional<ButtonType> result = alert.showAndWait();
-    return result;
-  }
-
-  /** @author Alexey Ryabov
    * @param stage the stage of the window
    * For testing. This closes the stage of the window where certain stage is located.
    */
@@ -201,5 +203,20 @@ public class WritingController {
     stage.getScene().getWindow();
     // Close the window of a stage.
     stage.close();
+  }
+
+  /**
+   * @author Alexey Ryabov
+   * @param list - list of strings
+   * @return - new list of string without duplicates
+   */
+  private List<String> removeDuplicates (List<String> list) {
+    List<String> newList = new ArrayList<>();
+    for(int i = 0; i < list.size(); i++){
+      if( !newList.contains(list.get(i)) ){
+        newList.add(list.get(i));
+      }
+    }
+    return newList;
   }
 }

@@ -5,7 +5,10 @@ import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -42,6 +45,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @throws MessagingException
      * @author Martin Fredin.
      * @author Hampus Jernkrook (added date support).
+     * @author Alexey Ryabov
      */
     @Override
     protected List<Email> parse(Store store) throws MessagingException {
@@ -59,9 +63,9 @@ public class GmailProvider extends EmailServiceProvider {
 
                 String contentType = message.getContentType();
                 String attachments = "";
-
+                byte[] fileAsBytes = null;
+                Map<byte[], String> listOfFilesAsByteArray = new HashMap<>();
                 LocalDateTime receivedDate = resolveReceivedDate((MimeMessage) message);  //get the received date of the email
-                System.out.println("DATE IS >> " + receivedDate.toString()); //TODO remove
 
                 try {
                     if (contentType.contains("multipart")) {
@@ -70,9 +74,26 @@ public class GmailProvider extends EmailServiceProvider {
                         for (int partCount = 0; partCount < numberOfPart; partCount++) {
                             MimeBodyPart part = (MimeBodyPart) multipart.getBodyPart(partCount);
                             if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
+                                //Read file name as string
                                 String fileName = part.getFileName();
+                                //Appending filename to a string. TODO maybe not needed??
                                 attachments += fileName + ", ";
-                                //TODO Save file here
+                                //Converting/reading MimeBodyPart as input stream.
+                                InputStream inputStream = part.getInputStream();
+                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                byte[] buffer = new byte[1000000]; // max size per attachment is 1mb = 1000000 byte.
+                                try {
+                                    for (int numOfBytes; (numOfBytes = inputStream.read(buffer)) != -1;) {
+                                        //Converting inputStream to outputStream
+                                        outputStream.write(buffer, 0, numOfBytes);
+                                    }
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
+                                //Converting outputStream to array of bytes
+                                fileAsBytes = outputStream.toByteArray();
+                                //Adding file and its name to hashmap
+                                listOfFilesAsByteArray.put(fileAsBytes, fileName);
                             } else {
                                 content = part.getContent().toString();
                             }
@@ -87,9 +108,6 @@ public class GmailProvider extends EmailServiceProvider {
                         }
 
                     }
-                    //MimeMessageParser parser = new MimeMessageParser((MimeMessage) message);
-                    //content = parser.parse().getPlainContent();
-                    //content = parser.parse().getHtmlContent();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -100,6 +118,7 @@ public class GmailProvider extends EmailServiceProvider {
                         subject,
                         content,
                         attachments,
+                        listOfFilesAsByteArray,
                         receivedDate
                 ));
             }
@@ -175,7 +194,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      * Asks server to authorice the session. Returns Authenticated Session.
      */
-    private static Session getAuthentication(Properties properties, String account, String password) {
+    private Session getAuthentication(Properties properties, String account, String password) {
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -189,7 +208,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @param properties - are connection properties to the server.
      * @author Alexey Ryabov
      */
-    private static void setGmailProperties(Properties properties) {
+    private void setGmailProperties(Properties properties) {
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -207,7 +226,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      * Composes a message, returnt message object..
      */
-    private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) throws Exception {
+    private Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) throws Exception {
         try {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));
