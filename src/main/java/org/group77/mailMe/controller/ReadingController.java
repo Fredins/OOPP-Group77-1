@@ -1,6 +1,6 @@
 package org.group77.mailMe.controller;
 
-import javafx.application.*;
+import javafx.concurrent.Worker.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -8,17 +8,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.web.*;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import org.group77.mailMe.Main;
+import javafx.stage.*;
+import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
-import javafx.concurrent.Worker.State;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class ReadingController {
@@ -37,8 +33,9 @@ public class ReadingController {
   /**
    * 1. set initial values for nodes
    * 2. add event handlers to nodes
+   *
    * @param control the model
-   * @param email the corresponding email
+   * @param email   the corresponding email
    * @author Martin, David
    */
   void init(Control control, Email email) {
@@ -54,30 +51,21 @@ public class ReadingController {
     setButtonHandler(control.getActiveFolder().get(), archiveHandler, restoreHandler);
     setButtonImage(control.getActiveFolder().get());
 
-
-    // attach event handlers
-    trashBtn.setOnAction(i -> load(email));
-    // trashBtn.setOnAction(i -> handleDelete(control));
-    replyBtn.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
-  }
-
-  private void load(Email email){
     WebEngine webEngine = webView.getEngine();
-    // webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> adjustHeigth(webEngine, newState));
     webEngine.loadContent(email.content(), "text/html");
 
-    // ScrollBar scrollBar= (ScrollBar)webView.lookup(".scroll-bar:horizontal");
-    // scrollBar.setVisible(true);
-    // scrollBar.setValue(0.5);
-
+    // attach event handlers
+    trashBtn.setOnAction(i -> handleDelete(control));
+    replyBtn.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
   }
 
   /**
    * set image to either a archive-image or a restore-image depending on current folder
-   * @author Martin
+   *
    * @param folder active folder
+   * @author Martin
    */
-  private void setButtonImage(Folder folder){
+  private void setButtonImage(Folder folder) {
     archiveImg.setImage(new Image(
       String.valueOf((Main.class.getResource(
         (folder.name().equals("Archive") | folder.name().equals("Trash")) ? "images_and_icons/restore.png" : "images_and_icons/archive.png"
@@ -87,20 +75,21 @@ public class ReadingController {
 
   /**
    * finds folder based on folderName and then calls control.moveEmail()
-   * @author Martin
-   * @param control the control layer
+   *
+   * @param control    the control layer
    * @param folderName the move-email-to-folder-name
+   * @author Martin
    */
-  private void moveEmailTo(Control control, String folderName){
+  private void moveEmailTo(Control control, String folderName) {
     Optional<Folder> maybeFolder = control
       .getFolders()
       .stream()
       .filter(folder -> folder.name().equals(folderName))
       .findFirst();
     maybeFolder.ifPresent(folder -> {
-      try{
+      try {
         control.moveEmail(folder);
-      }catch (Exception e){
+      } catch (Exception e) {
         e.printStackTrace();
       }
     });
@@ -108,26 +97,29 @@ public class ReadingController {
 
   /**
    * try to remove event handler, if fail then do nothing
-   * @author Martin
-   * @param node the node to remove event handler
+   *
+   * @param node         the node to remove event handler
    * @param eventHandler the event handler to be removed
+   * @author Martin
    */
-  private void removeEventHandler(Node node, EventHandler<ActionEvent> eventHandler){
-    try{
-     node.removeEventHandler(ActionEvent.ACTION, eventHandler);
-    }catch (NullPointerException ignore){}
+  private void removeEventHandler(Node node, EventHandler<ActionEvent> eventHandler) {
+    try {
+      node.removeEventHandler(ActionEvent.ACTION, eventHandler);
+    } catch (NullPointerException ignore) {
+    }
   }
 
   /**
    * 1. remove all existing even handlers
    * 2. set a new event handler depending on current folder
-   * @author Martin
-   * @param folder the current folder
+   *
+   * @param folder         the current folder
    * @param archiveHandler handler to execute if archive button
    * @param restoreHandler handler to execute if restore button
+   * @author Martin
    */
-  private void setButtonHandler(Folder folder,EventHandler<ActionEvent> archiveHandler, EventHandler<ActionEvent> restoreHandler){
-    if(folder == null){
+  private void setButtonHandler(Folder folder, EventHandler<ActionEvent> archiveHandler, EventHandler<ActionEvent> restoreHandler) {
+    if (folder == null) {
       return;
     }
     removeEventHandler(archiveBtn, archiveHandler);
@@ -138,14 +130,15 @@ public class ReadingController {
   }
 
   /**
-   * @author Martin
-   * @param webEngine the webviews webengine
-   * @param newState the state of the webengine
    * once the web content is loaded
    * 1. get height of document
    * 2. adjust height accordingly
+   *
+   * @param webEngine the webviews webengine
+   * @param newState  the state of the webengine
+   * @author Martin
    */
-  private void adjustHeigth(WebEngine webEngine, State newState){
+  private void adjustHeigth(WebEngine webEngine, State newState) {
     if (newState == State.SUCCEEDED) {
       double height = Double.parseDouble(((String) webEngine.executeScript(
         "window.getComputedStyle(document.body, null).getPropertyValue('height')"
@@ -156,8 +149,9 @@ public class ReadingController {
 
   /**
    * Moves email to trash if not already in trash. If in trash --> Deletes permanently (but with confirmation).
-   * @author David
+   *
    * @param control the control layer
+   * @author David
    */
   private void handleDelete(Control control) {
     if ((control.getActiveFolder().get().name().equals("Trash"))) {
@@ -179,7 +173,8 @@ public class ReadingController {
 
   /**
    * Displays a confirmation alert when you try to permanently delete an email.
-   * @param message Type in your message you want user to see in an alert.
+   *
+   * @param message   Type in your message you want user to see in an alert.
    * @param alertType What types of alert you want to display (CONFIRMATION in this case)
    * @author David Zamanian
    */
@@ -194,6 +189,7 @@ public class ReadingController {
 
   /**
    * Removes brackets from a string. Used to remove "[" and "]" from recipients.
+   *
    * @param s
    * @author David Zamanian
    */
@@ -203,13 +199,13 @@ public class ReadingController {
   }
 
   /**
-   * @author Alexey Ryabov
    * @param email - Received email.
+   * @author Alexey Ryabov
    */
-  private void AttachmentsController(Email email){
-    if (email.attachments() != null){
+  private void AttachmentsController(Email email) {
+    if (email.attachments() != null) {
       //For every attachment in the list.
-      for (Map.Entry<byte[], String> attachment : email.attachmentsAsBytes().entrySet()){
+      for (Map.Entry<byte[], String> attachment : email.attachmentsAsBytes().entrySet()) {
         try {
           //Creating a button with attachment name.
           Button button = hBoxButtonSetup(attachment);
@@ -225,9 +221,9 @@ public class ReadingController {
   }
 
   /**
-   * @author Alexey Ryabov
    * @param attachment - list of attachments
    * @return button for the HBox.
+   * @author Alexey Ryabov
    */
   private Button hBoxButtonSetup(Map.Entry<byte[], String> attachment) {
     //Creating image for attachments button
@@ -240,23 +236,23 @@ public class ReadingController {
     tt.setText(attachment.getValue());
     button.setTooltip(tt);
     button.setGraphic(iv);
-    button.setMinSize(30,30);
+    button.setMinSize(30, 30);
     button.setMaxSize(30, 30);
     button.setStyle("-fx-background-color: white"); //  + "-fx-border-color: black;"
     return button;
   }
 
   /**
-   * @author - Alexey Ryabov
    * @param fileToSave - array of the attachment.
-   * @param fileName - file name of the attachment.
-   * @param button - button, with info about its attachment.
+   * @param fileName   - file name of the attachment.
+   * @param button     - button, with info about its attachment.
+   * @author - Alexey Ryabov
    */
-  public void AttachmentButtonAction (byte[] fileToSave, String fileName, Button button) {
-    button.setOnAction( e -> {
+  public void AttachmentButtonAction(byte[] fileToSave, String fileName, Button button) {
+    button.setOnAction(e -> {
       try {
         //On button action a file chooser going to open.
-        OpenFileChooser((Stage)button.getScene().getWindow(), fileToSave, fileName);
+        OpenFileChooser((Stage) button.getScene().getWindow(), fileToSave, fileName);
       } catch (IOException ex) {
         ex.printStackTrace();
       }
@@ -264,13 +260,13 @@ public class ReadingController {
   }
 
   /**
-   * @author - Alexey Ryabov
-   * @param stage - stage where save window is going to be displayed.
+   * @param stage      - stage where save window is going to be displayed.
    * @param fileToSave - array of the attachment.
-   * @param fileName - name of the attachment.
+   * @param fileName   - name of the attachment.
    * @throws IOException
+   * @author - Alexey Ryabov
    */
-  public void OpenFileChooser (Stage stage, byte[] fileToSave, String fileName) throws IOException {
+  public void OpenFileChooser(Stage stage, byte[] fileToSave, String fileName) throws IOException {
     //Creating file chooser.
     FileChooser fileChooser = new FileChooser();
     //Set extension filter
@@ -280,17 +276,17 @@ public class ReadingController {
     //Show save file dialog
     File filePath = fileChooser.showSaveDialog(stage);
 
-    if(fileToSave != null){
+    if (fileToSave != null) {
       SaveFile(fileToSave, filePath);
     }
   }
 
   /**
-   * @author Alexey Ryabov
    * @param content - byte array to be saved as a file.
-   * @param file - path where file is going to be saved.
+   * @param file    - path where file is going to be saved.
+   * @author Alexey Ryabov
    */
-  private void SaveFile(byte[] content, File file){
+  private void SaveFile(byte[] content, File file) {
     try {
       FileOutputStream outputStream = new FileOutputStream(file);
       outputStream.write(content);
@@ -299,8 +295,5 @@ public class ReadingController {
     } catch (IOException ex) {
       ex.printStackTrace();
     }
-
   }
-
-
 }
