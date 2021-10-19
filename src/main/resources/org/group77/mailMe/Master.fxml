@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.MasterController">
+<StackPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.MasterController">
    <children>
       <AnchorPane fx:id="progressPane" pickOnBounds="false">
          <children>
@@ -50,7 +50,7 @@
                         </FlowPane>
                      </content>
                   </ScrollPane>
-                  <Button fx:id="filterButton" contentDisplay="CENTER" ellipsisString="" layoutX="218.0" layoutY="23.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="filterButton" text="Button">
+                  <Button fx:id="filterButton" contentDisplay="CENTER" ellipsisString="" layoutX="218.0" layoutY="22.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="filterButton" text="Button">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" styleClass="filterButton">
                            <image>
@@ -65,7 +65,7 @@
                         <String fx:value="removeFocus" />
                      </styleClass>
                   </TextField>
-                  <Button fx:id="refreshBtn" layoutX="259.0" layoutY="23.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="21.0" styleClass="refreshButton" stylesheets="@Master.css">
+                  <Button fx:id="refreshBtn" layoutX="259.0" layoutY="22.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0" styleClass="refreshButton" stylesheets="@Master.css">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -74,8 +74,30 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button fx:id="clearSearchButton" layoutX="187.0" layoutY="22.0" mnemonicParsing="false" text="X" />
-                  <Button fx:id="applySearchButton" layoutX="154.0" layoutY="22.0" mnemonicParsing="false" text="√" />
+                  <Button fx:id="clearSearchButton" layoutX="187.0" layoutY="22.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images_and_icons/clearIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <styleClass>
+                        <String fx:value="removeButton" />
+                        <String fx:value="removeFocus" />
+                     </styleClass></Button>
+                  <Button fx:id="applySearchButton" layoutX="154.0" layoutY="22.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="24.0" prefWidth="24.0">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images_and_icons/SearchIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <styleClass>
+                        <String fx:value="addButton" />
+                        <String fx:value="removeFocus" />
+                     </styleClass></Button>
                </children>
             </Pane>
             <Button fx:id="writeBtn" layoutX="23.0" layoutY="17.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="75.0" stylesheets="@Master.css" text="New" AnchorPane.leftAnchor="23.0" AnchorPane.topAnchor="17.0">
