@@ -87,11 +87,7 @@
                   <String fx:value="removeFocus" />
                </styleClass>
             </Button>
-            <Pane fx:id="readingPane" layoutX="444.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="970.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="430.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <FlowPane fx:id="filterFlowPane" layoutX="36.0" layoutY="174.0" prefHeight="250.0" prefWidth="500.0" />
-               </children>
-            </Pane>
+            <Pane fx:id="readingPane" layoutX="444.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="970.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="430.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       
              <ComboBox fx:id="accountsCombo" layoutX="809.0" layoutY="22.0" maxWidth="178.0" prefHeight="27.0" prefWidth="173.0" styleClass="account-comboBox" stylesheets="@Master.css" AnchorPane.rightAnchor="68.0" AnchorPane.topAnchor="22.0" />
             <Button fx:id="addAccountBtn" graphicTextGap="0.0" layoutX="989.0" layoutY="20.0" mnemonicParsing="false" stylesheets="@Master.css" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="20.0">
@@ -116,5 +112,6 @@
             <URL value="@DefaultStyle.css" />
          </stylesheets>
       </AnchorPane>
+      <FlowPane fx:id="filterFlowPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" />
    </children>
 </StackPane>
