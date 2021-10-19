@@ -22,11 +22,10 @@ import java.util.List;
 public class TestModel {
     private static List<Account> accounts;
     private static List<Folder> folders;
+    private static Model model;
 
     @BeforeAll
     public static void setup() throws EmailDomainNotSupportedException {
-
-        // ============ Setup account and folders to be used in tests ============
 
         // ===== Initiate folders ======
 
@@ -55,13 +54,17 @@ public class TestModel {
         accounts.add(AccountFactory.createAccount("hej@gmail.com","hej123".toCharArray()));
         accounts.add(AccountFactory.createAccount("hola@gmail.com","hola123".toCharArray()));
 
+        // ==== Initiate model =====
+        model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+
     }
 
     // ========= setActiveAccount =========
 
     @Test
     public void testSetExistingAccountAsActiveAccount() throws ActiveAccountNotInAccounts {
-        Model model = new Model(accounts);
+
         Account newActiveAccount = accounts.get(0);
 
         // try to set existing account as active account
@@ -73,8 +76,6 @@ public class TestModel {
 
     @Test
     public void testSetNonExistingAccountAsActiveAccount() throws EmailDomainNotSupportedException {
-        Model model = new Model(accounts);
-
         // create new account that is not in model's accounts
         Account newActiveAccountFake = AccountFactory.createAccount("fake@gmail.com","fake123".toCharArray());
 
@@ -87,8 +88,6 @@ public class TestModel {
 
     @Test
     public void testAddNotAlreadyAddedAccount() throws EmailDomainNotSupportedException, AccountAlreadyExistsException {
-        Model model = new Model(accounts);
-
         // create new account that is not in model and add it to model
         Account newAccount = AccountFactory.createAccount("newEmail@gmail.com","test123".toCharArray());
         model.addAccount(newAccount);
@@ -100,8 +99,6 @@ public class TestModel {
 
     @Test
     public void testAddAlreadyAddedAccount()  {
-        Model model = new Model(accounts);
-
         // try to add already existing account to model
         Account existingAccount = model.getAccounts().get().get(0);
 
@@ -113,7 +110,6 @@ public class TestModel {
 
     @Test
     public void testCreateAccountEmailAddress() throws EmailDomainNotSupportedException {
-        Model model = new Model(accounts);
         Account account = model.createAccount("hej@gmail.com","hej123".toCharArray());
 
         Assertions.assertEquals("hej@gmail.com",account.emailAddress());
@@ -121,7 +117,6 @@ public class TestModel {
 
     @Test
     public void testCreateAccountPassword() throws EmailDomainNotSupportedException {
-        Model model = new Model(accounts);
         Account account = model.createAccount("hej@gmail.com","hej123".toCharArray());
 
         Assertions.assertEquals("hej123",new String(account.password()));
@@ -129,7 +124,6 @@ public class TestModel {
 
     @Test
     public void testCreateNotValidAccount() {
-        Model model = new Model(accounts);
 
         Assertions.assertThrows(EmailDomainNotSupportedException.class, () -> model.createAccount(
                                                                             "notValid@yahoo.com",
@@ -140,8 +134,6 @@ public class TestModel {
     // ========= updateFolder =========
     @Test
     public void testUpdateInboxWithOneEmail()  {
-        Model model = new Model(accounts);
-        model.getFolders().replaceAll(folders);
 
         // Add newEmail to model's inbox
         Email newEmail = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt");
@@ -156,8 +148,6 @@ public class TestModel {
     @Test
     public void testUpdateInboxWithSeveralEmail() {
 
-        Model model = new Model(accounts);
-        model.getFolders().replaceAll(folders);
 
         // Add newEmail to model's inbox
         Email newEmail = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt");
@@ -178,7 +168,6 @@ public class TestModel {
 
     @Test
     public void testCreateFolders() {
-        Model model = new Model(accounts);
 
         List<Folder> folders = List.of(
                 new Folder("Inbox", new ArrayList<>()),
@@ -194,8 +183,6 @@ public class TestModel {
 
     @Test
     public void testFilterOnTo() {
-        Model model = new Model(accounts);
-        model.getFolders().replaceAll(folders);
 
         // set email's in sent folder as model's activeEmails
         List<Email> sentEmails = model.getFolders().get().get(1).emails();
@@ -214,8 +201,6 @@ public class TestModel {
 
     @Test
     public void testFilterOnFrom() {
-        Model model = new Model(accounts);
-        model.getFolders().replaceAll(folders);
 
         // set email's in sent folder as model's activeEmails
         List<Email> inboxEmails = model.getFolders().get().get(0).emails();
@@ -228,6 +213,15 @@ public class TestModel {
 
         Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
     }
+
+    // ========= filterOnMaxDate =========
+    @Test
+    public void testFilterOnMaxDate() {
+
+
+
+    }
+
 
     // ========= getters and setters =========
 
