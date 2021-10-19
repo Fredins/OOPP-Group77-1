@@ -18,11 +18,11 @@ public record Email(
         String[] to,
         String subject,
         String content,
-        String attachments,
+        String attachments, //TODO alexey only one attachment thingy
         List<File> attachmentsAsFile,
         Map<byte[], String> attachmentsAsBytes,
         LocalDateTime date
-) implements Serializable {
+) implements Serializable { //TODO too many constructors
     public Email(String from, String[] to, String subject, String content) {
         this(from, to, subject, content, null, null,null, LocalDateTime.now(ZoneId.systemDefault())); // set current time as date
     }

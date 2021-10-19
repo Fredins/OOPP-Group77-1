@@ -1,5 +1,6 @@
 package org.group77.mailMe.controller;
 
+import javafx.application.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -45,7 +46,7 @@ public class ReadingController {
     subjectLabel.setText(email.subject());
     toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
     dateLabel.setText(email.date().toString());
-    AttachmentsController(email);
+    // AttachmentsController(email); //TODO alexey fix this. gives nullpointer. probably cause email.attachemnts är empty
 
     // set button action handler and button icon
     EventHandler<ActionEvent> archiveHandler = actionEvent -> moveEmailTo(control, "Archive");
@@ -53,14 +54,23 @@ public class ReadingController {
     setButtonHandler(control.getActiveFolder().get(), archiveHandler, restoreHandler);
     setButtonImage(control.getActiveFolder().get());
 
-    WebEngine webEngine = webView.getEngine();
-    webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> adjustHeigth(webEngine, newState));
-    webEngine.loadContent(email.content());
+
     // attach event handlers
-    trashBtn.setOnAction(i -> handleDelete(control));
+    trashBtn.setOnAction(i -> load(email));
+    // trashBtn.setOnAction(i -> handleDelete(control));
     replyBtn.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
   }
 
+  private void load(Email email){
+    WebEngine webEngine = webView.getEngine();
+    // webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> adjustHeigth(webEngine, newState));
+    webEngine.loadContent(email.content(), "text/html");
+
+    // ScrollBar scrollBar= (ScrollBar)webView.lookup(".scroll-bar:horizontal");
+    // scrollBar.setVisible(true);
+    // scrollBar.setValue(0.5);
+
+  }
 
   /**
    * set image to either a archive-image or a restore-image depending on current folder
@@ -141,7 +151,6 @@ public class ReadingController {
         "window.getComputedStyle(document.body, null).getPropertyValue('height')"
       )).replace("px", ""));
       webView.setPrefHeight(height);
-      vBox.setPrefHeight(height);
     }
   }
 
