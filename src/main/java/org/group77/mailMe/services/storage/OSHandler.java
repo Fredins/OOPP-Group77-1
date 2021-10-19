@@ -13,7 +13,7 @@ public class OSHandler {
      * @author Hampus Jernkrook
      * Get the right app directory and separator for the user's OS.
      */
-    public static String[] getAppDirAndSeparator() throws OSNotFoundException {
+     static String[] getAppDirAndSeparator() throws OSNotFoundException {
         // The variables that will be returned:
         String appDir;
         String separator;

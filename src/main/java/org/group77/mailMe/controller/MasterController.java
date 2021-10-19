@@ -66,6 +66,19 @@ public class MasterController {
       // filterFlowPane.setVisible(true);
       filterFlowPane.setVisible(!filterFlowPane.isVisible());
     });
+      //Add ToolTips for every button
+      Tooltip t1 = new Tooltip("Search");
+      Tooltip.install(applySearchButton,t1);
+      Tooltip t2 = new Tooltip("Clear Search");
+      Tooltip.install(clearSearchButton,t2);
+      Tooltip t3 = new Tooltip("Refresh");
+      Tooltip.install(refreshBtn,t3);
+      Tooltip t4 = new Tooltip("Open Filter");
+      Tooltip.install(filterButton,t4);
+      Tooltip t5 = new Tooltip("Write New Mail");
+      Tooltip.install(writeBtn,t5);
+      Tooltip t6 = new Tooltip("Add New Account");
+      Tooltip.install(addAccountBtn,t6);
 
     // attach event handlers
     refreshBtn.setOnAction(i -> refresh(control));
@@ -80,6 +93,8 @@ public class MasterController {
     control.getActiveFolder().addObserver(newFolder -> handleActiveFolderChange(newFolder, control));
 
     //TODO: make sure that clearing the search does not clear filter and vice versa...
+
+
     applySearchButton.setOnAction(i -> applySearch(control));
     searchField.setOnAction(i -> applySearch(control)); // allows for direct search using 'ENTER' instead of pressing the button.
     clearSearchButton.setOnAction(i -> clearSearch(control));

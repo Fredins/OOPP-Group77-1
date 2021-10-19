@@ -29,8 +29,22 @@ folderPane{
 -fx-background-color: #E5E5E5
 }
 
+.removeButton{
+-fx-background-color: #f4f4f4
+}
+
+.removeButton:hover{
+-fx-background-color: #E5E5E5
+}
+
 .add-button{
  -fx-color: #E03A5B;
+}
+.addButton{
+-fx-background-color: #f4f4f4
+}
+.addButton: hover{
+-fx-background-color: #E5E5E5
 }
 
 .account-comboBox{
