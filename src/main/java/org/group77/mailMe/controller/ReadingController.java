@@ -7,12 +7,17 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.web.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.*;
 import javafx.concurrent.Worker.State;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 public class ReadingController {
@@ -20,13 +25,13 @@ public class ReadingController {
   @FXML private Label subjectLabel;
   @FXML private Label toLabel;
   @FXML private Label dateLabel;
-  @FXML private Label attachmentsLabel;
   @FXML private Button replyBtn;
   @FXML private Button trashBtn;
   @FXML private Button archiveBtn;
   @FXML private VBox vBox;
   @FXML private WebView webView;
   @FXML private ImageView archiveImg;
+  @FXML private HBox attachmentsHBox;
 
   /**
    * 1. set initial values for nodes
@@ -40,7 +45,7 @@ public class ReadingController {
     subjectLabel.setText(email.subject());
     toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
     dateLabel.setText(email.date().toString());
-    attachmentsLabel.setText(email.attachments());
+    AttachmentsController(email);
 
     // set button action handler and button icon
     EventHandler<ActionEvent> archiveHandler = actionEvent -> moveEmailTo(control, "Archive");
@@ -163,14 +168,12 @@ public class ReadingController {
     }
   }
 
-
   /**
    * Displays a confirmation alert when you try to permanently delete an email.
    * @param message Type in your message you want user to see in an alert.
    * @param alertType What types of alert you want to display (CONFIRMATION in this case)
    * @author David Zamanian
    */
-
   private Optional<ButtonType> customAlert(String message, Alert.AlertType alertType) {
     Alert alert = new Alert(alertType);
     alert.setTitle("Delete Email");
@@ -180,16 +183,115 @@ public class ReadingController {
     return result;
   }
 
-
   /**
    * Removes brackets from a string. Used to remove "[" and "]" from recipients.
    * @param s
    * @author David Zamanian
    */
-
   private String removeBrackets(String s) {
     s = s.replaceAll("[\\[\\](){}]", "");
     return s;
   }
+
+  /**
+   * @author Alexey Ryabov
+   * @param email - Received email.
+   */
+  private void AttachmentsController(Email email){
+    if (email.attachments() != null){
+      //For every attachment in the list.
+      for (Map.Entry<byte[], String> attachment : email.attachmentsAsBytes().entrySet()){
+        try {
+          //Creating a button with attachment name.
+          Button button = hBoxButtonSetup(attachment);
+          AttachmentButtonAction(attachment.getKey(), attachment.getValue(), button);
+          //Adding a button to HBox.
+          attachmentsHBox.setSpacing(5);
+          attachmentsHBox.getChildren().add(button);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  /**
+   * @author Alexey Ryabov
+   * @param attachment - list of attachments
+   * @return button for the HBox.
+   */
+  private Button hBoxButtonSetup(Map.Entry<byte[], String> attachment) {
+    //Creating image for attachments button
+    ImageView iv = new ImageView(new Image(String.valueOf(Main.class.getResource("images_and_icons/attachmentIcon.png"))));
+    iv.setFitHeight(30);
+    iv.setFitWidth(30);
+    //Creating button for the HBox
+    Button button = new Button();
+    Tooltip tt = new Tooltip(); // Tooltip for the button with attachment's name.
+    tt.setText(attachment.getValue());
+    button.setTooltip(tt);
+    button.setGraphic(iv);
+    button.setMinSize(30,30);
+    button.setMaxSize(30, 30);
+    button.setStyle("-fx-background-color: white"); //  + "-fx-border-color: black;"
+    return button;
+  }
+
+  /**
+   * @author - Alexey Ryabov
+   * @param fileToSave - array of the attachment.
+   * @param fileName - file name of the attachment.
+   * @param button - button, with info about its attachment.
+   */
+  public void AttachmentButtonAction (byte[] fileToSave, String fileName, Button button) {
+    button.setOnAction( e -> {
+      try {
+        //On button action a file chooser going to open.
+        OpenFileChooser((Stage)button.getScene().getWindow(), fileToSave, fileName);
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+    });
+  }
+
+  /**
+   * @author - Alexey Ryabov
+   * @param stage - stage where save window is going to be displayed.
+   * @param fileToSave - array of the attachment.
+   * @param fileName - name of the attachment.
+   * @throws IOException
+   */
+  public void OpenFileChooser (Stage stage, byte[] fileToSave, String fileName) throws IOException {
+    //Creating file chooser.
+    FileChooser fileChooser = new FileChooser();
+    //Set extension filter
+    FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All Files", "*.*");
+    fileChooser.getExtensionFilters().add(extFilter);
+    fileChooser.setInitialFileName(fileName);
+    //Show save file dialog
+    File filePath = fileChooser.showSaveDialog(stage);
+
+    if(fileToSave != null){
+      SaveFile(fileToSave, filePath);
+    }
+  }
+
+  /**
+   * @author Alexey Ryabov
+   * @param content - byte array to be saved as a file.
+   * @param file - path where file is going to be saved.
+   */
+  private void SaveFile(byte[] content, File file){
+    try {
+      FileOutputStream outputStream = new FileOutputStream(file);
+      outputStream.write(content);
+      outputStream.close();
+      outputStream.flush();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+
+  }
+
 
 }

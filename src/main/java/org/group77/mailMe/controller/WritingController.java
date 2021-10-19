@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.web.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -14,6 +17,7 @@ import org.controlsfx.control.*;
 
 import org.controlsfx.control.textfield.TextFields;
 
+import org.group77.mailMe.Main;
 import org.group77.mailMe.model.Control;
 
 
@@ -32,9 +36,10 @@ public class WritingController {
   @FXML private Button attachBtn;
   @FXML private TextField subjectField;
   @FXML private HTMLEditor contentField;
+  @FXML private HBox attachmentsHBox;
   private final ExecutorService threadExecutor = Executors.newSingleThreadExecutor();
 
-  private final List<File> attachments = new ArrayList<File>();
+  private final List<File> attachments = new ArrayList<>();
 
   /**
    * normal init method when not replying
@@ -66,9 +71,15 @@ public class WritingController {
     // input handlers
     sendBtn.setOnAction(inputEvent -> send2(control, ((Node) sendBtn)));
     attachBtn.setOnAction(inputEvent -> attachFiles());
-
     // change handlers
     control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
+    //remove attachments
+    attachmentsHBox.setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getTarget() == attachmentsHBox) {
+        clearAllAttachments();
+      }
+    });
+
   }
 
   /** Removes brackets from a list and takes the first element of that list and breaks it up where there are ; and creates a new list will all the new elements
@@ -101,7 +112,7 @@ public class WritingController {
       //When sending a new message, the recipient's email is saved in the suggestions in storage
       control.addSuggestion(toField.getText());
       control.send(
-        fromTextFieldToListOfRecipients(toField.getText()),
+        removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())),
         subjectField.getText(),
         contentField.getHtmlText(),
         attachments
@@ -157,8 +168,41 @@ public class WritingController {
     File selectedFile = fileChooser.showOpenDialog(null);
     if (selectedFile != null) {
       attachments.add(selectedFile);
-      System.out.println("File selected >" + " " + selectedFile); // For Testing
+      Button button = hBoxButtonSetup(selectedFile);
+      attachmentsHBox.getChildren().add(button);
     }
+  }
+
+  /**
+   * @author Alexey Ryabov
+   * @param selectedFile - file that was added as an attachment.
+   * @return button for the HBox.
+   */
+  private Button hBoxButtonSetup(File selectedFile) {
+    //Creating image for attachments button
+    ImageView iv = new ImageView(new Image(String.valueOf(Main.class.getResource("images_and_icons/attachmentIcon.png"))));
+    iv.setFitHeight(30);
+    iv.setFitWidth(30);
+    //Creating button for the HBox
+    Button button = new Button();
+    Tooltip tt = new Tooltip(); // Tooltip for the button with attachment's name.
+    tt.setText(selectedFile.getName());
+    button.setTooltip(tt);
+    button.setGraphic(iv);
+    button.setMinSize(30,30);
+    button.setMaxSize(30, 30);
+    button.setStyle("-fx-background-color: white"); //  + "-fx-border-color: black;"
+
+    return button;
+  }
+
+  /**
+   * @author Alexey Ryabov
+   * Removed all attachments from from HBox and List of attachments
+   */
+  public void clearAllAttachments () {
+    attachments.clear();
+    attachmentsHBox.getChildren().removeAll(attachmentsHBox.getChildren());
   }
 
   /**
@@ -201,5 +245,20 @@ public class WritingController {
     stage.getScene().getWindow();
     // Close the window of a stage.
     stage.close();
+  }
+
+  /**
+   * @author Alexey Ryabov
+   * @param list - list of strings
+   * @return - new list of string without duplicates
+   */
+  private List<String> removeDuplicates (List<String> list) {
+    List<String> newList = new ArrayList<>();
+    for(int i = 0; i < list.size(); i++){
+      if( !newList.contains(list.get(i)) ){
+        newList.add(list.get(i));
+      }
+    }
+    return newList;
   }
 }
