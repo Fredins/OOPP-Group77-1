@@ -190,6 +190,45 @@ public class TestModel {
         Assertions.assertEquals(folders,model.createFolders());
     }
 
+    // ========= filterOnTo =========
+
+    @Test
+    public void testFilterOnTo() {
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+
+        // set email's in sent folder as model's activeEmails
+        List<Email> sentEmails = model.getFolders().get().get(1).emails();
+        model.setActiveEmails(sentEmails);
+
+        model.filterOnTo("adam@gmail.com");
+
+        // only adam@gmail.com's mail should be left in activeEmails, not maria@gmail.com
+        List<Email> expectedEmails = List.of(folders.get(1).emails().get(0)); // adam@gmail.com added to expectedEmails
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
+
+    }
+
+    // ========= filterOnFrom =========
+
+    @Test
+    public void testFilterOnFrom() {
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+
+        // set email's in sent folder as model's activeEmails
+        List<Email> inboxEmails = model.getFolders().get().get(0).emails();
+        model.setActiveEmails(inboxEmails);
+
+        model.filterOnFrom("maria@gmail.com");
+
+        // only emails from maria@gmail.com should be left in activeEmails
+        List<Email> expectedEmails = List.of(folders.get(0).emails().get(1)); // maria@gmail.com added to expectedEmails
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
+    }
+
     // ========= getters and setters =========
 
     @Test
@@ -217,7 +256,7 @@ public class TestModel {
     }
 
     @Test
-    public void getActiveFolder() {
+    public void testGetActiveFolder() {
         Model model = new Model(accounts);
         model.getFolders().replaceAll(folders);
 
@@ -227,13 +266,24 @@ public class TestModel {
     }
 
     @Test
-    public void getActiveEmail() {
+    public void testGetActiveEmail() {
         Model model = new Model(accounts);
         model.getFolders().replaceAll(folders);
 
         model.setActiveEmail(folders.get(0).emails().get(0));
 
         Assertions.assertEquals(folders.get(0).emails().get(0),model.getActiveEmail().get());
+    }
+
+    @Test
+    public void testGetAutoSuggestions() {
+        Model model = new Model(accounts);
+
+        List<String> autoSuggestions = List.of("adam@gmail.com");
+        model.setAutoSuggestions(autoSuggestions);
+
+        Assertions.assertEquals(autoSuggestions,model.getAutoSuggestions().get());
+
     }
 
 
