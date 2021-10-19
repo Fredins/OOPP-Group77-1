@@ -135,18 +135,105 @@ public class TestModel {
 
     }
 
-
-    /*
+    // ========= updateInbox =========
     @Test
-    public void testUpdateInbox() {
+    public void testUpdateInboxWithOneEmail() throws InboxNotFoundException {
         Model model = new Model(accounts);
         model.getFolders().replaceAll(folders);
 
+        // Add newEmail to model's inbox
+        Email newEmail = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt");
         List<Email> newEmails = new ArrayList<>();
-        newEmails.add(new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt"));
+        newEmails.add(newEmail);
+        model.updateInbox(newEmails);
+
+        // Assert that inbox is updated with newEmail
+        Assertions.assertTrue(model.getFolders().get().get(0).emails().contains(newEmail));
+    }
+
+    @Test
+    public void testUpdateInboxWithSeveralEmail() throws InboxNotFoundException {
+
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+
+        // Add newEmail to model's inbox
+        Email newEmail = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt");
+        Email newEmail2 = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej igen","vad gör du nu");
+        List<Email> newEmails = new ArrayList<>();
+        newEmails.add(newEmail);
+        newEmails.add(newEmail2);
+        model.updateInbox(newEmails);
+
+        // Assert that inbox is updated with newEmail
+        Assertions.assertTrue(model.getFolders().get().get(0).emails().contains(newEmail) &&
+                                model.getFolders().get().get(0).emails().contains(newEmail2));
+
    }
 
-     */
+
+    // ========= createFolders =========
+
+    @Test
+    public void testCreateFolders() {
+        Model model = new Model(accounts);
+
+        List<Folder> folders = List.of(
+                new Folder("Inbox", new ArrayList<>()),
+                new Folder("Archive", new ArrayList<>()),
+                new Folder("Sent", new ArrayList<>()),
+                new Folder("Drafts", new ArrayList<>()),
+                new Folder("Trash", new ArrayList<>()));
+
+        Assertions.assertEquals(folders,model.createFolders());
+    }
+
+    // ========= getters and setters =========
+
+    @Test
+    public void testGetAccounts() {
+        Model model = new Model(accounts);
+
+        Assertions.assertEquals(accounts,model.getAccounts().get());
+    }
+
+    @Test
+    public void testGetActiveAccount() throws ActiveAccountNotInAccounts {
+        Model model = new Model(accounts);
+        model.setActiveAccount(model.getAccounts().get().get(0));
+
+        Assertions.assertEquals(model.getAccounts().get().get(0),model.getActiveAccount().get());
+    }
+
+    @Test
+    public void testGetEmails() {
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+        model.setEmails(model.getFolders().get().get(0).emails());
+
+        Assertions.assertEquals(model.getFolders().get().get(0).emails(),model.getEmails().get());
+    }
+
+    @Test
+    public void getActiveFolder() {
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+
+        model.setActiveFolder(model.getFolders().get().get(0));
+
+        Assertions.assertEquals(model.getFolders().get().get(0),model.getActiveFolder().get());
+    }
+
+    @Test
+    public void getActiveEmail() {
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+
+        model.setActiveEmail(folders.get(0).emails().get(0));
+
+        Assertions.assertEquals(folders.get(0).emails().get(0),model.getActiveEmail().get());
+    }
 
 
 }
+
