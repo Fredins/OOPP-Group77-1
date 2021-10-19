@@ -43,7 +43,7 @@ public class ReadingController {
     subjectLabel.setText(email.subject());
     toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
     dateLabel.setText(email.date().toString());
-    // AttachmentsController(email); //TODO alexey fix this. gives nullpointer. probably cause email.attachemnts är empty
+    AttachmentsController(email);
 
     // set button action handler and button icon
     EventHandler<ActionEvent> archiveHandler = actionEvent -> moveEmailTo(control, "Archive");
@@ -276,9 +276,18 @@ public class ReadingController {
     //Show save file dialog
     File filePath = fileChooser.showSaveDialog(stage);
 
-    if (fileToSave != null) {
-      SaveFile(fileToSave, filePath);
+    if (filePath == null)
+    {
+      //Do nothing if file chooser was cancelled.
+      //This is for NullPointerException.
+      System.out.println("FileChooser was cancelled.");
+    } else {
+      if (fileToSave != null) {
+        SaveFile(fileToSave, filePath);
+      }
     }
+
+
   }
 
   /**
@@ -293,6 +302,8 @@ public class ReadingController {
       outputStream.close();
       outputStream.flush();
     } catch (IOException ex) {
+      ex.printStackTrace();
+    } catch (NullPointerException ex) {
       ex.printStackTrace();
     }
   }
