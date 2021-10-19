@@ -15,9 +15,9 @@ Navigate to the repository and install dependencies using maven.
 cd OOPP-Group77
 mvn install 
 ```
-Start the application.
+Start the application (clean is necessary for autocompletion to work).
 ```
-mvn javafx:run
+mvn clean javafx:run
 ```
 
 ## Installation
