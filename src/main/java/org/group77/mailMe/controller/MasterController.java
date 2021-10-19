@@ -71,7 +71,7 @@ public class MasterController {
     refreshBtn.setOnAction(i -> refresh(control));
     writeBtn.setOnAction(i -> WindowOpener.openWriting(control));
     addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(control, node -> ((Stage) node.getScene().getWindow()).close()));
-    filterButton.setOnAction(i -> WindowOpener.openFilter(control));
+   // filterButton.setOnAction(i -> WindowOpener.openFilter(control));
     control.getActiveAccount().addObserver(newAccount -> accountsCombo.setValue(newAccount));
     control.getFolders().addObserver(newFolders -> handleFoldersChange(newFolders, control));
     control.getActiveEmails().addObserver(newEmails -> loadEmails(newEmails, control));
