@@ -24,6 +24,8 @@ public class TestModel {
     @BeforeAll
     public static void setup() throws EmailDomainNotSupportedException {
 
+        // ============ Setup account and folders to be used in tests ============
+
         // ===== Initiate folders ======
 
         // Mails to be added to inbox folder
@@ -46,12 +48,14 @@ public class TestModel {
 
         // ===== Initiate accounts =====
 
-        // Models accounts
+        // Accounts
         accounts = new ArrayList<>();
         accounts.add(AccountFactory.createAccount("hej@gmail.com","hej123".toCharArray()));
         accounts.add(AccountFactory.createAccount("hola@gmail.com","hola123".toCharArray()));
 
     }
+
+    // ========= setActiveAccount =========
 
     @Test
     public void testSetExistingAccountAsActiveAccount() throws ActiveAccountNotInAccounts {
@@ -77,6 +81,8 @@ public class TestModel {
 
     }
 
+    // ========= addAccount =========
+
     @Test
     public void testAddNotAlreadyAddedAccount() throws EmailDomainNotSupportedException, AccountAlreadyExistsException {
         Model model = new Model(accounts);
@@ -100,6 +106,8 @@ public class TestModel {
         // assert that existingAccount cannot be added to model
         Assertions.assertThrows(AccountAlreadyExistsException.class, () -> model.addAccount(existingAccount));
     }
+
+    // ========= createAccount =========
 
     @Test
     public void testCreateAccountEmailAddress() throws EmailDomainNotSupportedException {
@@ -128,12 +136,17 @@ public class TestModel {
     }
 
 
+    /*
     @Test
     public void testUpdateInbox() {
-        /*model.getFolders().replaceAll(folders);
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
 
         List<Email> newEmails = new ArrayList<>();
-        newEmails.add(new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt"));*/
-    }
+        newEmails.add(new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt"));
+   }
+
+     */
+
 
 }
