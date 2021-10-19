@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +31,7 @@ public class TestModel {
 
         // ===== Initiate folders ======
 
-        // Mails to be added to inbox folder
+        // Emails to be added to inbox folder
         List<Email> inboxEmails = new ArrayList<>();
         inboxEmails.add(new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","vad gör du"));
         inboxEmails.add(new Email("maria@gmail.com",new String[]{"hej@gmail.com"},"important!","hej"));
@@ -39,13 +41,32 @@ public class TestModel {
         sentEmails.add(new Email("hej@gmail.com", new String[]{"adam@gmail.com"},"hej","inget, vad gör du?"));
         sentEmails.add(new Email("hej@gmail.com",new String[]{"maria@gmail.com"},"important!","hej"));
 
+        // Emails to be added to dateFolder, a folder containing emails with dates
+        List<Email> dateEmails = new ArrayList<>();
+        String[] to1 = new String[]{"TEST_nr_1@gmail.com", "lol@gmail.com"};
+        String[] to2 = new String[]{"TEST_nr_2@outlook.com", "lol@hotmail.com"};
+        String[] to3 = new String[]{"TEST_nr_3@live.com", "haha@gmail.com"};
+
+
+        dateEmails.add(new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE",
+                        LocalDateTime.of(2021, Month.OCTOBER, 11, 15, 30, 45)));
+
+        dateEmails.add(new Email("memail@live.com", to2, "Second", "contains sausage",
+                        LocalDateTime.of(2021, Month.MAY, 11, 15, 30, 45)));
+
+        dateEmails.add(new Email("lol@hotmail.com", to3, "third", "contains no meat at all",
+                        LocalDateTime.of(2010, Month.JANUARY, 11, 15, 30, 45)));
+
+
         Folder inboxFolder = new Folder("Inbox",inboxEmails);
         Folder sentFolder = new Folder("Sent",sentEmails);
+        Folder dateFolder = new Folder("DateFolder", dateEmails);
 
         // Folders belonging to active account
         folders = new ArrayList<>();
         folders.add(inboxFolder);
         folders.add(sentFolder);
+        folders.add(dateFolder);
 
         // ===== Initiate accounts =====
 
@@ -57,6 +78,63 @@ public class TestModel {
         // ==== Initiate model =====
         model = new Model(accounts);
         model.getFolders().replaceAll(folders);
+
+    }
+
+    // ========= getters and setters =========
+
+    @Test
+    public void testGetAccounts() {
+        Model model = new Model(accounts);
+
+        Assertions.assertEquals(accounts,model.getAccounts().get());
+    }
+
+    @Test
+    public void testGetActiveAccount() throws ActiveAccountNotInAccounts {
+        Model model = new Model(accounts);
+        model.setActiveAccount(model.getAccounts().get().get(0));
+
+        Assertions.assertEquals(model.getAccounts().get().get(0),model.getActiveAccount().get());
+    }
+
+    @Test
+    public void testGetActiveEmails() {
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+        model.setActiveEmails(model.getFolders().get().get(0).emails());
+
+        Assertions.assertEquals(model.getFolders().get().get(0).emails(),model.getActiveEmails().get());
+    }
+
+    @Test
+    public void testGetActiveFolder() {
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+
+        model.setActiveFolder(model.getFolders().get().get(0));
+
+        Assertions.assertEquals(model.getFolders().get().get(0),model.getActiveFolder().get());
+    }
+
+    @Test
+    public void testGetActiveEmail() {
+        Model model = new Model(accounts);
+        model.getFolders().replaceAll(folders);
+
+        model.setActiveEmail(folders.get(0).emails().get(0));
+
+        Assertions.assertEquals(folders.get(0).emails().get(0),model.getActiveEmail().get());
+    }
+
+    @Test
+    public void testGetAutoSuggestions() {
+        Model model = new Model(accounts);
+
+        List<String> autoSuggestions = List.of("adam@gmail.com");
+        model.setAutoSuggestions(autoSuggestions);
+
+        Assertions.assertEquals(autoSuggestions,model.getAutoSuggestions().get());
 
     }
 
@@ -218,67 +296,71 @@ public class TestModel {
     @Test
     public void testFilterOnMaxDate() {
 
+        // set dateFolder's emails as active
+        List<Email> dateEmails = model.getFolders().get().get(2).emails();
+        model.setActiveEmails(dateEmails);
 
+        model.filterOnMaxDate(LocalDateTime.of(2020, Month.DECEMBER,31,12,30));
+
+        // only email that should be left in activeEmails is the third one from 2010
+        List<Email> expectedEmails = List.of(model.getFolders().get().get(2).emails().get(2));
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
 
     }
 
-
-    // ========= getters and setters =========
+    // ========= filterOnMinDate =========
 
     @Test
-    public void testGetAccounts() {
-        Model model = new Model(accounts);
+    public void testOnMinDate() {
 
-        Assertions.assertEquals(accounts,model.getAccounts().get());
+        // set dateFolder's emails as active
+        List<Email> dateEmails = model.getFolders().get().get(2).emails();
+        model.setActiveEmails(dateEmails);
+
+        model.filterOnMinDate(LocalDateTime.of(2020, Month.DECEMBER,31,12,30));
+
+        // only email that should be left in activeEmails is the two first ones from 2021
+        List<Email> expectedEmails = List.of(model.getFolders().get().get(2).emails().get(0),
+                                            model.getFolders().get().get(2).emails().get(1));
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
+
+    }
+
+    // ========= filterOnMinDate =========
+    @Test
+    public void testSortByNewToOld() {
+
+        // unsortedEmails are not sorted by date
+        List<Email> dateEmails = model.getFolders().get().get(2).emails();
+        List<Email> unsortedEmails = List.of(dateEmails.get(0),dateEmails.get(2),dateEmails.get(1));
+
+        model.setActiveEmails(unsortedEmails);
+        model.sortByNewToOld();
+
+        List<Email> expectedEmails = List.of(dateEmails.get(0),dateEmails.get(1),dateEmails.get(2));
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
+
+
     }
 
     @Test
-    public void testGetActiveAccount() throws ActiveAccountNotInAccounts {
-        Model model = new Model(accounts);
-        model.setActiveAccount(model.getAccounts().get().get(0));
+    public void testSortByOldToNew() {
 
-        Assertions.assertEquals(model.getAccounts().get().get(0),model.getActiveAccount().get());
+        // set dateEmails as active emails
+        List<Email> dateEmails = model.getFolders().get().get(2).emails();
+        model.setActiveEmails(dateEmails);
+
+        model.sortByOldToNew();
+
+        // dateEmails from oldest to newest
+        List<Email> expectedEmails = List.of(dateEmails.get(2),dateEmails.get(1),dateEmails.get(0));
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
     }
 
-    @Test
-    public void testGetActiveEmails() {
-        Model model = new Model(accounts);
-        model.getFolders().replaceAll(folders);
-        model.setActiveEmails(model.getFolders().get().get(0).emails());
-
-        Assertions.assertEquals(model.getFolders().get().get(0).emails(),model.getActiveEmails().get());
-    }
-
-    @Test
-    public void testGetActiveFolder() {
-        Model model = new Model(accounts);
-        model.getFolders().replaceAll(folders);
-
-        model.setActiveFolder(model.getFolders().get().get(0));
-
-        Assertions.assertEquals(model.getFolders().get().get(0),model.getActiveFolder().get());
-    }
-
-    @Test
-    public void testGetActiveEmail() {
-        Model model = new Model(accounts);
-        model.getFolders().replaceAll(folders);
-
-        model.setActiveEmail(folders.get(0).emails().get(0));
-
-        Assertions.assertEquals(folders.get(0).emails().get(0),model.getActiveEmail().get());
-    }
-
-    @Test
-    public void testGetAutoSuggestions() {
-        Model model = new Model(accounts);
-
-        List<String> autoSuggestions = List.of("adam@gmail.com");
-        model.setAutoSuggestions(autoSuggestions);
-
-        Assertions.assertEquals(autoSuggestions,model.getAutoSuggestions().get());
-
-    }
 
 
 }
