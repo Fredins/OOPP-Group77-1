@@ -198,19 +198,8 @@ public class Control {
             //Convert String list of recipients to String Array of recipients.
             String[] recipientsArray = recipients.stream().toArray(String[] ::new);
             //Creating new email to be copied to Sent-folder
-            Email newEmail = new Email(model.getActiveAccount().get().emailAddress(), recipientsArray, subject, content, attachments);
             EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
             esp.sendEmail(model.getActiveAccount().get(),recipients,subject,content,attachments);
-            /*
-            //If email is sent successfully
-            if (esp.sendEmail(model.getActiveAccount().get(),recipients,subject,content,attachments))
-            {
-                //Email is moved to Sent-folder(index 2)
-                moveSentEmail(newEmail, 2);
-            }
-
-             */
-
 
         } else {
             throw new Exception("No active account");
@@ -219,13 +208,17 @@ public class Control {
 
     /** @author Alexey Ryabov
      * Moves a copy of successfylly an email into the a folder of choise. Sent-folder(index 2 in the folders list).
-     * @param email - is a email that is currently being sent.
+     * @param  - is a email that is currently being sent.
      * @throws Exception
      */
-    public void moveSentEmail (Email email, int folderIndex) throws Exception {
+    public void moveSentEmail (List<String> recipients, String subject, String content, List<File> attachments, int folderIndex) throws Exception {
+        //Convert String list of recipients to String Array of recipients.
+        String[] recipientsArray = recipients.stream().toArray(String[] ::new);
+        //Creating new email to be copied to Sent-folder
+        Email newEmail = new Email(model.getActiveAccount().get().emailAddress(), recipientsArray, subject, content, attachments);
         List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
         //Move the currently open email to the Sent-folder
-        newFolders.get(folderIndex).emails().add(email); // index 2 -> SentFolder
+        newFolders.get(folderIndex).emails().add(newEmail); // index 2 -> SentFolder
         storage.store(model.getActiveAccount().get(), newFolders);
         model.getFolders().replaceAll(newFolders);
     }

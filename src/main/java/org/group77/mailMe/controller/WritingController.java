@@ -100,29 +100,6 @@ public class WritingController {
 
   }
 
-  /**
-   * 1. send email
-   * 2. display feedback if sending was successful
-   * @param control the model
-   * @author Alexey
-   */
-  private void send(Control control) {
-
-    try {
-      //When sending a new message, the recipient's email is saved in the suggestions in storage
-      control.addSuggestion(toField.getText());
-      control.send(
-        removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())),
-        subjectField.getText(),
-        contentField.getHtmlText(),
-        attachments
-      );
-      if (customAlert("Confirmation !", Alert.AlertType.CONFIRMATION).get() == ButtonType.OK) {closeWindowAction((Stage) sendBtn.getScene().getWindow());}
-    } catch (Exception e) {
-      if (customAlert(e.getMessage(), Alert.AlertType.ERROR).get() == ButtonType.OK) {closeWindowAction((Stage) sendBtn.getScene().getWindow());}
-      e.printStackTrace(); // TODO display feedback
-    }
-  }
 
   /**
    * 1. try to send email
@@ -141,7 +118,7 @@ public class WritingController {
       try {
         control.addSuggestion(toField.getText());
         control.send(
-          fromTextFieldToListOfRecipients(toField.getText()),
+          removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())),
           subjectField.getText(),
           contentField.getHtmlText(),
           attachments
@@ -149,6 +126,7 @@ public class WritingController {
         Platform.runLater(() -> notification
           .graphic(new Label("Message sent successfully!"))
           .show());
+          control.moveSentEmail(removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())), subjectField.getText(), contentField.getHtmlText(), attachments, 2);
       } catch (Exception e) {
         Platform.runLater(() -> notification
           .title("Failed")
@@ -218,22 +196,6 @@ public class WritingController {
 
     //System.out.println(list); // For Testing.
     return list;
-  }
-
-  /** @author Alexey Ryabov
-   * @param message - Type in your message you want user to see in an alert.
-   * This will show conformation window when message has been sent.
-   * @return optional button.
-   */
-  private Optional<ButtonType> customAlert (String message, Alert.AlertType alertType) {
-    // Example of alert type: Alert.AlertType.INFORMATION
-    Alert alert = new Alert(alertType);
-    alert.setTitle("MeAlert");
-    //alert.setHeaderText(message);
-    alert.setContentText(message);
-    alert.getDialogPane().setPrefSize(300, 300);
-    Optional<ButtonType> result = alert.showAndWait();
-    return result;
   }
 
   /** @author Alexey Ryabov
