@@ -60,46 +60,17 @@ public class FilterController {
             //clear filter before applying anything
             control.clearFilter();
             // apply all filters chosen
-            System.out.println("Do something"); //TODO for Hampus to add
-            // if some string is entered in the to-field, then filter on to
-            if (!Objects.equals(toTextField.getText(), "")) {
-                System.out.println("GOING TO FILTER ON TO"); //TODO REMOVE
-                control.filterOnTo(toTextField.getText());
-            }
-            if (!Objects.equals(fromTextField.getText(), "")) {
-                System.out.println("GOING TO FILTER ON FROM"); //TODO REMOVE
-                control.filterOnFrom(fromTextField.getText());
-            }
-            if (!Objects.equals(maxDatePicker.getValue(), null)) {
-                System.out.println("GOING TO FILTER ON MAX DATE"); //todo remove
-                // convert the selected date to LocalDateTime.
-                // For max date to be inclusive, set max date to be start of day after the chosen date.
-                LocalDateTime date = maxDatePicker.getValue().plusDays(1).atStartOfDay();
-                control.filterOnMaxDate(date);
-            }
-            if (!Objects.equals(minDatePicker.getValue(), null)) {
-                System.out.println("GOING TO FILTER ON MIN DATE"); //todo remove
-                // convert the selected date to LocalDateTime. Min date is inclusive.
-                LocalDateTime date = minDatePicker.getValue().atStartOfDay();
-                control.filterOnMinDate(date);
-            }
-            if (!Objects.equals(timeChoiceBox.getValue(), null)) {
-                System.out.println("TIME CHOICE BOX IS NOT EMPTY"); //TODO REMOVE
-                if (Objects.equals(timeChoiceBox.getValue(), newToOldSorting)) {
-                    System.out.println("NEW TO OLD SORTING APPLIED"); //TODO REMOVE
-                    control.sortByNewToOld();
-                } else if (Objects.equals(timeChoiceBox.getValue(), oldToNewSorting)) {
-                    System.out.println("OLD TO NEW SORTING APPLIED"); //TODO REMOVE
-                    control.sortByOldToNew();
-                }
-            }
+            applyAllFilters(control);
         });
 
+        // close button hides the filter view
         closeButton.setOnAction(i -> rootPane.getParent().setVisible(false));
 
+        // populate the list/time choice box of possible sorting alternatives:
         populateChoiceBox();
         // set value in time choice box to default sorting.
         timeChoiceBox.setValue(defaultSorting);
+
         //TODO: ask control to default sort upon initialisation? I.e.
         // control.sortByNewToOld();
     }
@@ -108,5 +79,62 @@ public class FilterController {
         timeChoiceBox.getItems().clear();
         timeChoiceBox.getItems().add(0, newToOldSorting);
         timeChoiceBox.getItems().add(1, oldToNewSorting);
+    }
+
+    private void applyAllFilters(Control control) {
+        // apply all filters chosen
+        // if some string is entered in the to-field, then filter on to
+        applyToFilter(control);
+        applyFromFilter(control);
+        applyMaxDateFilter(control);
+        applyMinDateFilter(control);
+        applySorting(control);
+    }
+
+    private void applyToFilter(Control control) {
+        // if some string is entered in the to-field, then filter on to
+        if (!Objects.equals(toTextField.getText(), "")) {
+            System.out.println("GOING TO FILTER ON TO"); //TODO REMOVE
+            control.filterOnTo(toTextField.getText());
+        }
+    }
+
+    private void applyFromFilter(Control control) {
+        if (!Objects.equals(fromTextField.getText(), "")) {
+            System.out.println("GOING TO FILTER ON FROM"); //TODO REMOVE
+            control.filterOnFrom(fromTextField.getText());
+        }
+    }
+
+    private void applyMaxDateFilter(Control control) {
+        if (!Objects.equals(maxDatePicker.getValue(), null)) {
+            System.out.println("GOING TO FILTER ON MAX DATE"); //todo remove
+            // convert the selected date to LocalDateTime.
+            // For max date to be inclusive, set max date to be start of day after the chosen date.
+            LocalDateTime date = maxDatePicker.getValue().plusDays(1).atStartOfDay();
+            control.filterOnMaxDate(date);
+        }
+    }
+
+    private void applyMinDateFilter(Control control) {
+        if (!Objects.equals(minDatePicker.getValue(), null)) {
+            System.out.println("GOING TO FILTER ON MIN DATE"); //todo remove
+            // convert the selected date to LocalDateTime. Min date is inclusive.
+            LocalDateTime date = minDatePicker.getValue().atStartOfDay();
+            control.filterOnMinDate(date);
+        }
+    }
+
+    private void applySorting(Control control) {
+        if (!Objects.equals(timeChoiceBox.getValue(), null)) {
+            System.out.println("TIME CHOICE BOX IS NOT EMPTY"); //TODO REMOVE
+            if (Objects.equals(timeChoiceBox.getValue(), newToOldSorting)) {
+                System.out.println("NEW TO OLD SORTING APPLIED"); //TODO REMOVE
+                control.sortByNewToOld();
+            } else if (Objects.equals(timeChoiceBox.getValue(), oldToNewSorting)) {
+                System.out.println("OLD TO NEW SORTING APPLIED"); //TODO REMOVE
+                control.sortByOldToNew();
+            }
+        }
     }
 }
