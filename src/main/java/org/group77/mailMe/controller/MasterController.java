@@ -36,6 +36,7 @@ public class MasterController {
   @FXML private AnchorPane progressPane;
   @FXML private Label progressLabel;
   private final ExecutorService threadExecutor = Executors.newSingleThreadExecutor();
+  private FilterControl filterControl;
 
 
   /**
@@ -314,7 +315,8 @@ public class MasterController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FilterView.fxml"));
             Pane pane = fxmlLoader.load();
-            ((FilterController) fxmlLoader.getController()).init(control);
+            filterControl = fxmlLoader.getController(); //todo changed this and the line below /h
+            filterControl.init(control);
             filterFlowPane.getChildren().clear();
             filterFlowPane.getChildren().add(pane);
             filterFlowPane.setVisible(false);
@@ -330,5 +332,6 @@ public class MasterController {
     private void clearSearch(Control control) {
         searchField.setText(""); // clear search field
         control.clearSearchResult(); // restore to original emails shown.
+        filterControl.applyFilter(control); // let filter re-apply its filters
     }
 }

@@ -18,7 +18,7 @@ import java.util.Objects;
  * @author Hampus Jernkrook
  */
 
-public class FilterController {
+public class FilterController implements FilterControl {
     @FXML
     private Button clearFilterButton; //button for clearing all filters
     @FXML
@@ -104,6 +104,10 @@ public class FilterController {
         applyMaxDateFilter(control);
         applyMinDateFilter(control);
         applySorting(control);
+    }
+
+    public void applyFilter(Control control) {
+        applyAllFilters(control);
     }
 
     /**
