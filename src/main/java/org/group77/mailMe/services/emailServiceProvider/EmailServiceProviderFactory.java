@@ -1,6 +1,7 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
 import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.model.exceptions.*;
 
 /**
  * @author Hampus Jernkrook.
@@ -18,13 +19,14 @@ public abstract class EmailServiceProviderFactory {
    * Determines what EmailServiceProviderStrategy to use depending on
    * account's ServerProvider enum.
    */
-  public static EmailServiceProvider createEmailServiceProvider(Account account) {
+  public static EmailServiceProvider createEmailServiceProvider(Account account) throws ServerException {
     if (account.provider() == ServerProvider.GMAIL) {
       return new GmailProvider();
     }
     else if(account.provider() == ServerProvider.MICROSOFT){
       return new MicrosoftProvider();
+    } else{
+      throw new ServerException();
     }
-    return null;
   }
 }

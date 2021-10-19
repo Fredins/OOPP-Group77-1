@@ -96,7 +96,6 @@ public class Control {
 
     /** Adds the recipients email address to the suggestion list in storage by retrieving the old list and add the new email and store them together
      *
-     * @param suggestion
      * @author David Zamanian, Martin
      */
 
@@ -133,16 +132,13 @@ public class Control {
      * @author Martin Fredin
      * @return new emails form server
      */
-    public List<Email> refresh() throws ProviderConnectionRefusedException {
+    public List<Email> refresh() throws ServerException {
+        List<Email> emails = new ArrayList<>();
         if (model.getActiveAccount() != null && model.getFolders() != null) {
             EmailServiceProvider esp = EmailServiceProviderFactory.createEmailServiceProvider(model.getActiveAccount().get());
-            try {
-                return esp.refreshFromServer(model.getActiveAccount().get());
-            } catch (MessagingException e) { // TODO make refreshFromServer throw ProviderConnectionRefusedException instead
-                throw new ProviderConnectionRefusedException();
-            }
+            emails = esp.refreshFromServer(model.getActiveAccount().get());
         }
-        return null;
+        return emails;
     }
 
     public void updateFolder(String folderName, List<Email> newEmails) throws FolderNotFoundException {
@@ -177,7 +173,7 @@ public class Control {
                 storage.store(account); // throws account already exists exception
                 model.addAccount(account); // will set created account to activeAccount
             }
-        } catch (EmailDomainNotSupportedException | AccountAlreadyExistsException | CouldNotConnectToServerException e) {
+        } catch (EmailDomainNotSupportedException | AccountAlreadyExistsException | ServerException e) {
             throw new Exception(e.getMessage());
         }
     }
@@ -223,13 +219,11 @@ public class Control {
      * @author David Zamanian, Martin
      */
 
-    public void deleteEmail() throws Exception {
+    public void deleteEmail() {
         Optional<Folder> maybeTrash = getFolders().stream()
             .filter(folder -> folder.name().equals("Trash"))
             .findFirst();
-        if(maybeTrash.isPresent()){
-            moveEmail(maybeTrash.get());
-        }
+        maybeTrash.ifPresent(this::moveEmail);
     }
 
     /**

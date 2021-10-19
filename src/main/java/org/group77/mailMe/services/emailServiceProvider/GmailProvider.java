@@ -2,6 +2,7 @@ package org.group77.mailMe.services.emailServiceProvider;
 
 import org.apache.commons.mail.util.*;
 import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.model.exceptions.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -166,7 +167,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      */
     @Override
-    public void sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
+    public void sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws ServerException {
         //System.out.println("Preparing to send message.."); // For Testing
 
         String fromAccount = from.emailAddress();
@@ -177,9 +178,12 @@ public class GmailProvider extends EmailServiceProvider {
 
         // An email is sent to every address in the list.
         for (String recipient : recipients) {
-            Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content, attachments);
-
-            Transport.send(msg);
+            try{
+                Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content, attachments);
+                Transport.send(msg);
+            }catch (MessagingException e){
+                throw new ServerException(e);
+            }
 
             //System.out.println("Message sent successfully!"); // For Testing.
         }
@@ -225,7 +229,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      * Composes a message, returnt message object..
      */
-    private Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) throws Exception {
+    private Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) {
         try {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));

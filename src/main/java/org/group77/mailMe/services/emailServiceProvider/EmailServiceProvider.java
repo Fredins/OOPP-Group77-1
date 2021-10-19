@@ -1,6 +1,6 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.group77.mailMe.model.exceptions.CouldNotConnectToServerException;
+import org.group77.mailMe.model.exceptions.ServerException;
 import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
@@ -47,12 +47,17 @@ public abstract class EmailServiceProvider {
    * @return List<Folder> is a list of folders.
    * @author Martin Fredin.
    */
-  public List<Email> refreshFromServer(Account account) throws MessagingException {
-    Store store = connectStore(account);
-    List<Email> emails = parse(store);
-    // closing the store is important because otherwise the email provider will not mark the emails as popped,
-    // because the email provider thinks the client crashed because no QUIT command was executed.
-    store.close();
+  public List<Email> refreshFromServer(Account account) throws ServerException {
+    List<Email> emails;
+    try{
+      Store store = connectStore(account);
+      emails = parse(store);
+      // closing the store is important because otherwise the email provider will not mark the emails as popped,
+      // because the email provider thinks the client crashed because no QUIT command was executed.
+      store.close();
+    }catch (MessagingException e){
+      throw new ServerException();
+    }
     return emails;
   }
 
@@ -62,11 +67,11 @@ public abstract class EmailServiceProvider {
    * @author Martin
    * @author Hampus Jernkrook
    */
-  public boolean testConnection(Account account) throws CouldNotConnectToServerException {
+  public boolean testConnection(Account account) {
     try {
       connectStore(account);
-    } catch (MessagingException e) {
-        throw new CouldNotConnectToServerException();
+    } catch (ServerException ignore) {
+     return false;
     }
     return true;
   }
@@ -76,12 +81,14 @@ public abstract class EmailServiceProvider {
    * @return Store is a list of folders
    * @author Martin Fredin.
    */
-  private Store connectStore(Account account) throws MessagingException {
+  private Store connectStore(Account account) throws ServerException {
     Properties props = new Properties();
     props.setProperty("mail.pop3.ssl.enable", "true");
 
     Session session = Session.getDefaultInstance((props), null);
-    Store store = session.getStore(protocolIn);
+    Store store = null;
+    try {
+      store = session.getStore(protocolIn);
 
     String address = account.emailAddress();
     String password = String.valueOf(account.password());
@@ -92,6 +99,9 @@ public abstract class EmailServiceProvider {
       address,
       password
     );
+    } catch (MessagingException e) {
+      throw new ServerException();
+    }
     return store;
   }
 
@@ -102,7 +112,7 @@ public abstract class EmailServiceProvider {
    * @param content   - content text field.
    * @author Alexey Ryabov
    */
-  public abstract void sendEmail(Account from, List<String> recipient, String subject, String content, List<File> attachments) throws Exception;
+  public abstract void sendEmail(Account from, List<String> recipient, String subject, String content, List<File> attachments) throws ServerException;
 
   /** @author Martin Fredin.
    * @param store - is a list of folders.
