@@ -4,7 +4,8 @@ import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.io.File;
+import java.io.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -30,18 +31,18 @@ public class MicrosoftProvider extends EmailServiceProvider {
    * @param recipients - List of to-account that email will be sent to.
    * @param subject    - subject text.
    * @param content    - content text.
-   * @return - boolean if email is sent successful.
    * @author Alexey Ryabov
    */
   @Override
-  public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
+  public void sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
     System.out.println("Preparing to send message.."); // For Testing
 
     String fromAccount = from.emailAddress();
-    String fromAccountPassword = Arrays.toString(from.password());
+    String fromAccountPassword = String.valueOf(from.password());
 
     Properties props = new Properties();
     setMicrosoftOutlookProperties(props);
+
 
     for (String recipient : recipients) {
       Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content, attachments);
@@ -50,43 +51,61 @@ public class MicrosoftProvider extends EmailServiceProvider {
 
       System.out.println("Message sent successfully!"); // For Testing
     }
-    return true;
   }
 
-  //TODO
   @Override
-  protected List<Email> parse(Store store) throws MessagingException {
-    return null;
-  }
+  protected List<Email> parse(Store store) throws MessagingException {  // TODO alexey implement parse method with content and attachment
+    javax.mail.Folder inbox = store.getFolder("INBOX");
 
-  /**
-   * @param properties - are properties of the session, are set in the sendEmail method.
-   * @param account - active account.
-   * @param password - password of the active account.
-   * @return - session object.
-   * @author Alexey Ryabov
-   * Asks server to authorice the session. Returns Authenticated Session.
-   */
-  private Session getAuthentication(Properties properties, String account, String password) {
-    Session session = Session.getInstance(properties, new Authenticator() {
-      @Override
-      protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(account, password);
+    List<Email> emails = new ArrayList<>();
+    inbox.open(2);
+
+    if (inbox.getMessageCount() != 0) {
+      for (Message message : inbox.getMessages()) {
+        String from = message.getFrom()[0].toString();
+        String[] to = Arrays.stream(message.getAllRecipients()).map(Address::toString).toArray(String[]::new);
+        String subject = message.getSubject();
+        String content = "no content";
+
+        emails.add(new Email(
+          from,
+          to,
+          subject,
+          content
+        ));
       }
-    });
-    return session;
+    }
+    return emails;
   }
 
-  /**
-   * @param properties - are connection properties to the server.
-   * @author Alexey Ryabov
-   */
-  private void setMicrosoftOutlookProperties(Properties properties) {
-    properties.put("mail.smtp.starttls.enable", "true");
-    properties.put("mail.smtp.auth", "true");
-    properties.put("mail.smtp.host", "smtp-mail.outlook.com");
-    properties.put("mail.smtp.port", "587");
-  }
+    /**
+     * @param properties - are properties of the session, are set in the sendEmail method.
+     * @param account - active account.
+     * @param password - password of the active account.
+     * @return - session object.
+     * @author Alexey Ryabov
+     * Asks server to authorice the session. Returns Authenticated Session.
+     */
+    private Session getAuthentication(Properties properties, String account, String password) {
+      Session session = Session.getInstance(properties, new Authenticator() {
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication(account, password);
+        }
+      });
+      return session;
+    }
+
+    /**
+     * @param properties - are connection properties to the server.
+     * @author Alexey Ryabov
+     */
+    private void setMicrosoftOutlookProperties(Properties properties) { // TODO alexey använd hostOut, portOut
+      properties.put("mail.smtp.host", "smtp-mail.outlook.com");
+      properties.put("mail.smtp.port", "587");
+      properties.put("mail.smtp.starttls.enable","true");
+      properties.put("mail.smtp.auth", "true");
+    }
 
   /**
    * @param session - session of the connection.

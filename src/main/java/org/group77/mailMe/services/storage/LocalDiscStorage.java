@@ -1,6 +1,7 @@
 package org.group77.mailMe.services.storage;
 
 import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.model.exceptions.*;
 
 import java.io.*;
 import java.util.*;

@@ -1,4 +1,4 @@
-package org.group77.mailMe.services.storage;
+package org.group77.mailMe.model.exceptions;
 
 /**
  * Exception for when a submitted account already exists in storage.

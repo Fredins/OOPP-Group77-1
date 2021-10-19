@@ -3,16 +3,12 @@ package org.group77.mailMe.model;
 import org.group77.mailMe.model.data.Account;
 import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
-import org.group77.mailMe.model.exceptions.EmailDomainNotSupportedException;
-import org.group77.mailMe.model.exceptions.FolderNotFoundException;
-import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
-import org.junit.Assert;
+import org.group77.mailMe.model.exceptions.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

@@ -21,8 +21,10 @@ public abstract class EmailServiceProviderFactory {
   public static EmailServiceProvider createEmailServiceProvider(Account account) {
     if (account.provider() == ServerProvider.GMAIL) {
       return new GmailProvider();
-    } else { //TODO should this be `else if microsoft`?
+    }
+    else if(account.provider() == ServerProvider.MICROSOFT){
       return new MicrosoftProvider();
     }
+    return null;
   }
 }

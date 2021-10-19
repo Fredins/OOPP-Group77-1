@@ -1,4 +1,4 @@
-package org.group77.mailMe.services.storage;
+package org.group77.mailMe.model.exceptions;
 
 /**
  * Exception to be used if the user's OS cannot be found/identified.

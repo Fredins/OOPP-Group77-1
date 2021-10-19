@@ -51,12 +51,10 @@ public class AddAccountController {
         .graphic(new Label(emailTextField.getText() + " added successfully"))
         .show();
     } catch (Exception e) {
-      // errorLabel.setText(e.getMessage()); //TODO: give a good exception message in Model
       notification
         .title("Failure")
         .text(e.getMessage())
         .showWarning();
-      // errorLabel.setText("Wrong login credentials, or domain is not supported");
     }
   }
   private void clearErrorMessage() {

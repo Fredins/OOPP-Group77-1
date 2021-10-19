@@ -48,7 +48,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      */
     @Override
-    protected List<Email> parse(Store store) throws MessagingException {
+    protected List<Email> parse(Store store) throws MessagingException { // TODO splitta till flera mindre metoder
         javax.mail.Folder inbox = store.getFolder("INBOX");
 
         List<Email> emails = new ArrayList<>();
@@ -166,7 +166,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      */
     @Override
-    public boolean sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
+    public void sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
         //System.out.println("Preparing to send message.."); // For Testing
 
         String fromAccount = from.emailAddress();
@@ -183,7 +183,6 @@ public class GmailProvider extends EmailServiceProvider {
 
             //System.out.println("Message sent successfully!"); // For Testing.
         }
-        return true;
     }
 
     /**
@@ -208,7 +207,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @param properties - are connection properties to the server.
      * @author Alexey Ryabov
      */
-    private void setGmailProperties(Properties properties) {
+    private void setGmailProperties(Properties properties) { // TODO använd hostOut coh portOut
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");

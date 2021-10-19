@@ -25,7 +25,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.*;
 
 public class WritingController {
@@ -67,7 +66,7 @@ public class WritingController {
     }
     fromLabel.setText(control.getActiveAccount().get().emailAddress());
     // input handlers
-    sendBtn.setOnAction(inputEvent -> send2(control, ((Node) sendBtn)));
+    sendBtn.setOnAction(inputEvent -> send(control, ((Node) sendBtn)));
     attachBtn.setOnAction(inputEvent -> attachFiles());
     // change handlers
     control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
@@ -105,7 +104,7 @@ public class WritingController {
    * @param control the control layer
    * @param node any node in active scene
    */
-  private void send2(Control control, Node node){
+  private void send(Control control, Node node){
     Notifications notification = Notifications.create()
       .position(Pos.TOP_CENTER)
       .hideAfter(Duration.seconds(2));
@@ -122,8 +121,10 @@ public class WritingController {
         Platform.runLater(() -> notification
           .graphic(new Label("Message sent successfully!"))
           .show());
-          control.moveSentEmail(removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())), subjectField.getText(), contentField.getHtmlText(), attachments, 2);
+          // control.moveSentEmail(removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())), subjectField.getText(), contentField.getHtmlText(), attachments, 2); // TODO alexey this trows exception
       } catch (Exception e) {
+        System.out.println("here");
+        e.printStackTrace();
         Platform.runLater(() -> notification
           .title("Failed")
           .text(e.getMessage())
@@ -187,11 +188,8 @@ public class WritingController {
    */
   private List<String> fromTextFieldToListOfRecipients(String textfield) {
     //String textFieldToString = textfield.toString();
-    String strings[] = textfield.split(";");
-    List list = Arrays.asList(strings);
-
-    //System.out.println(list); // For Testing.
-    return list;
+    String[] strings = textfield.split(";");
+    return Arrays.asList(strings);
   }
 
   /** @author Alexey Ryabov

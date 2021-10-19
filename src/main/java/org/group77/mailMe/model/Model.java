@@ -5,7 +5,7 @@ import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.model.exceptions.*;
 import org.group77.mailMe.model.textFinding.TextFinder;
-import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
+import org.group77.mailMe.model.exceptions.AccountAlreadyExistsException;
 
 
 import java.time.LocalDateTime;

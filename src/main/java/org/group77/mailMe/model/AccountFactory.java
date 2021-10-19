@@ -25,15 +25,16 @@ public class AccountFactory {
      *
      */
     public static Account createAccount(String emailAddress, char[] password) throws EmailDomainNotSupportedException {
+
+
         if (emailAddress.contains("@gmail.com")) {
             return new Account(emailAddress, password, ServerProvider.GMAIL);
         }
-        /*
-        else if (emailAddress.contains("@hotmail.com") || emailAddress.contains("@live.com")
-                || emailAddress.contains("@outlook.com")) {
+        else if ( emailAddress.contains("@hotmail.com")
+                ||emailAddress.contains("@live.com")
+                ||emailAddress.contains("@outlook.com")) {
             return new Account(emailAddress, password, ServerProvider.MICROSOFT);
         }
-         */
         else {
             throw new EmailDomainNotSupportedException();
         }

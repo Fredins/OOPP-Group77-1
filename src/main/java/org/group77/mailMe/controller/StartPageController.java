@@ -8,7 +8,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.group77.mailMe.Main;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.model.ActiveAccountNotInAccounts;
 import org.group77.mailMe.model.Control;
 import org.group77.mailMe.model.data.Account;
 

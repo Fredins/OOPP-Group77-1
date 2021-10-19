@@ -1,4 +1,4 @@
-package org.group77.mailMe.services.storage;
+package org.group77.mailMe.model.exceptions;
 
 /**
  * abstract unchecked exception wrapper to rethrow checked exceptions like IOException and SQLException

@@ -1,5 +1,7 @@
 package org.group77.mailMe.services.storage;
 
+import org.group77.mailMe.model.exceptions.*;
+
 /**
  * This class sets the application directory and the correct separator
  * depending on the user's OS. It serves only as a helper for other

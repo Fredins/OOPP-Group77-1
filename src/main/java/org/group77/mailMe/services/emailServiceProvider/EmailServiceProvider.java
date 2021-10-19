@@ -100,10 +100,9 @@ public abstract class EmailServiceProvider {
    * @param recipient - list of email addresses.
    * @param subject   - subject text field.
    * @param content   - content text field.
-   * @return - boolean if email is sent successful.
    * @author Alexey Ryabov
    */
-  public abstract boolean sendEmail(Account from, List<String> recipient, String subject, String content, List<File> attachments) throws Exception;
+  public abstract void sendEmail(Account from, List<String> recipient, String subject, String content, List<File> attachments) throws Exception;
 
   /** @author Martin Fredin.
    * @param store - is a list of folders.
