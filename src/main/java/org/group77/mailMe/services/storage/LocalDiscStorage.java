@@ -25,9 +25,9 @@ public class LocalDiscStorage implements Storage {
     public LocalDiscStorage() throws OSNotFoundException {
         // Depending on OS, get the appropriate app directory and separator.
         String[] appDirAndSep = OSHandler.getAppDirAndSeparator();
-        appPath = appDirAndSep[0]; // TODO perhaps replace with Pair<String, String>
+        appPath = appDirAndSep[0];
         separator = appDirAndSep[1];
-        this.mkdir(appPath); //create the
+        this.mkdir(appPath);
     }
 
     /**
@@ -103,14 +103,16 @@ public class LocalDiscStorage implements Storage {
      * @author David Zamanian
      */
     @Override
-    public void store(Account account, String suggestion) throws Exception {
+    public void storeSuggestions(Account account, List<String> suggestions) throws StorageException{
         String address = account.emailAddress();
-        String dirPath = appPath + separator + address + separator + "Suggestions";
+        String path = appPath + separator + address + separator + "suggestions";
 
-            mkdir(dirPath);
-            String suggestionPath = dirPath + separator + "Suggestion";
-            touch(suggestionPath);
-            serialize(suggestion, suggestionPath);
+            try{
+                touch(path);
+                serialize(suggestions, path);
+            }catch (IOException e){
+                throw new StorageException(e);
+            }
     }
 
     /**
@@ -123,23 +125,11 @@ public class LocalDiscStorage implements Storage {
     public List<String> retrieveSuggestions(Account account) {
         // get all account directories under the app root directory
         String accountPath = appPath + separator + account.emailAddress();
-        File[] accountsDir = Arrays.stream(Objects.requireNonNull((new File(accountPath)).listFiles())).filter(file -> file.getName().equals("Suggestions"))
-                .toArray(File[]::new);
-        List<String> suggestions;
-            suggestions = Arrays.stream(accountsDir)
-                    .map(f -> {
-                        String suggestion = null;
-                        try {
-                            // unpack the suggestion object under AppDir/*emailAddress*/Suggestions/Suggestion
-                            suggestion = (String) deserialize(f.getPath() + separator + "Suggestion");
-                        } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace(); // TODO propagate
-                        }
-                        return suggestion;
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-
+        String path = accountPath + separator + "suggestions";
+        List<String> suggestions = new ArrayList<>();
+        try {
+            suggestions = (List<String>) deserialize(path);
+        } catch (IOException | ClassNotFoundException ignore) {}
         return suggestions;
     }
 

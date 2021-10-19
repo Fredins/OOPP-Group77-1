@@ -29,9 +29,10 @@ public class Model {
     private final Subject<Account> activeAccount = new Subject<>(null);
     private final Subject<Folder> activeFolder = new Subject<>(null);
     private final Subject<Email> activeEmail = new Subject<>(null);
+    private final SubjectList<String> autoSuggestions = new SubjectList<>(new ArrayList<>());
+
     private final TextFinder textFinder = new TextFinder();
 
-    private final SubjectList<String> autoSuggestions = new SubjectList<>(new ArrayList<>());
 
     public Model(List<Account> accounts){
         // if a new account is added then set it as active

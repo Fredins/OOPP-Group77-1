@@ -60,7 +60,7 @@ public class WritingController {
 
   public void init(Control control, String to) {
     //Lets the tField get auto suggestions when typing
-    TextFields.bindAutoCompletion(toField, splitAndMakeToList(control.getAutoSuggestions().get()));
+    TextFields.bindAutoCompletion(toField, control.getAutoSuggestions().get());
     if (to != null) {
       toField.setText(to);
     }
@@ -111,7 +111,7 @@ public class WritingController {
 
     threadExecutor.execute(() -> {
       try {
-        control.addSuggestion(toField.getText());
+        control.addSuggestion(Arrays.stream(toField.getText().split(";")).toList());
         control.send(
           removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())),
           subjectField.getText(),

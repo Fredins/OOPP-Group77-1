@@ -15,7 +15,7 @@ public interface Storage {
   void store(Account account) throws StorageException;
   void store(Account account, List<Folder> folders) throws StorageException;
   void store(Account account, Folder folder) throws StorageException;
-  void store(Account account, String s) throws IOException, Exception;
+  void storeSuggestions(Account account, List<String> suggestions) throws StorageException;
 
   List<Account> retrieveAccounts() throws StorageException;
   List<Folder> retrieveFolders(Account account) throws StorageException;

@@ -17,6 +17,7 @@ import java.util.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.stream.*;
 
 
 /**
@@ -95,24 +96,21 @@ public class Control {
 
     /** Adds the recipients email address to the suggestion list in storage by retrieving the old list and add the new email and store them together
      *
-     * @param s
-     * @throws Exception
-     * @author David Zamanian
+     * @param suggestion
+     * @author David Zamanian, Martin
      */
 
-    public void addSuggestion(String s) throws Exception {
-        //If there are already suggestions in the list
-        if (!storage.retrieveSuggestions(getActiveAccount().get()).isEmpty()){
-            //If there are no duplicates
-            if (!storage.retrieveSuggestions(getActiveAccount().get()).get(0).contains(s)){
-                System.out.println("Loks like this: " + storage.retrieveSuggestions(getActiveAccount().get()));
-                 String newString = s + ";" + (storage.retrieveSuggestions(getActiveAccount().get()));
-                 storage.store(getActiveAccount().get(), removeBrackets(newString));}
+    public void addSuggestion(List<String> newSuggestions){
+        try{
+            List<String> oldSuggestions = storage.retrieveSuggestions(getActiveAccount().get());
+            List<String> combinedSuggestions = Stream.concat(oldSuggestions.stream(), newSuggestions.stream())
+              .distinct()
+              .collect(Collectors.toList());
+            storage.storeSuggestions(getActiveAccount().get(), combinedSuggestions);
+            getAutoSuggestions().replaceAll(combinedSuggestions);
+        }catch (StorageException e){
+            e.printStackTrace();
         }
-        else {
-            storage.store(getActiveAccount().get(), s);
-        }
-
     }
 
     /**
@@ -282,8 +280,6 @@ public class Control {
     }
 
     public SubjectList<String> getAutoSuggestions() {return model.getAutoSuggestions();}
-
-
     public Subject<Account> getActiveAccount() { return model.getActiveAccount(); }
     public SubjectList<Account> getAccounts() { return model.getAccounts(); }
     public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {model.setActiveAccount(account);}
@@ -292,7 +288,6 @@ public class Control {
     public Subject<Email> getActiveEmail() { return model.getActiveEmail(); }
     public SubjectList<Email> getActiveEmails() { return model.getActiveEmails(); }
     public void setFolder(Folder activeFolder) { model.setActiveFolder(activeFolder); }
-    public void setVisibleEmails(List<Email> visibleEmails) { model.setActiveEmails(visibleEmails); }
 
 
     public void filterOnTo(String searchWord) {
