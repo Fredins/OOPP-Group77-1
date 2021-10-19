@@ -9,7 +9,7 @@ import java.util.function.BiPredicate;
  *
  * @author Hampus Jernkrook
  */
-public class InAnyTextFieldPredicate implements BiPredicate<Email, String> {
+class InAnyTextFieldPredicate implements BiPredicate<Email, String> {
     /**
      * Searches an email for a given substring. The search is case-insensitive.
      * The substring can be in either one of the email's addresses, the subject or the content.

@@ -10,7 +10,7 @@ import java.util.List;
  * @param <T> - type of the elements in the collection.
  * @author Hampus Jernkrook
  */
-public class Sorter<T> {
+class Sorter<T> {
     /**
      * Sort the given list by the total ordering enforced by the comparator.
      *
