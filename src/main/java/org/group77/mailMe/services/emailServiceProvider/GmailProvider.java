@@ -175,7 +175,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      * Asks server to authorice the session. Returns Authenticated Session.
      */
-    private static Session getAuthentication(Properties properties, String account, String password) {
+    private Session getAuthentication(Properties properties, String account, String password) {
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -189,7 +189,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @param properties - are connection properties to the server.
      * @author Alexey Ryabov
      */
-    private static void setGmailProperties(Properties properties) {
+    private void setGmailProperties(Properties properties) {
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -207,7 +207,7 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      * Composes a message, returnt message object..
      */
-    private static Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) throws Exception {
+    private Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) throws Exception {
         try {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));

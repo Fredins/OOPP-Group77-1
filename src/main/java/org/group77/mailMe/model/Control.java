@@ -12,12 +12,10 @@ import org.group77.mailMe.services.storage.Storage;
 
 
 import javax.mail.*;
-import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -222,11 +220,10 @@ public class Control {
     /**
      * Used when deleting emails from the trash. Will remove it from all inboxes and will not be able to recover it
      *
-     * @throws Exception
      * @author David Zamanian, Martin
      */
 
-    public void permDeleteEmail() throws Exception {
+    public void permDeleteEmail() {
         Email email = getActiveEmail().get();
         Folder deleteFromFolder = getActiveFolder().get();
         getActiveEmails().remove(email);
@@ -243,7 +240,7 @@ public class Control {
      * @author David Zamanian, Martin
      */
 
-    public void moveEmail(Folder MoveTofolder) throws Exception {
+    public void moveEmail(Folder MoveTofolder) {
         Email email = getActiveEmail().get();
         getActiveEmails().remove(email);
         Folder moveFromFolder = getActiveFolder().get();
