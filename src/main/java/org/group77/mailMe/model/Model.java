@@ -5,6 +5,8 @@ import org.group77.mailMe.model.data.Email;
 import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.model.exceptions.*;
 import org.group77.mailMe.model.textFinding.TextFinder;
+import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class Model {
             Account newAccount = newAccounts.get(newAccounts.size() - 1);
             activeAccount.set(newAccount);
         }); // -- moved this cause it doesn't have anything to do with services. Martin
+
+
     }
 
     /**
@@ -57,18 +61,22 @@ public class Model {
         folders.replace(folder, newFolder);
     }
 
-    public void setActiveAccount(Account account) {
+    public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {
         // check if account is in this accounts
-        activeAccount.set(account);
-        /*if (accounts.get().contains(account)) {
 
-        }*/
+        if (accounts.get().contains(account)) {
+            activeAccount.set(account);
+        } else {
+            throw new ActiveAccountNotInAccounts();
+        }
     }
 
-    public void addAccount(Account account) {
+    public void addAccount(Account account) throws AccountAlreadyExistsException {
         // add account if it does not already exist in this accounts
         if (!(accounts.get().contains(account))) {
             accounts.add(account);
+        } else {
+            throw new AccountAlreadyExistsException("Account already exists");
         }
     }
 
