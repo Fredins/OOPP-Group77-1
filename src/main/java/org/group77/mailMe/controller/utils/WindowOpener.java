@@ -22,7 +22,7 @@ public class WindowOpener {
    */
   public static void openMaster(Control control){
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Master.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/Master.fxml"));
       Pane pane = fxmlLoader.load();
       ((MasterController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();
@@ -41,7 +41,7 @@ public class WindowOpener {
    */
   public static void openStartPage(Control control){
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("StartPage.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/StartPage.fxml"));
       Pane pane = fxmlLoader.load();
       ((StartPageController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();
@@ -62,7 +62,7 @@ public class WindowOpener {
   public static void openAddAccount(Control control, Consumer<Node> onClose) {
 
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddAccount.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/AddAccount.fxml"));
       Pane pane = fxmlLoader.load();
       ((AddAccountController) fxmlLoader.getController()).init(control, onClose);
       Stage stage = new Stage();
@@ -81,7 +81,7 @@ public class WindowOpener {
    */
   public static void openWriting(Control control) {
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/Writing.fxml"));
       Pane pane = fxmlLoader.load();
       ((WritingController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();
@@ -101,7 +101,7 @@ public class WindowOpener {
    */
   public static void openReply(Control control, String to) {
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Writing.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/Writing.fxml"));
       Pane pane = fxmlLoader.load();
       ((WritingController) fxmlLoader.getController()).init(control, to);
       Stage stage = new Stage();
@@ -122,7 +122,7 @@ public class WindowOpener {
 
   public static void openFilter(Control control){
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FilterView.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/FilterView.fxml"));
       Pane pane = fxmlLoader.load();
       ((FilterController) fxmlLoader.getController()).init(control);
       Stage stage = new Stage();

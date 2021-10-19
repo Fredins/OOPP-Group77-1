@@ -54,7 +54,7 @@
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" styleClass="filterButton">
                            <image>
-                              <Image url="@images_and_icons/filter-icon.png" />
+                              <Image url="@../images_and_icons/filter-icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -69,7 +69,7 @@
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images_and_icons/refresh.png" />
+                              <Image url="@../images_and_icons/refresh.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -78,7 +78,7 @@
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images_and_icons/clearIcon.png" />
+                              <Image url="@../images_and_icons/clearIcon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -90,7 +90,7 @@
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images_and_icons/SearchIcon.png" />
+                              <Image url="@../images_and_icons/SearchIcon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -116,7 +116,7 @@
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images_and_icons/addAccount-white.png" />
+                        <Image url="@../images_and_icons/addAccount-white.png" />
                      </image>
                   </ImageView>
                </graphic>

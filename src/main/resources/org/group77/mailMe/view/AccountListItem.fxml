@@ -16,7 +16,7 @@
       </Label>
       <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="12.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="12.0" AnchorPane.topAnchor="10.0">
          <image>
-            <Image url="@images_and_icons/UserIconEmailItem.png" />
+            <Image url="@../images_and_icons/UserIconEmailItem.png" />
          </image>
       </ImageView>
    </children>

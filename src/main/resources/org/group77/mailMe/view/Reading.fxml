@@ -45,7 +45,7 @@
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images_and_icons/ReplyButtonIcon.png" />
+                        <Image url="@../images_and_icons/ReplyButtonIcon.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -54,7 +54,7 @@
                <graphic>
                   <ImageView fx:id="archiveImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images_and_icons/archive.png" />
+                        <Image url="@../images_and_icons/archive.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -63,7 +63,7 @@
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images_and_icons/trashIcon.png" />
+                        <Image url="@../images_and_icons/trashIcon.png" />
                      </image>
                   </ImageView>
                </graphic>

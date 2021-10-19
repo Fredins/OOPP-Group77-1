@@ -54,7 +54,7 @@ public class StartPageController {
     for (Account account : control.getAccounts().get()) {
       try {
         // load AccountListItem.fxml
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AccountListItem.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/AccountListItem.fxml"));
         Pane accountPane = fxmlLoader.load();
         ((AccountListItemController) fxmlLoader.getController()).init(account);
         // add it to VBox

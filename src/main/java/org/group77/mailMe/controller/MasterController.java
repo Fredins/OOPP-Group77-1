@@ -238,7 +238,7 @@ public class MasterController {
      */
     private void loadReading(Email email, Control control) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Reading.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/Reading.fxml"));
             Pane pane = fxmlLoader.load();
             pane.setPrefWidth(readingPane.getWidth());
             pane.setPrefHeight(readingPane.getHeight());
@@ -265,7 +265,7 @@ public class MasterController {
                 .map(folder -> {
                     Pane pane = null;
                     try {
-                        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FolderItem.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/FolderItem.fxml"));
                         pane = fxmlLoader.load();
                         ((FolderItemController) fxmlLoader.getController()).init(control, folder);
                     } catch (IOException e) {
@@ -291,7 +291,7 @@ public class MasterController {
                 .map(email -> {
                     Pane pane = null;
                     try {
-                        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("EmailItem.fxml"));
+                        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/EmailItem.fxml"));
                         pane = fxmlLoader.load();
                         ((EmailItemController) fxmlLoader.getController()).init(control, email);
                     } catch (IOException e) {
@@ -312,7 +312,7 @@ public class MasterController {
     private void loadFilterView(Control control) {
         System.out.println("INIT FILTER FIEW"); //todo remove
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FilterView.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/FilterView.fxml"));
             Pane pane = fxmlLoader.load();
             ((FilterController) fxmlLoader.getController()).init(control);
             filterFlowPane.getChildren().clear();
