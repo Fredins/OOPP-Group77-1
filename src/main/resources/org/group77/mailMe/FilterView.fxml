@@ -6,15 +6,22 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane prefHeight="250.0" prefWidth="500.0" style="-fx-background-color: ffffff;" stylesheets="@DefaultStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.FilterController">
+<AnchorPane prefHeight="300.0" prefWidth="600.0" stylesheets="@DefaultStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.FilterController">
    <children>
+      <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #484848; -fx-border-width: 4;">
+         <effect>
+            <DropShadow />
+         </effect>
+      </FlowPane>
       <ChoiceBox fx:id="timeChoiceBox" layoutX="94.0" layoutY="23.0" prefHeight="27.0" prefWidth="126.0" styleClass="removeFocus" AnchorPane.leftAnchor="95.0" />
       <TextField fx:id="toTextField" layoutX="97.0" layoutY="67.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="352.0" styleClass="removeFocus" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="51.0" />
-      <TextField fx:id="fromTextField" layoutX="95.0" layoutY="112.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="354.0" styleClass="removeFocus" AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="51.0" />
+      <TextField fx:id="fromTextField" layoutX="95.0" layoutY="116.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="354.0" styleClass="removeFocus" AnchorPane.bottomAnchor="157.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="51.0" />
       <DatePicker fx:id="maxDatePicker" layoutX="95.0" layoutY="158.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="126.0" styleClass="removeFocus" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="95.0" />
-      <DatePicker fx:id="minDatePicker" layoutX="95.0" layoutY="200.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="126.0" styleClass="removeFocus" />
+      <DatePicker fx:id="minDatePicker" layoutX="95.0" layoutY="160.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="126.0" styleClass="removeFocus" />
       <Button fx:id="addFilterButton" layoutX="430.0" layoutY="91.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Add" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="51.0">
          <styleClass>
             <String fx:value="removeFocus" />
@@ -33,7 +40,7 @@
             <String fx:value="standardTextFontSize" />
          </styleClass>
       </Label>
-      <Label layoutX="12.0" layoutY="112.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="From" AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="12.0">
+      <Label layoutX="14.0" layoutY="116.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="From" AnchorPane.bottomAnchor="157.0" AnchorPane.leftAnchor="14.0">
          <styleClass>
             <String fx:value="standardFontFamily" />
             <String fx:value="standardTextFontSize" />
@@ -51,11 +58,17 @@
             <String fx:value="standardFontFamily" />
          </styleClass>
       </Label>
-      <Label layoutX="12.0" layoutY="199.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="Min Date" AnchorPane.leftAnchor="12.0">
+      <Label layoutX="12.0" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="60.0" text="Min Date" AnchorPane.leftAnchor="12.0">
          <styleClass>
             <String fx:value="standardFontFamily" />
             <String fx:value="standardTextFontSize" />
          </styleClass>
       </Label>
+      <Button fx:id="closeButton" layoutX="336.0" layoutY="263.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Close">
+         <styleClass>
+            <String fx:value="removeFocus" />
+            <String fx:value="prominentButtonSmall" />
+         </styleClass>
+      </Button>
    </children>
 </AnchorPane>
