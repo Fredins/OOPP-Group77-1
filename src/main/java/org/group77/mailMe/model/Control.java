@@ -139,7 +139,7 @@ public class Control {
      */
     public List<Email> refresh() throws ProviderConnectionRefusedException {
         if (model.getActiveAccount() != null && model.getFolders() != null) {
-            EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
+            EmailServiceProvider esp = EmailServiceProviderFactory.createEmailServiceProvider(model.getActiveAccount().get());
             try {
                 return esp.refreshFromServer(model.getActiveAccount().get());
             } catch (MessagingException e) { // TODO make refreshFromServer throw ProviderConnectionRefusedException instead
@@ -177,7 +177,7 @@ public class Control {
         try {
             Account account = model.createAccount(emailAddress, password.toCharArray());
             // test connection
-            if (EmailServiceProviderFactory.getEmailServiceProvider(account).testConnection(account)) {
+            if (EmailServiceProviderFactory.createEmailServiceProvider(account).testConnection(account)) {
                 storage.store(account); // throws account already exists exception
                 model.addAccount(account); // will set created account to activeAccount
             }
@@ -194,7 +194,7 @@ public class Control {
      */
     public void send(List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
         if (model.getActiveAccount() != null) {
-            EmailServiceProvider esp = EmailServiceProviderFactory.getEmailServiceProvider(model.getActiveAccount().get());
+            EmailServiceProvider esp = EmailServiceProviderFactory.createEmailServiceProvider(model.getActiveAccount().get());
             esp.sendEmail(model.getActiveAccount().get(),recipients,subject,content,attachments);
             model.setAutoSuggestions(storage.retrieveSuggestions(getActiveAccount().get()));
             System.out.println("Storage: "+storage.retrieveSuggestions(getActiveAccount().get()));

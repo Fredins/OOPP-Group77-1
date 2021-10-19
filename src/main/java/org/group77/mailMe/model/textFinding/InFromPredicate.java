@@ -9,7 +9,7 @@ import java.util.function.BiPredicate;
  *
  * @author Hampus Jernkrook
  */
-public class InFromPredicate implements BiPredicate<Email, String> {
+class InFromPredicate implements BiPredicate<Email, String> {
     /**
      * Tests whether the given substring is in the email's from-address.
      * Case-insensitive.

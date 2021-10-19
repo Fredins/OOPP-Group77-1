@@ -11,7 +11,7 @@ import java.util.function.BiPredicate;
  * @param <U> - type of the other argument supplied to the BiPredicate.
  * @author Hampus Jernkrook
  */
-public class Filter<T, U> {
+class Filter<T, U> {
     /**
      * Filters a collection based on the given predicate.
      *

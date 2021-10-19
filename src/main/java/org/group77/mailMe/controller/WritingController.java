@@ -43,8 +43,6 @@ public class WritingController {
    */
 
   public void init(Control control) {
-    //Lets the tField get auto suggestions when typing
-    TextFields.bindAutoCompletion(toField, splitAndMakeToList(control.getAutoSuggestions().get()));
     init(control, null);
   }
 
@@ -81,10 +79,8 @@ public class WritingController {
   private List<String> splitAndMakeToList(List<String> list){
     if (!list.isEmpty()) {
       String theList = list.get(0);
-      String strings[] = theList.split(";");
-      List newList = Arrays.asList(strings);
-
-      return newList;
+      String[] strings = theList.split(";");
+      return Arrays.asList(strings);
     } else return list;
 
   }
