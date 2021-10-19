@@ -272,12 +272,12 @@ public class Control {
 
     public Subject<Account> getActiveAccount() { return model.getActiveAccount(); }
     public SubjectList<Account> getAccounts() { return model.getAccounts(); }
-    public void setActiveAccount(Account account) { model.setActiveAccount(account); }
+    public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {model.setActiveAccount(account);}
     public SubjectList<Folder> getFolders() { return model.getFolders(); }
     public Subject<Folder> getActiveFolder() { return model.getActiveFolder(); }
     public Subject<Email> getActiveEmail() { return model.getActiveEmail(); }
     public SubjectList<Email> getActiveEmails() { return model.getActiveEmails(); }
-    public void setActiveFolder(Folder activeFolder) { model.setActiveFolder(activeFolder); }
+    public void setFolder(Folder activeFolder) { model.setActiveFolder(activeFolder); }
     public void setVisibleEmails(List<Email> visibleEmails) { model.setActiveEmails(visibleEmails); }
 
 
