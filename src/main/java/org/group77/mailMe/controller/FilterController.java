@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import org.group77.mailMe.model.Control;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,9 @@ public class FilterController {
     private final String oldToNewSorting = "Oldest to Newest";
     // set new to old sorting as default
     private final String defaultSorting = newToOldSorting;
+
+    @FXML private AnchorPane rootPane;
+    @FXML private Button closeButton;
 
     /** init function
      *
@@ -90,6 +94,9 @@ public class FilterController {
                 }
             }
         });
+
+        closeButton.setOnAction(i -> rootPane.getParent().setVisible(false));
+
         populateChoiceBox();
         // set value in time choice box to default sorting.
         timeChoiceBox.setValue(defaultSorting);
