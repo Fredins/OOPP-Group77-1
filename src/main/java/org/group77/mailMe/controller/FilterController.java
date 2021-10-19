@@ -19,21 +19,20 @@ import java.util.Objects;
  */
 
 public class FilterController {
-    @FXML private Button clearFilterButton;
-    @FXML private Button addFilterButton;
-    @FXML private TextField toTextField;
-    @FXML private TextField fromTextField;
-    @FXML private DatePicker maxDatePicker;
-    @FXML private DatePicker minDatePicker;
-    @FXML private ChoiceBox<String> timeChoiceBox;
-    // Strings for the sorting choice box: timeChoiceBox.
+    @FXML private Button clearFilterButton; //button for clearing all filters
+    @FXML private Button applyFilterButton; //button for applying all chosen filters
+    @FXML private TextField toTextField; // text field for filtering on 'to'
+    @FXML private TextField fromTextField; // text field for filtering on 'from'
+    @FXML private DatePicker maxDatePicker; // date picker for filtering on max date.
+    @FXML private DatePicker minDatePicker; // date picker for filtering on min date.
+    @FXML private ChoiceBox<String> sortingChoiceBox; //list of sorting alternatives.
+    @FXML private AnchorPane rootPane; // the underlying pane which all other components are children of.
+    @FXML private Button closeButton; // button for closing the filter view.
+    // Strings for the sorting choice box:
     private final String newToOldSorting = "Newest to Oldest";
     private final String oldToNewSorting = "Oldest to Newest";
     // set new to old sorting as default
     private final String defaultSorting = newToOldSorting;
-
-    @FXML private AnchorPane rootPane;
-    @FXML private Button closeButton;
 
     /** init function
      *
@@ -46,39 +45,34 @@ public class FilterController {
         // upon clearing the filter, clear all fields except the sorting.
         // Sorting instead is set to default.
         clearFilterButton.setOnMouseClicked(inputEvent -> {
-            toTextField.clear();
-            fromTextField.clear();
-            maxDatePicker.setValue(null);
-            minDatePicker.setValue(null);
-            timeChoiceBox.setValue(defaultSorting);
+            clearAllFilters();
             // notify control to restore active emails
-            System.out.println("FILTERS ARE CLEARED!"); //todo remoVE
             control.clearFilter();
-            control.sortByNewToOld(); // apply default filter again
+            // apply default sorting again
+            applyDefaultSorting(control);
         });
-        addFilterButton.setOnMouseClicked(inputEvent -> {
-            //clear filter before applying anything
+        // when applying the chosen filters:
+        applyFilterButton.setOnMouseClicked(inputEvent -> {
+            //clear filter (restore to original emails) before applying anything
             control.clearFilter();
             // apply all filters chosen
             applyAllFilters(control);
         });
-
         // close button hides the filter view
         closeButton.setOnAction(i -> rootPane.getParent().setVisible(false));
-
-        // populate the list/time choice box of possible sorting alternatives:
+        // populate the list/sorting choice box of possible sorting alternatives:
         populateChoiceBox();
-        // set value in time choice box to default sorting.
-        timeChoiceBox.setValue(defaultSorting);
+        // set value in sorting choice box to default sorting.
+        sortingChoiceBox.setValue(defaultSorting);
 
         //TODO: ask control to default sort upon initialisation? I.e.
         // control.sortByNewToOld();
     }
 
     private void populateChoiceBox(){
-        timeChoiceBox.getItems().clear();
-        timeChoiceBox.getItems().add(0, newToOldSorting);
-        timeChoiceBox.getItems().add(1, oldToNewSorting);
+        sortingChoiceBox.getItems().clear();
+        sortingChoiceBox.getItems().add(0, newToOldSorting);
+        sortingChoiceBox.getItems().add(1, oldToNewSorting);
     }
 
     private void applyAllFilters(Control control) {
@@ -126,15 +120,27 @@ public class FilterController {
     }
 
     private void applySorting(Control control) {
-        if (!Objects.equals(timeChoiceBox.getValue(), null)) {
+        if (!Objects.equals(sortingChoiceBox.getValue(), null)) {
             System.out.println("TIME CHOICE BOX IS NOT EMPTY"); //TODO REMOVE
-            if (Objects.equals(timeChoiceBox.getValue(), newToOldSorting)) {
+            if (Objects.equals(sortingChoiceBox.getValue(), newToOldSorting)) {
                 System.out.println("NEW TO OLD SORTING APPLIED"); //TODO REMOVE
                 control.sortByNewToOld();
-            } else if (Objects.equals(timeChoiceBox.getValue(), oldToNewSorting)) {
+            } else if (Objects.equals(sortingChoiceBox.getValue(), oldToNewSorting)) {
                 System.out.println("OLD TO NEW SORTING APPLIED"); //TODO REMOVE
                 control.sortByOldToNew();
             }
         }
+    }
+
+    private void clearAllFilters() {
+        toTextField.clear();
+        fromTextField.clear();
+        maxDatePicker.setValue(null);
+        minDatePicker.setValue(null);
+        sortingChoiceBox.setValue(defaultSorting);
+    }
+
+    private void applyDefaultSorting(Control control) {
+        control.sortByNewToOld();
     }
 }
