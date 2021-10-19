@@ -43,6 +43,13 @@ public class FilterController implements FilterControl {
     // set new to old sorting as default
     private final String defaultSorting = newToOldSorting;
 
+    //todo added this /h
+    private SearchControl searchControl;
+    public void init(Control control, SearchControl searchControl) {
+        this.searchControl = searchControl;
+        init(control);
+    }
+
     /**
      * Upon initialisation: add actions to all buttons and set default sorting.
      *
@@ -50,7 +57,6 @@ public class FilterController implements FilterControl {
      * @author David Zamanian
      * @author Hampus Jernkrook
      */
-
     public void init(Control control) {
         // upon clearing the filter, clear all fields except the sorting.
         // Sorting instead is set to default.
@@ -60,11 +66,16 @@ public class FilterController implements FilterControl {
             control.clearFilter();
             // apply default sorting again
             applyDefaultSorting(control);
+            // todo added this /h
+            // ask search control to apply the searching again
+            searchControl.applySearch(control);
         });
         // when applying the chosen filters:
         applyFilterButton.setOnMouseClicked(inputEvent -> {
             //clear filter (restore to original emails) before applying anything
             control.clearFilter();
+            // apply potential search via search control
+            searchControl.applySearch(control);
             // apply all filters chosen
             applyAllFilters(control);
         });

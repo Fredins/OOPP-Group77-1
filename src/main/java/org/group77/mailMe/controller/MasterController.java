@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
 
-public class MasterController {
+public class MasterController implements SearchControl {
   @FXML private Button refreshBtn;
   @FXML private Button writeBtn;
   @FXML private FlowPane foldersFlow;
@@ -85,7 +85,6 @@ public class MasterController {
     refreshBtn.setOnAction(i -> refresh(control));
     writeBtn.setOnAction(i -> WindowOpener.openWriting(control));
     addAccountBtn.setOnAction(inputEvent -> WindowOpener.openAddAccount(control, node -> ((Stage) node.getScene().getWindow()).close()));
-   // filterButton.setOnAction(i -> WindowOpener.openFilter(control));
     control.getActiveAccount().addObserver(newAccount -> accountsCombo.setValue(newAccount));
     control.getFolders().addObserver(newFolders -> handleFoldersChange(newFolders, control));
     control.getActiveEmails().addObserver(newEmails -> loadEmails(newEmails, control));
@@ -315,8 +314,8 @@ public class MasterController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FilterView.fxml"));
             Pane pane = fxmlLoader.load();
-            filterControl = fxmlLoader.getController(); //todo changed this and the line below /h
-            filterControl.init(control);
+            filterControl = fxmlLoader.getController(); //todo added this /h
+            filterControl.init(control, this); //todo added this /h
             filterFlowPane.getChildren().clear();
             filterFlowPane.getChildren().add(pane);
             filterFlowPane.setVisible(false);
@@ -325,8 +324,10 @@ public class MasterController {
         }
     }
 
-    private void applySearch(Control control) {
-        control.search(searchField.getText());
+    public void applySearch(Control control) {
+        control.clearSearchResult(); // clear the search result first.
+        filterControl.applyFilter(control); // re-apply filters via filter control
+        control.search(searchField.getText()); // search for the submitted search word.
     }
 
     private void clearSearch(Control control) {

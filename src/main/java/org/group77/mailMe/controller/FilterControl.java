@@ -4,5 +4,6 @@ import org.group77.mailMe.model.Control;
 
 interface FilterControl {
     public void init(Control control);
+    public void init(Control control, SearchControl searchControl);
     public void applyFilter(Control control);
 }
