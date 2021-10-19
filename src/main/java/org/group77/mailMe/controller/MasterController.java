@@ -17,6 +17,7 @@ import org.group77.mailMe.model.exceptions.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.*;
 
 public class MasterController {
@@ -34,6 +35,7 @@ public class MasterController {
   @FXML private FlowPane filterFlowPane;
   @FXML private AnchorPane progressPane;
   @FXML private Label progressLabel;
+  private final ExecutorService threadExecutor = Executors.newSingleThreadExecutor();
 
 
   /**
@@ -98,7 +100,8 @@ public class MasterController {
         .position(Pos.TOP_CENTER)
         .hideAfter(Duration.seconds(2));
 
-    new Thread(() ->{
+
+    threadExecutor.execute(() ->{
       try {
         List<Email> newEmails = control.refresh();
         Platform.runLater(() -> {
@@ -122,7 +125,7 @@ public class MasterController {
         });
         e.printStackTrace();
       }
-    }).start();
+    });
   }
 
   /**
