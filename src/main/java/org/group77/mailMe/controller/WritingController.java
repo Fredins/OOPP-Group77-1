@@ -19,6 +19,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import org.group77.mailMe.Main;
 import org.group77.mailMe.model.Control;
+import org.group77.mailMe.model.data.*;
 
 
 import java.io.File;
@@ -66,7 +67,7 @@ public class WritingController {
     }
     fromLabel.setText(control.getActiveAccount().get().emailAddress());
     // input handlers
-    sendBtn.setOnAction(inputEvent -> send(control, ((Node) sendBtn)));
+    sendBtn.setOnAction(inputEvent -> send(control, sendBtn));
     attachBtn.setOnAction(inputEvent -> attachFiles());
     // change handlers
     control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
@@ -78,23 +79,6 @@ public class WritingController {
     });
 
   }
-
-  /** Removes brackets from a list and takes the first element of that list and breaks it up where there are ; and creates a new list will all the new elements
-   *
-   * @param list a list with only one element
-   * @return
-   * @author David Zamanian
-   */
-
-  private List<String> splitAndMakeToList(List<String> list){
-    if (!list.isEmpty()) {
-      String theList = list.get(0);
-      String[] strings = theList.split(";");
-      return Arrays.asList(strings);
-    } else return list;
-
-  }
-
 
   /**
    * 1. try to send email
@@ -192,16 +176,6 @@ public class WritingController {
     return Arrays.asList(strings);
   }
 
-  /** @author Alexey Ryabov
-   * @param stage the stage of the window
-   * For testing. This closes the stage of the window where certain stage is located.
-   */
-  @FXML
-  private void closeWindowAction(Stage stage){
-    stage.getScene().getWindow();
-    // Close the window of a stage.
-    stage.close();
-  }
 
   /**
    * @author Alexey Ryabov

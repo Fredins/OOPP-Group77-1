@@ -36,11 +36,11 @@ public class TestFilter {
                 "haha@gmail.com"
         };
         emails = Arrays.asList(
-                new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE",
+                new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE", null,
                         LocalDateTime.of(2021, Month.OCTOBER, 11, 15, 30, 45)),
-                new Email("memail@live.com", to2, "Second", "contains sausage",
+                new Email("memail@live.com", to2, "Second", "contains sausage", null,
                         LocalDateTime.of(2021, Month.MAY, 11, 15, 30, 45)),
-                new Email("lol@hotmail.com", to3, "third", "contains no meat at all",
+                new Email("lol@hotmail.com", to3, "third", "contains no meat at all", null,
                         LocalDateTime.of(2010, Month.JANUARY, 11, 15, 30, 45))
         );
     }

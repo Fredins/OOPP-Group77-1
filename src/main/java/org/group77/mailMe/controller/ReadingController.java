@@ -129,23 +129,6 @@ public class ReadingController {
     );
   }
 
-  /**
-   * once the web content is loaded
-   * 1. get height of document
-   * 2. adjust height accordingly
-   *
-   * @param webEngine the webviews webengine
-   * @param newState  the state of the webengine
-   * @author Martin
-   */
-  private void adjustHeigth(WebEngine webEngine, State newState) {
-    if (newState == State.SUCCEEDED) {
-      double height = Double.parseDouble(((String) webEngine.executeScript(
-        "window.getComputedStyle(document.body, null).getPropertyValue('height')"
-      )).replace("px", ""));
-      webView.setPrefHeight(height);
-    }
-  }
 
   /**
    * Moves email to trash if not already in trash. If in trash --> Deletes permanently (but with confirmation).
@@ -188,28 +171,17 @@ public class ReadingController {
   }
 
   /**
-   * Removes brackets from a string. Used to remove "[" and "]" from recipients.
-   *
-   * @param s
-   * @author David Zamanian
-   */
-  private String removeBrackets(String s) {
-    s = s.replaceAll("[\\[\\](){}]", "");
-    return s;
-  }
-
-  /**
    * @param email - Received email.
    * @author Alexey Ryabov
    */
   private void AttachmentsController(Email email) {
-    if (email.attachments() != null) {
+    if (!email.attachments().isEmpty()) {
       //For every attachment in the list.
-      for (Map.Entry<byte[], String> attachment : email.attachmentsAsBytes().entrySet()) {
+      for (Attachment attachment : email.attachments()) {
         try {
           //Creating a button with attachment name.
           Button button = hBoxButtonSetup(attachment);
-          AttachmentButtonAction(attachment.getKey(), attachment.getValue(), button);
+          AttachmentButtonAction(attachment, button);
           //Adding a button to HBox.
           attachmentsHBox.setSpacing(5);
           attachmentsHBox.getChildren().add(button);
@@ -225,7 +197,7 @@ public class ReadingController {
    * @return button for the HBox.
    * @author Alexey Ryabov
    */
-  private Button hBoxButtonSetup(Map.Entry<byte[], String> attachment) {
+  private Button hBoxButtonSetup(Attachment attachment) {
     //Creating image for attachments button
     ImageView iv = new ImageView(new Image(String.valueOf(Main.class.getResource("images_and_icons/attachmentIcon.png"))));
     iv.setFitHeight(30);
@@ -233,7 +205,7 @@ public class ReadingController {
     //Creating button for the HBox
     Button button = new Button();
     Tooltip tt = new Tooltip(); // Tooltip for the button with attachment's name.
-    tt.setText(attachment.getValue());
+    tt.setText(attachment.name());
     button.setTooltip(tt);
     button.setGraphic(iv);
     button.setMinSize(30, 30);
@@ -248,11 +220,11 @@ public class ReadingController {
    * @param button     - button, with info about its attachment.
    * @author - Alexey Ryabov
    */
-  public void AttachmentButtonAction(byte[] fileToSave, String fileName, Button button) {
+  public void AttachmentButtonAction(Attachment attachment, Button button) {
     button.setOnAction(e -> {
       try {
         //On button action a file chooser going to open.
-        OpenFileChooser((Stage) button.getScene().getWindow(), fileToSave, fileName);
+        OpenFileChooser((Stage) button.getScene().getWindow(), attachment.content(), attachment.name());
       } catch (IOException ex) {
         ex.printStackTrace();
       }

@@ -63,7 +63,7 @@ public class GmailProvider extends EmailServiceProvider {
                 String content = "no content";
 
                 String contentType = message.getContentType();
-                String attachments = "";
+                List<Attachment> attachments = new ArrayList<>();
                 byte[] fileAsBytes = null;
                 Map<byte[], String> listOfFilesAsByteArray = new HashMap<>();
                 LocalDateTime receivedDate = resolveReceivedDate((MimeMessage) message);  //get the received date of the email
@@ -78,7 +78,6 @@ public class GmailProvider extends EmailServiceProvider {
                                 //Read file name as string
                                 String fileName = part.getFileName();
                                 //Appending filename to a string. TODO maybe not needed??
-                                attachments += fileName + ", ";
                                 //Converting/reading MimeBodyPart as input stream.
                                 InputStream inputStream = part.getInputStream();
                                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -95,12 +94,10 @@ public class GmailProvider extends EmailServiceProvider {
                                 fileAsBytes = outputStream.toByteArray();
                                 //Adding file and its name to hashmap
                                 listOfFilesAsByteArray.put(fileAsBytes, fileName);
+                                attachments.add(new Attachment(fileName, fileAsBytes, null));
                             } else {
                                 content = part.getContent().toString();
                             }
-                        }
-                        if (attachments.length() > 1) {
-                            attachments = attachments.substring(0, attachments.length() - 2);
                         }
                     } else if (contentType.contains("text/plain") || contentType.contains("text/html")) {
                         Object c = message.getContent();
@@ -119,7 +116,6 @@ public class GmailProvider extends EmailServiceProvider {
                         subject,
                         content,
                         attachments,
-                        listOfFilesAsByteArray,
                         receivedDate
                 ));
             }
@@ -159,27 +155,23 @@ public class GmailProvider extends EmailServiceProvider {
     }
 
     /**
-     * @param from       - active account.
-     * @param recipients - List of to-account that email will be sent to.
-     * @param subject    - subject text.
-     * @param content    - content text.
      * @return - boolean if email is sent successful.
      * @author Alexey Ryabov
      */
     @Override
-    public void sendEmail(Account from, List<String> recipients, String subject, String content, List<File> attachments) throws ServerException {
+    public void sendEmail(Account account, Email email) throws ServerException {
         //System.out.println("Preparing to send message.."); // For Testing
 
-        String fromAccount = from.emailAddress();
-        String fromAccountPassword = String.valueOf(from.password());
+        String fromAccount = account.emailAddress();
+        String fromAccountPassword = String.valueOf(account.password());
 
         Properties props = new Properties();
         setGmailProperties(props);
 
         // An email is sent to every address in the list.
-        for (String recipient : recipients) {
+        for (String recipient : email.to()) {
             try{
-                Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), fromAccount, recipient, subject, content, attachments);
+                Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), recipient, email);
                 Transport.send(msg);
             }catch (MessagingException e){
                 throw new ServerException(e);
@@ -220,40 +212,34 @@ public class GmailProvider extends EmailServiceProvider {
 
     /**
      * @param session   - session of the connection.
-     * @param from      - active account.
      * @param recipient - email address of the recipient.
-     * @param subject   - email subject string.
-     * @param content   - email content.
      * @return - message object.
      * @throws Exception
      * @author Alexey Ryabov
      * Composes a message, returnt message object..
      */
-    private Message composingMessage(Session session, String from, String recipient, String subject, String content, List<File> attachments) {
+    private Message composingMessage(Session session, String recipient, Email email) {
         try {
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(from));
+            msg.setFrom(new InternetAddress(email.from()));
             System.out.println(recipient); // For testing.
             msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-            msg.setSubject(subject);
+            msg.setSubject(email.subject());
             //msg.setText(content);
             // Create the Multipart and add MimeBodyParts to it.
             Multipart multipart = new MimeMultipart();
             // Create and fill the first message part.
             MimeBodyPart messageBodyPart = new MimeBodyPart();
             //Content of the message.
-            messageBodyPart.setContent(content, "text/html");
+            messageBodyPart.setContent(email.content(), "text/html");
             // Add multipart to message.
             multipart.addBodyPart(messageBodyPart);
             msg.setContent(multipart);
             // adding attachments:
-            if (attachments.size() > 0) {
-                // For every file in attachments list, created new MimeBodyPart and add it to Multipart.
-                for (File file : attachments) {
-                    MimeBodyPart mimeBodyPart = new MimeBodyPart();
-                    mimeBodyPart.attachFile(file);
-                    multipart.addBodyPart(mimeBodyPart);
-                }
+            for(Attachment attachment : email.attachments()){
+                MimeBodyPart mimeBodyPart = new MimeBodyPart();
+                mimeBodyPart.attachFile(attachment.file());
+                multipart.addBodyPart(mimeBodyPart);
             }
             msg.setSentDate(new Date());
             return msg;

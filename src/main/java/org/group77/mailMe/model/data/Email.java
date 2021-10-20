@@ -18,30 +18,9 @@ public record Email(
         String[] to,
         String subject,
         String content,
-        String attachments, //TODO alexey only one attachment thingy
-        List<File> attachmentsAsFile,
-        Map<byte[], String> attachmentsAsBytes,
+        List<Attachment> attachments,
         LocalDateTime date
-) implements Serializable { //TODO too many constructors
-    public Email(String from, String[] to, String subject, String content) {
-        this(from, to, subject, content, null, null,null, LocalDateTime.now(ZoneId.systemDefault())); // set current time as date
-    }
-
-    public Email(String from, String[] to, String subject, String content, LocalDateTime date) {
-        this(from, to, subject, content, null, null,null,date);
-    }
-
-    public Email(String from, String[] to, String subject, String content, String attachments) {
-        this(from, to, subject, content, attachments, null,null,LocalDateTime.now(ZoneId.systemDefault()));
-    }
-
-    public Email(String from, String[] to, String subject, String content, String attachments, Map<byte[], String> attachmentsAsBytes, LocalDateTime date) {
-        this(from, to, subject, content, attachments, null, attachmentsAsBytes, date);
-    }
-
-    public Email(String from, String[] to, String subject, String content, List<File> attachmentsAsFile) {
-        this(from, to, subject, content, null, attachmentsAsFile,null, LocalDateTime.now(ZoneId.systemDefault()));
-    }
+) implements Serializable {
 
     @Override
     public boolean equals(Object o) {

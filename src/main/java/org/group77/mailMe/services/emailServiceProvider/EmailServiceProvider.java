@@ -86,7 +86,7 @@ public abstract class EmailServiceProvider {
     props.setProperty("mail.pop3.ssl.enable", "true");
 
     Session session = Session.getDefaultInstance((props), null);
-    Store store = null;
+    Store store;
     try {
       store = session.getStore(protocolIn);
 
@@ -106,13 +106,9 @@ public abstract class EmailServiceProvider {
   }
 
   /**
-   * @param from      - active account
-   * @param recipient - list of email addresses.
-   * @param subject   - subject text field.
-   * @param content   - content text field.
    * @author Alexey Ryabov
    */
-  public abstract void sendEmail(Account from, List<String> recipient, String subject, String content, List<File> attachments) throws ServerException;
+  public abstract void sendEmail(Account account, Email email) throws ServerException;
 
   /** @author Martin Fredin.
    * @param store - is a list of folders.

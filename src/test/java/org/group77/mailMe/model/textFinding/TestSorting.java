@@ -31,27 +31,27 @@ public class TestSorting {
         // emails to use as input. The only thing changing is the date, for the most part.
         emails = new Email[]{
                 // 2019
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2019, Month.OCTOBER, 14, 8, 19)),
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2019, Month.DECEMBER, 24, 8, 0)),
-                new Email("different_from@gmail.com", to, subject, content, //DIFFERENT FROM ADDRESS FROM ABOVE.
+                new Email("different_from@gmail.com", to, subject, content, null,//DIFFERENT FROM ADDRESS FROM ABOVE.
                         LocalDateTime.of(2019, Month.DECEMBER, 24, 8, 0)),
                 // 2021
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2021, Month.OCTOBER, 14, 8, 19)),
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2021, Month.SEPTEMBER, 1, 8, 0)),
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2021, Month.MARCH, 31, 18, 20)),
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2021, Month.JANUARY, 23, 8, 54)),
                 // 2020
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2020, Month.NOVEMBER, 14, 8, 19)),
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2020, Month.AUGUST, 18, 4, 30)),
-                new Email(from, to, subject, content,
+                new Email(from, to, subject, content, null,
                         LocalDateTime.of(2020, Month.FEBRUARY, 28, 5, 20))
         };
         // expected order of new to old
