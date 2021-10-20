@@ -187,7 +187,7 @@ public class MasterController implements SearchControl {
         readingPane.getChildren().clear();
       }
       control.getActiveEmails().replaceAll(newFolder.emails());
-
+        filterControl.applySorting(control); // keep current sorting //todo added this /h
     }
 
     /**
