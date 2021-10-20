@@ -11,14 +11,13 @@ public class AccountFactory {
 
     /**
      * Creates a concrete account instance.
+     * Sets ServerProvider depending on the suffix of the email address.
+     *      * "@gmail.com" gets associated with ServerProvider.GMAIL.
+     *      * "@hotmail.com", "@live.com", "@outlook.com" with ServerProvider.MICROSOFT.
      *
      * @param emailAddress - email address of the created account
      * @param password     - password of the created account
      * @return An account instance with the given attributes.
-     * Sets ServerProvider depending on the suffix of the email address.
-     * "@gmail.com" gets associated with ServerProvider.GMAIL.
-     * "@hotmail.com", "@live.com", "@outlook.com" with ServerProvider.MICROSOFT.
-     *
      * @author Martin Fredin
      * @author Hampus Jernkrook
      * @author Elin Hagman
