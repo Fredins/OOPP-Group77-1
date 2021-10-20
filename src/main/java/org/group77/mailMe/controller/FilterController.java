@@ -86,8 +86,8 @@ public class FilterController implements FilterControl {
         // set value in sorting choice box to default sorting.
         sortingChoiceBox.setValue(defaultSorting);
 
-        //TODO: ask control to default sort upon initialisation? I.e.
-        // control.sortByNewToOld();
+        // apply default sorting of inbox upon init //todo added this /h
+        applyDefaultSorting(control);
     }
 
     /**
