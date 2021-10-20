@@ -3,7 +3,8 @@ package org.group77.mailMe.controller;
 import org.group77.mailMe.model.Control;
 
 interface FilterControl {
-    public void init(Control control);
-    public void init(Control control, SearchControl searchControl);
-    public void applyFilter(Control control);
+    void init(Control control);
+    void init(Control control, SearchControl searchControl);
+    void applyFilter(Control control);
+    void applySorting(Control control);
 }

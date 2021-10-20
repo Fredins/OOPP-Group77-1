@@ -125,6 +125,8 @@ public class MasterController implements SearchControl {
             notification
               .graphic(new Label(newEmails.isEmpty() ? "No new messages" : newEmails.size() + " new messages"))
               .show();
+              // sort the result of the refresh by the chosen sorting strategy //todo added this /h
+              filterControl.applySorting(control);
           } catch (FolderNotFoundException e) {
             e.printStackTrace();
           }

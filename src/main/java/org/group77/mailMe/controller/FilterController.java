@@ -114,12 +114,13 @@ public class FilterController implements FilterControl {
         applyFromFilter(control);
         applyMaxDateFilter(control);
         applyMinDateFilter(control);
-        applySorting(control);
+        sort(control);
     }
 
     public void applyFilter(Control control) {
         applyAllFilters(control);
-    }
+    } //todo added this /h
+    public void applySorting(Control control) { sort(control);} //todo added this /h
 
     /**
      * Applies the filter on 'to'.
@@ -184,7 +185,7 @@ public class FilterController implements FilterControl {
      * @param control - the class to delegate on to.
      * @author Hampus Jernkrook
      */
-    private void applySorting(Control control) {
+    private void sort(Control control) {
         // if there is some sorting choice made, then apply the chosen order.
         if (!Objects.equals(sortingChoiceBox.getValue(), null)) {
             if (Objects.equals(sortingChoiceBox.getValue(), newToOldSorting)) {
