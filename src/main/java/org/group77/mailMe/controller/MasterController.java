@@ -157,6 +157,7 @@ public class MasterController implements SearchControl {
     if(!newFolders.isEmpty()){
       loadFolders(newFolders, control);
       control.getActiveFolder().set(newFolders.get(0));
+      filterControl.applySorting(control); // keep current sorting //todo added this /h
     }
   }
 
