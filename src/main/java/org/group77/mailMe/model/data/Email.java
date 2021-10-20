@@ -22,6 +22,10 @@ public record Email(
         LocalDateTime date
 ) implements Serializable {
 
+    public Email(String from,String[] to, String subject, String content, List<Attachment> attachments) {
+        this(from,to,subject,content,attachments,LocalDateTime.now(ZoneId.systemDefault()));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
