@@ -12,12 +12,15 @@ import org.group77.mailMe.model.exceptions.*;
 public abstract class EmailServiceProviderFactory {
 
   /**
+   *
+   * Determines what EmailServiceProviderStrategy to use depending on
+   * account's ServerProvider enum.
    * @param account - the account that should be connected against some
    *                email service provider.
    * @return an EmailServiceProviderStrategy.
+   * @throws ServerException if email server is not supported
    * @author Hampus Jernkrook
-   * Determines what EmailServiceProviderStrategy to use depending on
-   * account's ServerProvider enum.
+   *
    */
   public static EmailServiceProvider createEmailServiceProvider(Account account) throws ServerException {
     if (account.provider() == ServerProvider.GMAIL) {
