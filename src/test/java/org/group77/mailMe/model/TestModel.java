@@ -6,10 +6,10 @@ import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.model.exceptions.EmailDomainNotSupportedException;
 import org.group77.mailMe.model.exceptions.FolderNotFoundException;
 import org.group77.mailMe.services.storage.AccountAlreadyExistsException;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -26,9 +26,8 @@ public class TestModel {
     private static List<Folder> folders;
     private static Model model;
 
-    @BeforeAll
-    public static void setup() throws EmailDomainNotSupportedException {
-
+    @BeforeEach
+    public void beforeEach() throws EmailDomainNotSupportedException {
         // ===== Initiate folders ======
 
         // Emails to be added to inbox folder
@@ -79,6 +78,16 @@ public class TestModel {
         model = new Model(accounts);
         model.getFolders().replaceAll(folders);
 
+    }
+
+    @AfterEach
+    public void afterEach() {
+        if (folders != null) {
+            folders.clear();
+        }
+        if (accounts != null) {
+            accounts.clear();
+        }
     }
 
     // ========= getters and setters =========
@@ -210,6 +219,7 @@ public class TestModel {
     }
 
     // ========= updateFolder =========
+
     @Test
     public void testUpdateInboxWithOneEmail()  {
 
@@ -328,7 +338,7 @@ public class TestModel {
 
     }
 
-    // ========= filterOnMinDate =========
+    // ========= sortByNewToOld =========
     @Test
     public void testSortByNewToOld() {
 
@@ -346,6 +356,8 @@ public class TestModel {
 
     }
 
+    // ========= sortByOldToNew =========
+
     @Test
     public void testSortByOldToNew() {
 
@@ -361,7 +373,104 @@ public class TestModel {
         Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
     }
 
+    // ========= clearFilter =========
 
+    @Test
+    public void testClearFilter() {
+
+        // set dateFolder and its emails as activeFolder and activeEmails
+        model.setActiveFolder(model.getFolders().get().get(2));
+        model.setActiveEmails(model.getActiveFolder().get().emails());
+
+        // save original order of emails
+        List<Email> originalEmails = new ArrayList<>(model.getActiveFolder().get().emails());
+
+        // change their original order (new to old) to old to new
+        model.sortByOldToNew();
+
+        model.clearFilter();
+
+        // assert that emails are back to original order
+        Assertions.assertEquals(originalEmails,model.getActiveEmails().get());
+
+    }
+
+    // ========= search =========
+
+    @Test
+    public void testSearchFromField() {
+        // set inboxFolder and its emails as activeFolder and activeEmails
+        Folder inboxFolder = model.getFolders().get().get(0);
+        model.setActiveFolder(inboxFolder);
+        model.setActiveEmails(inboxFolder.emails());
+
+        model.search("adam@gmail.com");
+
+        // only email from adam@gmail.com should be in activeEmails
+        List<Email> expectedEmails = List.of(inboxFolder.emails().get(0));
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
+    }
+
+
+    @Test
+    public void testSearchToField() {
+        // set sentFolder and its emails as activeFolder and activeEmails
+        Folder sentFolder = model.getFolders().get().get(1);
+        model.setActiveFolder(sentFolder);
+        model.setActiveEmails(sentFolder.emails());
+
+        model.search("adam@gmail.com");
+
+        // only email containing fields with adam@gmail.com should be in activeEmails
+        List<Email> expectedEmails = List.of(sentFolder.emails().get(0));
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
+    }
+
+    @Test
+    public void testSearchContentField() {
+        // set inboxFolder and its emails as activeFolder and activeEmails
+        Folder inboxFolder = model.getFolders().get().get(0);
+        model.setActiveFolder(inboxFolder);
+        model.setActiveEmails(inboxFolder.emails());
+
+        model.search("Vad gör");
+
+        // only email containing fields with "Vad gör" should be in activeEmails
+        List<Email> expectedEmails = List.of(inboxFolder.emails().get(0));
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
+    }
+
+    @Test
+    public void testSearchSeveralFields() {
+        // set inboxFolder and its emails as activeFolder and activeEmails
+        Folder inboxFolder = model.getFolders().get().get(0);
+        model.setActiveFolder(inboxFolder);
+        model.setActiveEmails(inboxFolder.emails());
+
+        model.search("hej");
+
+        // both emails contain "hej", first one in subject field and second one in content field
+        List<Email> expectedEmails = List.of(inboxFolder.emails().get(0),inboxFolder.emails().get(1));
+
+        Assertions.assertEquals(expectedEmails,model.getActiveEmails().get());
+
+    }
+
+    @Test
+    public void testSearchThatResultsInNoEmails() {
+
+        // set inboxFolder and its emails as activeFolder and activeEmails
+        Folder inboxFolder = model.getFolders().get().get(0);
+        model.setActiveFolder(inboxFolder);
+        model.setActiveEmails(inboxFolder.emails());
+
+        model.search("lwekäwerjäwörk");
+
+        Assertions.assertTrue(model.getActiveEmails().get().isEmpty());
+    }
 
 }
 
