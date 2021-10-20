@@ -105,7 +105,7 @@ public class LocalDiscStorage implements Storage {
     @Override
     public void storeSuggestions(Account account, List<String> suggestions) throws StorageException{
         String address = account.emailAddress();
-        String path = appPath + separator + address + separator + "suggestions";
+        String path = appPath + separator + address + separator + "Suggestions";
 
             try{
                 touch(path);
@@ -125,7 +125,7 @@ public class LocalDiscStorage implements Storage {
     public List<String> retrieveSuggestions(Account account) {
         // get all account directories under the app root directory
         String accountPath = appPath + separator + account.emailAddress();
-        String path = accountPath + separator + "suggestions";
+        String path = accountPath + separator + "Suggestions";
         List<String> suggestions = new ArrayList<>();
         try {
             suggestions = (List<String>) deserialize(path);
