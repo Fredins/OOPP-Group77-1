@@ -1,7 +1,6 @@
 package org.group77.mailMe.model;
 
-import org.group77.mailMe.model.data.Account;
-import org.group77.mailMe.model.data.Email;
+import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.model.data.Folder;
 import org.group77.mailMe.model.exceptions.*;
 import org.group77.mailMe.model.exceptions.FolderNotFoundException;
@@ -184,11 +183,24 @@ public class Control {
      *
      * @author Alexey Ryabov
      */
-    public void send(List<String> recipients, String subject, String content, List<File> attachments) throws Exception {
-        if (model.getActiveAccount() != null) {
+    public void send(List<String> recipients, String subject, String content, List<File> files) throws Exception {
+        Account account = model.getActiveAccount().get();
+        if (account != null) {
             //Creating new email to be copied to Sent-folder
+            List<Attachment> attachments = files.stream()
+              .map(file -> new Attachment(file.getName(), null, file))
+              .collect(Collectors.toList());
+
+            Email email = new Email(
+              account.emailAddress(),
+              recipients.toArray(String[]::new),
+              subject,
+              content,
+              attachments,
+              LocalDateTime.now());
+
             EmailServiceProvider esp = EmailServiceProviderFactory.createEmailServiceProvider(model.getActiveAccount().get());
-            esp.sendEmail(model.getActiveAccount().get(),recipients,subject,content,attachments);
+            esp.sendEmail(account, email);
 
         } else {
             throw new Exception("No active account");
@@ -200,11 +212,14 @@ public class Control {
      * @param  - is a email that is currently being sent.
      * @throws Exception
      */
-    public void moveSentEmail (List<String> recipients, String subject, String content, List<File> attachments, int folderIndex) throws Exception {
+    public void moveSentEmail (List<String> recipients, String subject, String content, List<File> files, int folderIndex) throws Exception {
         //Convert String list of recipients to String Array of recipients.
-        String[] recipientsArray = recipients.stream().toArray(String[] ::new);
+        String[] recipientsArray = recipients.toArray(String[]::new);
         //Creating new email to be copied to Sent-folder
-        Email newEmail = new Email(model.getActiveAccount().get().emailAddress(), recipientsArray, subject, content, attachments);
+        List<Attachment> attachments = files.stream()
+          .map(file -> new Attachment(file.getName(), null, file))
+          .collect(Collectors.toList());
+        Email newEmail = new Email(model.getActiveAccount().get().emailAddress(), recipientsArray, subject, content, attachments, null);
         List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
         //Move the currently open email to the Sent-folder
         newFolders.get(folderIndex).emails().add(newEmail); // index 2 -> SentFolder

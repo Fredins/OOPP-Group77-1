@@ -28,13 +28,13 @@ public class TestModel {
 
         // Mails to be added to inbox folder
         List<Email> inboxEmails = new ArrayList<>();
-        inboxEmails.add(new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","vad gör du"));
-        inboxEmails.add(new Email("maria@gmail.com",new String[]{"hej@gmail.com"},"important!","hej"));
+        inboxEmails.add(new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","vad gör du", null, null));
+        inboxEmails.add(new Email("maria@gmail.com",new String[]{"hej@gmail.com"},"important!","hej", null, null));
 
         // Mails to be added to sent folder
         List<Email> sentEmails = new ArrayList<>();
-        sentEmails.add(new Email("hej@gmail.com", new String[]{"adam@gmail.com"},"hej","inget, vad gör du?"));
-        sentEmails.add(new Email("hej@gmail.com",new String[]{"maria@gmail.com"},"important!","hej"));
+        sentEmails.add(new Email("hej@gmail.com", new String[]{"adam@gmail.com"},"hej","inget, vad gör du?", null, null));
+        sentEmails.add(new Email("hej@gmail.com",new String[]{"maria@gmail.com"},"important!","hej", null, null));
 
         Folder inboxFolder = new Folder("Inbox",inboxEmails);
         Folder sentFolder = new Folder("Sent",sentEmails);
@@ -140,7 +140,7 @@ public class TestModel {
         model.getFolders().replaceAll(folders);
 
         // Add newEmail to model's inbox
-        Email newEmail = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt");
+        Email newEmail = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt", null, null);
         List<Email> newEmails = new ArrayList<>();
         newEmails.add(newEmail);
         model.updateFolder(model.getFolders().get().get(0),newEmails);
@@ -156,8 +156,8 @@ public class TestModel {
         model.getFolders().replaceAll(folders);
 
         // Add newEmail to model's inbox
-        Email newEmail = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt");
-        Email newEmail2 = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej igen","vad gör du nu");
+        Email newEmail = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej","jag gör inte heller nåt", null, null);
+        Email newEmail2 = new Email("adam@gmail.com",new String[]{"hej@gmail.com"},"hej igen","vad gör du nu", null, null);
         List<Email> newEmails = new ArrayList<>();
         newEmails.add(newEmail);
         newEmails.add(newEmail2);
