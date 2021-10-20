@@ -16,40 +16,85 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Holds the application state.
+ * A high level layer of the state of an email application.
+ *
+ * Can hold several accounts and a possibly current activeAccount.
+ * Can hold folders that belong to the activeAccount.
+ * Holds activeFolder, activeEmails and activeEmail which content can be filtered, sorted and searched on.
+ * Can hold previous recipients of the activeAccount.
+ *
+ * @author Elin Hagman
+ * @author Martin Fredin
+ * @author Hampus Jernkrook
  */
 
 public class Model {
 
-    //private Subject<Map<Account,List<Folder>>> folders = new Subject<>(null);
     // state fields
+    /**
+     * An observable list of accounts of the email application.
+     */
     private final SubjectList<Account> accounts = new SubjectList<>(new ArrayList<>());
-    private final SubjectList<Folder> folders = new SubjectList<>(new ArrayList<>());
-    private final SubjectList<Email> activeEmails = new SubjectList<>(new ArrayList<>());
+    /**
+     * An observable subject with the currently activeAccount .
+     */
     private final Subject<Account> activeAccount = new Subject<>(null);
+    /**
+     * An observable list of the folders that belong to activeAccount.
+     */
+    private final SubjectList<Folder> folders = new SubjectList<>(new ArrayList<>());
+    /**
+     * An observable subject with a folder in folders that is active.
+     */
     private final Subject<Folder> activeFolder = new Subject<>(null);
+    /**
+     * A list of observable emails of this activeFolder which sort, filter and search functionality
+     * will be applied to.
+     */
+    private final SubjectList<Email> activeEmails = new SubjectList<>(new ArrayList<>());
+    /**
+     * An observable subject of the emails in activeEmails which sort, filter and search
+     * functionality will be applied to.
+     */
     private final Subject<Email> activeEmail = new Subject<>(null);
+    /**
+     * An observable list that can hold the previous recipients of the activeAccount.
+     */
     private final SubjectList<String> autoSuggestions = new SubjectList<>(new ArrayList<>());
 
+    /**
+     * TextFinder that provides search, filter and sort functionality to Model.
+     */
     private final TextFinder textFinder = new TextFinder();
 
+    /**
+     * Creates a Model with the given accounts.
+     * Adds observer to this accounts that sets any account added to this activeAccount.
+     * There is initially no activeAccount, has to be set by client.
+     *
+     * @param accounts the accounts of the email application
+     * @author Martin Fredin
+     */
 
     public Model(List<Account> accounts){
-        // if a new account is added then set it as active
         this.accounts.replaceAll(accounts);
+        // if a new account is added then set it as active
         this.accounts.addObserver(newAccounts -> {
             Account newAccount = newAccounts.get(newAccounts.size() - 1);
             activeAccount.set(newAccount);
-        }); // -- moved this cause it doesn't have anything to do with services. Martin
+        });
 
 
     }
 
+
     /**
-     * 1. find the correct folder
-     * 2. replace emails in folder
-     * @author Martin
-     * @param newEmails emails to added to inbox folder in active account
+     * Adds emails to the specified folder.
+     * TODO: should throw FolderNotFoundException
+     *
+     * @param folder the folder to be updated
+     * @param newEmails the emails to be added to the specified folder
+     * @author Martin Fredin
      */
 
     public void updateFolder(Folder folder, List<Email> newEmails) {
@@ -62,8 +107,15 @@ public class Model {
         folders.replace(folder, newFolder);
     }
 
+    /**
+     * Sets one of the accounts in this accounts as activeAccount.
+     *
+     * @param account to be set as activeAccount
+     * @throws ActiveAccountNotInAccounts if account is not in this accounts
+     * @author Elin Hagman
+     */
+
     public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {
-        // check if account is in this accounts
 
         if (accounts.get().contains(account)) {
             activeAccount.set(account);
@@ -72,8 +124,15 @@ public class Model {
         }
     }
 
+    /**
+     * Adds an account to this accounts if it does not already exist.
+     * @param account to be added to accounts
+     * @throws AccountAlreadyExistsException if account already exists in accounts
+     * @author Elin Hagman
+     */
+
     public void addAccount(Account account) throws AccountAlreadyExistsException {
-        // add account if it does not already exist in this accounts
+
         if (!(accounts.get().contains(account))) {
             accounts.add(account);
         } else {
@@ -81,11 +140,24 @@ public class Model {
         }
     }
 
+    /**
+     * Creates an account with the specified emailAddress and password
+     * @param emailAddress the email address of the account to be created
+     * @param password the password of the account to be created
+     * @return the account with the specified email address and password
+     * @throws EmailDomainNotSupportedException if AccountFactory gives exception that domain is not supported
+     * @author Elin Hagman
+     */
+
     public Account createAccount(String emailAddress, char[] password) throws EmailDomainNotSupportedException {
         return AccountFactory.createAccount(emailAddress, password);
     }
 
-
+    /**
+     * Creates and returns a default set of folders.
+     * @return List of folders
+     * @author Martin Fredin
+     */
     public List<Folder> createFolders() {
         return List.of(
                 new Folder("Inbox", new ArrayList<>()),
@@ -109,45 +181,87 @@ public class Model {
     public void setActiveEmail(Email activeEmail) { this.activeEmail.set(activeEmail); }
     public void setActiveEmails(List<Email> activeEmails) { this.activeEmails.replaceAll(activeEmails); }
 
+    /**
+     * Filters this activeEmails to only contain Emails with recipients containing the search word.
+     * @param searchWord the word which the recipients of an email should match
+     * @author Hampus Jernkrook
+     */
     public void filterOnTo(String searchWord) {
         List<Email> newActiveEmails = textFinder.filterOnTo(activeEmails.get(), searchWord);
         setActiveEmails(newActiveEmails);
     }
 
+    /**
+     * Filters this activeEmails to only contain Emails with senders containing the search word.
+     * @param searchWord the word which the senders of an email should match
+     * @author Hampus Jernkrook
+     */
     public void filterOnFrom(String searchWord) {
         List<Email> newActiveEmails = textFinder.filterOnFrom(activeEmails.get(), searchWord);
         setActiveEmails(newActiveEmails);
     }
 
+    /**
+     * Filters this activeEmails to only contain Emails that was sent before the specified date.
+     * @param date the maximum date of an email
+     * @author Hampus Jernkrook
+     */
     public void filterOnMaxDate(LocalDateTime date) {
         List<Email> newActiveEmails = textFinder.filterOnMaxDate(activeEmails.get(), date);
         setActiveEmails(newActiveEmails);
     }
+
+    /**
+     * Filters this activeEmails to only contain Emails that was sent after the specified date.
+     * @param date the minimum date of an email
+     * @author Hampus Jernkrook
+     */
 
     public void filterOnMinDate(LocalDateTime date) {
         List<Email> newActiveEmails = textFinder.filterOnMinDate(activeEmails.get(), date);
         setActiveEmails(newActiveEmails);
     }
 
+    /**
+     * Sorts the emails in this activeEmails from the newest to the oldest date.
+     * @author Hampus Jernkrook
+     */
     public void sortByNewToOld() {
         List<Email> newActiveEmails = textFinder.sortByNewToOld(activeEmails.get());
         setActiveEmails(newActiveEmails);
     }
 
+    /**
+     * Sorts the emails in this activeEmails from the oldest to the newest date.
+     * @author Hampus Jernkrook
+     */
     public void sortByOldToNew() {
         List<Email> newActiveEmails = textFinder.sortByOldToNew(activeEmails.get());
         setActiveEmails(newActiveEmails);
     }
 
+    /**
+     * Erases all filters from this activeEmails and restores it to its default state.
+     * @author Hampus Jernkrook
+     */
     public void clearFilter() {
         // set active emails to all emails in the current folder
         setActiveEmails(activeFolder.get().emails());
     }
 
+    /**
+     * Filters this activeEmails to only contain Emails that has any attribute that contains the
+     * search word.
+     * @param searchWord the word which at least one the Emails attributes should contain.
+     * @author Hampus Jernkrook
+     */
+
     public void search(String searchWord) {
         List<Email> newActiveEmails = textFinder.search(activeEmails.get(), searchWord);
         setActiveEmails(newActiveEmails);
     }
+
+    // TODO: delete this and replace with clearFilter instead?
 
     // does same as clearFilter....
     public void clearSearchResult() {
