@@ -47,13 +47,13 @@ public class TestModel {
         String[] to3 = new String[]{"TEST_nr_3@live.com", "haha@gmail.com"};
 
 
-        dateEmails.add(new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE",
+        dateEmails.add(new Email("mailme@gmail.com", to1, "First", "contains SAUSAGE",null,
                         LocalDateTime.of(2021, Month.OCTOBER, 11, 15, 30, 45)));
 
-        dateEmails.add(new Email("memail@live.com", to2, "Second", "contains sausage",
+        dateEmails.add(new Email("memail@live.com", to2, "Second", "contains sausage",null,
                         LocalDateTime.of(2021, Month.MAY, 11, 15, 30, 45)));
 
-        dateEmails.add(new Email("lol@hotmail.com", to3, "third", "contains no meat at all",
+        dateEmails.add(new Email("lol@hotmail.com", to3, "third", "contains no meat at all",null,
                         LocalDateTime.of(2010, Month.JANUARY, 11, 15, 30, 45)));
 
 
