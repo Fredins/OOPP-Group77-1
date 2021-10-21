@@ -125,11 +125,12 @@ public class MicrosoftProvider extends EmailServiceProvider {
      * @param properties - are connection properties to the server.
      * @author Alexey Ryabov
      */
-    private void setMicrosoftOutlookProperties(Properties properties) { // TODO alexey använd hostOut, portOut
-        properties.put("mail.smtp.host", "smtp-mail.outlook.com");
-        properties.put("mail.smtp.port", "587");
+    private void setMicrosoftOutlookProperties(Properties properties) {
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.host", this.hostOut);
+        properties.put("mail.smtp.port", this.portOut);
+
     }
 
 }

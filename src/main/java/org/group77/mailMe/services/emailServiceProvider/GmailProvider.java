@@ -137,11 +137,11 @@ public class GmailProvider extends EmailServiceProvider {
      * @param properties - are connection properties to the server.
      * @author Alexey Ryabov
      */
-    private void setGmailProperties(Properties properties) { // TODO använd hostOut coh portOut
+    private void setGmailProperties(Properties properties) {
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.host", this.hostOut);
+        properties.put("mail.smtp.port", this.portOut);
     }
 
 }
