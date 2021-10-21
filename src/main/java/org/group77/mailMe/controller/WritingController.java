@@ -118,7 +118,6 @@ public class WritingController {
                         .graphic(new Label("Message sent successfully!"))
                         .show());
             } catch (Exception e) {
-                System.out.println("here");
                 e.printStackTrace();
                 Platform.runLater(() -> notification
                         .title("Failed")
