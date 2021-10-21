@@ -413,7 +413,10 @@ public class Control {
         model.search(searchWord);
     }
 
-
+    /** Clears the search results
+     *
+     * @author Hampus Jernkrook
+     */
     public void clearSearchResult() {
         model.clearSearchResult();
     }
