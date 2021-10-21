@@ -6,8 +6,10 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.*;
+import org.group77.mailMe.model.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 
 /**
@@ -106,6 +108,26 @@ public class WindowOpener {
       ((WritingController) fxmlLoader.getController()).init(control, to);
       Stage stage = new Stage();
       stage.setTitle("Reply");
+      stage.setScene(new Scene(pane));
+      stage.setResizable(false);
+      stage.show();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * open reply window
+   * @param draft the unfinished email
+   * @author Martin Fredin
+   */
+  public static void openDraft(Control control, Email draft) {
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/Writing.fxml"));
+      Pane pane = fxmlLoader.load();
+      ((WritingController) fxmlLoader.getController()).init(control, draft);
+      Stage stage = new Stage();
+      stage.setTitle("Draft");
       stage.setScene(new Scene(pane));
       stage.setResizable(false);
       stage.show();

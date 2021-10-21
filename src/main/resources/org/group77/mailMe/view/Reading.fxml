@@ -43,9 +43,9 @@
          <children>
             <Button fx:id="replyBtn" alignment="CENTER" contentDisplay="CENTER" ellipsisString="0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" styleClass="removeFocus">
                <graphic>
-                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="replyImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images_and_icons/ReplyButtonIcon.png" />
+                        <Image url="@../images_and_icons/reply.png" />
                      </image>
                   </ImageView>
                </graphic>

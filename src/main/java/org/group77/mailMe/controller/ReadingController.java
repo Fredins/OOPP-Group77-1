@@ -39,11 +39,11 @@ public class ReadingController {
     @FXML
     private Button archiveBtn;
     @FXML
-    private VBox vBox;
-    @FXML
     private WebView webView;
     @FXML
     private ImageView archiveImg;
+    @FXML
+    private ImageView replyImg;
     @FXML
     private HBox attachmentsHBox;
 
@@ -60,14 +60,11 @@ public class ReadingController {
         subjectLabel.setText(email.subject());
         toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
         dateLabel.setText(email.date().toString().replace("T", "  "));
+        archiveImg.setImage(getImage(control.getActiveFolder().get(), archiveImg));
+        replyImg.setImage(getImage(control.getActiveFolder().get(), replyImg));
         attachmentsController(email);
 
-        // set button action handler and button icon
-        EventHandler<ActionEvent> archiveHandler = actionEvent -> moveEmailTo(control, "Archive");
-        EventHandler<ActionEvent> restoreHandler = actionEvent -> moveEmailTo(control, "Inbox");
-        setButtonHandler(control.getActiveFolder().get(), archiveHandler, restoreHandler);
-        setButtonImage(control.getActiveFolder().get());
-
+        // webview
         String content = email.content();
         WebEngine webEngine = webView.getEngine();
         if(email.content().contains("contenteditable=\"true\"")){
@@ -75,10 +72,10 @@ public class ReadingController {
         }
         webEngine.loadContent(content, "text/html");
 
-
         // attach event handlers
         trashBtn.setOnAction(i -> handleDelete(control));
-        replyBtn.setOnAction(inputEvent -> reply(control));
+        replyBtn.setOnAction(getButtonHandler(control, email, replyBtn));
+        archiveBtn.setOnAction(getButtonHandler(control, email, archiveBtn));
     }
 
     /**
@@ -115,17 +112,25 @@ public class ReadingController {
 
 
     /**
-     * set image to either a archive-image or a restore-image depending on current folder
+     *  decides on what image depending on folder and image view
      *
      * @param folder active folder
+     * @param imageView corresponding image view
      * @author Martin Fredin
+     *
      */
-    private void setButtonImage(Folder folder) {
-        archiveImg.setImage(new Image(
-                String.valueOf((Main.class.getResource(
-                        (folder.name().equals("Archive") | folder.name().equals("Trash")) ? "images_and_icons/restore.png" : "images_and_icons/archive.png"
-                )))
-        ));
+    private Image getImage(Folder folder, ImageView imageView){
+       if(imageView.equals(archiveImg)){
+          return new Image(
+              String.valueOf((Main.class.getResource(
+                (folder.name().equals("Archive") | folder.name().equals("Trash")) ? "images_and_icons/restore.png" : "images_and_icons/archive.png"
+              ))));
+       }else {
+           return new Image(
+             String.valueOf((Main.class.getResource(
+               folder.name().equals("Drafts") ? "images_and_icons/continue_draft.png" : "images_and_icons/reply.png"
+             ))));
+       }
     }
 
     /**
@@ -151,37 +156,25 @@ public class ReadingController {
     }
 
     /**
-     * try to remove event handler, if fail then do nothing
+     * remove all existing even handlers, set a new event handler depending on current folder and button
      *
-     * @param node         the node to remove event handler
-     * @param eventHandler the event handler to be removed
+     * @param button         the corresponding button
+     * @param control        the control layer
+     * @param email          the corresponding email to controller
      * @author Martin
      */
-    private void removeEventHandler(Node node, EventHandler<ActionEvent> eventHandler) {
-        try {
-            node.removeEventHandler(ActionEvent.ACTION, eventHandler);
-        } catch (NullPointerException ignore) {
-        }
-    }
+    private EventHandler<ActionEvent> getButtonHandler(Control control, Email email, Button button) {
+        EventHandler<ActionEvent> archiveHandler = actionEvent -> moveEmailTo(control, "Archive");
+        EventHandler<ActionEvent> restoreHandler = actionEvent -> moveEmailTo(control, "Inbox");
+        EventHandler<ActionEvent> replyHandler = actionEvent -> reply(control);
+        EventHandler<ActionEvent> continueDraftHandler = actionEvent ->  WindowOpener.openDraft(control, email);
+        Folder folder = control.getActiveFolder().get();
 
-    /**
-     * 1. remove all existing even handlers
-     * 2. set a new event handler depending on current folder
-     *
-     * @param folder         the current folder
-     * @param archiveHandler handler to execute if archive button
-     * @param restoreHandler handler to execute if restore button
-     * @author Martin
-     */
-    private void setButtonHandler(Folder folder, EventHandler<ActionEvent> archiveHandler, EventHandler<ActionEvent> restoreHandler) {
-        if (folder == null) {
-            return;
+        if (button.equals(archiveBtn)){
+            return (folder.name().equals("Archive") | folder.name().equals("Trash")) ? restoreHandler : archiveHandler;
+        }else {
+            return (folder.name().equals("Drafts")  ? continueDraftHandler : replyHandler);
         }
-        removeEventHandler(archiveBtn, archiveHandler);
-        removeEventHandler(archiveBtn, restoreHandler);
-        archiveBtn.setOnAction(
-                (folder.name().equals("Archive") | folder.name().equals("Trash")) ? restoreHandler : archiveHandler
-        );
     }
 
 
