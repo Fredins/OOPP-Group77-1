@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * controller for the writing view
@@ -126,7 +127,10 @@ public class WritingController {
      * @author Martin
      */
     private void sendHandler(Control control, Node node){
-        String[] recipients = toField.getText().split(";");
+        String[] recipients = Arrays.stream(toField.getText()
+          .split(";"))
+          .distinct()
+          .toArray(String[]::new);
         Email email = EmailFactory.createEmail(control,
                                  recipients,
                                  subjectField.getText(),
@@ -197,33 +201,5 @@ public class WritingController {
     public void clearAllAttachments() {
         attachments.clear();
         attachmentsHBox.getChildren().removeAll(attachmentsHBox.getChildren());
-    }
-
-    /**
-     * @param textfield - toTextField.
-     * @return list of recipients mail addresses.
-     * @author Alexey Ryabov
-     * This method converts TextField string to list of recipients separated with ";" -sign.
-     */
-    private List<String> fromTextFieldToListOfRecipients(String textfield) {
-        //String textFieldToString = textfield.toString();
-        String[] strings = textfield.split(";");
-        return Arrays.asList(strings);
-    }
-
-
-    /**
-     * @param list - list of strings
-     * @return - new list of string without duplicates
-     * @author Alexey Ryabov
-     */
-    private List<String> removeDuplicates(List<String> list) {
-        List<String> newList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (!newList.contains(list.get(i))) {
-                newList.add(list.get(i));
-            }
-        }
-        return newList;
     }
 }
