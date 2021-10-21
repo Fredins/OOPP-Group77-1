@@ -12,7 +12,6 @@ import org.group77.mailMe.services.storage.StorageException;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import java.io.File;
 import java.util.List;
 import java.util.stream.*;
 
@@ -233,17 +232,18 @@ public class Control {
     }
 
     /**
-     * find sent folder, add email, save to storage.
-     * @param email the newly sent email
+     * finds folder, add email, save to storage.
+     * @param email the email to be added to folder
+     * @param folderName name of folder
      * @author Martin Fredin
      */
-    public void addEmailToSent(Email email) {
-        Folder sent = model.getFolders().stream()
-          .filter(folder -> folder.name().equals("Sent"))
+    public void addEmailToFolder(Email email, String folderName) {
+        Folder folder = model.getFolders().stream()
+          .filter(folder1 -> folder1.name().equals(folderName))
           .findFirst()
-          .orElse(new Folder("Sent", new ArrayList<>()));
-        sent.addEmail(email);
-        storage.store(model.getActiveAccount().get(), sent);
+          .orElse(new Folder(folderName, new ArrayList<>()));
+        folder.addEmail(email);
+        storage.store(model.getActiveAccount().get(), folder);
     }
 
     /* public void deleteEmail(Email emailToBeDeleted) {

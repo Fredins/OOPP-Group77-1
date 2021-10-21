@@ -45,6 +45,8 @@ public class WritingController {
     @FXML
     private Button attachBtn;
     @FXML
+    private Button draftBtn;
+    @FXML
     private TextField subjectField;
     @FXML
     private HTMLEditor contentField;
@@ -61,7 +63,7 @@ public class WritingController {
      * @author Martin, Alexey, David
      */
     public void init(Control control) {
-        init(control, null);
+        setHandlers(control);
     }
 
     /**
@@ -73,24 +75,76 @@ public class WritingController {
      * @author David Zamanian
      */
 
+
+
     public void init(Control control, String to) {
-        //shows known recipients when typing in toField
-        TextFields.bindAutoCompletion(toField, control.getKnownRecipients().get());
-        if (to != null) {
-            toField.setText(to);
-        }
         fromLabel.setText(control.getActiveAccount().get().emailAddress());
+        setHandlers(control);
+    }
+
+    public void init(Control control, Email draft){
+        fromLabel.setText(draft.from());
+        toField.setText(String.join(";", draft.to()));
+        subjectField.setText(draft.subject());
+        contentField.setHtmlText(draft.content());
+        setHandlers(control);
+    }
+
+    /**
+     * set event handler for nodes and change handlers
+     * @param control the control layer
+     * @author Martin Fredin
+     */
+    private void setHandlers(Control control){
+        TextFields.bindAutoCompletion(toField, control.getKnownRecipients().get());
         // input handlers
         sendBtn.setOnAction(inputEvent -> sendHandler(control, sendBtn));
         attachBtn.setOnAction(inputEvent -> attachFiles());
+        draftBtn.setOnAction(actionEvent -> draftHandler(control, draftBtn));
         // change handlers
         control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
-        //remove attachments
-        attachmentsHBox.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getTarget() == attachmentsHBox) {
-                clearAllAttachments();
-            }
-        });
+
+    }
+
+
+    /**
+     * get the email, add email to folder, close window, display notification
+     * @param control the control layer
+     * @param node any node in active scene
+     * @author Martin Fredin
+     */
+    private void draftHandler(Control control, Node node){
+        Email draft = createEmail(control);
+        control.addEmailToFolder(draft, "Drafts");
+        ((Stage) node.getScene().getWindow()).close();
+        showSuccessNotification("Draft saved");
+    }
+
+    /**
+     * return array of recipients in "to-field"
+     * @author Martin Fredin
+     */
+    private String[] getRecipients(){
+        return Arrays.stream(toField.getText()
+                               .split(";"))
+                               .distinct()
+                               .toArray(String[]::new);
+
+    }
+
+    /**
+     * return an email created from the different fields
+     * @param control the control layer
+     * @author Martin Fredin
+     */
+    private Email createEmail(Control control){
+        return EmailFactory.createEmail(control,
+                                        getRecipients(),
+                                        subjectField.getText(),
+                                        contentField.getHtmlText(),
+                                        attachments
+        );
+
     }
 
 
@@ -119,6 +173,7 @@ public class WritingController {
           .show();
     }
 
+
     /**
      * try to send email, display visual feedback, move email to Sent Folder, Close window
      *
@@ -127,24 +182,15 @@ public class WritingController {
      * @author Martin
      */
     private void sendHandler(Control control, Node node){
-        String[] recipients = Arrays.stream(toField.getText()
-          .split(";"))
-          .distinct()
-          .toArray(String[]::new);
-        Email email = EmailFactory.createEmail(control,
-                                 recipients,
-                                 subjectField.getText(),
-                                 contentField.getHtmlText(),
-                                 attachments
-        );
+        Email email = createEmail(control);
 
         threadExecutor.execute(() -> {
             try{
                 control.send(email);
-                control.addNewKnownRecipient(Arrays.stream(recipients).toList());
+                control.addNewKnownRecipient(Arrays.stream(getRecipients()).toList());
                 Platform.runLater(() -> {
                     showSuccessNotification("Message sent successfully!");
-                    control.addEmailToSent(email);
+                    control.addEmailToFolder(email, "Sent");
                 });
             }catch (Exception e){
                 Platform.runLater(() -> showFailNotification(e));
@@ -172,7 +218,7 @@ public class WritingController {
     /**
      * @param selectedFile - file that was added as an attachment.
      * @return button for the HBox.
-     * @author Alexey Ryabov
+     * @author Alexey Ryabov, Martin Fredin
      */
     private Button hBoxButtonSetup(File selectedFile) {
         //Creating image for attachments button
@@ -182,14 +228,23 @@ public class WritingController {
         icon.setFitWidth(24);
         //Creating button for the HBox
         Button button = new Button();
-        Tooltip tooltip = new Tooltip(); // Tooltip for the button with attachment's name.
-        tooltip.setText(selectedFile.getName());
-        button.setTooltip(tooltip);
         button.setGraphic(icon);
         button.setText(selectedFile.getName());
         button.setCursor(Cursor.HAND);
         button.setFont(Font.font("System", FontWeight.BOLD, 12));
         button.setStyle("-fx-background-color: #f4f4f4");
+
+        // context menu
+        MenuItem removeAttachment = new MenuItem("Remove attachment");
+        removeAttachment.setOnAction(actionEvent -> clearAllAttachments());
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.getItems().add(removeAttachment);
+        button.setContextMenu(contextMenu);
+
+        // tooltip
+        Tooltip tooltip = new Tooltip(); // Tooltip for the button with attachment's name.
+        tooltip.setText(selectedFile.getName());
+        button.setTooltip(tooltip);
 
         return button;
     }
