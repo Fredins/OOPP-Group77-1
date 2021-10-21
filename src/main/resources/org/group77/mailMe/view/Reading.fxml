@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane fx:id="root" styleClass="pane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.ReadingController">
+<AnchorPane fx:id="root" styleClass="pane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.ReadingController">
     <children>
       <HBox alignment="CENTER_LEFT" spacing="40.0" AnchorPane.topAnchor="20.0">
          <children>
@@ -41,7 +41,7 @@
       <WebView fx:id="webView" layoutX="428.0" layoutY="44.0" prefHeight="-1.0" prefWidth="-1.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0" />
       <HBox alignment="CENTER_LEFT" spacing="15.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0">
          <children>
-            <Button fx:id="replyBtn" alignment="CENTER" contentDisplay="CENTER" ellipsisString="0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false">
+            <Button fx:id="replyBtn" alignment="CENTER" contentDisplay="CENTER" ellipsisString="0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" styleClass="removeFocus">
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -50,7 +50,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="archiveBtn" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false">
+            <Button fx:id="archiveBtn" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" mnemonicParsing="false" styleClass="removeFocus">
                <graphic>
                   <ImageView fx:id="archiveImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -59,7 +59,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="trashBtn" alignment="CENTER" contentDisplay="CENTER" ellipsisString="0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false">
+            <Button fx:id="trashBtn" alignment="CENTER" contentDisplay="CENTER" ellipsisString="0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" styleClass="removeFocus">
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>

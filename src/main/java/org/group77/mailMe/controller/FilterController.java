@@ -17,7 +17,7 @@ import java.util.Objects;
  * @author Hampus Jernkrook
  * @author David Zamanian
  */
-public class FilterController {
+public class FilterController implements FilterControl {
     @FXML
     private Button clearFilterButton; //button for clearing all filters
     @FXML
@@ -41,6 +41,20 @@ public class FilterController {
     private final String oldToNewSorting = "Oldest to Newest";
     // set new to old sorting as default
     private final String defaultSorting = newToOldSorting;
+    private SearchControl searchControl; // component responsible for sorting
+
+    /**
+     * Initialise by adding actions to all buttons and set default sorting.
+     * Also set component for search control.
+     *
+     * @param control       - the class to delegate on to towards the backend.
+     * @param searchControl - the class responsible for sorting.
+     * @author Hampus Jernkrook
+     */
+    public void init(Control control, SearchControl searchControl) {
+        this.searchControl = searchControl;
+        init(control);
+    }
 
     /**
      * Upon initialisation: add actions to all buttons and set default sorting.
@@ -48,12 +62,6 @@ public class FilterController {
      * @param control - the class to delegate on to towards the backend.
      * @author David Zamanian
      * @author Hampus Jernkrook
-     */
-
-    /**
-     * 1. attach event handlers
-     * 2. set initial values for nodes
-     * @param control the control layer
      */
     public void init(Control control) {
         // upon clearing the filter, clear all fields except the sorting.
@@ -64,11 +72,15 @@ public class FilterController {
             control.clearFilter();
             // apply default sorting again
             applyDefaultSorting(control);
+            // ask search control to apply the searching again
+            searchControl.applySearch(control);
         });
         // when applying the chosen filters:
         applyFilterButton.setOnMouseClicked(inputEvent -> {
             //clear filter (restore to original emails) before applying anything
             control.clearFilter();
+            // apply potential search via search control
+            searchControl.applySearch(control);
             // apply all filters chosen
             applyAllFilters(control);
         });
@@ -79,8 +91,8 @@ public class FilterController {
         // set value in sorting choice box to default sorting.
         sortingChoiceBox.setValue(defaultSorting);
 
-        //TODO: ask control to default sort upon initialisation? I.e.
-        // control.sortByNewToOld();
+        // apply default sorting of inbox upon init
+        applyDefaultSorting(control);
     }
 
     /**
@@ -107,7 +119,27 @@ public class FilterController {
         applyFromFilter(control);
         applyMaxDateFilter(control);
         applyMinDateFilter(control);
-        applySorting(control);
+        sort(control);
+    }
+
+    /**
+     * Apply all filters. Interface method.
+     *
+     * @param control - the class to delegate on to.
+     * @author Hampus Jernkrook
+     */
+    public void applyFilter(Control control) {
+        applyAllFilters(control);
+    }
+
+    /**
+     * Apply the selected sorting order.
+     *
+     * @param control - the class to delegate on to.
+     * @author Hampus Jernkrook
+     */
+    public void applySorting(Control control) {
+        sort(control);
     }
 
     /**
@@ -173,7 +205,7 @@ public class FilterController {
      * @param control - the class to delegate on to.
      * @author Hampus Jernkrook
      */
-    private void applySorting(Control control) {
+    private void sort(Control control) {
         // if there is some sorting choice made, then apply the chosen order.
         if (!Objects.equals(sortingChoiceBox.getValue(), null)) {
             if (Objects.equals(sortingChoiceBox.getValue(), newToOldSorting)) {
