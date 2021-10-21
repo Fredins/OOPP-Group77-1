@@ -228,3 +228,7 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,linux,maven,java,intellij
 *.iml
+
+# Files
+nullactive_account
+nullgmail-imaps
