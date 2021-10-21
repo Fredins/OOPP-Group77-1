@@ -5,13 +5,15 @@ import javafx.fxml.*;
 import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.text.Text;
 import javafx.util.*;
 import org.controlsfx.control.*;
 import org.group77.mailMe.Control;
 
 import java.util.function.*;
 
+/**
+ * Controller for AddAccount
+ */
 public class AddAccountController {
     @FXML
     private TextField emailTextField;

@@ -6,6 +6,9 @@ import javafx.scene.layout.*;
 import org.group77.mailMe.Control;
 import org.group77.mailMe.model.Email;
 
+/**
+ * Controller for EmailItem
+ */
 public class EmailItemController {
     @FXML
     private AnchorPane root;

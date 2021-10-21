@@ -1,12 +1,13 @@
 package org.group77.mailMe.controller;
 
-import javafx.beans.value.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import org.group77.mailMe.Control;
 import org.group77.mailMe.model.Folder;
 
-
+/**
+ * Controller for FolderItem
+ */
 public class FolderItemController {
     @FXML
     private Label nameLabel;

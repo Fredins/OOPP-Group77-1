@@ -1,6 +1,5 @@
 package org.group77.mailMe.controller;
 
-import javafx.concurrent.Worker.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;

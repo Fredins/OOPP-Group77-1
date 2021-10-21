@@ -86,7 +86,6 @@ public class Model {
 
     /**
      * Adds emails to the specified folder.
-     * TODO: should throw FolderNotFoundException
      *
      * @param folder    the folder to be updated
      * @param newEmails the emails to be added to the specified folder

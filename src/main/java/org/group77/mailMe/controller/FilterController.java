@@ -14,10 +14,9 @@ import java.util.Objects;
 /**
  * For applying filter to search
  *
- * @author David Zamanian
  * @author Hampus Jernkrook
+ * @author David Zamanian
  */
-
 public class FilterController {
     @FXML
     private Button clearFilterButton; //button for clearing all filters
@@ -51,6 +50,11 @@ public class FilterController {
      * @author Hampus Jernkrook
      */
 
+    /**
+     * 1. attach event handlers
+     * 2. set initial values for nodes
+     * @param control the control layer
+     */
     public void init(Control control) {
         // upon clearing the filter, clear all fields except the sorting.
         // Sorting instead is set to default.
