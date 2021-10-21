@@ -1,14 +1,10 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.apache.commons.mail.util.*;
 import org.group77.mailMe.model.data.*;
 import org.group77.mailMe.model.exceptions.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -115,57 +111,6 @@ public class GmailProvider extends EmailServiceProvider {
         return emails;
     }
 
-    /**@author Alexey Ryabov
-     * Converts inputstream into a bytearrayoutputstream
-     * @param inputStream - email attachment part as inputstream.
-     * @return - attachment as byte array
-     */
-    private ByteArrayOutputStream attachmentAsStream (InputStream inputStream) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1000000]; // max size per attachment is 1mb = 1000000 byte.
-        try {
-            for (int numOfBytes; (numOfBytes = inputStream.read(buffer)) != -1;) {
-                //Converting inputStream to outputStream
-                outputStream.write(buffer, 0, numOfBytes);
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        //Converting outputStream to array of bytes
-        return outputStream;
-    }
-
-    /**
-     * Get the received date from an email.
-     *
-     * @param message - the message to find the received date for.
-     * @return The received date of the email if it could be found and parsed, else the current date.
-     * @throws MessagingException
-     * @author Hampus Jernkrook
-     */
-    private LocalDateTime resolveReceivedDate(MimeMessage message) throws MessagingException {
-        LocalDateTime res = LocalDateTime.now(ZoneId.systemDefault());
-        // if received date can be extracted directly, use that.
-        if (message.getReceivedDate() != null) {
-            return message.getReceivedDate()
-                    .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        }
-        if (message.getSentDate() != null) {
-            return message.getSentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        }
-        String[] receivedHeaders = message.getHeader("Received");
-        // if no received-header was found, return the current date
-        System.out.println("\nHEADER IS >> " + Arrays.toString(receivedHeaders) + "\n"); //TODO remove
-        // if no recieved-header was found, return the current date
-        if (receivedHeaders == null) {
-            return res;
-        }
-        // if header was found then scan it for the date and parse into LocalDateTime format.
-        // TODO
-        // if no date was found or could be parsed, set current date as received date
-        return res;
-    }
-
     /**
      * @return - boolean if email is sent successful.
      * @author Alexey Ryabov
@@ -191,24 +136,6 @@ public class GmailProvider extends EmailServiceProvider {
     }
 
     /**
-     * @param properties - are properties of the session, are set in the sendEmail method.
-     * @param account    - active account.
-     * @param password   - password of the active account.
-     * @return - session object.
-     * @author Alexey Ryabov
-     * Asks server to authorice the session. Returns Authenticated Session.
-     */
-    private Session getAuthentication(Properties properties, String account, String password) {
-        Session session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(account, password);
-            }
-        });
-        return session;
-    }
-
-    /**
      * @param properties - are connection properties to the server.
      * @author Alexey Ryabov
      */
@@ -217,55 +144,6 @@ public class GmailProvider extends EmailServiceProvider {
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
-    }
-
-    /**
-     * @param session   - session of the connection.
-     * @param recipient - email address of the recipient.
-     * @return - message object.
-     * @throws Exception
-     * @author Alexey Ryabov
-     * Composes a message, returnt message object..
-     */
-    private Message composingMessage(Session session, String recipient, Email email) {
-        try {
-            Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(email.from())); // From.
-            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient)); //To, recipient.
-            msg.setSubject(email.subject()); //Subject
-            msg.setContent(messageMultiPart(email)); //content split into multipart. Text content, attachment content.
-            msg.setSentDate(new Date()); //Local date
-
-            return msg;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**@author Alexey Ryabov
-     * Creates an multiplart for an email with text-part and attachment-part.
-     * @param email - new email.
-     * @return - multipart with content and attachments.
-     * @throws MessagingException
-     * @throws IOException
-     */
-    private Multipart messageMultiPart (Email email) throws MessagingException, IOException {
-        // Create the Multipart and add MimeBodyParts to it.
-        Multipart multipart = new MimeMultipart();
-        // Create and fill the first message part.
-        MimeBodyPart messageBodyPart = new MimeBodyPart();
-        //Content of the message.
-        messageBodyPart.setContent(email.content(), "text/html");
-        // Add multipart to message.
-        multipart.addBodyPart(messageBodyPart);
-        // adding attachments:
-        for(Attachment attachment : email.attachments()){
-            MimeBodyPart mimeBodyPart = new MimeBodyPart();
-            mimeBodyPart.attachFile(attachment.file());
-            multipart.addBodyPart(mimeBodyPart);
-        }
-        return multipart;
     }
 
 }

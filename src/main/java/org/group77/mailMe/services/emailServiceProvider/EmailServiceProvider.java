@@ -4,7 +4,16 @@ import org.group77.mailMe.model.exceptions.ServerException;
 import org.group77.mailMe.model.data.*;
 
 import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 
@@ -112,9 +121,128 @@ public abstract class EmailServiceProvider {
 
   /** @author Martin Fredin.
    * @author Alexey Ryabov
+   * Parses throw emails from a server and convers in into email.
    * @param store - is a list of folders.
    * @return - list of emails.
    * @throws MessagingException
    */
   protected abstract List<Email> parse(Store store) throws MessagingException;
+
+  /**@author Alexey Ryabov
+   * Converts inputstream into a bytearrayoutputstream
+   * @param inputStream - email attachment part as inputstream.
+   * @return - attachment as byte array
+   */
+  protected ByteArrayOutputStream attachmentAsStream (InputStream inputStream) {
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    byte[] buffer = new byte[1000000]; // max size per attachment is 1mb = 1000000 byte.
+    try {
+      for (int numOfBytes; (numOfBytes = inputStream.read(buffer)) != -1;) {
+        //Converting inputStream to outputStream
+        outputStream.write(buffer, 0, numOfBytes);
+      }
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+    //Converting outputStream to array of bytes
+    return outputStream;
+  }
+
+  /**@author Alexey Ryabov
+   * Creates an multiplart for an email with text-part and attachment-part.
+   * @param email - new email.
+   * @return - multipart with content and attachments.
+   * @throws MessagingException
+   * @throws IOException
+   */
+  protected Multipart messageMultiPart (Email email) throws MessagingException, IOException {
+    // Create the Multipart and add MimeBodyParts to it.
+    Multipart multipart = new MimeMultipart();
+    // Create and fill the first message part.
+    MimeBodyPart messageBodyPart = new MimeBodyPart();
+    //Content of the message.
+    messageBodyPart.setContent(email.content(), "text/html");
+    // Add multipart to message.
+    multipart.addBodyPart(messageBodyPart);
+    // adding attachments:
+    for(Attachment attachment : email.attachments()){
+      MimeBodyPart mimeBodyPart = new MimeBodyPart();
+      mimeBodyPart.attachFile(attachment.file());
+      multipart.addBodyPart(mimeBodyPart);
+    }
+    return multipart;
+  }
+
+  /**
+   * @param session   - session of the connection.
+   * @param recipient - email address of the recipient.
+   * @return - message object.
+   * @throws Exception
+   * @author Alexey Ryabov
+   * Composes a message, returnt message object..
+   */
+  protected Message composingMessage(Session session, String recipient, Email email) {
+    try {
+      Message msg = new MimeMessage(session);
+      msg.setFrom(new InternetAddress(email.from())); // From.
+      msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient)); //To, recipient.
+      msg.setSubject(email.subject()); //Subject
+      msg.setContent(messageMultiPart(email)); //content split into multipart. Text content, attachment content.
+      msg.setSentDate(new Date()); //Local date
+
+      return msg;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  /**
+   * @param properties - are properties of the session, are set in the sendEmail method.
+   * @param account    - active account.
+   * @param password   - password of the active account.
+   * @return - session object.
+   * @author Alexey Ryabov
+   * Asks server to authorice the session. Returns Authenticated Session.
+   */
+  protected Session getAuthentication(Properties properties, String account, String password) {
+    Session session = Session.getInstance(properties, new Authenticator() {
+      @Override
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(account, password);
+      }
+    });
+    return session;
+  }
+
+  /**
+   * Get the received date from an email.
+   *
+   * @param message - the message to find the received date for.
+   * @return The received date of the email if it could be found and parsed, else the current date.
+   * @throws MessagingException
+   * @author Hampus Jernkrook
+   */
+  protected LocalDateTime resolveReceivedDate(MimeMessage message) throws MessagingException {
+    LocalDateTime res = LocalDateTime.now(ZoneId.systemDefault());
+    // if received date can be extracted directly, use that.
+    if (message.getReceivedDate() != null) {
+      return message.getReceivedDate()
+              .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+    if (message.getSentDate() != null) {
+      return message.getSentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+    String[] receivedHeaders = message.getHeader("Received");
+    // if no received-header was found, return the current date
+    System.out.println("\nHEADER IS >> " + Arrays.toString(receivedHeaders) + "\n"); //TODO remove
+    // if no recieved-header was found, return the current date
+    if (receivedHeaders == null) {
+      return res;
+    }
+    // if header was found then scan it for the date and parse into LocalDateTime format.
+    // TODO
+    // if no date was found or could be parsed, set current date as received date
+    return res;
+  }
 }
