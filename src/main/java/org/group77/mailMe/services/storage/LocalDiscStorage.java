@@ -77,7 +77,6 @@ public class LocalDiscStorage implements Storage {
      * @throws StorageException the folders cannot be stored
      * @author Hampus Jernkrook
      * @author Martin Fredin.
-     * TODO: get rid of try-catch and propagate exception to control.
      */
     @Override
     public void store(Account account, List<Folder> folders) throws StorageException {

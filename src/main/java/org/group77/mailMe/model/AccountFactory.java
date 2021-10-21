@@ -20,8 +20,6 @@ public class AccountFactory {
      * @author Elin Hagman
      */
     public static Account createAccount(String emailAddress, char[] password) throws EmailDomainNotSupportedException {
-
-
         if (emailAddress.contains("@gmail.com")) {
             return new Account(emailAddress, password, ServerProvider.GMAIL);
         } else if (emailAddress.contains("@hotmail.com")
