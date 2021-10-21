@@ -64,14 +64,11 @@ public class ReadingController {
         setButtonHandler(control.getActiveFolder().get(), archiveHandler, restoreHandler);
         setButtonImage(control.getActiveFolder().get());
 
-        String content = null;
-
+        String content = email.content();
         WebEngine webEngine = webView.getEngine();
-
         if(email.content().contains("contenteditable=\"true\"")){
             content =email.content().replace("contenteditable=\"true\"", "contenteditable=\"false\"");
         }
-
         webEngine.loadContent(content, "text/html");
 
 
