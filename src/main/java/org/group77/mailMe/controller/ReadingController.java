@@ -17,6 +17,9 @@ import org.group77.mailMe.model.Folder;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
+
+import static java.util.regex.Pattern.compile;
 
 
 public class ReadingController {
@@ -74,8 +77,41 @@ public class ReadingController {
 
         // attach event handlers
         trashBtn.setOnAction(i -> handleDelete(control));
-        replyBtn.setOnAction(inputEvent -> WindowOpener.openReply(control, fromLabel.getText()));
+        replyBtn.setOnAction(inputEvent -> reply(control));
     }
+
+    /**
+     * open email writing window and fill in to recipient field if possible
+     * @param control the control layer
+     * @author Martin Fredin
+     */
+    private void reply(Control control){
+        try{
+            WindowOpener.openReply(control, extractEmailAddress(fromLabel.getText()));
+        }catch (Exception ignore){
+            WindowOpener.openWriting(control);
+        }
+    }
+
+    /**
+     * extract email address from string
+     * @param str a string that possibly contains an email address
+     * @return the first valid email address if exists
+     * @throws Exception if there are no valid email address
+     * @author Martin Fredin
+     */
+    private String extractEmailAddress(String str) throws Exception{
+        // official email validator standard RFC 5322
+        String rfc5322 = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+        Pattern pattern = compile(rfc5322);
+        Matcher matcher = pattern.matcher(str);
+        if(matcher.find()){
+            return matcher.group(0);
+        }else{
+            throw new Exception("reply: couldn't extract email address");
+        }
+    }
+
 
     /**
      * set image to either a archive-image or a restore-image depending on current folder
