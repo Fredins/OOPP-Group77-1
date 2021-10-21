@@ -86,7 +86,7 @@ public class Control {
      * @author Martin Fredin
      */
 
-    public void addSuggestion(List<String> newKnownRecipients) {
+    public void addNewKnownRecipient(List<String> newKnownRecipients) {
         try {
             List<String> oldKnownRecipients = storage.retrieveKnownRecipients(getActiveAccount().get()); //Retrieve the old suggestions
             List<String> combinedSuggestions = Stream.concat(oldKnownRecipients.stream(), newKnownRecipients.stream())

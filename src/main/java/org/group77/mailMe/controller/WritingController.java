@@ -107,7 +107,7 @@ public class WritingController {
 
         threadExecutor.execute(() -> {
             try {
-                control.addSuggestion(Arrays.stream(toField.getText().split(";")).toList());
+                control.addNewKnownRecipient(Arrays.stream(toField.getText().split(";")).toList());
                 control.send(
                         removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())),
                         subjectField.getText(),
