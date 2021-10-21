@@ -261,22 +261,17 @@ public class Control {
 
 
     /**
-     * Moves the email to the desired MoveTofolder and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
+     * Moves the email to the desired newFolde and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
      *
-     * @param MoveTofolder The MoveTofolder that was selected in the "Move" comboBox in readingView
+     * @param newFolder The MoveTofolder that was selected in the "Move" comboBox in readingView
      * @author David Zamanian
      * @author Martin Fredin
      */
 
-    public void moveEmail(Folder MoveTofolder) {
-        Email email = getActiveEmail().get();
-        getActiveEmails().remove(email);
-        Folder moveFromFolder = getActiveFolder().get();
-        moveFromFolder.emails().remove(email);
-        getActiveFolder().set(new Folder(moveFromFolder.name(), moveFromFolder.emails()));
-        MoveTofolder.emails().add(email);
-        storage.store(getActiveAccount().get(), moveFromFolder);
-        storage.store(getActiveAccount().get(), MoveTofolder);
+    public void moveEmail(Folder newFolder) {
+        model.moveEmail(newFolder);
+        storage.store(getActiveAccount().get(), model.getActiveFolder().get());
+        storage.store(getActiveAccount().get(), newFolder);
     }
 
     /* public void deleteEmail(Email emailToBeDeleted) {
