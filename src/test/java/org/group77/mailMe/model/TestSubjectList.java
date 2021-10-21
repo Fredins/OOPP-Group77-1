@@ -1,6 +1,5 @@
 package org.group77.mailMe.model;
 
-import org.group77.mailMe.model.data.*;
 import org.junit.jupiter.api.*;
 
 import java.util.*;

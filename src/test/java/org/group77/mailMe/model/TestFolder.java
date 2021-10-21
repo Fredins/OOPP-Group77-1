@@ -1,12 +1,9 @@
 package org.group77.mailMe.model;
 
 
-import org.group77.mailMe.model.data.Email;
-import org.group77.mailMe.model.data.Folder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

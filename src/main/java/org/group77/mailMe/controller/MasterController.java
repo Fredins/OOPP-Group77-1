@@ -11,9 +11,8 @@ import javafx.util.*;
 import org.controlsfx.control.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.model.Control;
-import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.model.exceptions.*;
+import org.group77.mailMe.model.*;
+import org.group77.mailMe.Control;
 
 import java.io.*;
 import java.util.*;
@@ -312,7 +311,7 @@ public class MasterController {
     private void loadFilterView(Control control) {
         System.out.println("INIT FILTER FIEW"); //todo remove
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/FilterView.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/Filter.fxml"));
             Pane pane = fxmlLoader.load();
             ((FilterController) fxmlLoader.getController()).init(control);
             filterFlowPane.getChildren().clear();

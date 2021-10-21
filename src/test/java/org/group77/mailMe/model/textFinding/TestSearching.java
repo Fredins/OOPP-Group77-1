@@ -1,6 +1,6 @@
 package org.group77.mailMe.model.textFinding;
 
-import org.group77.mailMe.model.data.Email;
+import org.group77.mailMe.model.Email;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

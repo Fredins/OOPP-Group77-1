@@ -1,9 +1,8 @@
 package org.group77.mailMe.model.textFinding;
 
-import org.group77.mailMe.model.data.Email;
+import org.group77.mailMe.model.Email;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.BiPredicate;
 
 /**

@@ -6,7 +6,6 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.*;
-import org.group77.mailMe.model.*;
 
 import java.io.*;
 import java.util.ArrayList;

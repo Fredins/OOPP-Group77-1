@@ -1,7 +1,7 @@
 package org.group77.mailMe.services.storage;
 
-import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.model.exceptions.*;
+import org.group77.mailMe.model.Account;
+import org.group77.mailMe.model.Folder;
 
 import java.io.*;
 import java.util.*;
@@ -12,11 +12,17 @@ import java.util.stream.*;
  */
 public class LocalDiscStorage implements Storage {
 
-    private final String appPath; //application's root directory
-    private final String separator; //separator symbol of the user's OS.
+    /**
+     * The path to the applications root directory.
+     */
+    private final String appPath;
+    /**
+     * The separator symbol of the Operating System being used.
+     */
+    private final String separator;
 
     /**
-     * Initializes the storage object and sets the app root directory and separator.
+     * Creates a LocalDiscStorage object and sets the app root directory and separator.
      *
      * @throws OSNotFoundException if the user's OS cannot be found.
      * @author David Zamanian
@@ -31,6 +37,11 @@ public class LocalDiscStorage implements Storage {
     }
 
     /**
+     * Stores an account in a directory with the email address as name in the app directory.
+     *
+     * Firstly the directory with the email address is created, then the specified account
+     * is serialized in that directory.
+     *
      * @param account - The account to be stored.
      * @throws StorageException if account already exists or problem with IO
      * @author Alexey Ryabov
@@ -44,29 +55,32 @@ public class LocalDiscStorage implements Storage {
         // if account already exists, then abort and inform caller.
         // else if account is not already added, create directory and store file with account details
         if (testExists(path)) {
-            throw new AccountAlreadyExistsException("Account already exists!");
+            throw new AccountAlreadyStoredException("Account already exists!");
         } else {
             mkdir(path);
             // path of the account file
             String accountFilePath = path + separator + "Account";
-            try{
+            try {
                 touch(accountFilePath);
                 serialize(account, accountFilePath);
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new StorageException(e);
             }
         }
     }
 
     /**
-     * @param folders - List of folders to store away.
-     * @param account - the account to store the folders under.
+     * Stores the specified list of folders in the account directory of the specified account.
+     *
+     * @param account - the account to store the folders under
+     * @param folders - List of folders to store
+     * @throws StorageException the folders cannot be stored
      * @author Hampus Jernkrook
      * @author Martin Fredin.
      * TODO: get rid of try-catch and propagate exception to control.
      */
     @Override
-    public void store(Account account, List<Folder> folders) throws StorageException{
+    public void store(Account account, List<Folder> folders) throws StorageException {
         // path to the given account's directory
         String accountPath = appPath + separator + account.emailAddress();
         // For each folder, create a directory with the folder name and store the folder object
@@ -79,47 +93,53 @@ public class LocalDiscStorage implements Storage {
                 throw new StorageException(e);
             }
         });
-        }
+    }
 
     /**
-     * store folder in corresponding account directory
-     *
-     * @author Elin Hagman, Martin
+     * Store the specified folder in corresponding account directory
+     * @param account the account which the folder should be stored under
+     * @param folder the folder to be stored
+     * @author Elin Hagman
+     * @author Martin Fredin
      */
     @Override
-    public void store(Account account, Folder folder) throws StorageException{
+    public void store(Account account, Folder folder) throws StorageException {
         String folderPath = appPath + separator + account.emailAddress() + separator + folder.name();
-        try{
+        try {
             touch(folderPath);
             serialize(folder, folderPath);
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new StorageException(e);
         }
     }
 
     /**
-     * store list of email suggestions proposed when writing
+     * Store list of email addresses which the specified account has sent emails to
      *
+     * @param account the account which recipients should be stored
+     * @param suggestions the email addresses of the recipients
      * @author David Zamanian
      */
     @Override
-    public void storeSuggestions(Account account, List<String> suggestions) throws StorageException{
+    public void storeKnownRecipients(Account account, List<String> suggestions) throws StorageException {
         String address = account.emailAddress();
         String path = appPath + separator + address + separator + "Suggestions";
 
-            try{
-                touch(path);
-                serialize(suggestions, path);
-            }catch (IOException e){
-                throw new StorageException(e);
-            }
+        try {
+            touch(path);
+            serialize(suggestions, path);
+        } catch (IOException e) {
+            throw new StorageException(e);
+        }
     }
 
     /**
-     * Retrieve the list of suggestions for a specific account
+     * Retrieve the list of email addresses that the specified account has had as
+     * recipients.
      *
-     * @author David Zamanian.
+     * @param account the account of which recipients is to be retrieved
      * @return Returns a list of all the auto-complete suggestions
+     * @author David Zamanian
      */
     @Override
     public List<String> retrieveSuggestions(Account account) {
@@ -129,22 +149,23 @@ public class LocalDiscStorage implements Storage {
         List<String> suggestions = new ArrayList<>();
         try {
             suggestions = (List<String>) deserialize(path);
-        } catch (IOException | ClassNotFoundException ignore) {}
+        } catch (IOException | ClassNotFoundException ignore) {
+        }
         return suggestions;
     }
 
 
     /**
-     * 1. retrieve all folders
-     * 2. sort folders
+     * Retrieve the list of stored folders of the specified account.
      *
-     * @param account - the account to retrieve folders for.
+     * @param account the account to retrieve folders for
+     * @return list of folders belonging to the specified account
      * @author David Zamanian
      * @author Martin Fredin
      * @author Hampus Jernkrook
      */
     @Override
-    public List<Folder> retrieveFolders(Account account) throws StorageException{
+    public List<Folder> retrieveFolders(Account account) throws StorageException {
         // path to account directory
         String accountPath = appPath + separator + account.emailAddress();
         // get all files under the account directory (all folders).
@@ -180,14 +201,14 @@ public class LocalDiscStorage implements Storage {
     }
 
     /**
-     * retrieve all saved accounts
+     * Retrieve a list of all the stored accounts in app directory
      *
-     * @return a list of all stored accounts.
+     * @return a list of all stored accounts
      * @author Martin (updated according to new design).
      * @author David Zamanian.
      */
     @Override
-    public List<Account> retrieveAccounts() throws StorageException{
+    public List<Account> retrieveAccounts() throws StorageException {
         // get all account directories under the app root directory
         File[] accountDirs = (new File(appPath)).listFiles();
         List<Account> accounts = new ArrayList<>();
@@ -224,10 +245,12 @@ public class LocalDiscStorage implements Storage {
     }
 
     /**
+     * Create new file with the specified path
+     * 
      * @param path the path to the file including filename
      * @throws IOException if the file is not found
      * @author Hampus Jernkrook
-     * @author Martin
+     * @author Martin Fredin
      */
     private void touch(String path) throws IOException {
         File file = new File(path);
@@ -240,7 +263,7 @@ public class LocalDiscStorage implements Storage {
 
     /**
      * @param path the path to directory including directory name
-     * @author Martin
+     * @author Martin Fredin
      */
     private void mkdir(String path) {
         File file = new File(path);
@@ -253,7 +276,7 @@ public class LocalDiscStorage implements Storage {
      * @param o    the object to be serialized
      * @param path the location on the computer including filename
      * @throws IOException if the object can't be serialized
-     * @author Martin
+     * @author Martin Fredin
      */
     private void serialize(Object o, String path) throws IOException {
         FileOutputStream file = new FileOutputStream(path);
@@ -268,9 +291,9 @@ public class LocalDiscStorage implements Storage {
      *
      * @param path the path of the file including filename
      * @return the object, uncasted
-     * @throws IOException if the file don't exist
+     * @throws IOException            if the file don't exist
      * @throws ClassNotFoundException if the file can't be deserialized in to Object
-     * @author Martin
+     * @author Martin Fredin
      */
     private Object deserialize(String path) throws IOException, ClassNotFoundException {
         FileInputStream file = new FileInputStream(path);

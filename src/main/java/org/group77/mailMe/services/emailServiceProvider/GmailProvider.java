@@ -1,13 +1,12 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.apache.commons.mail.util.*;
-import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.model.exceptions.*;
+import org.group77.mailMe.model.Account;
+import org.group77.mailMe.model.Attachment;
+import org.group77.mailMe.model.Email;
 
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -83,7 +82,7 @@ public class GmailProvider extends EmailServiceProvider {
                                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                                 byte[] buffer = new byte[1000000]; // max size per attachment is 1mb = 1000000 byte.
                                 try {
-                                    for (int numOfBytes; (numOfBytes = inputStream.read(buffer)) != -1;) {
+                                    for (int numOfBytes; (numOfBytes = inputStream.read(buffer)) != -1; ) {
                                         //Converting inputStream to outputStream
                                         outputStream.write(buffer, 0, numOfBytes);
                                     }
@@ -170,10 +169,10 @@ public class GmailProvider extends EmailServiceProvider {
 
         // An email is sent to every address in the list.
         for (String recipient : email.to()) {
-            try{
+            try {
                 Message msg = composingMessage(getAuthentication(props, fromAccount, fromAccountPassword), recipient, email);
                 Transport.send(msg);
-            }catch (MessagingException e){
+            } catch (MessagingException e) {
                 throw new ServerException(e);
             }
 
@@ -236,7 +235,7 @@ public class GmailProvider extends EmailServiceProvider {
             multipart.addBodyPart(messageBodyPart);
             msg.setContent(multipart);
             // adding attachments:
-            for(Attachment attachment : email.attachments()){
+            for (Attachment attachment : email.attachments()) {
                 MimeBodyPart mimeBodyPart = new MimeBodyPart();
                 mimeBodyPart.attachFile(attachment.file());
                 multipart.addBodyPart(mimeBodyPart);

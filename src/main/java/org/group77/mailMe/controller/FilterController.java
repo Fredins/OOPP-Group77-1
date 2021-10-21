@@ -6,7 +6,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import org.group77.mailMe.model.Control;
+import org.group77.mailMe.Control;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

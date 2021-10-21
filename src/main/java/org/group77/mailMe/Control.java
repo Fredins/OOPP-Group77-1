@@ -1,13 +1,12 @@
-package org.group77.mailMe.model;
+package org.group77.mailMe;
 
-import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.model.data.Folder;
-import org.group77.mailMe.model.exceptions.*;
-import org.group77.mailMe.model.exceptions.FolderNotFoundException;
+import org.group77.mailMe.model.*;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProvider;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
-import org.group77.mailMe.model.exceptions.AccountAlreadyExistsException;
+import org.group77.mailMe.services.storage.AccountAlreadyStoredException;
+import org.group77.mailMe.services.emailServiceProvider.ServerException;
 import org.group77.mailMe.services.storage.Storage;
+import org.group77.mailMe.services.storage.StorageException;
 
 
 import javax.mail.*;
@@ -41,13 +40,12 @@ public class Control {
 
     /**
      * Creates a Control with the specified storage solution.
-     *
+     * <p>
      * Creates and initiates an instance of Model with necessary data from storage.
      * Adds logic to model so that when active account changes its folders are retrieved
      * from storage.
      *
      * @param storage storage solution used for storing user data.
-     *
      * @author Elin Hagman
      * @author Martin Fredin
      */
@@ -72,42 +70,45 @@ public class Control {
 
         //Updates the autoSuggestions as soon as an account gets active
         getActiveAccount().addObserver(i -> {
-                if (getActiveAccount().get() != null) {
-                    model.setAutoSuggestions(storage.retrieveSuggestions(getActiveAccount().get()));
+            if (getActiveAccount().get() != null) {
+                model.setKnownRecipients(storage.retrieveKnownRecipients(getActiveAccount().get()));
 
-                }});
+            }
+        });
 
     }
 
     /**
      * Adds the recipients email address to the suggestion list in storage by retrieving the old list and add the
      * new email and store them together
-     * @param newSuggestions the new suggestions
+     *
+     * @param newKnownRecipients the new suggestions
      * @author David Zamanian
      * @author Martin Fredin
      */
 
-    public void addSuggestion(List<String> newSuggestions){
-        try{
-            List<String> oldSuggestions = storage.retrieveSuggestions(getActiveAccount().get());
-            List<String> combinedSuggestions = Stream.concat(oldSuggestions.stream(), newSuggestions.stream())
-              .distinct()
-              .collect(Collectors.toList());
-            storage.storeSuggestions(getActiveAccount().get(), combinedSuggestions);
-            getAutoSuggestions().replaceAll(combinedSuggestions);
-        }catch (StorageException e){
+    public void addSuggestion(List<String> newKnownRecipients) {
+        try {
+            List<String> oldKnownRecipients = storage.retrieveKnownRecipients(getActiveAccount().get()); //Retrieve the old suggestions
+            List<String> combinedSuggestions = Stream.concat(oldKnownRecipients.stream(), newKnownRecipients.stream())
+                    .distinct()
+                    .collect(Collectors.toList()); //Concatenate the oldSuggestion with the newSuggestions
+            storage.storeKnownRecipients(getActiveAccount().get(), combinedSuggestions);
+            getKnownRecipients().replaceAll(combinedSuggestions); //Replace the oldSuggestions with the new
+        } catch (StorageException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Removes brackets from a string. Used to remove "[" and "]" from recipients.
+     *
      * @param s The string to remove brackets from
      * @author David Zamanian
      */
 
-    public String removeBrackets(String s){
-        s = s.replaceAll("[\\[\\](){}]","");
+    public String removeBrackets(String s) {
+        s = s.replaceAll("[\\[\\](){}]", "");
         return s;
     }
 
@@ -132,15 +133,15 @@ public class Control {
      * Adds the specified emails to the specified folder in this model.
      *
      * @param folderName the name of the folder that is to be updated
-     * @param newEmails the emails the specified folder should be updated with
+     * @param newEmails  the emails the specified folder should be updated with
      * @throws FolderNotFoundException // TODO: Should this be exception instead? The exception should be thrown by model
      * @author Martin Fredin
      */
     public void updateFolder(String folderName, List<Email> newEmails) throws FolderNotFoundException {
         Folder folder = model.getFolders().stream()
-          .filter(folder1 -> folder1.name().equals(folderName))
-          .findFirst()
-          .orElseThrow(() -> new FolderNotFoundException(folderName));
+                .filter(folder1 -> folder1.name().equals(folderName))
+                .findFirst()
+                .orElseThrow(() -> new FolderNotFoundException(folderName));
 
         model.updateFolder(folder, newEmails);
         storage.store(model.getActiveAccount().get(), folder);
@@ -168,7 +169,7 @@ public class Control {
                 storage.store(account); // throws account already exists exception
                 model.addAccount(account); // will set created account to activeAccount
             }
-        } catch (EmailDomainNotSupportedException | AccountAlreadyExistsException | ServerException e) {
+        } catch (EmailDomainNotSupportedException | AccountAlreadyStoredException | ServerException e) {
             throw new Exception(e.getMessage());
         }
     }
@@ -179,9 +180,9 @@ public class Control {
      * and sets this model's activeAccount as sender of the Email.
      *
      * @param recipients The recipients of the email to be sent
-     * @param subject The subject of the email to be sent
-     * @param content The content of the email to be sent
-     * @param files The files of the email to be sent
+     * @param subject    The subject of the email to be sent
+     * @param content    The content of the email to be sent
+     * @param files      The files of the email to be sent
      * @throws Exception if there is no active account in this model
      * @author Alexey Ryabov
      */
@@ -190,16 +191,16 @@ public class Control {
         if (account != null) {
             //Creating new email to be copied to Sent-folder
             List<Attachment> attachments = files.stream()
-              .map(file -> new Attachment(file.getName(), null, file))
-              .collect(Collectors.toList());
+                    .map(file -> new Attachment(file.getName(), null, file))
+                    .collect(Collectors.toList());
 
             Email email = new Email(
-              account.emailAddress(),
-              recipients.toArray(String[]::new),
-              subject,
-              content,
-              attachments,
-              LocalDateTime.now());
+                    account.emailAddress(),
+                    recipients.toArray(String[]::new),
+                    subject,
+                    content,
+                    attachments,
+                    LocalDateTime.now());
 
             EmailServiceProvider esp = EmailServiceProviderFactory.createEmailServiceProvider(model.getActiveAccount().get());
             esp.sendEmail(account, email);
@@ -213,17 +214,18 @@ public class Control {
      * TODO: fix javadoc comment
      * Moves a copy of successfylly an email into the a folder of choise.
      * Sent-folder(index 2 in the folders list).
-     * @param  - is a email that is currently being sent.
+     *
+     * @param - is a email that is currently being sent.
      * @throws Exception
      * @author Alexey Ryabov
      */
-    public void moveSentEmail (List<String> recipients, String subject, String content, List<File> files, int folderIndex) throws Exception {
+    public void moveSentEmail(List<String> recipients, String subject, String content, List<File> files, int folderIndex) throws Exception {
         //Convert String list of recipients to String Array of recipients.
         String[] recipientsArray = recipients.toArray(String[]::new);
         //Creating new email to be copied to Sent-folder
         List<Attachment> attachments = files.stream()
-          .map(file -> new Attachment(file.getName(), null, file))
-          .collect(Collectors.toList());
+                .map(file -> new Attachment(file.getName(), null, file))
+                .collect(Collectors.toList());
         Email newEmail = new Email(model.getActiveAccount().get().emailAddress(), recipientsArray, subject, content, attachments, null);
         List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
         //Move the currently open email to the Sent-folder
@@ -241,8 +243,8 @@ public class Control {
 
     public void deleteEmail() {
         Optional<Folder> maybeTrash = getFolders().stream()
-            .filter(folder -> folder.name().equals("Trash"))
-            .findFirst();
+                .filter(folder -> folder.name().equals("Trash"))
+                .findFirst();
         maybeTrash.ifPresent(this::moveEmail);
     }
 
@@ -295,19 +297,46 @@ public class Control {
         model.setActiveEmail(readingEmail);
     }
 
-    public SubjectList<String> getAutoSuggestions() {return model.getAutoSuggestions();}
-    public Subject<Account> getActiveAccount() { return model.getActiveAccount(); }
-    public SubjectList<Account> getAccounts() { return model.getAccounts(); }
-    public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {model.setActiveAccount(account);}
-    public SubjectList<Folder> getFolders() { return model.getFolders(); }
-    public Subject<Folder> getActiveFolder() { return model.getActiveFolder(); }
-    public Subject<Email> getActiveEmail() { return model.getActiveEmail(); }
-    public SubjectList<Email> getActiveEmails() { return model.getActiveEmails(); }
-    public void setFolder(Folder activeFolder) { model.setActiveFolder(activeFolder); }
+    public SubjectList<String> getKnownRecipients() {
+        return model.getKnownRecipients();
+    }
+
+    public Subject<Account> getActiveAccount() {
+        return model.getActiveAccount();
+    }
+
+    public SubjectList<Account> getAccounts() {
+        return model.getAccounts();
+    }
+
+    public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {
+        model.setActiveAccount(account);
+    }
+
+    public SubjectList<Folder> getFolders() {
+        return model.getFolders();
+    }
+
+    public Subject<Folder> getActiveFolder() {
+        return model.getActiveFolder();
+    }
+
+    public Subject<Email> getActiveEmail() {
+        return model.getActiveEmail();
+    }
+
+    public SubjectList<Email> getActiveEmails() {
+        return model.getActiveEmails();
+    }
+
+    public void setFolder(Folder activeFolder) {
+        model.setActiveFolder(activeFolder);
+    }
 
     /**
      * Filters this model's activeEmails to only contain Emails with recipients containing
      * the search word.
+     *
      * @param searchWord the word which the recipients of an email should match
      * @author Hampus Jernkrook
      */
@@ -317,6 +346,7 @@ public class Control {
 
     /**
      * Filters this model's activeEmails to only contain Emails with senders containing the search word.
+     *
      * @param searchWord the word which the senders of an email should match
      * @author Hampus Jernkrook
      */
@@ -327,6 +357,7 @@ public class Control {
     /**
      * Filters this model's activeEmails to only contain Emails that was sent before
      * the specified date.
+     *
      * @param date the maximum date of an email
      * @author Hampus Jernkrook
      */
@@ -337,6 +368,7 @@ public class Control {
     /**
      * Filters this model's activeEmails to only contain Emails that was sent after the
      * specified date.
+     *
      * @param date the minimum date of an email
      * @author Hampus Jernkrook
      */
@@ -346,6 +378,7 @@ public class Control {
 
     /**
      * Sorts the emails in this model's activeEmails from the newest to the oldest date.
+     *
      * @author Hampus Jernkrook
      */
     public void sortByNewToOld() {
@@ -354,6 +387,7 @@ public class Control {
 
     /**
      * Sorts the emails in this model's activeEmails from the oldest to the newest date.
+     *
      * @author Hampus Jernkrook
      */
     public void sortByOldToNew() {
@@ -362,6 +396,7 @@ public class Control {
 
     /**
      * Erases all filters from this model's activeEmails and restores it to its default state.
+     *
      * @author Hampus Jernkrook
      */
     public void clearFilter() {
@@ -371,6 +406,7 @@ public class Control {
     /**
      * Filters this model's activeEmails to only contain Emails that has any attribute that contains the
      * search word.
+     *
      * @param searchWord the word which at least one the Emails attributes should contain.
      * @author Hampus Jernkrook
      */
