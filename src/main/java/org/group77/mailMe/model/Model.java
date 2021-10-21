@@ -316,4 +316,39 @@ public class Model {
     public void clearSearchResult() {
         setActiveEmails(activeFolder.get().emails());
     }
+
+
+    /**
+     * Permanently deletes this activeEmail from this activeFolder and this activeEmails
+     *
+     * @author Elin Hagman
+     * @author David Zamanian
+     */
+    public void permDeleteEmail() {
+        activeEmails.remove(activeEmail.get());
+        activeFolder.get().deleteEmail(activeEmail.get());
+        // next row is necessary to notify listeners
+        getActiveFolder().set(new Folder(activeFolder.get().name(), activeFolder.get().emails()));
+    }
+
+    /**
+     * Moves activeEmail from this activeFolder to the given newFolder.
+     *
+     * @param newFolder the folder that activeEmail should be moved to
+     * @author Elin Hagman
+     * @author David Zamanian
+     */
+    public void moveEmail(Folder newFolder) {
+        // Remove activeEmail from activeEmails and activeFolder
+        activeEmails.remove(activeEmail.get());
+        activeFolder.get().deleteEmail(activeEmail.get());
+
+        // next row necessary to notify listeners
+        activeFolder.set(new Folder(activeFolder.get().name(), activeFolder.get().emails()));
+
+        // add activeEmail to new folder
+        newFolder.addEmail(activeEmail.get());
+
+    }
+
 }

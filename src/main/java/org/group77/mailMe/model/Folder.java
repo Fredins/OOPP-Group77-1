@@ -15,4 +15,12 @@ public record Folder(
         String name,
         List<Email> emails
 ) implements Serializable {
+
+    public void addEmail(Email email) {
+        this.emails.add(email);
+    }
+
+    public void deleteEmail(Email email) {
+        this.emails.remove(email);
+    }
 }
