@@ -202,7 +202,7 @@ public class ReadingController {
                 try {
                     //Creating a button with attachment name.
                     Button button = hBoxButtonSetup(attachment);
-                    AttachmentButtonAction(attachment, button);
+                    attachmentButtonAction(attachment, button);
                     //Adding a button to HBox.
                     attachmentsHBox.setSpacing(5);
                     attachmentsHBox.getChildren().add(button);
@@ -240,7 +240,7 @@ public class ReadingController {
      * @param button     - button, with info about its attachment.
      * @author - Alexey Ryabov
      */
-    public void AttachmentButtonAction(Attachment attachment, Button button) {
+    public void attachmentButtonAction(Attachment attachment, Button button) {
         button.setOnAction(e -> {
             try {
                 //On button action a file chooser going to open.
