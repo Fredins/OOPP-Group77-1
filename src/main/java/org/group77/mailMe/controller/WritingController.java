@@ -105,7 +105,6 @@ public class WritingController {
         Platform.runLater(() -> notification
           .graphic(new Label("Message sent successfully!"))
           .show());
-          // control.moveSentEmail(removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())), subjectField.getText(), contentField.getHtmlText(), attachments, 2); // TODO alexey this trows exception
       } catch (Exception e) {
         System.out.println("here");
         e.printStackTrace();
@@ -157,7 +156,7 @@ public class WritingController {
 
   /**
    * @author Alexey Ryabov
-   * Removed all attachments from from HBox and List of attachments
+   * Removed all attachments from HBox and List of attachments
    */
   public void clearAllAttachments () {
     attachments.clear();
@@ -166,7 +165,7 @@ public class WritingController {
 
   /**
    * @param textfield - toTextField.
-   * @return list of recipints mail adresses.
+   * @return list of recipients mail addresses.
    * @author Alexey Ryabov
    * This method converts TextField string to list of recipients separated with ";" -sign.
    */

@@ -43,7 +43,7 @@ public class ReadingController {
     subjectLabel.setText(email.subject());
     toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
     dateLabel.setText(email.date().toString());
-    AttachmentsController(email);
+    attachmentsController(email);
 
     // set button action handler and button icon
     EventHandler<ActionEvent> archiveHandler = actionEvent -> moveEmailTo(control, "Archive");
@@ -174,7 +174,7 @@ public class ReadingController {
    * @param email - Received email.
    * @author Alexey Ryabov
    */
-  private void AttachmentsController(Email email) {
+  private void attachmentsController(Email email) {
     if (!email.attachments().isEmpty()) {
       //For every attachment in the list.
       for (Attachment attachment : email.attachments()) {
@@ -215,8 +215,7 @@ public class ReadingController {
   }
 
   /**
-   * @param fileToSave - array of the attachment.
-   * @param fileName   - file name of the attachment.
+   * @param attachment - attachment.
    * @param button     - button, with info about its attachment.
    * @author - Alexey Ryabov
    */
@@ -224,7 +223,7 @@ public class ReadingController {
     button.setOnAction(e -> {
       try {
         //On button action a file chooser going to open.
-        OpenFileChooser((Stage) button.getScene().getWindow(), attachment.content(), attachment.name());
+        openFileChooser((Stage) button.getScene().getWindow(), attachment.content(), attachment.name());
       } catch (IOException ex) {
         ex.printStackTrace();
       }
@@ -238,7 +237,7 @@ public class ReadingController {
    * @throws IOException
    * @author - Alexey Ryabov
    */
-  public void OpenFileChooser(Stage stage, byte[] fileToSave, String fileName) throws IOException {
+  public void openFileChooser(Stage stage, byte[] fileToSave, String fileName) throws IOException {
     //Creating file chooser.
     FileChooser fileChooser = new FileChooser();
     //Set extension filter
@@ -255,7 +254,7 @@ public class ReadingController {
       System.out.println("FileChooser was cancelled.");
     } else {
       if (fileToSave != null) {
-        SaveFile(fileToSave, filePath);
+        saveFile(fileToSave, filePath);
       }
     }
 
@@ -267,7 +266,7 @@ public class ReadingController {
    * @param file    - path where file is going to be saved.
    * @author Alexey Ryabov
    */
-  private void SaveFile(byte[] content, File file) {
+  private void saveFile(byte[] content, File file) {
     try {
       FileOutputStream outputStream = new FileOutputStream(file);
       outputStream.write(content);
