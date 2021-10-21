@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.*;
 import javafx.scene.web.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -150,18 +151,20 @@ public class WritingController {
      */
     private Button hBoxButtonSetup(File selectedFile) {
         //Creating image for attachments button
-        ImageView iv = new ImageView(new Image(String.valueOf(Main.class.getResource("images_and_icons/attachmentIcon.png"))));
-        iv.setFitHeight(30);
-        iv.setFitWidth(30);
+        ImageView icon = new ImageView(new Image(String.valueOf(Main.class.getResource("images_and_icons/attachment.png"))));
+        icon.rotateProperty().set(-90);
+        icon.setFitHeight(24);
+        icon.setFitWidth(24);
         //Creating button for the HBox
         Button button = new Button();
-        Tooltip tt = new Tooltip(); // Tooltip for the button with attachment's name.
-        tt.setText(selectedFile.getName());
-        button.setTooltip(tt);
-        button.setGraphic(iv);
-        button.setMinSize(30, 30);
-        button.setMaxSize(30, 30);
-        button.setStyle("-fx-background-color: white"); //  + "-fx-border-color: black;"
+        Tooltip tooltip = new Tooltip(); // Tooltip for the button with attachment's name.
+        tooltip.setText(selectedFile.getName());
+        button.setTooltip(tooltip);
+        button.setGraphic(icon);
+        button.setText(selectedFile.getName());
+        button.setCursor(Cursor.HAND);
+        button.setFont(Font.font("System", FontWeight.BOLD, 12));
+        button.setStyle("-fx-background-color: #f4f4f4");
 
         return button;
     }
