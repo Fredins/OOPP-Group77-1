@@ -18,8 +18,8 @@ import org.controlsfx.control.*;
 import org.controlsfx.control.textfield.TextFields;
 
 import org.group77.mailMe.Main;
-import org.group77.mailMe.model.Control;
-import org.group77.mailMe.model.data.*;
+import org.group77.mailMe.Control;
+
 
 
 import java.io.File;
@@ -27,6 +27,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
+
+/**
+ * controller for the writing view
+ */
 
 public class WritingController {
     @FXML

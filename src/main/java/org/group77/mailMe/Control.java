@@ -9,7 +9,6 @@ import org.group77.mailMe.services.storage.Storage;
 import org.group77.mailMe.services.storage.StorageException;
 
 
-import javax.mail.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -68,7 +67,7 @@ public class Control {
             }
         });
 
-        //Updates the autoSuggestions as soon as an account gets active
+        //Updates the knownRecipients as soon as an account gets active
         getActiveAccount().addObserver(i -> {
             if (getActiveAccount().get() != null) {
                 model.setKnownRecipients(storage.retrieveKnownRecipients(getActiveAccount().get()));
@@ -212,7 +211,7 @@ public class Control {
 
     /**
      * TODO: fix javadoc comment
-     * Moves a copy of successfylly an email into the a folder of choise.
+     * Moves a copy of successfully an email into the a folder of choice.
      * Sent-folder(index 2 in the folders list).
      *
      * @param - is a email that is currently being sent.

@@ -56,7 +56,7 @@ public class Model {
     /**
      * An observable list that can hold the previous recipients of the activeAccount.
      */
-    private final SubjectList<String> autoSuggestions = new SubjectList<>(new ArrayList<>());
+    private final SubjectList<String> knownRecipients = new SubjectList<>(new ArrayList<>());
 
     /**
      * TextFinder that provides search, filter and sort functionality to Model.
@@ -309,9 +309,11 @@ public class Model {
         setActiveEmails(newActiveEmails);
     }
 
-    // TODO: delete this and replace with clearFilter instead?
 
-    // does same as clearFilter....
+    /** Clears the search result by setting the active emails to all emails in the active folder.
+     *
+     * @author Hampus Jernkrook
+     */
     public void clearSearchResult() {
         setActiveEmails(activeFolder.get().emails());
     }

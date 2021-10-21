@@ -19,6 +19,7 @@ import org.group77.mailMe.model.Folder;
 import java.io.*;
 import java.util.*;
 
+
 public class ReadingController {
     @FXML
     private Label fromLabel;

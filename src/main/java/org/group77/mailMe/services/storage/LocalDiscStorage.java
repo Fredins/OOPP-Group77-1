@@ -142,12 +142,13 @@ public class LocalDiscStorage implements Storage {
      * @author David Zamanian
      */
     @Override
-    public List<String> retrieveSuggestions(Account account) {
+    public List<String> retrieveKnownRecipients(Account account) {
         // get all account directories under the app root directory
         String accountPath = appPath + separator + account.emailAddress();
         String path = accountPath + separator + "Suggestions";
         List<String> suggestions = new ArrayList<>();
         try {
+            //Unpack the stored Suggestion object
             suggestions = (List<String>) deserialize(path);
         } catch (IOException | ClassNotFoundException ignore) {
         }
@@ -168,7 +169,7 @@ public class LocalDiscStorage implements Storage {
     public List<Folder> retrieveFolders(Account account) throws StorageException {
         // path to account directory
         String accountPath = appPath + separator + account.emailAddress();
-        // get all files under the account directory (all folders).
+        // get all files under the account directory (all folders) except "Account" and "Suggestions".
         File[] files = Arrays.stream(Objects.requireNonNull((new File(accountPath)).listFiles()))
                 .filter(file -> !file.getName().equals("Account") && !file.getName().equals("Suggestions"))
                 .toArray(File[]::new);

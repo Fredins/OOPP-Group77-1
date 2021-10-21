@@ -14,6 +14,9 @@ import org.group77.mailMe.model.Account;
 import java.io.IOException;
 import java.util.function.Consumer;
 
+/**
+ * Controller for startPage
+ */
 
 public class StartPageController {
     @FXML
