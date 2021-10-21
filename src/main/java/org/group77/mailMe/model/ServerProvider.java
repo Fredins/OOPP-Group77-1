@@ -1,4 +1,4 @@
-package org.group77.mailMe.model.data;
+package org.group77.mailMe.model;
 
 /**
  * Supported Server Providers that can be linked to a given account.

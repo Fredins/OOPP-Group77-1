@@ -1,11 +1,7 @@
 package org.group77.mailMe.model;
 
-import org.group77.mailMe.model.data.Account;
-import org.group77.mailMe.model.data.Email;
-import org.group77.mailMe.model.data.Folder;
-import org.group77.mailMe.model.exceptions.*;
 import org.group77.mailMe.model.textFinding.TextFinder;
-import org.group77.mailMe.model.exceptions.AccountAlreadyExistsException;
+import org.group77.mailMe.services.storage.AccountAlreadyStoredException;
 
 
 import java.time.LocalDateTime;
@@ -17,7 +13,7 @@ import java.util.stream.Stream;
 
 /**
  * A high level layer of the state of an email application.
- *
+ * <p>
  * Can hold several accounts and a possibly current activeAccount.
  * Can hold folders that belong to the activeAccount.
  * Holds activeFolder, activeEmails and activeEmail which content can be filtered, sorted and searched on.
@@ -60,7 +56,7 @@ public class Model {
     /**
      * An observable list that can hold the previous recipients of the activeAccount.
      */
-    private final SubjectList<String> autoSuggestions = new SubjectList<>(new ArrayList<>());
+    private final SubjectList<String> knownRecipients = new SubjectList<>(new ArrayList<>());
 
     /**
      * TextFinder that provides search, filter and sort functionality to Model.
@@ -76,7 +72,7 @@ public class Model {
      * @author Martin Fredin
      */
 
-    public Model(List<Account> accounts){
+    public Model(List<Account> accounts) {
         this.accounts.replaceAll(accounts);
         // if a new account is added then set it as active
         this.accounts.addObserver(newAccounts -> {
@@ -90,9 +86,8 @@ public class Model {
 
     /**
      * Adds emails to the specified folder.
-     * TODO: should throw FolderNotFoundException
      *
-     * @param folder the folder to be updated
+     * @param folder    the folder to be updated
      * @param newEmails the emails to be added to the specified folder
      * @author Martin Fredin
      */
@@ -126,24 +121,26 @@ public class Model {
 
     /**
      * Adds an account to this accounts if it does not already exist.
+     *
      * @param account to be added to accounts
-     * @throws AccountAlreadyExistsException if account already exists in accounts
+     * @throws AccountAlreadyStoredException if account already exists in accounts
      * @author Elin Hagman
      */
 
-    public void addAccount(Account account) throws AccountAlreadyExistsException {
+    public void addAccount(Account account) throws AccountAlreadyStoredException {
 
         if (!(accounts.get().contains(account))) {
             accounts.add(account);
         } else {
-            throw new AccountAlreadyExistsException("Account already exists");
+            throw new AccountAlreadyStoredException("Account already exists");
         }
     }
 
     /**
      * Creates an account with the specified emailAddress and password
+     *
      * @param emailAddress the email address of the account to be created
-     * @param password the password of the account to be created
+     * @param password     the password of the account to be created
      * @return the account with the specified email address and password
      * @throws EmailDomainNotSupportedException if AccountFactory gives exception that domain is not supported
      * @author Elin Hagman
@@ -155,6 +152,7 @@ public class Model {
 
     /**
      * Creates and returns a default set of folders.
+     *
      * @return List of folders
      * @author Martin Fredin
      */
@@ -168,21 +166,63 @@ public class Model {
         );
     }
 
-    public SubjectList<String> getAutoSuggestions() {return autoSuggestions;}
-    public void setAutoSuggestions(List<String> list) {this.autoSuggestions.replaceAll(list);}
+    /** Gets called from Control's getAutoSuggestion
+     *
+     * @return returns the list of the known recipients
+     * @author David Zamanian
+     */
+    public SubjectList<String> getKnownRecipients() {
+        return knownRecipients;
+    }
 
-    public SubjectList<Account> getAccounts() { return accounts; }
-    public Subject<Account> getActiveAccount() { return activeAccount; }
-    public SubjectList<Folder> getFolders() { return folders; }
-    public Subject<Folder> getActiveFolder() { return activeFolder; }
-    public Subject<Email> getActiveEmail() { return activeEmail; }
-    public SubjectList<Email> getActiveEmails() { return activeEmails; }
-    public void setActiveFolder(Folder activeFolder) { this.activeFolder.set(activeFolder); }
-    public void setActiveEmail(Email activeEmail) { this.activeEmail.set(activeEmail); }
-    public void setActiveEmails(List<Email> activeEmails) { this.activeEmails.replaceAll(activeEmails); }
+    /** Replaces knownRecipients with the new list
+     *
+     * @param list The new list of recipients that will replace the old onw
+     * @author David Zamanian
+     */
+    public void setKnownRecipients(List<String> list) {
+        this.knownRecipients.replaceAll(list);
+    }
+
+    public SubjectList<Account> getAccounts() {
+        return accounts;
+    }
+
+    public Subject<Account> getActiveAccount() {
+        return activeAccount;
+    }
+
+    public SubjectList<Folder> getFolders() {
+        return folders;
+    }
+
+    public Subject<Folder> getActiveFolder() {
+        return activeFolder;
+    }
+
+    public Subject<Email> getActiveEmail() {
+        return activeEmail;
+    }
+
+    public SubjectList<Email> getActiveEmails() {
+        return activeEmails;
+    }
+
+    public void setActiveFolder(Folder activeFolder) {
+        this.activeFolder.set(activeFolder);
+    }
+
+    public void setActiveEmail(Email activeEmail) {
+        this.activeEmail.set(activeEmail);
+    }
+
+    public void setActiveEmails(List<Email> activeEmails) {
+        this.activeEmails.replaceAll(activeEmails);
+    }
 
     /**
      * Filters this activeEmails to only contain Emails with recipients containing the search word.
+     *
      * @param searchWord the word which the recipients of an email should match
      * @author Hampus Jernkrook
      */
@@ -193,6 +233,7 @@ public class Model {
 
     /**
      * Filters this activeEmails to only contain Emails with senders containing the search word.
+     *
      * @param searchWord the word which the senders of an email should match
      * @author Hampus Jernkrook
      */
@@ -203,6 +244,7 @@ public class Model {
 
     /**
      * Filters this activeEmails to only contain Emails that was sent before the specified date.
+     *
      * @param date the maximum date of an email
      * @author Hampus Jernkrook
      */
@@ -213,6 +255,7 @@ public class Model {
 
     /**
      * Filters this activeEmails to only contain Emails that was sent after the specified date.
+     *
      * @param date the minimum date of an email
      * @author Hampus Jernkrook
      */
@@ -224,6 +267,7 @@ public class Model {
 
     /**
      * Sorts the emails in this activeEmails from the newest to the oldest date.
+     *
      * @author Hampus Jernkrook
      */
     public void sortByNewToOld() {
@@ -233,6 +277,7 @@ public class Model {
 
     /**
      * Sorts the emails in this activeEmails from the oldest to the newest date.
+     *
      * @author Hampus Jernkrook
      */
     public void sortByOldToNew() {
@@ -242,6 +287,7 @@ public class Model {
 
     /**
      * Erases all filters from this activeEmails and restores it to its default state.
+     *
      * @author Hampus Jernkrook
      */
     public void clearFilter() {
@@ -252,6 +298,7 @@ public class Model {
     /**
      * Filters this activeEmails to only contain Emails that has any attribute that contains the
      * search word.
+     *
      * @param searchWord the word which at least one the Emails attributes should contain.
      * @author Hampus Jernkrook
      */
@@ -261,9 +308,11 @@ public class Model {
         setActiveEmails(newActiveEmails);
     }
 
-    // TODO: delete this and replace with clearFilter instead?
 
-    // does same as clearFilter....
+    /** Clears the search result by setting the active emails to all emails in the active folder.
+     *
+     * @author Hampus Jernkrook
+     */
     public void clearSearchResult() {
         setActiveEmails(activeFolder.get().emails());
     }

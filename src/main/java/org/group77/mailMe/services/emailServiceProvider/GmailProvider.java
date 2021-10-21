@@ -1,13 +1,11 @@
 package org.group77.mailMe.services.emailServiceProvider;
 
-import org.group77.mailMe.model.data.*;
-import org.group77.mailMe.model.exceptions.*;
+import org.group77.mailMe.model.*;
 
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 /**

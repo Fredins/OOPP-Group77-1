@@ -6,19 +6,19 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 import org.group77.mailMe.*;
 import org.group77.mailMe.controller.*;
-import org.group77.mailMe.model.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.*;
 
+/**
+ * util class for opening windows
+ */
 public class WindowOpener {
 
-  /*
+  /**
    * open master window
-   * @param model the model
-   * @author Martin
+   * @param control the control layer
+   * @author Martin Fredin
    */
   public static void openMaster(Control control){
     try {
@@ -36,8 +36,8 @@ public class WindowOpener {
   }
   /**
    * open start page window
-   * @param control the model
-   * @author Martin
+   * @param control the control layer
+   * @author Martin Fredin
    */
   public static void openStartPage(Control control){
     try {
@@ -56,8 +56,8 @@ public class WindowOpener {
   }
   /**
    * open add-account window
-   * @param control the model
-   * @author Martin
+   * @param control the control layer
+   * @author Martin Fredin
    */
   public static void openAddAccount(Control control, Consumer<Node> onClose) {
 
@@ -77,7 +77,7 @@ public class WindowOpener {
   /**
    * open writing window
    * @param control the model
-   * @author Martin
+   * @author Martin Fredin
    */
   public static void openWriting(Control control) {
     try {
@@ -95,9 +95,9 @@ public class WindowOpener {
   }
   /**
    * open reply window
-   * @param control the model
+   * @param control the control layer
    * @param to the email address which the user is replying to
-   * @author Martin
+   * @author Martin Fredin
    */
   public static void openReply(Control control, String to) {
     try {
@@ -113,26 +113,4 @@ public class WindowOpener {
       e.printStackTrace();
     }
   }
-
-  /** Call this function when clicking on the filter button in MainView to open the filterView
-   *
-   * @param control
-   * @author David Zamanian
-   */
-
-  public static void openFilter(Control control){
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("View/FilterView.fxml"));
-      Pane pane = fxmlLoader.load();
-      ((FilterController) fxmlLoader.getController()).init(control);
-      Stage stage = new Stage();
-      stage.setTitle("Filter");
-      stage.setScene(new Scene(pane));
-      stage.setResizable(false);
-      stage.show();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
 }

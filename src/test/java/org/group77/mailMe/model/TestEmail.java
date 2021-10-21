@@ -1,12 +1,9 @@
 package org.group77.mailMe.model;
 
-import org.group77.mailMe.model.data.Attachment;
-import org.group77.mailMe.model.data.Email;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
@@ -90,7 +87,9 @@ public class TestEmail {
                 new String[]{"recipient@gmail.com"},
                 "subject",
                 "content",
-                null);
+                null,
+                LocalDateTime.of(2021, Month.OCTOBER,20,13,49)
+                );
 
         Assertions.assertEquals(email, copyEmail);
     }

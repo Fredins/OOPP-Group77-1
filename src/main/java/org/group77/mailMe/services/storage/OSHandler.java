@@ -1,7 +1,5 @@
 package org.group77.mailMe.services.storage;
 
-import org.group77.mailMe.model.exceptions.*;
-
 /**
  * This class sets the application directory and the correct separator
  * depending on the user's OS. It serves only as a helper for other
@@ -15,7 +13,7 @@ public class OSHandler {
      * @author Hampus Jernkrook
      * Get the right app directory and separator for the user's OS.
      */
-     static String[] getAppDirAndSeparator() throws OSNotFoundException {
+    static String[] getAppDirAndSeparator() throws OSNotFoundException {
         // The variables that will be returned:
         String appDir;
         String separator;

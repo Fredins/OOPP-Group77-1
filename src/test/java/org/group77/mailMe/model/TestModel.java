@@ -1,13 +1,9 @@
 package org.group77.mailMe.model;
 
-import org.group77.mailMe.model.data.Account;
-import org.group77.mailMe.model.data.Email;
-import org.group77.mailMe.model.data.Folder;
-import org.group77.mailMe.model.exceptions.*;
+import org.group77.mailMe.services.storage.AccountAlreadyStoredException;
 import org.junit.jupiter.api.Assertions;
 
 import org.junit.jupiter.api.Test;
-import org.group77.mailMe.model.exceptions.EmailDomainNotSupportedException;
 
 import org.junit.jupiter.api.*;
 
@@ -141,9 +137,9 @@ public class TestModel {
         Model model = new Model(accounts);
 
         List<String> autoSuggestions = List.of("adam@gmail.com");
-        model.setAutoSuggestions(autoSuggestions);
+        model.setKnownRecipients(autoSuggestions);
 
-        Assertions.assertEquals(autoSuggestions,model.getAutoSuggestions().get());
+        Assertions.assertEquals(autoSuggestions,model.getKnownRecipients().get());
 
     }
 
@@ -174,7 +170,7 @@ public class TestModel {
     // ========= addAccount =========
 
     @Test
-    public void testAddNotAlreadyAddedAccount() throws EmailDomainNotSupportedException, AccountAlreadyExistsException {
+    public void testAddNotAlreadyAddedAccount() throws EmailDomainNotSupportedException, AccountAlreadyStoredException {
         // create new account that is not in model and add it to model
         Account newAccount = AccountFactory.createAccount("newEmail@gmail.com","test123".toCharArray());
         model.addAccount(newAccount);
@@ -190,7 +186,7 @@ public class TestModel {
         Account existingAccount = model.getAccounts().get().get(0);
 
         // assert that existingAccount cannot be added to model
-        Assertions.assertThrows(AccountAlreadyExistsException.class, () -> model.addAccount(existingAccount));
+        Assertions.assertThrows(AccountAlreadyStoredException.class, () -> model.addAccount(existingAccount));
     }
 
     // ========= createAccount =========

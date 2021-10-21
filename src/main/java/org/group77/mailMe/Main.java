@@ -4,7 +4,6 @@ import javafx.application.*;
 import javafx.scene.*;
 import javafx.stage.*;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.model.*;
 import org.group77.mailMe.services.storage.LocalDiscStorage;
 import org.group77.mailMe.services.storage.Storage;
 
