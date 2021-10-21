@@ -6,6 +6,7 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.*;
 import javafx.scene.web.*;
 import javafx.stage.*;
 import org.group77.mailMe.*;
@@ -249,22 +250,24 @@ public class ReadingController {
     /**
      * @param attachment - list of attachments
      * @return button for the HBox.
-     * @author Alexey Ryabov
+     * @author Alexey Ryabov, Martin Fredin
      */
     private Button hBoxButtonSetup(Attachment attachment) {
         //Creating image for attachments button
-        ImageView iv = new ImageView(new Image(String.valueOf(Main.class.getResource("images_and_icons/attachmentIcon.png"))));
-        iv.setFitHeight(30);
-        iv.setFitWidth(30);
+        ImageView icon = new ImageView(new Image(String.valueOf(Main.class.getResource("images_and_icons/attachment.png"))));
+        icon.rotateProperty().setValue(-90);
+        icon.setFitHeight(24);
+        icon.setFitWidth(24);
         //Creating button for the HBox
         Button button = new Button();
-        Tooltip tt = new Tooltip(); // Tooltip for the button with attachment's name.
-        tt.setText(attachment.name());
-        button.setTooltip(tt);
-        button.setGraphic(iv);
-        button.setMinSize(30, 30);
-        button.setMaxSize(30, 30);
-        button.setStyle("-fx-background-color: white"); //  + "-fx-border-color: black;"
+        Tooltip tooltip = new Tooltip(); // Tooltip for the button with attachment's name.
+        tooltip.setText(attachment.name());
+        button.setTooltip(tooltip);
+        button.setGraphic(icon);
+        button.setText(attachment.name());
+        button.setCursor(Cursor.HAND);
+        button.setFont(Font.font("System", FontWeight.BOLD, 13));
+        button.setStyle("-fx-background-color: white");
         return button;
     }
 
