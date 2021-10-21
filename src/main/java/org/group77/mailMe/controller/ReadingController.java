@@ -55,7 +55,7 @@ public class ReadingController {
         fromLabel.setText(email.from());
         subjectLabel.setText(email.subject());
         toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
-        dateLabel.setText(email.date().toString());
+        dateLabel.setText(email.date().toString().replace("T", "  "));
         attachmentsController(email);
 
         // set button action handler and button icon
@@ -64,8 +64,16 @@ public class ReadingController {
         setButtonHandler(control.getActiveFolder().get(), archiveHandler, restoreHandler);
         setButtonImage(control.getActiveFolder().get());
 
+        String content = null;
+
         WebEngine webEngine = webView.getEngine();
-        webEngine.loadContent(email.content(), "text/html");
+
+        if(email.content().contains("contenteditable=\"true\"")){
+            content =email.content().replace("contenteditable=\"true\"", "contenteditable=\"false\"");
+        }
+
+        webEngine.loadContent(content, "text/html");
+
 
         // attach event handlers
         trashBtn.setOnAction(i -> handleDelete(control));
