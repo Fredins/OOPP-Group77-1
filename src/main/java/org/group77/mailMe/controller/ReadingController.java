@@ -251,7 +251,7 @@ public class ReadingController {
     {
       //Do nothing if file chooser was cancelled.
       //This is for NullPointerException.
-      System.out.println("FileChooser was cancelled.");
+      System.out.println("FileChooser was cancelled."); //For testing
     } else {
       if (fileToSave != null) {
         saveFile(fileToSave, filePath);

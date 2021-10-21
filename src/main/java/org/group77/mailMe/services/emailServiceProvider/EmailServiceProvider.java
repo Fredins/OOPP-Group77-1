@@ -111,6 +111,7 @@ public abstract class EmailServiceProvider {
   public abstract void sendEmail(Account account, Email email) throws ServerException;
 
   /** @author Martin Fredin.
+   * @author Alexey Ryabov
    * @param store - is a list of folders.
    * @return - list of emails.
    * @throws MessagingException

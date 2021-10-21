@@ -49,53 +49,46 @@ public class GmailProvider extends EmailServiceProvider {
      * @author Alexey Ryabov
      */
     @Override
-    protected List<Email> parse(Store store) throws MessagingException { // TODO splitta till flera mindre metoder
+    protected List<Email> parse(Store store) throws MessagingException {
         javax.mail.Folder inbox = store.getFolder("INBOX");
-
         List<Email> emails = new ArrayList<>();
         inbox.open(2);
 
         if (inbox.getMessageCount() != 0) {
             for (Message message : inbox.getMessages()) {
+
                 String from = message.getFrom()[0].toString();
                 String[] to = Arrays.stream(message.getAllRecipients()).map(Address::toString).toArray(String[]::new);
                 String subject = message.getSubject();
                 String content = "no content";
-
                 String contentType = message.getContentType();
+
+                //Attachments
                 List<Attachment> attachments = new ArrayList<>();
                 byte[] fileAsBytes = null;
-                Map<byte[], String> listOfFilesAsByteArray = new HashMap<>();
+
+                //Local Time
                 LocalDateTime receivedDate = resolveReceivedDate((MimeMessage) message);  //get the received date of the email
 
                 try {
                     if (contentType.contains("multipart")) {
                         Multipart multipart = (Multipart) message.getContent();
+
                         int numberOfPart = multipart.getCount();
                         for (int partCount = 0; partCount < numberOfPart; partCount++) {
                             MimeBodyPart part = (MimeBodyPart) multipart.getBodyPart(partCount);
                             if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
                                 //Read file name as string
                                 String fileName = part.getFileName();
-                                //Appending filename to a string. TODO maybe not needed??
-                                //Converting/reading MimeBodyPart as input stream.
+                                //Converting MimeBodyPart as input stream.
                                 InputStream inputStream = part.getInputStream();
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                                byte[] buffer = new byte[1000000]; // max size per attachment is 1mb = 1000000 byte.
-                                try {
-                                    for (int numOfBytes; (numOfBytes = inputStream.read(buffer)) != -1;) {
-                                        //Converting inputStream to outputStream
-                                        outputStream.write(buffer, 0, numOfBytes);
-                                    }
-                                } catch (IOException ex) {
-                                    ex.printStackTrace();
-                                }
-                                //Converting outputStream to array of bytes
-                                fileAsBytes = outputStream.toByteArray();
+                                //Converting attachment as outputstream to array of bytes
+                                fileAsBytes = attachmentAsStream(inputStream).toByteArray();
                                 //Adding file and its name to hashmap
-                                listOfFilesAsByteArray.put(fileAsBytes, fileName);
                                 attachments.add(new Attachment(fileName, fileAsBytes, null));
+
                             } else {
+                                //If content is not an attachment
                                 content = part.getContent().toString();
                             }
                         }
@@ -104,7 +97,6 @@ public class GmailProvider extends EmailServiceProvider {
                         if (c != null) {
                             content = c.toString();
                         }
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -121,6 +113,26 @@ public class GmailProvider extends EmailServiceProvider {
             }
         }
         return emails;
+    }
+
+    /**@author Alexey Ryabov
+     * Converts inputstream into a bytearrayoutputstream
+     * @param inputStream - email attachment part as inputstream.
+     * @return - attachment as byte array
+     */
+    private ByteArrayOutputStream attachmentAsStream (InputStream inputStream) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1000000]; // max size per attachment is 1mb = 1000000 byte.
+        try {
+            for (int numOfBytes; (numOfBytes = inputStream.read(buffer)) != -1;) {
+                //Converting inputStream to outputStream
+                outputStream.write(buffer, 0, numOfBytes);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        //Converting outputStream to array of bytes
+        return outputStream;
     }
 
     /**
@@ -160,11 +172,10 @@ public class GmailProvider extends EmailServiceProvider {
      */
     @Override
     public void sendEmail(Account account, Email email) throws ServerException {
-        //System.out.println("Preparing to send message.."); // For Testing
-
         String fromAccount = account.emailAddress();
         String fromAccountPassword = String.valueOf(account.password());
 
+        //Properties for an email with host name and port.
         Properties props = new Properties();
         setGmailProperties(props);
 
@@ -176,8 +187,6 @@ public class GmailProvider extends EmailServiceProvider {
             }catch (MessagingException e){
                 throw new ServerException(e);
             }
-
-            //System.out.println("Message sent successfully!"); // For Testing.
         }
     }
 
@@ -221,31 +230,42 @@ public class GmailProvider extends EmailServiceProvider {
     private Message composingMessage(Session session, String recipient, Email email) {
         try {
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(email.from()));
-            System.out.println(recipient); // For testing.
-            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-            msg.setSubject(email.subject());
-            //msg.setText(content);
-            // Create the Multipart and add MimeBodyParts to it.
-            Multipart multipart = new MimeMultipart();
-            // Create and fill the first message part.
-            MimeBodyPart messageBodyPart = new MimeBodyPart();
-            //Content of the message.
-            messageBodyPart.setContent(email.content(), "text/html");
-            // Add multipart to message.
-            multipart.addBodyPart(messageBodyPart);
-            msg.setContent(multipart);
-            // adding attachments:
-            for(Attachment attachment : email.attachments()){
-                MimeBodyPart mimeBodyPart = new MimeBodyPart();
-                mimeBodyPart.attachFile(attachment.file());
-                multipart.addBodyPart(mimeBodyPart);
-            }
-            msg.setSentDate(new Date());
+            msg.setFrom(new InternetAddress(email.from())); // From.
+            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient)); //To, recipient.
+            msg.setSubject(email.subject()); //Subject
+            msg.setContent(messageMultiPart(email)); //content split into multipart. Text content, attachment content.
+            msg.setSentDate(new Date()); //Local date
+
             return msg;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
+    /**@author Alexey Ryabov
+     * Creates an multiplart for an email with text-part and attachment-part.
+     * @param email - new email.
+     * @return - multipart with content and attachments.
+     * @throws MessagingException
+     * @throws IOException
+     */
+    private Multipart messageMultiPart (Email email) throws MessagingException, IOException {
+        // Create the Multipart and add MimeBodyParts to it.
+        Multipart multipart = new MimeMultipart();
+        // Create and fill the first message part.
+        MimeBodyPart messageBodyPart = new MimeBodyPart();
+        //Content of the message.
+        messageBodyPart.setContent(email.content(), "text/html");
+        // Add multipart to message.
+        multipart.addBodyPart(messageBodyPart);
+        // adding attachments:
+        for(Attachment attachment : email.attachments()){
+            MimeBodyPart mimeBodyPart = new MimeBodyPart();
+            mimeBodyPart.attachFile(attachment.file());
+            multipart.addBodyPart(mimeBodyPart);
+        }
+        return multipart;
+    }
+
 }
