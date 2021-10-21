@@ -42,9 +42,16 @@ public class FilterController implements FilterControl {
     private final String oldToNewSorting = "Oldest to Newest";
     // set new to old sorting as default
     private final String defaultSorting = newToOldSorting;
+    private SearchControl searchControl; // component responsible for sorting
 
-    //todo added this /h
-    private SearchControl searchControl;
+    /**
+     * Initialise by adding actions to all buttons and set default sorting.
+     * Also set component for search control.
+     *
+     * @param control       - the class to delegate on to towards the backend.
+     * @param searchControl - the class responsible for sorting.
+     * @author Hampus Jernkrook
+     */
     public void init(Control control, SearchControl searchControl) {
         this.searchControl = searchControl;
         init(control);
@@ -66,7 +73,6 @@ public class FilterController implements FilterControl {
             control.clearFilter();
             // apply default sorting again
             applyDefaultSorting(control);
-            // todo added this /h
             // ask search control to apply the searching again
             searchControl.applySearch(control);
         });
@@ -86,7 +92,7 @@ public class FilterController implements FilterControl {
         // set value in sorting choice box to default sorting.
         sortingChoiceBox.setValue(defaultSorting);
 
-        // apply default sorting of inbox upon init //todo added this /h
+        // apply default sorting of inbox upon init
         applyDefaultSorting(control);
     }
 
@@ -117,10 +123,25 @@ public class FilterController implements FilterControl {
         sort(control);
     }
 
+    /**
+     * Apply all filters. Interface method.
+     *
+     * @param control - the class to delegate on to.
+     * @author Hampus Jernkrook
+     */
     public void applyFilter(Control control) {
         applyAllFilters(control);
-    } //todo added this /h
-    public void applySorting(Control control) { sort(control);} //todo added this /h
+    }
+
+    /**
+     * Apply the selected sorting order.
+     *
+     * @param control - the class to delegate on to.
+     * @author Hampus Jernkrook
+     */
+    public void applySorting(Control control) {
+        sort(control);
+    }
 
     /**
      * Applies the filter on 'to'.
