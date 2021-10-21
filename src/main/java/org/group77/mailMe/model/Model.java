@@ -316,4 +316,28 @@ public class Model {
     public void clearSearchResult() {
         setActiveEmails(activeFolder.get().emails());
     }
+
+    /**
+     * Moves this activeEmail to trash folder
+     *
+     * @author David Zamanian
+     * @author Elin Hagman
+     */
+    public void deleteEmail() {
+        // remove activeEmail from its folder
+        // add it to trash folder
+    }
+
+    /**
+     * Permanently deletes this activeEmail from this activeFolder and this activeEmails
+     *
+     * @author Elin Hagman
+     * @author David Zamanian
+     */
+    public void permDeleteEmail() {
+        activeEmails.remove(activeEmail.get());
+        activeFolder.get().deleteEmail(activeEmail.get());
+        // next row is necessary to notify listeners
+        getActiveFolder().set(new Folder(activeFolder.get().name(), activeFolder.get().emails()));
+    }
 }

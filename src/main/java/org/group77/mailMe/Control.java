@@ -255,12 +255,8 @@ public class Control {
      */
 
     public void permDeleteEmail() {
-        Email email = getActiveEmail().get();
-        Folder deleteFromFolder = getActiveFolder().get();
-        getActiveEmails().remove(email);
-        deleteFromFolder.emails().remove(email);
-        getActiveFolder().set(new Folder(deleteFromFolder.name(), deleteFromFolder.emails()));
-        storage.store(getActiveAccount().get(), deleteFromFolder);
+        model.permDeleteEmail();
+        storage.store(getActiveAccount().get(), model.getActiveFolder().get());
     }
 
 
