@@ -317,16 +317,6 @@ public class Model {
         setActiveEmails(activeFolder.get().emails());
     }
 
-    /**
-     * Moves this activeEmail to trash folder
-     *
-     * @author David Zamanian
-     * @author Elin Hagman
-     */
-    public void deleteEmail() {
-        // remove activeEmail from its folder
-        // add it to trash folder
-    }
 
     /**
      * Permanently deletes this activeEmail from this activeFolder and this activeEmails
@@ -360,4 +350,5 @@ public class Model {
         newFolder.addEmail(activeEmail.get());
 
     }
+
 }
