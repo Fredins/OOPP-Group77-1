@@ -162,7 +162,7 @@ public class Control {
      */
     public void addAccount(String emailAddress, String password) throws Exception {
         try {
-            Account account = model.createAccount(emailAddress, password.toCharArray());
+            Account account = AccountFactory.createAccount(emailAddress, password.toCharArray());
             // test connection
             if (EmailServiceProviderFactory.createEmailServiceProvider(account).testConnection(account)) {
                 storage.store(account); // throws account already exists exception
@@ -175,62 +175,20 @@ public class Control {
 
 
     /**
-     * Creates and sends an Email with the data from the parameters
-     * and sets this model's activeAccount as sender of the Email.
-     *
-     * @param recipients The recipients of the email to be sent
-     * @param subject    The subject of the email to be sent
-     * @param content    The content of the email to be sent
-     * @param files      The files of the email to be sent
+     * finds the right email service provider and sends the email
+     * @param email email to be sent
      * @throws Exception if there is no active account in this model
-     * @author Alexey Ryabov
+     * @author Alexey Ryabov, Martin Fredin
      */
-    public void send(List<String> recipients, String subject, String content, List<File> files) throws Exception {
+    public void send(Email email) throws Exception {
         Account account = model.getActiveAccount().get();
         if (account != null) {
-            //Creating new email to be copied to Sent-folder
-            List<Attachment> attachments = files.stream()
-                    .map(file -> new Attachment(file.getName(), null, file))
-                    .collect(Collectors.toList());
-
-            Email email = new Email(
-                    account.emailAddress(),
-                    recipients.toArray(String[]::new),
-                    subject,
-                    content,
-                    attachments,
-                    LocalDateTime.now());
-
-            EmailServiceProvider esp = EmailServiceProviderFactory.createEmailServiceProvider(model.getActiveAccount().get());
-            esp.sendEmail(account, email);
-
+            EmailServiceProviderFactory
+              .createEmailServiceProvider(account)
+              .sendEmail(account, email);
         } else {
             throw new Exception("No active account");
         }
-    }
-
-    /**
-     * TODO: fix javadoc comment
-     * Moves a copy of successfully an email into the a folder of choice.
-     * Sent-folder(index 2 in the folders list).
-     *
-     * @param - is a email that is currently being sent.
-     * @throws Exception
-     * @author Alexey Ryabov
-     */
-    public void moveSentEmail(List<String> recipients, String subject, String content, List<File> files, int folderIndex) throws Exception {
-        //Convert String list of recipients to String Array of recipients.
-        String[] recipientsArray = recipients.toArray(String[]::new);
-        //Creating new email to be copied to Sent-folder
-        List<Attachment> attachments = files.stream()
-                .map(file -> new Attachment(file.getName(), null, file))
-                .collect(Collectors.toList());
-        Email newEmail = new Email(model.getActiveAccount().get().emailAddress(), recipientsArray, subject, content, attachments, null);
-        List<Folder> newFolders = storage.retrieveFolders(model.getActiveAccount().get());
-        //Move the currently open email to the Sent-folder
-        newFolders.get(folderIndex).emails().add(newEmail); // index 2 -> SentFolder
-        storage.store(model.getActiveAccount().get(), newFolders);
-        model.getFolders().replaceAll(newFolders);
     }
 
     /**
@@ -239,7 +197,6 @@ public class Control {
      * @author David Zamanian
      * @author Martin Fredin
      */
-
     public void deleteEmail() {
         Optional<Folder> maybeTrash = getFolders().stream()
                 .filter(folder -> folder.name().equals("Trash"))
@@ -270,9 +227,23 @@ public class Control {
      */
 
     public void moveEmail(Folder newFolder) {
-        model.moveEmail(newFolder);
+        model.moveActiveEmail(newFolder);
         storage.store(getActiveAccount().get(), model.getActiveFolder().get());
         storage.store(getActiveAccount().get(), newFolder);
+    }
+
+    /**
+     * find sent folder, add email, save to storage.
+     * @param email the newly sent email
+     * @author Martin Fredin
+     */
+    public void addEmailToSent(Email email) {
+        Folder sent = model.getFolders().stream()
+          .filter(folder -> folder.name().equals("Sent"))
+          .findFirst()
+          .orElse(new Folder("Sent", new ArrayList<>()));
+        sent.addEmail(email);
+        storage.store(model.getActiveAccount().get(), sent);
     }
 
     /* public void deleteEmail(Email emailToBeDeleted) {
