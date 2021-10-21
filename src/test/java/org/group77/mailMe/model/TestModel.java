@@ -193,14 +193,14 @@ public class TestModel {
 
     @Test
     public void testCreateAccountEmailAddress() throws EmailDomainNotSupportedException {
-        Account account = model.createAccount("hej@gmail.com","hej123".toCharArray());
+        Account account = AccountFactory.createAccount("hej@gmail.com","hej123".toCharArray());
 
         Assertions.assertEquals("hej@gmail.com",account.emailAddress());
     }
 
     @Test
     public void testCreateAccountPassword() throws EmailDomainNotSupportedException {
-        Account account = model.createAccount("hej@gmail.com","hej123".toCharArray());
+        Account account = AccountFactory.createAccount("hej@gmail.com","hej123".toCharArray());
 
         Assertions.assertEquals("hej123",new String(account.password()));
     }
@@ -208,7 +208,7 @@ public class TestModel {
     @Test
     public void testCreateNotValidAccount() {
 
-        Assertions.assertThrows(EmailDomainNotSupportedException.class, () -> model.createAccount(
+        Assertions.assertThrows(EmailDomainNotSupportedException.class, () -> AccountFactory.createAccount(
                                                                             "notValid@yahoo.com",
                                                                                         "fail123".toCharArray()));
 
