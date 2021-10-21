@@ -137,20 +137,6 @@ public class Model {
     }
 
     /**
-     * Creates an account with the specified emailAddress and password
-     *
-     * @param emailAddress the email address of the account to be created
-     * @param password     the password of the account to be created
-     * @return the account with the specified email address and password
-     * @throws EmailDomainNotSupportedException if AccountFactory gives exception that domain is not supported
-     * @author Elin Hagman
-     */
-
-    public Account createAccount(String emailAddress, char[] password) throws EmailDomainNotSupportedException {
-        return AccountFactory.createAccount(emailAddress, password);
-    }
-
-    /**
      * Creates and returns a default set of folders.
      *
      * @return List of folders
@@ -338,7 +324,7 @@ public class Model {
      * @author Elin Hagman
      * @author David Zamanian
      */
-    public void moveEmail(Folder newFolder) {
+    public void moveActiveEmail(Folder newFolder) {
         // Remove activeEmail from activeEmails and activeFolder
         activeEmails.remove(activeEmail.get());
         activeFolder.get().deleteEmail(activeEmail.get());
@@ -348,7 +334,6 @@ public class Model {
 
         // add activeEmail to new folder
         newFolder.addEmail(activeEmail.get());
-
     }
 
 }

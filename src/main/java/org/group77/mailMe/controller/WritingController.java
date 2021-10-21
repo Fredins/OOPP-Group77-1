@@ -20,7 +20,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import org.group77.mailMe.Main;
 import org.group77.mailMe.Control;
-
+import org.group77.mailMe.model.*;
 
 
 import java.io.File;
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * controller for the writing view
@@ -79,7 +80,7 @@ public class WritingController {
         }
         fromLabel.setText(control.getActiveAccount().get().emailAddress());
         // input handlers
-        sendBtn.setOnAction(inputEvent -> send(control, sendBtn));
+        sendBtn.setOnAction(inputEvent -> sendHandler(control, sendBtn));
         attachBtn.setOnAction(inputEvent -> attachFiles());
         // change handlers
         control.getActiveAccount().addObserver(newAccount -> fromLabel.setText(newAccount.emailAddress()));
@@ -89,45 +90,65 @@ public class WritingController {
                 clearAllAttachments();
             }
         });
+    }
 
+
+    /**
+     * show an error notification with information about error
+     * @param e the thrown exception
+     * @author Martin Fredin
+     */
+    private void showFailNotification(Exception e){
+        Notifications.create()
+          .position(Pos.TOP_CENTER)
+          .hideAfter(Duration.seconds(2))
+          .title("Failed")
+          .text(e.getMessage())
+          .showError();
     }
 
     /**
-     * 1. try to send email
-     * 2. display notification if successful or not
-     * 3. close window
+     * show success notification
+     */
+    private void showSuccessNotification(String message){
+        Notifications.create()
+          .position(Pos.TOP_CENTER)
+          .hideAfter(Duration.seconds(2))
+          .graphic(new Label(message))
+          .show();
+    }
+
+    /**
+     * try to send email, display visual feedback, move email to Sent Folder, Close window
      *
      * @param control the control layer
      * @param node    any node in active scene
      * @author Martin
      */
-    private void send(Control control, Node node) {
-        Notifications notification = Notifications.create()
-                .position(Pos.TOP_CENTER)
-                .hideAfter(Duration.seconds(2));
+    private void sendHandler(Control control, Node node){
+        String[] recipients = toField.getText().split(";");
+        Email email = EmailFactory.createEmail(control,
+                                 recipients,
+                                 subjectField.getText(),
+                                 contentField.getHtmlText(),
+                                 attachments
+        );
 
         threadExecutor.execute(() -> {
-            try {
-                control.addNewKnownRecipient(Arrays.stream(toField.getText().split(";")).toList());
-                control.send(
-                        removeDuplicates(fromTextFieldToListOfRecipients(toField.getText())),
-                        subjectField.getText(),
-                        contentField.getHtmlText(),
-                        attachments
-                );
-                Platform.runLater(() -> notification
-                        .graphic(new Label("Message sent successfully!"))
-                        .show());
-            } catch (Exception e) {
-                e.printStackTrace();
-                Platform.runLater(() -> notification
-                        .title("Failed")
-                        .text(e.getMessage())
-                        .showError());
+            try{
+                control.send(email);
+                control.addNewKnownRecipient(Arrays.stream(recipients).toList());
+                Platform.runLater(() -> {
+                    showSuccessNotification("Message sent successfully!");
+                    control.addEmailToSent(email);
+                });
+            }catch (Exception e){
+                Platform.runLater(() -> showFailNotification(e));
             }
         });
         ((Stage) node.getScene().getWindow()).close();
     }
+
 
     /**
      * @author Alexey Ryabov

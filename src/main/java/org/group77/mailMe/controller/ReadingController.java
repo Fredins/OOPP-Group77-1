@@ -278,12 +278,8 @@ public class ReadingController {
      */
     public void attachmentButtonAction(Attachment attachment, Button button) {
         button.setOnAction(e -> {
-            try {
-                //On button action a file chooser going to open.
-                openFileChooser((Stage) button.getScene().getWindow(), attachment.content(), attachment.name());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            //On button action a file chooser going to open.
+            openFileChooser((Stage) button.getScene().getWindow(), attachment.content(), attachment.name());
         });
     }
 
@@ -291,10 +287,9 @@ public class ReadingController {
      * @param stage      - stage where save window is going to be displayed.
      * @param fileToSave - array of the attachment.
      * @param fileName   - name of the attachment.
-     * @throws IOException
      * @author - Alexey Ryabov
      */
-    public void openFileChooser(Stage stage, byte[] fileToSave, String fileName) throws IOException {
+    public void openFileChooser(Stage stage, byte[] fileToSave, String fileName) {
         //Creating file chooser.
         FileChooser fileChooser = new FileChooser();
         //Set extension filter
@@ -330,9 +325,7 @@ public class ReadingController {
             outputStream.write(content);
             outputStream.close();
             outputStream.flush();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (NullPointerException ex) {
+        } catch (IOException | NullPointerException ex) {
             ex.printStackTrace();
         }
     }
