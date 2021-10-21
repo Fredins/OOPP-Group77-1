@@ -150,7 +150,7 @@ public class Control {
 
 
     /**
-     * Tries to add a new account to accounts.
+     * Tries to add a new account to this model's accounts.
      * <p>
      * If emailAddress does not belong to a supported domain, throws Exception with informative message.
      * If account cannot connect to server or store account, throws Exception with informative message.
@@ -234,7 +234,7 @@ public class Control {
     }
 
     /**
-     * Removes this model's activeEmail and moves it to the trash folder.
+     * Moves this model's activeEmail to the trash folder.
      *
      * @author David Zamanian
      * @author Martin Fredin
@@ -245,6 +245,7 @@ public class Control {
                 .filter(folder -> folder.name().equals("Trash"))
                 .findFirst();
         maybeTrash.ifPresent(this::moveEmail);
+
     }
 
     /**
@@ -261,9 +262,9 @@ public class Control {
 
 
     /**
-     * Moves the email to the desired newFolde and deletes it from the activeFolder. Choose where to move in the comboBox in the readingView.
+     * Moves the email to the desired newFolder and deletes it from the activeFolder.
      *
-     * @param newFolder The MoveTofolder that was selected in the "Move" comboBox in readingView
+     * @param newFolder the folder this model's activeEmail should be moved to
      * @author David Zamanian
      * @author Martin Fredin
      */
