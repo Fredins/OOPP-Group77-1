@@ -24,9 +24,9 @@ public class MicrosoftProvider extends EmailServiceProvider {
     public MicrosoftProvider() {
         super("outlook.office365.com",
                 "smtp-mail.outlook.com",
-                "imaps",
+                "pop3",
                 "smtp",
-                993,
+                995,
                 587);
     }
 

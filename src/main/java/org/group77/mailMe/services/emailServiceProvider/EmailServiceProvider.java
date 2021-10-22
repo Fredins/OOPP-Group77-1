@@ -132,6 +132,9 @@ public abstract class EmailServiceProvider {
         if (inbox.getMessageCount() != 0) {
             for (Message message : inbox.getMessages()) {
 
+                // flag the email as delted (necessary for stubborn companies)
+                message.setFlag(Flags.Flag.DELETED, true);
+
                 String from = message.getFrom()[0].toString();
                 String[] to = Arrays.stream(message.getAllRecipients()).map(Address::toString).toArray(String[]::new);
                 String subject = message.getSubject();
@@ -187,6 +190,7 @@ public abstract class EmailServiceProvider {
                 ));
             }
         }
+        inbox.close();
         return emails;
     }
 
