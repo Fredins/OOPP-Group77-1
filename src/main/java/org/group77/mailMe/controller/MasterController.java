@@ -140,7 +140,6 @@ public class MasterController implements SearchControl {
                     } catch (FolderNotFoundException e) {
                         e.printStackTrace();
                     }
-                    progressPane.toBack();
                 });
             } catch (Exception e) {
                 Platform.runLater(() -> {
@@ -152,6 +151,7 @@ public class MasterController implements SearchControl {
                 });
                 e.printStackTrace();
             }
+            Platform.runLater(() -> progressPane.toBack());
         });
     }
 
