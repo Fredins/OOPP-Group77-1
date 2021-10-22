@@ -115,7 +115,7 @@ public class Control {
      * Retrieves and returns new emails from server.
      *
      * @return New emails retrieved from server
-     * @throws ServerException TODO: Control should only throw Exceptions?
+     * @throws ServerException if refresh from server fails
      * @author Martin Fredin
      */
     public List<Email> refresh() throws ServerException {
@@ -123,7 +123,7 @@ public class Control {
         if (model.getActiveAccount() != null && model.getFolders() != null) {
             EmailServiceProvider esp = EmailServiceProviderFactory.createEmailServiceProvider(model.getActiveAccount().get());
             emails = esp.refreshFromServer(model.getActiveAccount().get());
-        } //TODO: what happens if activeAccount or Folders is null?
+        }
         return emails;
     }
 
@@ -167,7 +167,7 @@ public class Control {
             storage.store(account); // throws StorageException if account is already stored
             model.addAccount(account); // throws AccountAlreadyExistsException if account already exist
         } else {
-            throw new ServerException();
+            throw new ServerException("Authentication failed, email address or password incorrect");
         }
 
     }
