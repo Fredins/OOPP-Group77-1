@@ -170,7 +170,7 @@ public class TestModel {
     // ========= addAccount =========
 
     @Test
-    public void testAddNotAlreadyAddedAccount() throws EmailDomainNotSupportedException, AccountAlreadyStoredException {
+    public void testAddNotAlreadyAddedAccount() throws EmailDomainNotSupportedException, AccountAlreadyExistsException {
         // create new account that is not in model and add it to model
         Account newAccount = AccountFactory.createAccount("newEmail@gmail.com","test123".toCharArray());
         model.addAccount(newAccount);

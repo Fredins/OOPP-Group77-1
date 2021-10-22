@@ -132,7 +132,7 @@ public class Control {
      *
      * @param folderName the name of the folder that is to be updated
      * @param newEmails  the emails the specified folder should be updated with
-     * @throws FolderNotFoundException // TODO: Should this be exception instead? The exception should be thrown by model
+     * @throws FolderNotFoundException if there is no folder with the given folderName
      * @author Martin Fredin
      */
     public void updateFolder(String folderName, List<Email> newEmails) throws FolderNotFoundException {
@@ -143,7 +143,7 @@ public class Control {
 
         model.updateFolder(folder, newEmails);
         storage.store(model.getActiveAccount().get(), folder);
-        storage.store(model.getActiveAccount().get(), model.getFolders().get()); // replaces old inbox with new emails
+        storage.store(model.getActiveAccount().get(), model.getFolders().get());
 
     }
 
@@ -159,13 +159,20 @@ public class Control {
      * @author Martin Fredin
      * @author Hampus Jernkrook
      */
-    public void addAccount(String emailAddress, String password) throws Exception {
+    public void addAccount(String emailAddress, String password) throws EmailDomainNotSupportedException, ServerException, AccountAlreadyExistsException, Exception {
+        /*Account account = AccountFactory.createAccount(emailAddress, password.toCharArray());
+        // throws exception if connection to server fails
+        if (EmailServiceProviderFactory.createEmailServiceProvider(account).testConnection(account)) {
+            storage.store(account); // throws exception if account is already stored
+            model.addAccount(account); // throws exception if account already exist
+        }*/
+
         try {
             Account account = AccountFactory.createAccount(emailAddress, password.toCharArray());
-            // test connection
+            // throws exception if connection to server fails
             if (EmailServiceProviderFactory.createEmailServiceProvider(account).testConnection(account)) {
-                storage.store(account); // throws account already exists exception
-                model.addAccount(account); // will set created account to activeAccount
+                storage.store(account); // throws exception if account is already stored
+                model.addAccount(account); // throws exception if account already exist
             }
         } catch (EmailDomainNotSupportedException | AccountAlreadyStoredException | ServerException e) {
             throw new Exception(e.getMessage());

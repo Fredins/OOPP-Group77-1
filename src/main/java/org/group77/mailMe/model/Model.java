@@ -115,7 +115,7 @@ public class Model {
         if (accounts.get().contains(account)) {
             activeAccount.set(account);
         } else {
-            throw new AccountNotFoundException();
+            throw new AccountNotFoundException("Cannot set account as active account because it cannot be found");
         }
     }
 
@@ -123,16 +123,16 @@ public class Model {
      * Adds an account to this accounts if it does not already exist.
      *
      * @param account to be added to accounts
-     * @throws AccountAlreadyStoredException if account already exists in accounts
+     * @throws AccountAlreadyExistsException if account already exists in accounts
      * @author Elin Hagman
      */
 
-    public void addAccount(Account account) throws AccountAlreadyStoredException {
+    public void addAccount(Account account) throws AccountAlreadyExistsException {
 
         if (!(accounts.get().contains(account))) {
             accounts.add(account);
         } else {
-            throw new AccountAlreadyStoredException("Account already exists");
+            throw new AccountAlreadyExistsException("Account already exists");
         }
     }
 

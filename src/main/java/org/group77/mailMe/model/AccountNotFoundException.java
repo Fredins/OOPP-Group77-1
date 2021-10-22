@@ -5,5 +5,5 @@ package org.group77.mailMe.model;
  * @author Elin Hagman.
  */
 public class AccountNotFoundException extends Exception {
-    public AccountNotFoundException() {super("Unknown account");}
+    public AccountNotFoundException(String msg) {super(msg);}
 }
