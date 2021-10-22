@@ -109,9 +109,7 @@ public class MasterController implements SearchControl {
     }
 
     /**
-     * 1. display progressbar
-     * 2. refresh new emails without blocking the application thread
-     * 3. remove progressbar and give display feedback
+     * display progressbar, refresh new emails without blocking the application thread, remove progressbar and give display feedback
      *
      * @param control the control layer
      * @author Martin
@@ -157,8 +155,7 @@ public class MasterController implements SearchControl {
 
     /**
      * when folders change:
-     * 1. load folders if not empty
-     * 2. set active folder to inbox
+     * load folders if not empty, set active folder to inbox
      *
      * @param control    the control layer
      * @param newFolders the new folders
@@ -174,8 +171,7 @@ public class MasterController implements SearchControl {
     }
 
     /**
-     * when active email change:
-     * 1. load email in reading pane or clear it
+     * when active email change: load email in reading pane or clear it
      *
      * @param newEmail the new Email
      * @param control  the control layer
@@ -190,8 +186,7 @@ public class MasterController implements SearchControl {
     }
 
     /**
-     * when active folder change:
-     * 1. clear reading pane
+     * when active folder change: clear reading pane
      *
      * @param control the control layer
      * @author Martin
@@ -272,8 +267,7 @@ public class MasterController implements SearchControl {
     }
 
     /**
-     * 1. initialize every folder in state field folders
-     * 2. display every folder in the folder flowPane
+     *  initialize every folder in state field folders, display every folder in the folder flowPane
      *
      * @param folders all the folders to be loaded
      * @param control the model
@@ -298,8 +292,7 @@ public class MasterController implements SearchControl {
     }
 
     /**
-     * 1. initialize every email in state field visibleEmails
-     * 2. display every email in the emails flowPane
+     * initialize every email in state field visibleEmails, display every email in the emails flowPane
      *
      * @param emails  the emails to be displayed
      * @param control the model
