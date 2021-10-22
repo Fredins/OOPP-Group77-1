@@ -186,7 +186,7 @@ public class TestModel {
         Account existingAccount = model.getAccounts().get().get(0);
 
         // assert that existingAccount cannot be added to model
-        Assertions.assertThrows(AccountAlreadyStoredException.class, () -> model.addAccount(existingAccount));
+        Assertions.assertThrows(AccountAlreadyExistsException.class, () -> model.addAccount(existingAccount));
     }
 
     // ========= createAccount =========
