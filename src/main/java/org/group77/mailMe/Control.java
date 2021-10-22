@@ -151,32 +151,25 @@ public class Control {
     /**
      * Tries to add a new account to this model's accounts.
      * <p>
-     * If emailAddress does not belong to a supported domain, throws Exception with informative message.
-     * If account cannot connect to server or store account, throws Exception with informative message.
      *
-     * @throws Exception if domain is not supported, authentication to server fails or if account already exists.
+     * @throws EmailDomainNotSupportedException if the given emailAddress has unsupported email domain
+     * @throws ServerException if authentication of emailAddress and password fails
+     * @throws StorageException if account is already stored
+     * @throws AccountAlreadyExistsException if the given emailAddress already exists
      * @author Elin Hagman
      * @author Martin Fredin
      * @author Hampus Jernkrook
      */
-    public void addAccount(String emailAddress, String password) throws EmailDomainNotSupportedException, ServerException, AccountAlreadyExistsException, Exception {
-        /*Account account = AccountFactory.createAccount(emailAddress, password.toCharArray());
+    public void addAccount(String emailAddress, String password) throws EmailDomainNotSupportedException, ServerException, StorageException, AccountAlreadyExistsException {
+        Account account = AccountFactory.createAccount(emailAddress, password.toCharArray());
         // throws exception if connection to server fails
         if (EmailServiceProviderFactory.createEmailServiceProvider(account).testConnection(account)) {
-            storage.store(account); // throws exception if account is already stored
-            model.addAccount(account); // throws exception if account already exist
-        }*/
-
-        try {
-            Account account = AccountFactory.createAccount(emailAddress, password.toCharArray());
-            // throws exception if connection to server fails
-            if (EmailServiceProviderFactory.createEmailServiceProvider(account).testConnection(account)) {
-                storage.store(account); // throws exception if account is already stored
-                model.addAccount(account); // throws exception if account already exist
-            }
-        } catch (EmailDomainNotSupportedException | AccountAlreadyStoredException | ServerException e) {
-            throw new Exception(e.getMessage());
+            storage.store(account); // throws StorageException if account is already stored
+            model.addAccount(account); // throws AccountAlreadyExistsException if account already exist
+        } else {
+            throw new ServerException();
         }
+
     }
 
 
