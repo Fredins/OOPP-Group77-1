@@ -96,7 +96,7 @@ public class TestModel {
     }
 
     @Test
-    public void testGetActiveAccount() throws ActiveAccountNotInAccounts {
+    public void testGetActiveAccount() throws AccountNotFoundException {
         Model model = new Model(accounts);
         model.setActiveAccount(model.getAccounts().get().get(0));
 
@@ -146,7 +146,7 @@ public class TestModel {
     // ========= setActiveAccount =========
 
     @Test
-    public void testSetExistingAccountAsActiveAccount() throws ActiveAccountNotInAccounts {
+    public void testSetExistingAccountAsActiveAccount() throws AccountNotFoundException {
 
         Account newActiveAccount = accounts.get(0);
 
@@ -163,7 +163,7 @@ public class TestModel {
         Account newActiveAccountFake = AccountFactory.createAccount("fake@gmail.com","fake123".toCharArray());
 
         // try to set new account that is not in model's accounts as activeAccount, should throw ActiveAccountNotInAccounts exception
-        Assertions.assertThrows(ActiveAccountNotInAccounts.class, () -> model.setActiveAccount(newActiveAccountFake));
+        Assertions.assertThrows(AccountNotFoundException.class, () -> model.setActiveAccount(newActiveAccountFake));
 
     }
 

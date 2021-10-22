@@ -271,7 +271,7 @@ public class Control {
         return model.getAccounts();
     }
 
-    public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {
+    public void setActiveAccount(Account account) throws AccountNotFoundException {
         model.setActiveAccount(account);
     }
 

@@ -106,16 +106,16 @@ public class Model {
      * Sets one of the accounts in this accounts as activeAccount.
      *
      * @param account to be set as activeAccount
-     * @throws ActiveAccountNotInAccounts if account is not in this accounts
+     * @throws AccountNotFoundException if account is not in this accounts
      * @author Elin Hagman
      */
 
-    public void setActiveAccount(Account account) throws ActiveAccountNotInAccounts {
+    public void setActiveAccount(Account account) throws AccountNotFoundException {
 
         if (accounts.get().contains(account)) {
             activeAccount.set(account);
         } else {
-            throw new ActiveAccountNotInAccounts();
+            throw new AccountNotFoundException();
         }
     }
 
