@@ -59,29 +59,33 @@ public class WritingController {
     /**
      * normal init method when not replying
      *
-     * @param control the model
+     * @param control the control layer
      * @author Martin, Alexey, David
      */
     public void init(Control control) {
-        setHandlers(control);
-    }
-
-    /**
-     * 1. set initial values for nodes
-     * 2. set event handlers for nodes and state fields
-     *
-     * @param control the model
-     * @param to      the email address which the user is replying to
-     * @author David Zamanian
-     */
-
-
-
-    public void init(Control control, String to) {
         fromLabel.setText(control.getActiveAccount().get().emailAddress());
         setHandlers(control);
     }
 
+    /**
+     * init method for reply
+     *
+     * @param control the control layer
+     * @param to      the email address which the user is replying to
+     * @author David Zamanian
+     */
+    public void init(Control control, String to) {
+        fromLabel.setText(control.getActiveAccount().get().emailAddress());
+        toField.setText(to);
+        setHandlers(control);
+    }
+
+    /**
+     * init method for continue draft
+     * @param control the control layer
+     * @param draft the draft which is to be continued
+     * @author Martin Fredin
+     */
     public void init(Control control, Email draft){
         fromLabel.setText(draft.from());
         toField.setText(String.join(";", draft.to()));
