@@ -61,14 +61,14 @@ public class StartPageController {
                 ((AccountListItemController) fxmlLoader.getController()).init(account);
                 // add it to VBox
                 accountsVbox.getChildren().add(accountPane);
-                // add OnMouseClicked to accountPane TODO: move to AccountListItemController??
+                // add OnMouseClicked to accountPane
                 accountPane.setOnMouseClicked(inputEvent -> {
                     ((Stage) ((Node) inputEvent.getSource()).getScene().getWindow()).close();
                     WindowOpener.openMaster(control);
                     try {
                         control.setActiveAccount(account);
                     } catch (Exception e) {
-                        e.printStackTrace(); // TODO: give error message to user
+                        e.printStackTrace();
                     }
                 });
             } catch (IOException e) {
@@ -79,7 +79,7 @@ public class StartPageController {
 
     /**
      * Closes Stage that this StartPageController is displayed on,
-     * calls openAddAccount() in WindowOpener to open Add Account View.
+     * calls openAddAccount() in WindowOpener to open AddAccount view.
      *
      * @param actionEvent occurs when user clicks on this addAccountButton
      * @param control     the control layer
