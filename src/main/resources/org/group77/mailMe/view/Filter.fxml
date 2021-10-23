@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane fx:id="rootPane" prefHeight="300.0" prefWidth="600.0" stylesheets="@DefaultStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.FilterController">
+<AnchorPane fx:id="rootPane" prefHeight="300.0" prefWidth="600.0" style="-fx-border-radius: 3; -fx-background-radius: 3; -fx-border-width: 3;" stylesheets="@DefaultStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group77.mailMe.controller.FilterController">
    <children>
-      <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #484848; -fx-border-width: 4;">
+      <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #484848; -fx-border-width: 2;">
          <effect>
             <DropShadow />
          </effect>
@@ -64,7 +64,7 @@
             <String fx:value="standardTextFontSize" />
          </styleClass>
       </Label>
-      <Button fx:id="closeButton" layoutX="336.0" layoutY="263.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Close">
+      <Button fx:id="closeButton" layoutX="343.0" layoutY="263.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Close" AnchorPane.bottomAnchor="12.0">
          <styleClass>
             <String fx:value="removeFocus" />
             <String fx:value="prominentButtonSmall" />
