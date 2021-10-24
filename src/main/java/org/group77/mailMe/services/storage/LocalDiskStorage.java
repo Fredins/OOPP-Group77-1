@@ -10,7 +10,7 @@ import java.util.stream.*;
 /**
  * Class for storing application files on the user's machine.
  */
-public class LocalDiscStorage implements Storage {
+public class LocalDiskStorage implements Storage {
 
     /**
      * The path to the applications root directory.
@@ -22,13 +22,13 @@ public class LocalDiscStorage implements Storage {
     private final String separator;
 
     /**
-     * Creates a LocalDiscStorage object and sets the app root directory and separator.
+     * Creates a LocalDiskStorage object and sets the app root directory and separator.
      *
      * @throws OSNotFoundException if the user's OS cannot be found.
      * @author David Zamanian
      * @author Hampus Jernkrook
      */
-    public LocalDiscStorage() throws OSNotFoundException {
+    public LocalDiskStorage() throws OSNotFoundException {
         // Depending on OS, get the appropriate app directory and separator.
         String[] appDirAndSep = OSHandler.getAppDirAndSeparator();
         appPath = appDirAndSep[0];

@@ -4,7 +4,7 @@ import javafx.application.*;
 import javafx.scene.*;
 import javafx.stage.*;
 import org.group77.mailMe.controller.utils.*;
-import org.group77.mailMe.services.storage.LocalDiscStorage;
+import org.group77.mailMe.services.storage.LocalDiskStorage;
 import org.group77.mailMe.services.storage.Storage;
 
 import java.util.function.*;
@@ -16,7 +16,7 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) throws Exception {
 
-    Storage storage = new LocalDiscStorage();
+    Storage storage = new LocalDiskStorage();
     Control control = new Control(storage);
     if (control.getAccounts().isEmpty()) {
       Consumer<Node> onClose = node -> {
