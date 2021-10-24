@@ -142,7 +142,7 @@ public class WritingController {
      * @author Martin Fredin
      */
     private Email createEmail(Control control){
-        return EmailFactory.createEmail(control,
+        return EmailFactory.createEmail(control.getActiveAccount().get().emailAddress(),
                                         getRecipients(),
                                         subjectField.getText(),
                                         contentField.getHtmlText(),
