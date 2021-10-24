@@ -202,6 +202,8 @@ public class ReadingController {
             try {
                 if (customAlert("Are you sure you want to permanently delete this email?", Alert.AlertType.CONFIRMATION).get().equals(ButtonType.OK)) {
                     control.permDeleteEmail();
+                    ((AnchorPane) webView.getParent()).getChildren().clear();
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -209,6 +211,7 @@ public class ReadingController {
         } else {
             try {
                 control.deleteEmail();
+                ((AnchorPane) webView.getParent()).getChildren().clear();
             } catch (Exception e) {
                 e.printStackTrace();
             }
