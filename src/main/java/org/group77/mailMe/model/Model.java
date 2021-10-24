@@ -71,7 +71,6 @@ public class Model {
      * @param accounts the accounts of the email application
      * @author Martin Fredin
      */
-
     public Model(List<Account> accounts) {
         this.accounts.replaceAll(accounts);
         // if a new account is added then set it as active
@@ -83,7 +82,6 @@ public class Model {
 
     }
 
-
     /**
      * Adds emails to the specified folder.
      *
@@ -91,7 +89,6 @@ public class Model {
      * @param newEmails the emails to be added to the specified folder
      * @author Martin Fredin
      */
-
     public void updateFolder(Folder folder, List<Email> newEmails) {
         Folder newFolder = new Folder(folder.name(),
                 Stream.of(newEmails, folder.emails())
@@ -103,30 +100,12 @@ public class Model {
     }
 
     /**
-     * Sets one of the accounts in this accounts as activeAccount.
-     *
-     * @param account to be set as activeAccount
-     * @throws AccountNotFoundException if account is not in this accounts
-     * @author Elin Hagman
-     */
-
-    public void setActiveAccount(Account account) throws AccountNotFoundException {
-
-        if (accounts.get().contains(account)) {
-            activeAccount.set(account);
-        } else {
-            throw new AccountNotFoundException("Cannot set account as active account because it cannot be found");
-        }
-    }
-
-    /**
      * Adds an account to this accounts if it does not already exist.
      *
      * @param account to be added to accounts
      * @throws AccountAlreadyExistsException if account already exists in accounts
      * @author Elin Hagman
      */
-
     public void addAccount(Account account) throws AccountAlreadyExistsException {
 
         if (!(accounts.get().contains(account))) {
@@ -152,59 +131,7 @@ public class Model {
         );
     }
 
-    /** Gets called from Control's getAutoSuggestion
-     *
-     * @return returns the list of the known recipients
-     * @author David Zamanian
-     */
-    public SubjectList<String> getKnownRecipients() {
-        return knownRecipients;
-    }
-
-    /** Replaces knownRecipients with the new list
-     *
-     * @param list The new list of recipients that will replace the old onw
-     * @author David Zamanian
-     */
-    public void setKnownRecipients(List<String> list) {
-        this.knownRecipients.replaceAll(list);
-    }
-
-    public SubjectList<Account> getAccounts() {
-        return accounts;
-    }
-
-    public Subject<Account> getActiveAccount() {
-        return activeAccount;
-    }
-
-    public SubjectList<Folder> getFolders() {
-        return folders;
-    }
-
-    public Subject<Folder> getActiveFolder() {
-        return activeFolder;
-    }
-
-    public Subject<Email> getActiveEmail() {
-        return activeEmail;
-    }
-
-    public SubjectList<Email> getActiveEmails() {
-        return activeEmails;
-    }
-
-    public void setActiveFolder(Folder activeFolder) {
-        this.activeFolder.set(activeFolder);
-    }
-
-    public void setActiveEmail(Email activeEmail) {
-        this.activeEmail.set(activeEmail);
-    }
-
-    public void setActiveEmails(List<Email> activeEmails) {
-        this.activeEmails.replaceAll(activeEmails);
-    }
+    /*=========================================================== SEARCH AND FILTERING =================================================================================*/
 
     /**
      * Filters this activeEmails to only contain Emails with recipients containing the search word.
@@ -216,7 +143,6 @@ public class Model {
         List<Email> newActiveEmails = textFinder.filterOnTo(activeEmails.get(), searchWord);
         setActiveEmails(newActiveEmails);
     }
-
     /**
      * Filters this activeEmails to only contain Emails with senders containing the search word.
      *
@@ -227,7 +153,6 @@ public class Model {
         List<Email> newActiveEmails = textFinder.filterOnFrom(activeEmails.get(), searchWord);
         setActiveEmails(newActiveEmails);
     }
-
     /**
      * Filters this activeEmails to only contain Emails that was sent before the specified date.
      *
@@ -238,19 +163,16 @@ public class Model {
         List<Email> newActiveEmails = textFinder.filterOnMaxDate(activeEmails.get(), date);
         setActiveEmails(newActiveEmails);
     }
-
     /**
      * Filters this activeEmails to only contain Emails that was sent after the specified date.
      *
      * @param date the minimum date of an email
      * @author Hampus Jernkrook
      */
-
     public void filterOnMinDate(LocalDateTime date) {
         List<Email> newActiveEmails = textFinder.filterOnMinDate(activeEmails.get(), date);
         setActiveEmails(newActiveEmails);
     }
-
     /**
      * Sorts the emails in this activeEmails from the newest to the oldest date.
      *
@@ -260,7 +182,6 @@ public class Model {
         List<Email> newActiveEmails = textFinder.sortByNewToOld(activeEmails.get());
         setActiveEmails(newActiveEmails);
     }
-
     /**
      * Sorts the emails in this activeEmails from the oldest to the newest date.
      *
@@ -270,7 +191,6 @@ public class Model {
         List<Email> newActiveEmails = textFinder.sortByOldToNew(activeEmails.get());
         setActiveEmails(newActiveEmails);
     }
-
     /**
      * Erases all filters from this activeEmails and restores it to its default state.
      *
@@ -280,7 +200,6 @@ public class Model {
         // set active emails to all emails in the current folder
         setActiveEmails(activeFolder.get().emails());
     }
-
     /**
      * Filters this activeEmails to only contain Emails that has any attribute that contains the
      * search word.
@@ -288,13 +207,10 @@ public class Model {
      * @param searchWord the word which at least one the Emails attributes should contain.
      * @author Hampus Jernkrook
      */
-
     public void search(String searchWord) {
         List<Email> newActiveEmails = textFinder.search(activeEmails.get(), searchWord);
         setActiveEmails(newActiveEmails);
     }
-
-
     /** Clears the search result by setting the active emails to all emails in the active folder.
      *
      * @author Hampus Jernkrook
@@ -302,8 +218,6 @@ public class Model {
     public void clearSearchResult() {
         setActiveEmails(activeFolder.get().emails());
     }
-
-
     /**
      * Permanently deletes this activeEmail from this activeFolder and this activeEmails
      *
@@ -316,7 +230,6 @@ public class Model {
         // next row is necessary to notify listeners
         getActiveFolder().set(new Folder(activeFolder.get().name(), activeFolder.get().emails()));
     }
-
     /**
      * Moves activeEmail from this activeFolder to the given newFolder.
      *
@@ -334,6 +247,57 @@ public class Model {
 
         // add activeEmail to new folder
         newFolder.addEmail(activeEmail.get());
+    }
+
+    /*=========================================================== GETTERS AND SETTERS =================================================================================*/
+
+    public SubjectList<Account> getAccounts() {
+        return accounts;
+    }
+    public Subject<Account> getActiveAccount() {
+        return activeAccount;
+    }
+    public SubjectList<Folder> getFolders() {
+        return folders;
+    }
+    public Subject<Folder> getActiveFolder() {
+        return activeFolder;
+    }
+    public Subject<Email> getActiveEmail() {
+        return activeEmail;
+    }
+    public SubjectList<Email> getActiveEmails() {
+        return activeEmails;
+    }
+    public SubjectList<String> getKnownRecipients() {
+        return knownRecipients;
+    }
+    public void setKnownRecipients(List<String> list) {
+        this.knownRecipients.replaceAll(list);
+    }
+    public void setActiveFolder(Folder activeFolder) {
+        this.activeFolder.set(activeFolder);
+    }
+    public void setActiveEmail(Email activeEmail) {
+        this.activeEmail.set(activeEmail);
+    }
+    public void setActiveEmails(List<Email> activeEmails) {
+        this.activeEmails.replaceAll(activeEmails);
+    }
+    /**
+     * Sets one of the accounts in this accounts as activeAccount.
+     *
+     * @param account to be set as activeAccount
+     * @throws AccountNotFoundException if account is not in this accounts
+     * @author Elin Hagman
+     */
+    public void setActiveAccount(Account account) throws AccountNotFoundException {
+
+        if (accounts.get().contains(account)) {
+            activeAccount.set(account);
+        } else {
+            throw new AccountNotFoundException("Cannot set account as active account because it cannot be found");
+        }
     }
 
 }
