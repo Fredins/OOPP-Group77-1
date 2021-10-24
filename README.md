@@ -37,5 +37,5 @@ because Oauth is not implemented yet.
 | model/               | Contains all the data stuctures and buissness rules/logic.                   |
 | controller/          | Contains multiple controllers for mediating events between model and view.   |
 | services/            | Contains logic for persistent data storage and connecting to email servers.  |
-| resoruces/           | Contains all views, stylingsheets, and images.                               | 
+| resources/           | Contains all views, stylingsheets, and images.                               | 
 | test/                | Contains all the unit tests for the application.                             |
