@@ -91,7 +91,12 @@ public class WritingController {
         toField.setText(String.join(";", draft.to()));
         subjectField.setText(draft.subject());
         contentField.setHtmlText(draft.content());
+        attachments.clear();
+        attachments.addAll(draft.attachments().stream()
+          .map(Attachment::file)
+          .collect(Collectors.toList()));
         setHandlers(control);
+        attachments.forEach(file -> attachmentsHBox.getChildren().add(hBoxButtonSetup(file)));
     }
 
     /**
