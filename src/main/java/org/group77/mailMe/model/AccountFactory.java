@@ -10,7 +10,7 @@ public class AccountFactory {
      * Creates a concrete account instance.
      * Sets ServerProvider depending on the suffix of the email address.
      * * "@gmail.com" gets associated with ServerProvider.GMAIL.
-     * * "@hotmail.com", "@live.com", "@outlook.com" with ServerProvider.MICROSOFT.
+     * * "@hotmail.com", "@outlook.com" with ServerProvider.MICROSOFT.
      *
      * @param emailAddress - email address of the created account
      * @param password     - password of the created account
@@ -23,7 +23,6 @@ public class AccountFactory {
         if (emailAddress.contains("@gmail.com")) {
             return new Account(emailAddress, password, ServerProvider.GMAIL);
         } else if (emailAddress.contains("@hotmail.com")
-                || emailAddress.contains("@live.com")
                 || emailAddress.contains("@outlook.com")) {
             return new Account(emailAddress, password, ServerProvider.MICROSOFT);
         } else {
