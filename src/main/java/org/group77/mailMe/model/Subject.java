@@ -33,10 +33,10 @@ public class Subject<T> {
     public void set(T value) {
         if (this.value == null) {
             this.value = value;
-            observers.forEach(obs -> obs.changed(value));
+            notifyObservers(value);
         } else if (!this.value.equals(value)) {
             this.value = value;
-            observers.forEach(obs -> obs.changed(value));
+            notifyObservers(value);
         } else {
             this.value = value;
         }
@@ -66,6 +66,15 @@ public class Subject<T> {
      */
     public void removeAllObservers() {
         observers.clear();
+    }
+
+    /**
+     * notify observers
+     * @param newValue the new value after change
+     * @author Martin
+     */
+    private void notifyObservers(T newValue){
+        observers.forEach(obs -> obs.changed(newValue));
     }
 
 }

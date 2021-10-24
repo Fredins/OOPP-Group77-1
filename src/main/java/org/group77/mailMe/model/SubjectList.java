@@ -39,7 +39,7 @@ public class SubjectList<T> {
      */
     public final void add(int index, T value) {
         list.add(index, value);
-        notifyObserver();
+        notifyObservers();
     }
 
     /**
@@ -57,7 +57,7 @@ public class SubjectList<T> {
      */
     public void addAll(int index, Collection<T> collection) {
         list.addAll(index, collection);
-        notifyObserver();
+        notifyObservers();
     }
 
     /**
@@ -65,7 +65,7 @@ public class SubjectList<T> {
      */
     public void clear() {
         list.clear();
-        notifyObserver();
+        notifyObservers();
     }
 
     /**
@@ -83,7 +83,7 @@ public class SubjectList<T> {
      */
     public void remove(int index) {
         list.remove(index);
-        notifyObserver();
+        notifyObservers();
     }
 
     /**
@@ -102,7 +102,7 @@ public class SubjectList<T> {
      */
     public void replace(int index, T newValue) {
         list.set(index, newValue);
-        notifyObserver();
+        notifyObservers();
     }
 
     /**
@@ -112,7 +112,7 @@ public class SubjectList<T> {
     public void replaceAll(Collection<T> collection) {
         list.clear();
         list.addAll(collection);
-        notifyObserver();
+        notifyObservers();
     }
 
     /**
@@ -159,7 +159,7 @@ public class SubjectList<T> {
      * @author Martin
      * notifes observers
      */
-    private void notifyObserver() {
+    private void notifyObservers() {
         observers.forEach(obs -> obs.changed(list));
     }
 
