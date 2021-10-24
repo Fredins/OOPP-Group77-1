@@ -58,7 +58,7 @@ public class ReadingController {
     void init(Control control, Email email) {
         fromLabel.setText(email.from());
         subjectLabel.setText(email.subject());
-        toLabel.setText(control.removeBrackets(Arrays.toString(email.to())));
+        toLabel.setText(removeBrackets(Arrays.toString(email.to())));
         dateLabel.setText(email.date().toString().replace("T", "  "));
         archiveImg.setImage(getImage(control.getActiveFolder().get(), archiveImg));
         replyImg.setImage(getImage(control.getActiveFolder().get(), replyImg));
@@ -77,6 +77,8 @@ public class ReadingController {
         replyBtn.setOnAction(getButtonHandler(control, email, replyBtn));
         archiveBtn.setOnAction(getButtonHandler(control, email, archiveBtn));
     }
+
+
 
     /**
      * open email writing window and fill in to recipient field if possible
@@ -131,6 +133,17 @@ public class ReadingController {
                folder.name().equals("Drafts") ? "images_and_icons/continue_draft.png" : "images_and_icons/reply.png"
              ))));
        }
+    }
+
+    /**
+     * Removes brackets from a string. Used to remove "[" and "]" from recipients.
+     *
+     * @param s The string to remove brackets from
+     * @author David Zamanian
+     */
+    private String removeBrackets(String s) {
+        s = s.replaceAll("[\\[\\](){}]", "");
+        return s;
     }
 
     /**

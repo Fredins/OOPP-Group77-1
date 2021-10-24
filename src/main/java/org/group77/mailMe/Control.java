@@ -3,7 +3,6 @@ package org.group77.mailMe;
 import org.group77.mailMe.model.*;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProvider;
 import org.group77.mailMe.services.emailServiceProvider.EmailServiceProviderFactory;
-import org.group77.mailMe.services.storage.AccountAlreadyStoredException;
 import org.group77.mailMe.services.emailServiceProvider.ServerException;
 import org.group77.mailMe.services.storage.Storage;
 import org.group77.mailMe.services.storage.StorageException;
@@ -23,7 +22,6 @@ import java.util.stream.*;
  *
  * @author Elin Hagman
  */
-
 public class Control {
 
     /**
@@ -47,7 +45,6 @@ public class Control {
      * @author Elin Hagman
      * @author Martin Fredin
      */
-
     public Control(Storage storage) {
         this.storage = storage;
 
@@ -77,41 +74,6 @@ public class Control {
     }
 
     /**
-     * Adds the recipients email address to the suggestion list in storage by retrieving the old list and add the
-     * new email and store them together
-     *
-     * @param newKnownRecipients the new suggestions
-     * @author David Zamanian
-     * @author Martin Fredin
-     */
-
-    public void addNewKnownRecipient(List<String> newKnownRecipients) {
-        try {
-            List<String> oldKnownRecipients = storage.retrieveKnownRecipients(getActiveAccount().get()); //Retrieve the old suggestions
-            List<String> combinedSuggestions = Stream.concat(oldKnownRecipients.stream(), newKnownRecipients.stream())
-                    .distinct()
-                    .collect(Collectors.toList()); //Concatenate the oldSuggestion with the newSuggestions
-            storage.storeKnownRecipients(getActiveAccount().get(), combinedSuggestions);
-            getKnownRecipients().replaceAll(combinedSuggestions); //Replace the oldSuggestions with the new
-        } catch (StorageException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Removes brackets from a string. Used to remove "[" and "]" from recipients.
-     *
-     * @param s The string to remove brackets from
-     * @author David Zamanian
-     */
-
-    public String removeBrackets(String s) {
-        s = s.replaceAll("[\\[\\](){}]", "");
-        return s;
-    }
-
-
-    /**
      * Retrieves and returns new emails from server.
      *
      * @return New emails retrieved from server
@@ -128,25 +90,21 @@ public class Control {
     }
 
     /**
-     * Adds the specified emails to the specified folder in this model.
-     *
-     * @param folderName the name of the folder that is to be updated
-     * @param newEmails  the emails the specified folder should be updated with
-     * @throws FolderNotFoundException if there is no folder with the given folderName
-     * @author Martin Fredin
+     * finds the right email service provider and sends the email
+     * @param email email to be sent
+     * @throws Exception if there is no active account in this model
+     * @author Alexey Ryabov, Martin Fredin
      */
-    public void updateFolder(String folderName, List<Email> newEmails) throws FolderNotFoundException {
-        Folder folder = model.getFolders().stream()
-                .filter(folder1 -> folder1.name().equals(folderName))
-                .findFirst()
-                .orElseThrow(() -> new FolderNotFoundException(folderName));
-
-        model.updateFolder(folder, newEmails);
-        storage.store(model.getActiveAccount().get(), folder);
-        storage.store(model.getActiveAccount().get(), model.getFolders().get());
-
+    public void send(Email email) throws Exception {
+        Account account = model.getActiveAccount().get();
+        if (account != null) {
+            EmailServiceProviderFactory
+              .createEmailServiceProvider(account)
+              .sendEmail(account, email);
+        } else {
+            throw new Exception("No active account");
+        }
     }
-
 
     /**
      * Tries to add a new account to this model's accounts.
@@ -172,22 +130,73 @@ public class Control {
 
     }
 
+    /**
+     * Adds the recipients email address to the suggestion list in storage by retrieving the old list and add the
+     * new email and store them together
+     *
+     * @param newKnownRecipients the new suggestions
+     * @author David Zamanian
+     * @author Martin Fredin
+     */
+    public void addNewKnownRecipient(List<String> newKnownRecipients) {
+        try {
+            List<String> oldKnownRecipients = storage.retrieveKnownRecipients(getActiveAccount().get()); //Retrieve the old suggestions
+            List<String> combinedSuggestions = Stream.concat(oldKnownRecipients.stream(), newKnownRecipients.stream())
+                    .distinct()
+                    .collect(Collectors.toList()); //Concatenate the oldSuggestion with the newSuggestions
+            storage.storeKnownRecipients(getActiveAccount().get(), combinedSuggestions);
+            getKnownRecipients().replaceAll(combinedSuggestions); //Replace the oldSuggestions with the new
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
-     * finds the right email service provider and sends the email
-     * @param email email to be sent
-     * @throws Exception if there is no active account in this model
-     * @author Alexey Ryabov, Martin Fredin
+     * finds folder, add email, save to storage.
+     * @param email the email to be added to folder
+     * @param folderName name of folder
+     * @author Martin Fredin
      */
-    public void send(Email email) throws Exception {
-        Account account = model.getActiveAccount().get();
-        if (account != null) {
-            EmailServiceProviderFactory
-              .createEmailServiceProvider(account)
-              .sendEmail(account, email);
-        } else {
-            throw new Exception("No active account");
-        }
+    public void addEmailToFolder(Email email, String folderName) {
+        Folder folder = model.getFolders().stream()
+          .filter(folder1 -> folder1.name().equals(folderName))
+          .findFirst()
+          .orElse(new Folder(folderName, new ArrayList<>()));
+        folder.addEmail(email);
+        storage.store(model.getActiveAccount().get(), folder);
+    }
+
+    /**
+     * Moves the email to the desired newFolder and deletes it from the activeFolder.
+     *
+     * @param newFolder the folder this model's activeEmail should be moved to
+     * @author David Zamanian
+     * @author Martin Fredin
+     */
+    public void moveEmail(Folder newFolder) {
+        model.moveActiveEmail(newFolder);
+        storage.store(getActiveAccount().get(), model.getActiveFolder().get());
+        storage.store(getActiveAccount().get(), newFolder);
+    }
+
+    /**
+     * Adds the specified emails to the specified folder in this model.
+     *
+     * @param folderName the name of the folder that is to be updated
+     * @param newEmails  the emails the specified folder should be updated with
+     * @throws FolderNotFoundException if there is no folder with the given folderName
+     * @author Martin Fredin
+     */
+    public void updateFolder(String folderName, List<Email> newEmails) throws FolderNotFoundException {
+        Folder folder = model.getFolders().stream()
+                .filter(folder1 -> folder1.name().equals(folderName))
+                .findFirst()
+                .orElseThrow(() -> new FolderNotFoundException(folderName));
+
+        model.updateFolder(folder, newEmails);
+        storage.store(model.getActiveAccount().get(), folder);
+        storage.store(model.getActiveAccount().get(), model.getFolders().get());
+
     }
 
     /**
@@ -210,90 +219,13 @@ public class Control {
      * @author David Zamanian
      * @author Martin Fredin
      */
-
     public void permDeleteEmail() {
         model.permDeleteEmail();
         storage.store(getActiveAccount().get(), model.getActiveFolder().get());
     }
 
 
-    /**
-     * Moves the email to the desired newFolder and deletes it from the activeFolder.
-     *
-     * @param newFolder the folder this model's activeEmail should be moved to
-     * @author David Zamanian
-     * @author Martin Fredin
-     */
-
-    public void moveEmail(Folder newFolder) {
-        model.moveActiveEmail(newFolder);
-        storage.store(getActiveAccount().get(), model.getActiveFolder().get());
-        storage.store(getActiveAccount().get(), newFolder);
-    }
-
-    /**
-     * finds folder, add email, save to storage.
-     * @param email the email to be added to folder
-     * @param folderName name of folder
-     * @author Martin Fredin
-     */
-    public void addEmailToFolder(Email email, String folderName) {
-        Folder folder = model.getFolders().stream()
-          .filter(folder1 -> folder1.name().equals(folderName))
-          .findFirst()
-          .orElse(new Folder(folderName, new ArrayList<>()));
-        folder.addEmail(email);
-        storage.store(model.getActiveAccount().get(), folder);
-    }
-
-    /* public void deleteEmail(Email emailToBeDeleted) {
-        // use method in model like: model.deleteEmail(emailToBeDeleted)
-        // model returns new folder structure, store new copy in storage
-    }
-    */
-
-    // state getters and setters
-
-    public void setReadingEmail(Email readingEmail) {
-        model.setActiveEmail(null);
-        model.setActiveEmail(readingEmail);
-    }
-
-    public SubjectList<String> getKnownRecipients() {
-        return model.getKnownRecipients();
-    }
-
-    public Subject<Account> getActiveAccount() {
-        return model.getActiveAccount();
-    }
-
-    public SubjectList<Account> getAccounts() {
-        return model.getAccounts();
-    }
-
-    public void setActiveAccount(Account account) throws AccountNotFoundException {
-        model.setActiveAccount(account);
-    }
-
-    public SubjectList<Folder> getFolders() {
-        return model.getFolders();
-    }
-
-    public Subject<Folder> getActiveFolder() {
-        return model.getActiveFolder();
-    }
-
-    public Subject<Email> getActiveEmail() {
-        return model.getActiveEmail();
-    }
-
-    public SubjectList<Email> getActiveEmails() {
-        return model.getActiveEmails();
-    }
-
-    public void setFolder(Folder activeFolder) {
-        model.setActiveFolder(activeFolder);
-    }
+    /*=========================================================== SEARCH AND FILTERING =================================================================================*/
 
     /**
      * Filters this model's activeEmails to only contain Emails with recipients containing
@@ -305,7 +237,6 @@ public class Control {
     public void filterOnTo(String searchWord) {
         model.filterOnTo(searchWord);
     }
-
     /**
      * Filters this model's activeEmails to only contain Emails with senders containing the search word.
      *
@@ -315,7 +246,6 @@ public class Control {
     public void filterOnFrom(String searchWord) {
         model.filterOnFrom(searchWord);
     }
-
     /**
      * Filters this model's activeEmails to only contain Emails that was sent before
      * the specified date.
@@ -326,7 +256,6 @@ public class Control {
     public void filterOnMaxDate(LocalDateTime date) {
         model.filterOnMaxDate(date);
     }
-
     /**
      * Filters this model's activeEmails to only contain Emails that was sent after the
      * specified date.
@@ -337,7 +266,6 @@ public class Control {
     public void filterOnMinDate(LocalDateTime date) {
         model.filterOnMinDate(date);
     }
-
     /**
      * Sorts the emails in this model's activeEmails from the newest to the oldest date.
      *
@@ -346,7 +274,6 @@ public class Control {
     public void sortByNewToOld() {
         model.sortByNewToOld();
     }
-
     /**
      * Sorts the emails in this model's activeEmails from the oldest to the newest date.
      *
@@ -355,7 +282,6 @@ public class Control {
     public void sortByOldToNew() {
         model.sortByOldToNew();
     }
-
     /**
      * Erases all filters from this model's activeEmails and restores it to its default state.
      *
@@ -364,7 +290,6 @@ public class Control {
     public void clearFilter() {
         model.clearFilter();
     }
-
     /**
      * Filters this model's activeEmails to only contain Emails that has any attribute that contains the
      * search word.
@@ -375,7 +300,6 @@ public class Control {
     public void search(String searchWord) {
         model.search(searchWord);
     }
-
     /** Clears the search results
      *
      * @author Hampus Jernkrook
@@ -384,4 +308,34 @@ public class Control {
         model.clearSearchResult();
     }
 
+    /*=========================================================== GETTERS AND SETTERS =================================================================================*/
+
+    public SubjectList<String> getKnownRecipients() {
+        return model.getKnownRecipients();
+    }
+    public Subject<Account> getActiveAccount() {
+        return model.getActiveAccount();
+    }
+    public SubjectList<Account> getAccounts() {
+        return model.getAccounts();
+    }
+    public SubjectList<Folder> getFolders() {
+        return model.getFolders();
+    }
+    public Subject<Folder> getActiveFolder() {
+        return model.getActiveFolder();
+    }
+    public Subject<Email> getActiveEmail() {
+        return model.getActiveEmail();
+    }
+    public SubjectList<Email> getActiveEmails() {
+        return model.getActiveEmails();
+    }
+    public void setActiveAccount(Account account) throws AccountNotFoundException {
+        model.setActiveAccount(account);
+    }
+    public void setActiveEmail(Email readingEmail) {
+        model.setActiveEmail(null);
+        model.setActiveEmail(readingEmail);
+    }
 }

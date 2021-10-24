@@ -33,7 +33,7 @@ public class EmailItemController {
         subjectLabel.setText(email.subject());
 
         // attach event handlers
-        button.setOnMouseClicked(inputEvent -> control.setReadingEmail(email));
+        button.setOnMouseClicked(inputEvent -> control.setActiveEmail(email));
         //Adds a dropShadow effect when selecting an email
         control.getActiveEmail().addObserver(newEmail -> dropShadow(newEmail, email));
     }
